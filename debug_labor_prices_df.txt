@@ -1,0 +1,8 @@
+  Jurisdiction  ... Base Salary + Costs (hourly)_UL
+0          VIC  ...                      142.435953
+1          VIC  ...                      185.692392
+2          VIC  ...                      118.091922
+3          VIC  ...                      160.233668
+4          VIC  ...                      440.226887
+
+[5 rows x 6 columns]

@@ -1,0 +1,71 @@
+﻿Test,Category,Scenario,Value
+Panel,Overhead Costs,20%,2242
+Panel,Overhead Costs,27% (base case),2373
+Panel,Overhead Costs,30%,2429
+Panel,Sequencing Instrument Throughput,Estimate (base case),2373
+Panel,Sequencing Instrument Throughput,40% of maximum,2294
+Panel,Sequencing Instrument Throughput,80% of maximum,2263
+Panel,Consumable Cost Discounts,0% (base case),2373
+Panel,Consumable Cost Discounts,30%,2279
+Panel,Consumable Cost Discounts,70%,2155
+Panel,Labor Prices,VIC (base case),2373
+Panel,Labor Prices,SA,2285
+Panel,Labor Prices,NSW,2225
+Panel,Labor Prices,QLD,2231
+Panel,Labor Prices,WA,2344
+ES-P,Overhead Costs,20%,2667
+ES-P,Overhead Costs,27% (base case),2823
+ES-P,Overhead Costs,30%,2890
+ES-P,Sequencing Instrument Throughput,Estimate (base case),2823
+ES-P,Sequencing Instrument Throughput,40% of maximum,2744
+ES-P,Sequencing Instrument Throughput,80% of maximum,2713
+ES-P,Consumable Cost Discounts,0% (base case),2823
+ES-P,Consumable Cost Discounts,30%,2729
+ES-P,Consumable Cost Discounts,70%,2604
+ES-P,Labor Prices,VIC (base case),2823
+ES-P,Labor Prices,SA,2699
+ES-P,Labor Prices,NSW,2526
+ES-P,Labor Prices,QLD,2550
+ES-P,Labor Prices,WA,2716
+ES-T,Overhead Costs,20%,5357
+ES-T,Overhead Costs,27% (base case),5670
+ES-T,Overhead Costs,30%,5804
+ES-T,Sequencing Instrument Throughput,Estimate (base case),5670
+ES-T,Sequencing Instrument Throughput,40% of maximum,5658
+ES-T,Sequencing Instrument Throughput,80% of maximum,5565
+ES-T,Consumable Cost Discounts,0% (base case),5670
+ES-T,Consumable Cost Discounts,30%,5413
+ES-T,Consumable Cost Discounts,70%,5071
+ES-T,Labor Prices,VIC (base case),5670
+ES-T,Labor Prices,SA,5426
+ES-T,Labor Prices,NSW,5231
+ES-T,Labor Prices,QLD,5253
+ES-T,Labor Prices,WA,5517
+GS-P,Overhead Costs,20%,4573
+GS-P,Overhead Costs,27% (base case),4840
+GS-P,Overhead Costs,30%,4954
+GS-P,Sequencing Instrument Throughput,Estimate (base case),4840
+GS-P,Sequencing Instrument Throughput,40% of maximum,4574
+GS-P,Sequencing Instrument Throughput,80% of maximum,4299
+GS-P,Consumable Cost Discounts,0% (base case),4840
+GS-P,Consumable Cost Discounts,30%,4451
+GS-P,Consumable Cost Discounts,70%,3933
+GS-P,Labor Prices,VIC (base case),4840
+GS-P,Labor Prices,SA,4714
+GS-P,Labor Prices,NSW,4431
+GS-P,Labor Prices,QLD,4456
+GS-P,Labor Prices,WA,4623
+GS-T,Overhead Costs,20%,10950
+GS-T,Overhead Costs,27% (base case),11589
+GS-T,Overhead Costs,30%,11863
+GS-T,Sequencing Instrument Throughput,Estimate (base case),11589
+GS-T,Sequencing Instrument Throughput,40% of maximum,10790
+GS-T,Sequencing Instrument Throughput,80% of maximum,9964
+GS-T,Consumable Cost Discounts,0% (base case),11589
+GS-T,Consumable Cost Discounts,30%,10424
+GS-T,Consumable Cost Discounts,70%,8871
+GS-T,Labor Prices,VIC (base case),11589
+GS-T,Labor Prices,SA,9924
+GS-T,Labor Prices,NSW,9379
+GS-T,Labor Prices,QLD,9410
+GS-T,Labor Prices,WA,9537

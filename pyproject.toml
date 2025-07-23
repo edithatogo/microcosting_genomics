@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "unimelb-phd-phase_1"
+version = "0.1.0"
+description = "{{PROJECT_DESCRIPTION}}"
+
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "openpyxl",
+    "pandas",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.setuptools]
+packages = ["unimelb_phd_phase_1"]
+
+[tool.mypy]
+strict = true
+
+[tool.bandit]
+skips = ["B101"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]

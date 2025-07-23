@@ -1,0 +1,1 @@
+['Test_Panel', 'Category_Equipment', 'Stage_DNA Extraction', 'LL_23.73', 'MP_22.66', 'UL_21.46', 'Shape_396.308117758932', 'Scale_0.0570137198495242', '2.5th_percentile_20.4550831719768', 'mean_22.592568081594', '97.5th_percentile_24.8761951055723']

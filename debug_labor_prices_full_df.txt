@@ -1,0 +1,33 @@
+Combined Headers: ['Jurisdiction', 'Personnel type', 'Label', 'Base Salary + Costs (hourly)_LL', 'Base Salary + Costs (hourly)_Mid-point', 'Base Salary + Costs (hourly)_UL']
+   Jurisdiction  ... Base Salary + Costs (hourly)_UL
+0           VIC  ...                      142.435953
+1           VIC  ...                      185.692392
+2           VIC  ...                      118.091922
+3           VIC  ...                      160.233668
+4           VIC  ...                      440.226887
+5          None  ...                             NaN
+6            SA  ...                      122.365486
+7            SA  ...                      173.579610
+8            SA  ...                       84.619305
+9            SA  ...                      141.519704
+10           SA  ...                      467.439671
+11         None  ...                             NaN
+12          NSW  ...                      108.214197
+13          NSW  ...                      178.926589
+14          NSW  ...                       76.914328
+15          NSW  ...                      140.771420
+16          NSW  ...                      349.538686
+17         None  ...                             NaN
+18          QLD  ...                      117.190056
+19          QLD  ...                      177.598839
+20          QLD  ...                      102.081533
+21          QLD  ...                      177.598839
+22          QLD  ...                      380.329724
+23         None  ...                             NaN
+24           WA  ...                      111.113840
+25           WA  ...                      182.998520
+26           WA  ...                       90.095935
+27           WA  ...                      122.213872
+28           WA  ...                      434.405151
+
+[29 rows x 6 columns]
