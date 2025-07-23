@@ -35,7 +35,7 @@ class CalculationEngine:
             # More strategies will be added here
         }
         self.sheet_configs = {
-            'Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': [('Test', ''), ('Category', ''), ('Sub-Category', ''), ('Step', '')]},
+            '1. Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
@@ -79,49 +79,39 @@ class CalculationEngine:
                 print(f"  No config found for {sheet_name}, skipping.")
 
     def _load_raw_sheet_data(self, sheet_obj):
-        print(f"  _load_raw_sheet_data called for sheet: {sheet_obj.title}")
-        all_data_values = []
-        all_data_formulas = []
+        """
+        Loads the raw data from a sheet.
+        It handles merged cells by looking up the value from the top-left cell.
+        """
+        sheet_name = sheet_obj.title
+        print(f"  _load_raw_sheet_data called for sheet: {sheet_name}")
 
-        # Create maps for merged cell values and formulas
-        merged_values_map = {}
-        merged_formulas_map = {}
-        for merged_range in sheet_obj.merged_cells.ranges:
-            min_col, min_row, max_col, max_row = merged_range.bounds
-            top_left_cell = sheet_obj.cell(row=min_row, column=min_col)
-            top_left_value = top_left_cell.internal_value
-            top_left_formula = top_left_cell.value
-            print(f"    Merged Range: {merged_range.coord}, Top-Left Value: {top_left_value}, Top-Left Formula: {top_left_formula}")
-            for r in range(min_row, max_row + 1):
-                for c in range(min_col, max_col + 1):
-                    merged_values_map[(r, c)] = top_left_value
-                    merged_formulas_map[(r, c)] = top_left_formula
+        ws = sheet_obj
 
-        for r_idx in range(1, sheet_obj.max_row + 1):
-            row_values = []
-            row_formulas = []
-            for c_idx in range(1, sheet_obj.max_column + 1):
-                cell_coords = (r_idx, c_idx)
-                
-                if cell_coords in merged_values_map:
-                    value_to_add = merged_values_map[cell_coords]
-                    formula_to_add = merged_formulas_map[cell_coords]
-                    print(f"    Cell {coords_to_cell(r_idx, c_idx)} (merged): Value={value_to_add}, Formula={formula_to_add}")
-                    row_values.append(value_to_add)
-                    row_formulas.append(formula_to_add)
+        # Pre-process merged cells for fast lookup
+        merged_lookup = {}
+        for merged_range in ws.merged_cells.ranges:
+            min_row, min_col, max_row, max_col = merged_range.bounds
+            top_left_cell = ws.cell(row=min_row, column=min_col)
+            val = top_left_cell.value
+            for row in range(min_row, max_row + 1):
+                for col in range(min_col, max_col + 1):
+                    merged_lookup[(row, col)] = val
+        
+        # Extract data using the lookup for merged cells
+        data = []
+        for row_idx, row in enumerate(ws.iter_rows(), start=1):
+            row_data = []
+            for col_idx, cell in enumerate(row, start=1):
+                if (row_idx, col_idx) in merged_lookup:
+                    row_data.append(merged_lookup[(row_idx, col_idx)])
                 else:
-                    cell = sheet_obj.cell(row=r_idx, column=c_idx)
-                    value_to_add = cell.internal_value
-                    formula_to_add = cell.value
-                    print(f"    Cell {coords_to_cell(r_idx, c_idx)} (non-merged): Value={value_to_add}, Formula={formula_to_add}")
-                    row_values.append(value_to_add)
-                    row_formulas.append(formula_to_add)
-            all_data_values.append(row_values)
-            all_data_formulas.append(row_formulas)
-            if r_idx == 4: # Debugging specific row
-                print(f"    Row {r_idx} Values: {row_values}")
-                print(f"    Row {r_idx} Formulas: {row_formulas}")
-        return all_data_values, all_data_formulas
+                    row_data.append(cell.value)
+            data.append(row_data)
+
+        # Since we only have one workbook view (data_only=False),
+        # we return the same data for both values and formulas.
+        return data, data
 
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
         print(f"  _process_raw_dataframe called for sheet: {sheet_name}, data_only: {data_only}")
@@ -136,21 +126,43 @@ class CalculationEngine:
         if header_rows > 0:
             header_df = df.iloc[:header_rows].copy()
             print(f"    Sheet: {sheet_name}, header_df.shape: {header_df.shape}")
-            header_df = header_df.ffill(axis=0).ffill(axis=1)
+            header_df = header_df.ffill(axis=0)
             
+            if sheet_name == 'Detailed Table':
+                print("--- DEBUG: Detailed Table Header ---")
+                print(header_df.to_string())
+                print("------------------------------------")
+
             data_df = df.iloc[data_starts_at - 1:].copy()
             print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
             print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
             data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
+
+            if sheet_name == 'Detailed Table':
+                print("--- DEBUG: Detailed Table Columns ---")
+                print(data_df.columns)
+                print("-------------------------------------")
+                print("--- DEBUG: Detailed Table Data (Before Coercion) ---")
+                print(data_df.head().to_string())
+                print("----------------------------------------------------")
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
         
         data_df.reset_index(drop=True, inplace=True)
 
         if data_only:
+            string_columns = config.get('string_columns', [])
             # Coerce all columns to numeric where possible, but don't fill NaNs
             for col_name, series in data_df.items():
-                data_df[col_name] = pd.to_numeric(series, errors='coerce')
+                # col_name can be a tuple if there's a multi-index
+                col_name_str = col_name[0] if isinstance(col_name, tuple) else col_name
+                if col_name_str not in string_columns:
+                    data_df[col_name] = pd.to_numeric(series, errors='coerce')
+            
+            if sheet_name == 'Detailed Table':
+                print("--- DEBUG: Detailed Table Data (After Coercion) ---")
+                print(data_df.head().to_string())
+                print("---------------------------------------------------")
         return data_df
 
     def get_cell_value(self, sheet_name, cell_ref):
@@ -265,21 +277,38 @@ class CalculationEngine:
         """
         return self.sheets[sheet_name]
 
-    def run_engine(self, sheet_name='Detailed Table'):
+    def run_engine(self, sheet_name='Detailed Table', fail_on_error=True):
         """
         Runs the calculation engine on the specified sheet and returns a DataFrame with the results.
+        If fail_on_error is False, it will log errors and continue.
         """
         formulas_df = self.get_formulas(sheet_name)
         if formulas_df is None:
-            return None
+            return None, []
 
         results_df = formulas_df.copy()
+        errors = []
         for r_idx in range(formulas_df.shape[0]):
             for c_idx in range(formulas_df.shape[1]):
                 formula = formulas_df.iloc[r_idx, c_idx]
+                cell_ref = coords_to_cell(r_idx + self.sheet_configs.get(sheet_name, {'data_starts_at': 1})['data_starts_at'] - 1, c_idx)
                 if isinstance(formula, str) and formula.startswith('='):
-                    cell_ref = coords_to_cell(r_idx + self.sheet_configs.get(sheet_name, {'data_starts_at': 1})['data_starts_at'] -1 , c_idx)
-                    results_df.iloc[r_idx, c_idx] = self.execute_formula(formula, sheet_name, cell_ref)
+                    try:
+                        result = self.execute_formula(formula, sheet_name, cell_ref)
+                        results_df.iloc[r_idx, c_idx] = result
+                    except Exception as e:
+                        error_info = {
+                            "cell": cell_ref,
+                            "formula": formula,
+                            "error": str(e),
+                            "call_stack": self.call_stack,
+                        }
+                        errors.append(error_info)
+                        results_df.iloc[r_idx, c_idx] = f"ERROR[{str(e)}]"
+                        if fail_on_error:
+                            raise
                 else:
-                    results_df.iloc[r_idx, c_idx] = self.get_cell_value(sheet_name, coords_to_cell(r_idx + self.sheet_configs.get(sheet_name, {'data_starts_at': 1})['data_starts_at'] - 1, c_idx))
-        return results_df
+                    # For non-formula cells, we can just take the value from the original sheet
+                    value = self.get_cell_value(sheet_name, cell_ref)
+                    results_df.iloc[r_idx, c_idx] = value
+        return results_df, errors

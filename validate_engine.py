@@ -16,8 +16,14 @@ def validate_engine():
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
-    results_df = engine.run_engine('1. Detailed Table')
+    results_df, errors = engine.run_engine('1. Detailed Table', fail_on_error=False)
     print("Calculation engine finished.")
+
+    if errors:
+        print("\n--- Calculation Errors ---")
+        for error in errors:
+            print(f"Cell: {error['cell']}, Formula: {error['formula']}, Error: {error['error']}")
+        print("--------------------------\n")
 
     # Extract the 'Unit Cost (AUD $/test)' columns for comparison
     ground_truth_costs = ground_truth_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
