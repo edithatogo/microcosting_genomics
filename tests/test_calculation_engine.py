@@ -1,4 +1,6 @@
 import pytest
+import os
+print(os.getcwd())
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -14,7 +16,10 @@ def test_engine():
     """
     Provides a CalculationEngine instance initialized with test data.
     """
-    return CalculationEngine('tests/test_data.xlsx')
+    # Construct an absolute path to the test data file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    test_data_path = os.path.join(current_dir, 'test_data.xlsx')
+    return CalculationEngine(test_data_path)
 
 @pytest.fixture
 def main_excel_engine():
@@ -67,5 +72,6 @@ def test_get_cell_formula_detailed_table(main_excel_engine):
 
 def test_run_engine(test_engine):
     results = test_engine.run_engine('Sheet1')
-    assert results.iloc[1, 2] == 4
-    assert results.iloc[4, 0] == 6
+    assert results.iloc[0, 2] == 4
+    assert results.iloc[1, 2] == 10
+    assert results.iloc[2, 2] == 18

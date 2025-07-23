@@ -12,11 +12,11 @@ def validate_engine():
     print("CalculationEngine initialized.")
 
     print("Loading ground truth data...")
-    ground_truth_df = engine.get_ground_truth('Detailed Table')
+    ground_truth_df = engine.get_ground_truth('1. Detailed Table')
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
-    results_df = engine.run_engine('Detailed Table')
+    results_df = engine.run_engine('1. Detailed Table')
     print("Calculation engine finished.")
 
     # Extract the 'Unit Cost (AUD $/test)' columns for comparison

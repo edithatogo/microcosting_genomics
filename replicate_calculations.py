@@ -6,7 +6,7 @@ from unimelb_phd_phase_1.formula_parser import parse_formula
 def main():
     """
     This script replicates the calculations from the 'Detailed Table' sheet of the microcosting
-    Excel file and compares them against the original values.
+    Excel file and saves the results to a parquet file.
     """
     print("Starting calculation replication...")
 
@@ -25,7 +25,7 @@ def main():
         print(f"Error: The ground truth data does not have the expected column: {unit_cost_col_name}")
         return
 
-    calculated_results = []
+    results_data = []
     # Iterate through each row of our ground truth data
     for index, row in ground_truth_df.iterrows():
         # The Excel row is the DataFrame index + 3 (1-based index, plus 2 header rows)
@@ -39,6 +39,7 @@ def main():
         # Get the formula from the raw excel file using our engine's method
         formula = engine.get_cell_formula(sheet_name, cell_ref)
 
+        calculated_value = 0
         if isinstance(formula, str) and formula.startswith('='):
             # If we have a formula, execute it
             parsed_formula = parse_formula(formula)
@@ -51,13 +52,35 @@ def main():
             # If there's no formula, the value is just the value
             calculated_value = formula
 
-        calculated_results.append(calculated_value)
+        cost_category = row.get('Cost_Category', 'Unknown')
+        
+        result_row = {
+            'Test_Type': row.get('Test_Type', ''),
+            'Cost_Category': cost_category,
+            'Cost_Sub_Category': row.get('Cost_Sub_Category', ''),
+            'Cost_Step': row.get('Cost_Step', ''),
+            'unit_cost_labour': 0,
+            'unit_cost_equipment': 0,
+            'unit_cost_consumables': 0
+        }
 
-    # Add the results to the DataFrame for comparison
-    ground_truth_df['Calculated_Value'] = calculated_results
+        if cost_category == 'Labour':
+            result_row['unit_cost_labour'] = calculated_value
+        elif cost_category == 'Equipment':
+            result_row['unit_cost_equipment'] = calculated_value
+        elif cost_category == 'Consumables':
+            result_row['unit_cost_consumables'] = calculated_value
+            
+        results_data.append(result_row)
 
-    print("\nReplication Results (Original vs. Calculated):")
-    print(ground_truth_df[[unit_cost_col_name, 'Calculated_Value']])
+    # Create a DataFrame from the results
+    calculated_df = pd.DataFrame(results_data)
+
+    # Save the calculated costs to a parquet file
+    calculated_df.to_parquet('data/calculated_costs_tidy.parquet', index=False)
+
+    print("\nCalculations replicated and saved to 'data/calculated_costs_tidy.parquet'.")
 
 if __name__ == "__main__":
     main()
+

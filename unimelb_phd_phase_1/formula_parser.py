@@ -15,6 +15,11 @@ def parse_formula(formula):
     if formula.isnumeric():
         return {"type": "literal", "value": float(formula)}
     
+    # Handle string literals
+    match = re.match(r'"([^"]*)"', formula)
+    if match:
+        return {"type": "string_literal", "value": match.group(1)}
+
     # IFERROR
     match = re.match(r"IFERROR\((.+),(.+)\)", formula)
     if match:
@@ -50,7 +55,7 @@ def parse_formula(formula):
             condition, value_if_true, value_if_false = args
             return {
                 "type": "if",
-                "condition": parse_formula(f"={condition.strip()}"),
+                "condition": condition.strip(),
                 "true_val": parse_formula(f"={value_if_true.strip()}"),
                 "false_val": parse_formula(f"={value_if_false.strip()}")
             }

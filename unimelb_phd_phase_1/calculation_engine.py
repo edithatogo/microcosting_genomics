@@ -131,34 +131,21 @@ class CalculationEngine:
         data_starts_at = config['data_starts_at']
 
         df = pd.DataFrame(raw_data)
+        print(f"    Sheet: {sheet_name}, df.shape: {df.shape}")
 
-        # Manually reconstruct the multi-level header
-        header = pd.Index([]) # Initialize as an empty pandas Index
         if header_rows > 0:
-            header_values = [df.iloc[r].tolist() for r in range(header_rows)]
-
-            # Forward-fill None values in the first header row for multi-index alignment
-            processed_header_values = []
-            for r_idx, row_vals in enumerate(header_values):
-                if r_idx == 0: # Only forward fill the very first header row
-                    filled_row = []
-                    last_val = None
-                    for val in row_vals:
-                        if val is not None:
-                            last_val = val
-                        filled_row.append(last_val)
-                    processed_header_values.append(filled_row)
-                else:
-                    processed_header_values.append(row_vals)
-
-            # Combine headers into a MultiIndex
-            max_len = max(len(row) for row in processed_header_values)
-            padded_header_values = [row + [None] * (max_len - len(row)) for row in processed_header_values]
-            header = pd.MultiIndex.from_arrays(padded_header_values)
-
-        # Get the actual data rows and assign headers
-        data_df = df.iloc[data_starts_at - 1:].copy()
-        data_df.columns = header
+            header_df = df.iloc[:header_rows].copy()
+            print(f"    Sheet: {sheet_name}, header_df.shape: {header_df.shape}")
+            header_df = header_df.ffill(axis=0).ffill(axis=1)
+            
+            data_df = df.iloc[data_starts_at - 1:].copy()
+            print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
+            print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
+            data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
+        else:
+            data_df = df.iloc[data_starts_at - 1:].copy()
+        
+        data_df.reset_index(drop=True, inplace=True)
 
         if data_only:
             # Coerce all columns to numeric where possible, but don't fill NaNs
