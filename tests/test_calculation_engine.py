@@ -1,6 +1,5 @@
 import pytest
 import os
-print(os.getcwd())
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
