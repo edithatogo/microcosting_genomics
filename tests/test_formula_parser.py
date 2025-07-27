@@ -55,6 +55,17 @@ def test_parse_multiplication_three_values():
     }
     assert parse_formula(formula) == expected
 
+def test_parse_addition_simple():
+    formula = "=A1+A2"
+    expected = {
+        "type": "addition",
+        "operands": [
+            {"type": "reference", "sheet": None, "cell": "A1"},
+            {"type": "reference", "sheet": None, "cell": "A2"},
+        ],
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_reference_with_sheet():
     formula = "='3. Estimates'!F5"
     expected = {"type": "reference", "sheet": "3. Estimates", "cell": "F5"}
