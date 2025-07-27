@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "openpyxl",
     "pandas",
+    "numpy-financial",
 ]
 
 [tool.ruff]

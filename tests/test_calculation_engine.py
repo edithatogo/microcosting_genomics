@@ -137,3 +137,13 @@ def test_addition_literals(test_engine):
 def test_addition_cell_references(test_engine):
     result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
     assert result == 3
+
+def test_pmt_literal_values(test_engine):
+    result = test_engine.execute_formula('=PMT(0.05, 10, -1000)', 'Sheet1', 'D1')
+    assert round(result, 2) == 129.50
+
+def test_pmt_percent_and_cells(test_engine):
+    # Ensure cells exist: A2=1, B2=4 as per test data
+    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    # rate 50% => 0.5, nper=1, pv=-4 -> payment should be approx 6.0
+    assert pytest.approx(result, rel=1e-2) == 6.0

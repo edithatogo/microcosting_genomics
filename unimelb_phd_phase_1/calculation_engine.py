@@ -16,6 +16,7 @@ from .strategies import (
     IfStrategy,
     IfErrorStrategy,
     VLookupStrategy,
+    PmtStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
 
@@ -41,6 +42,7 @@ class CalculationEngine:
             'if': IfStrategy(),
             'iferror': IfErrorStrategy(),
             'vlookup': VLookupStrategy(),
+            'pmt': PmtStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
