@@ -19,7 +19,7 @@ def validate_calculations():
         return
 
     # Load the original data from the Excel sheet
-    file_path = Path(__file__).resolve().parents[0] / 'data' / 'Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx'
+    file_path = Path(__file__).resolve().parents[0] / 'data' / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'
     try:
         original_df_raw = pd.read_excel(file_path, sheet_name='1. Detailed Table', header=None)
     except FileNotFoundError:

@@ -38,7 +38,7 @@ def _flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 def validate_engine() -> None:
     """Validate the calculation engine across all prepared tables."""
-    workbook_path = "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    workbook_path = "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
 
     print("Initializing CalculationEngine...")
     engine = CalculationEngine(workbook_path)

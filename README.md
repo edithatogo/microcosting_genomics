@@ -11,6 +11,7 @@ snippet similar to:
 from pathlib import Path
 DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
 ```
+The primary workbook used for validation is `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm` and should be stored here.
 
 The processed and extracted files referenced in the notebooks and scripts should
 be placed inside this directory.
