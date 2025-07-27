@@ -73,7 +73,7 @@ def parse_formula(formula):
         }
 
     # PMT
-    match = re.match(r"PMT\(([^,]+),([^,]+),([^\)]+)\)", formula)
+    match = re.match(r"^PMT\(([^,]+),([^,]+),([^,)]+)\)$", formula)
     if match:
         rate, nper, pv = [s.strip() for s in match.groups()]
         return {
