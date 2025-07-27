@@ -34,7 +34,14 @@ from .utils import cell_to_coords, coords_to_cell
 logger = logging.getLogger(__name__)
 
 class CalculationEngine:
-    def __init__(self, excel_file_path: Path | str | None = None):
+    def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
+        self.logger = logger.getChild(self.__class__.__name__)
+        level = logging.DEBUG if verbose else logging.INFO
+        self.logger.setLevel(level)
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s:%(message)s"))
+            self.logger.addHandler(handler)
         if excel_file_path is None:
             data_dir = Path(__file__).resolve().parents[1] / "data"
             excel_file_path = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
@@ -147,7 +154,6 @@ class CalculationEngine:
 
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
         logger.debug("  _process_raw_dataframe called for sheet: %s, data_only: %s", sheet_name, data_only)
-
         config = self.sheet_configs[sheet_name]
         header_rows = config['header_rows']
         data_starts_at = config['data_starts_at']
@@ -217,6 +223,7 @@ class CalculationEngine:
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
         df_row_idx = row_idx - (data_starts_at - 1)
         
+       
         logger.debug(
             "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
             row_idx,
