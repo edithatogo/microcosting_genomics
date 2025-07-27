@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "unimelb-phd-phase_1"
 version = "0.1.0"
 description = "{{PROJECT_DESCRIPTION}}"
-packages = ["unimelb_phd_phase_1"]
 
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -23,13 +22,18 @@ dependencies = [
     "PyYAML",
 ]
 
-[project.optional-dependencies.dev]
-pytest = "*"
-pre-commit = "*"
-ruff = "*"
-black = "*"
-isort = "*"
-bandit = "*"
+[tool.setuptools.packages.find]
+include = ["unimelb_phd_phase_1*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+    "ruff",
+    "black",
+    "isort",
+    "bandit",
+]
 
 [project.scripts]
 validate-engine = "validate_engine:validate_engine"
