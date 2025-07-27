@@ -117,3 +117,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .aider*
+# Debugging outputs
+debug_*.py
+debug_*.txt
+debug_*.csv
+session.txt
+validation_output.txt

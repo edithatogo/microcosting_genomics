@@ -55,6 +55,17 @@ def test_parse_multiplication_three_values():
     }
     assert parse_formula(formula) == expected
 
+def test_parse_addition_simple():
+    formula = "=A1+A2"
+    expected = {
+        "type": "addition",
+        "operands": [
+            {"type": "reference", "sheet": None, "cell": "A1"},
+            {"type": "reference", "sheet": None, "cell": "A2"},
+        ],
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_reference_with_sheet():
     formula = "='3. Estimates'!F5"
     expected = {"type": "reference", "sheet": "3. Estimates", "cell": "F5"}
@@ -78,6 +89,16 @@ def test_parse_sum_range():
 def test_parse_sum_cells():
     formula = "=SUM(M744,M748,M752)"
     expected = {"type": "sum_cells", "cells": ["M744", "M748", "M752"]}
+    assert parse_formula(formula) == expected
+
+def test_parse_multiplication_by_number_with_sheet():
+    formula = "='Sheet2'!A2*3"
+    expected = {
+        "type": "multiplication_by_number",
+        "sheet": "Sheet2",
+        "cell": "A2",
+        "number": 3,
+    }
     assert parse_formula(formula) == expected
 
 def test_parse_vlookup():
@@ -111,8 +132,8 @@ def test_parse_if():
     expected = {
         "type": "if",
         "condition": "E770=0",
-        "value_if_true": {"type": "literal", "value": 0.0},
-        "value_if_false": {
+        "true_val": {"type": "literal", "value": 0.0},
+        "false_val": {
             "type": "multiplication",
             "operands": [
                 {"sheet": None, "cell": "E770"},

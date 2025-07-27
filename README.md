@@ -10,16 +10,33 @@ reflected when running the package:
 pip install -e .
 ```
 
+## Data Directory
+
+All input files used by the helper scripts live in the `data/` directory at the
+root of the repository. Each script resolves this path dynamically using a
+snippet similar to:
+
+```python
+from pathlib import Path
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+```
+
+The processed and extracted files referenced in the notebooks and scripts should
+be placed inside this directory.
+
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
 workbook in Python.  A calculation engine parses the Excel formulas and
 recreates the results so they can be tested and validated programmatically.
 
 ## Requirements
-- Python 3.8+
+Python 3.8 or later is required. Runtime dependencies are declared in
+`pyproject.toml` and include:
+
 - `pandas`
 - `openpyxl`
-- `pytest` (for running the tests)
+
+The test suite relies on `pytest`.
 
 Install the dependencies with:
 
@@ -63,6 +80,18 @@ This loads the workbook and returns a `CalculationEngine` instance ready for
 use.
 
 ## Validation
+With the prepared parquet files you can verify the engine against every table:
+Before tackling the full detailed table you can verify the simpler reference
+tables. Run:
+
+```bash
+python validate_simple_tables.py
+```
+
+This script loads the "2. Labor Prices" and "3. Estimates" sheets, computes the
+formulas with `CalculationEngine` and compares the results to the corresponding
+parquet files.
+
 With `ground_truth.parquet` prepared you can compare the engine's output to the
 expected values:
 
@@ -70,5 +99,7 @@ expected values:
 python validate_engine.py
 ```
 
-The script runs the calculation engine on the detailed table, compares the
-results to the ground truth and prints a summary of any differences.
+For each table the script reports how many cells were compared, how many
+differences were detected and summary error statistics. Rows with differences
+larger than `1e-4` are printed with their expected and calculated values so you
+can quickly spot any mismatches.
