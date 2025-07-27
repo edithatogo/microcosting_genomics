@@ -1,6 +1,12 @@
 import logging
 from pathlib import Path
 import re
+import warnings
+
+# The data tables contain thousands of columns which trigger Pandas
+# PerformanceWarnings when coercing types. These flood the test output, so we
+# silence them globally.
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
 import openpyxl
 import pandas as pd
@@ -52,7 +58,15 @@ class CalculationEngine:
             # More strategies will be added here
         }
         self.sheet_configs = {
-            'Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
+            # The first four rows in the "Detailed Table" sheet form a complex
+            # multi-level header.  Row five begins the actual data.  The
+            # configuration below reflects that structure so that the loader
+            # correctly builds a ``MultiIndex`` for the columns.
+            'Detailed Table': {
+                'header_rows': 4,
+                'data_starts_at': 5,
+                'string_columns': ['Test', 'Category', 'Sub-Category', 'Step'],
+            },
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
@@ -146,6 +160,9 @@ class CalculationEngine:
             logger.debug("    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape)
             header_df = header_df.ffill(axis=0)
             
+            # Avoid extremely verbose debug output when loading the large
+            # "Detailed Table" sheet.  The header can span more than a thousand
+            # columns, so printing it is not practical during normal test runs.
             if sheet_name == 'Detailed Table':
                 logger.debug("--- DEBUG: Detailed Table Header ---")
                 logger.debug("%s", header_df.to_string())

@@ -1,6 +1,12 @@
 import pytest
 from pathlib import Path
 import os
+import pandas as pd
+import math
+import warnings
+
+# Silence very verbose PerformanceWarnings emitted during data loading
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -70,6 +76,26 @@ def test_engine_initialization(engine):
     sheet_names = engine.get_sheet_names()
     assert isinstance(sheet_names, list)
     assert 'Detailed Table' in sheet_names
+
+
+def test_detailed_table_header(engine):
+    df = engine.get_data('Detailed Table')
+    assert df.columns.nlevels == 4
+
+    expected = [
+        (float('nan'), 'Test', 'Test', 'Test'),
+        (float('nan'), 'Category', 'Category', 'Category'),
+        (float('nan'), 'Sub-Category', 'Sub-Category', 'Sub-Category'),
+        (float('nan'), 'Step', 'Step', 'Step'),
+        ('Estimates', 'Quantity of Use per Test', 'LL', 'LL'),
+    ]
+
+    for actual, exp in zip(list(df.columns[:5]), expected):
+        for a, e in zip(actual, exp):
+            if isinstance(e, float) and math.isnan(e):
+                assert pd.isna(a)
+            else:
+                assert a == e
 
 
 def test_get_cell_formula(test_engine):
