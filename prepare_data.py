@@ -2,6 +2,8 @@
 
 from pathlib import Path
 import pandas as pd
+import numpy as np
+from unimelb_phd_phase_1.config import load_config
 
 def create_unique_column_names(columns: list[str]) -> list[str]:
     """Ensure column names are unique by appending a suffix if required."""
@@ -16,7 +18,6 @@ def create_unique_column_names(columns: list[str]) -> list[str]:
             seen[col] = 1
             unique_columns.append(col)
     return unique_columns
-
 
 def _parse_generic_sheet(
     file_path: Path | str,
@@ -54,24 +55,32 @@ def _parse_generic_sheet(
 def main() -> None:
     """Create cleaned Parquet datasets used for validation."""
 
+    config = load_config()
+    workbook_key = config.get("default_workbook", "main")
+    try:
+        source_file = Path(config["workbooks"][workbook_key]["path"])
+        detailed_table_sheet = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+        labor_prices_sheet = config["workbooks"][workbook_key]["sheets"]["labor_prices"]
+        estimates_sheet = config["workbooks"][workbook_key]["sheets"]["estimates"]
+    except KeyError as e:
+        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
+
     data_dir = Path(__file__).resolve().parents[0] / "data"
+    prepared_dir = data_dir / "prepared"
+    prepared_dir.mkdir(exist_ok=True)
 
     # --- 1. Detailed Table -------------------------------------------------
-    main_wb = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
-    ground_truth = _parse_generic_sheet(main_wb, "Detailed Table", header_rows=3)
-    (data_dir / "prepared").mkdir(exist_ok=True)
-    ground_truth.to_parquet(data_dir / "prepared" / "ground_truth.parquet")
+    ground_truth = _parse_generic_sheet(source_file, detailed_table_sheet, header_rows=3)
+    ground_truth.to_parquet(prepared_dir / "ground_truth.parquet")
     print("Saved ground_truth.parquet")
 
     # --- 2. Labor Prices & 3. Estimates -----------------------------------
-    supp_wb = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
-
-    labor_prices = _parse_generic_sheet(supp_wb, "2. Labor Prices", header_rows=2)
-    labor_prices.to_parquet(data_dir / "prepared" / "2._labor_prices.parquet")
+    labor_prices = _parse_generic_sheet(source_file, labor_prices_sheet, header_rows=2)
+    labor_prices.to_parquet(prepared_dir / "2._labor_prices.parquet")
     print("Saved 2._labor_prices.parquet")
 
-    estimates = _parse_generic_sheet(supp_wb, "3. Estimates", header_rows=3, skip_rows=1)
-    estimates.to_parquet(data_dir / "prepared" / "3._estimates.parquet")
+    estimates = _parse_generic_sheet(source_file, estimates_sheet, header_rows=3, skip_rows=1)
+    estimates.to_parquet(prepared_dir / "3._estimates.parquet")
     print("Saved 3._estimates.parquet")
 
 

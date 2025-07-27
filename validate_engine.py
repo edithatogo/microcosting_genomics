@@ -1,5 +1,6 @@
 import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from unimelb_phd_phase_1.config import load_config
 
 def validate_engine():
     """
@@ -7,19 +8,13 @@ def validate_engine():
     """
     print("Initializing CalculationEngine...")
 
-    # Path to the Excel workbook used for validation. The R1 workbook (Nov 2023)
-    # uses a sheet named ``"1. Detailed Table"`` while earlier versions simply
-    # use ``"Detailed Table"``.
-    workbook_path = (
-        "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
-    )
-
-    # Determine the correct sheet name based on the workbook being used.
-    sheet_name = (
-        "1. Detailed Table"
-        if "Supp Tables" in workbook_path
-        else "Detailed Table"
-    )
+    config = load_config()
+    workbook_key = "validation"
+    try:
+        workbook_path = config["workbooks"][workbook_key]["path"]
+        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    except KeyError as e:
+        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
 
     engine = CalculationEngine(workbook_path)
 

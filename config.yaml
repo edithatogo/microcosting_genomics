@@ -1,0 +1,10 @@
+default_workbook: main
+workbooks:
+  main:
+    path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    sheets:
+      detailed_table: "Detailed Table"
+  validation:
+    path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    sheets:
+      detailed_table: "1. Detailed Table"
