@@ -21,6 +21,17 @@ dependencies = [
     "numpy-financial",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "isort",
+    "black",
+    "bandit",
+    "pre-commit",
+    "hypothesis",
+]
+
 [tool.ruff]
 line-length = 88
 extend-select = ["W292"]
@@ -37,6 +48,7 @@ skips = ["B101"]
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
+filterwarnings = ["ignore::pandas.errors.PerformanceWarning"]
 testpaths = [
     "tests",
 ]

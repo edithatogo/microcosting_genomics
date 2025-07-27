@@ -5,7 +5,11 @@ import pandas as pd
 
 # Read the detailed sheet from the Excel file with a multi-level header
 DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
-df = pd.read_excel(DATA_DIR / 'Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx', sheet_name='1. Detailed Table', header=[0, 1])
+df = pd.read_excel(
+    DATA_DIR / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm',
+    sheet_name='1. Detailed Table',
+    header=[0, 1],
+)
 
 # Flatten the multi-level column headers
 df.columns = ['_ '.join(col).strip() for col in df.columns.values]

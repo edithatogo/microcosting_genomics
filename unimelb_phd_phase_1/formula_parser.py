@@ -120,8 +120,28 @@ def parse_formula(formula):
             ]
         }
 
-    # Multiplication with a number
-    match = re.match(r"(\w+\d+)\*(\d+)", formula)
+    # Multiplication with a number and optional sheet name
+    match = re.match(r"'([^']*)'!(\$?\w+\$?\d+)\*(\d+)", formula)
+    if match:
+        sheet, cell, number = match.groups()
+        return {
+            "type": "multiplication_by_number",
+            "sheet": sheet,
+            "cell": cell,
+            "number": int(number)
+        }
+
+    match = re.match(r"([\w\s\.-]+)!(\$?\w+\$?\d+)\*(\d+)", formula)
+    if match:
+        sheet, cell, number = match.groups()
+        return {
+            "type": "multiplication_by_number",
+            "sheet": sheet.strip(),
+            "cell": cell,
+            "number": int(number)
+        }
+
+    match = re.match(r"(\$?\w+\$?\d+)\*(\d+)", formula)
     if match:
         cell, number = match.groups()
         return {
@@ -175,7 +195,7 @@ def parse_formula(formula):
         return {"type": "reference", "sheet": sheet.strip(), "cell": cell}
 
     # Simple cell reference without sheet name
-    match = re.match(r"^(\w+\d+)$", formula)
+    match = re.match(r"^(\$?\w+\$?\d+)$", formula)
     if match:
         cell = match.group(1)
         return {"type": "reference", "sheet": None, "cell": cell}

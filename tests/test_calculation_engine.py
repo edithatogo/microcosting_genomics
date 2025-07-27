@@ -1,6 +1,12 @@
 import pytest
 from pathlib import Path
 import os
+import pandas as pd
+import math
+import warnings
+
+# Silence very verbose PerformanceWarnings emitted during data loading
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -17,7 +23,13 @@ def test_engine():
     Provides a CalculationEngine instance initialized with test data.
     """
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
-    return CalculationEngine(test_data_path)
+    engine = CalculationEngine(test_data_path)
+    engine.sheet_configs['Sheet2'] = {'header_rows': 1, 'data_starts_at': 2}
+    sheet_obj = engine._workbook['Sheet2']
+    values, formulas = engine._load_raw_sheet_data(sheet_obj)
+    engine.sheets['Sheet2'] = engine._process_raw_dataframe(values, sheet_obj, 'Sheet2', data_only=True)
+    engine.formula_sheets['Sheet2'] = engine._process_raw_dataframe(formulas, sheet_obj, 'Sheet2', data_only=False)
+    return engine
 
 @pytest.fixture
 def main_excel_engine():
@@ -70,6 +82,26 @@ def test_engine_initialization(engine):
     sheet_names = engine.get_sheet_names()
     assert isinstance(sheet_names, list)
     assert 'Detailed Table' in sheet_names
+
+
+def test_detailed_table_header(engine):
+    df = engine.get_data('Detailed Table')
+    assert df.columns.nlevels == 4
+
+    expected = [
+        (float('nan'), 'Test', 'Test', 'Test'),
+        (float('nan'), 'Category', 'Category', 'Category'),
+        (float('nan'), 'Sub-Category', 'Sub-Category', 'Sub-Category'),
+        (float('nan'), 'Step', 'Step', 'Step'),
+        ('Estimates', 'Quantity of Use per Test', 'LL', 'LL'),
+    ]
+
+    for actual, exp in zip(list(df.columns[:5]), expected):
+        for a, e in zip(actual, exp):
+            if isinstance(e, float) and math.isnan(e):
+                assert pd.isna(a)
+            else:
+                assert a == e
 
 
 def test_get_cell_formula(test_engine):
@@ -147,3 +179,31 @@ def test_pmt_percent_and_cells(test_engine):
     result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
     # rate 50% => 0.5, nper=1, pv=-4 -> payment should be approx 6.0
     assert pytest.approx(result, rel=1e-2) == 6.0
+
+def test_multilevel_header_parsing(test_engine):
+    """Ensure headers are loaded as a MultiIndex."""
+    df = test_engine.get_data('Sheet1')
+    expected = pd.MultiIndex.from_arrays([
+        ['col1', 'col2', 'col3'],
+    ])
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
+
+def test_multiplication_by_number_other_sheet(test_engine):
+    result = test_engine.execute_formula("='Sheet2'!A2*3", 'Sheet1', 'D1')
+    assert result == 30
+
+def test_nested_if_with_sum(test_engine):
+    result = test_engine.execute_formula('=IF(1=1, SUM(A2:A4), 0)', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_absolute_relative_references(test_engine):
+    result = test_engine.execute_formula('=$A$2+B$3', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_vlookup_cross_sheet(test_engine):
+    formula = '=VLOOKUP(A2+19, Sheet2!$A$1:$B$3, 2, FALSE)'
+    result = test_engine.execute_formula(formula, 'Sheet1', 'E1')
+    assert result == 50
