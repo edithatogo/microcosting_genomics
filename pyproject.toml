@@ -21,3 +21,12 @@ dependencies = [
 "numpy-financial",
     "PyYAML",
 ]
+
+[tool.setuptools]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

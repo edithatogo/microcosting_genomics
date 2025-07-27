@@ -3,8 +3,9 @@ University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Micro
 
 ## Installation
 
-Install the project in editable mode so that changes to the source are immediately
-reflected when running the package:
+The Python sources now live under the `src/` directory.  Install the project in
+editable mode so that changes to the source are immediately reflected when
+running the package:
 
 ```bash
 pip install -e .
@@ -60,8 +61,8 @@ python prepare_data.py
 ```
 
 This command reads the `1. Detailed Table` sheet from the Excel workbook in the
-`data/` directory and writes the cleaned data to
-`data/prepared/ground_truth.parquet`.
+`data/` directory and writes the cleaned data to the
+`data/prepared/` folder as `ground_truth.parquet`.
 
 ## Configuration
 Workbook locations and sheet names are defined in `config.yaml` at the project
@@ -82,7 +83,7 @@ Scripts such as `prepare_data.py` and `validate_engine.py` load this file to
 determine which workbook and sheet to use.
 
 ## Running tests
-Execute the test suite from the repository root with:
+After installing the package you can run the tests from the repository root with:
 
 ```bash
 pytest
@@ -101,7 +102,7 @@ This loads the workbook and returns a `CalculationEngine` instance ready for
 use.
 
 ## Validation
-With the prepared parquet files you can verify the engine against every table:
+With the files in `data/prepared/` you can verify the engine against every table:
 Before tackling the full detailed table you can verify the simpler reference
 tables. Run:
 
