@@ -163,3 +163,19 @@ def test_addition_literals(test_engine):
 def test_addition_cell_references(test_engine):
     result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
     assert result == 3
+
+
+def test_nested_if_with_sum(test_engine):
+    result = test_engine.execute_formula('=IF(1=1, SUM(A2:A4), 0)', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_absolute_relative_references(test_engine):
+    result = test_engine.execute_formula('=$A$2+B$3', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_vlookup_cross_sheet(test_engine):
+    formula = '=VLOOKUP(A2+19, Sheet2!$A$1:$B$3, 2, FALSE)'
+    result = test_engine.execute_formula(formula, 'Sheet1', 'E1')
+    assert result == 50

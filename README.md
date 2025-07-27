@@ -68,6 +68,17 @@ This loads the workbook and returns a `CalculationEngine` instance ready for
 use.
 
 ## Validation
+Before tackling the full detailed table you can verify the simpler reference
+tables. Run:
+
+```bash
+python validate_simple_tables.py
+```
+
+This script loads the "2. Labor Prices" and "3. Estimates" sheets, computes the
+formulas with `CalculationEngine` and compares the results to the corresponding
+parquet files.
+
 With `ground_truth.parquet` prepared you can compare the engine's output to the
 expected values:
 

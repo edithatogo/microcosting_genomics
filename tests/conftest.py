@@ -10,3 +10,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 # Silence noisy PerformanceWarnings from pandas during tests
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+
+# Ensure the package root is on the path when running tests without installation
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))

@@ -1,6 +1,5 @@
-import pandas as pd
+import logging
 from pathlib import Path
-import openpyxl
 import re
 import warnings
 
@@ -8,6 +7,13 @@ import warnings
 # PerformanceWarnings when coercing types. These flood the test output, so we
 # silence them globally.
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+
+import openpyxl
+import pandas as pd
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 from .formula_parser import parse_formula
 from .strategies import (
     LiteralStrategy,
@@ -24,6 +30,8 @@ from .strategies import (
     VLookupStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
+
+logger = logging.getLogger(__name__)
 
 class CalculationEngine:
     def __init__(self, excel_file_path: Path | str | None = None):
@@ -68,6 +76,7 @@ class CalculationEngine:
             '8. PSA': {'header_rows': 1, 'data_starts_at': 2},
             'Process': {'header_rows': 1, 'data_starts_at': 2},
             'Sheet1': {'header_rows': 1, 'data_starts_at': 2},
+            'Sheet2': {'header_rows': 1, 'data_starts_at': 2},
             'Summary Table': {'header_rows': 1, 'data_starts_at': 2},
             'At a Glance': {'header_rows': 1, 'data_starts_at': 2},
             'Labour - Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
@@ -83,13 +92,13 @@ class CalculationEngine:
 
     def _load_all_sheets(self):
         """Loads all sheets from the Excel file into the engine."""
-        print(f"Loading sheets from: {self.excel_file_path}")
-        print(f"Workbook sheet names: {self._workbook.sheetnames}")
+        logger.info("Loading sheets from: %s", self.excel_file_path)
+        logger.info("Workbook sheet names: %s", self._workbook.sheetnames)
 
         for sheet_name in self._workbook.sheetnames:
-            print(f"Processing sheet: {sheet_name}")
+            logger.info("Processing sheet: %s", sheet_name)
             if sheet_name in self.sheet_configs:
-                print(f"  Config found for {sheet_name}: {self.sheet_configs[sheet_name]}")
+                logger.info("  Config found for %s: %s", sheet_name, self.sheet_configs[sheet_name])
                 sheet_obj = self._workbook[sheet_name]
                 
                 # Load raw data (values and formulas) using openpyxl
@@ -99,7 +108,7 @@ class CalculationEngine:
                 self.sheets[sheet_name] = self._process_raw_dataframe(all_data_values, sheet_obj, sheet_name, data_only=True)
                 self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_obj, sheet_name, data_only=False)
             else:
-                print(f"  No config found for {sheet_name}, skipping.")
+                logger.info("  No config found for %s, skipping.", sheet_name)
 
     def _load_raw_sheet_data(self, sheet_obj):
         """
@@ -107,7 +116,7 @@ class CalculationEngine:
         It handles merged cells by looking up the value from the top-left cell.
         """
         sheet_name = sheet_obj.title
-        print(f"  _load_raw_sheet_data called for sheet: {sheet_name}")
+        logger.debug("  _load_raw_sheet_data called for sheet: %s", sheet_name)
 
         ws = sheet_obj
 
@@ -137,40 +146,40 @@ class CalculationEngine:
         return data, data
 
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
-        print(f"  _process_raw_dataframe called for sheet: {sheet_name}, data_only: {data_only}")
+        logger.debug("  _process_raw_dataframe called for sheet: %s, data_only: %s", sheet_name, data_only)
 
         config = self.sheet_configs[sheet_name]
         header_rows = config['header_rows']
         data_starts_at = config['data_starts_at']
 
         df = pd.DataFrame(raw_data)
-        print(f"    Sheet: {sheet_name}, df.shape: {df.shape}")
+        logger.debug("    Sheet: %s, df.shape: %s", sheet_name, df.shape)
 
         if header_rows > 0:
             header_df = df.iloc[:header_rows].copy()
-            print(f"    Sheet: {sheet_name}, header_df.shape: {header_df.shape}")
+            logger.debug("    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape)
             header_df = header_df.ffill(axis=0)
             
             # Avoid extremely verbose debug output when loading the large
             # "Detailed Table" sheet.  The header can span more than a thousand
             # columns, so printing it is not practical during normal test runs.
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Header (truncated) ---")
-                print(header_df.iloc[:, :10].to_string())
-                print("------------------------------------------------")
+                logger.debug("--- DEBUG: Detailed Table Header ---")
+                logger.debug("%s", header_df.to_string())
+                logger.debug("------------------------------------")
 
             data_df = df.iloc[data_starts_at - 1:].copy()
-            print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
-            print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
+            logger.debug("    Sheet: %s, data_df.shape: %s", sheet_name, data_df.shape)
+            logger.debug("    Sheet: %s, header_df.shape[1]: %s", sheet_name, header_df.shape[1])
             data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
 
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Columns (truncated) ---")
-                print(list(data_df.columns[:10]))
-                print("--- DEBUG: Sample Data ---")
-                with pd.option_context('display.max_columns', 20):
-                    print(data_df.iloc[:5, :10].to_string())
-                print("----------------------------------------------------")
+                logger.debug("--- DEBUG: Detailed Table Columns ---")
+                logger.debug("%s", data_df.columns)
+                logger.debug("-------------------------------------")
+                logger.debug("--- DEBUG: Detailed Table Data (Before Coercion) ---")
+                logger.debug("%s", data_df.head().to_string())
+                logger.debug("----------------------------------------------------")
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
         
@@ -186,21 +195,20 @@ class CalculationEngine:
                     data_df[col_name] = pd.to_numeric(series, errors='coerce')
             
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Data (After Coercion) ---")
-                with pd.option_context('display.max_columns', 20):
-                    print(data_df.iloc[:5, :10].to_string())
-                print("---------------------------------------------------")
+                logger.debug("--- DEBUG: Detailed Table Data (After Coercion) ---")
+                logger.debug("%s", data_df.head().to_string())
+                logger.debug("---------------------------------------------------")
         return data_df
 
     def get_cell_value(self, sheet_name, cell_ref):
-        print(f"DEBUG: get_cell_value called for sheet: {sheet_name}, cell: {cell_ref}")
+        logger.debug("get_cell_value called for sheet: %s, cell: %s", sheet_name, cell_ref)
         row_idx, col_idx = cell_to_coords(cell_ref) # These are 0-indexed
         if row_idx is None or col_idx is None:
-            print(f"DEBUG: Invalid cell_ref: {cell_ref}")
+            logger.debug("Invalid cell_ref: %s", cell_ref)
             return None
 
         if sheet_name not in self.sheets:
-            print(f"DEBUG: Sheet '{sheet_name}' not found in self.sheets.")
+            logger.debug("Sheet '%s' not found in self.sheets.", sheet_name)
             return None
 
         config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
@@ -209,25 +217,30 @@ class CalculationEngine:
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
         df_row_idx = row_idx - (data_starts_at - 1)
         
-        print(f"DEBUG: Excel row_idx={row_idx}, col_idx={col_idx} -> DataFrame df_row_idx={df_row_idx}")
+        logger.debug(
+            "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
+            row_idx,
+            col_idx,
+            df_row_idx,
+        )
 
         if df_row_idx < 0 or df_row_idx >= len(self.sheets[sheet_name]):
-            print(f"DEBUG: df_row_idx {df_row_idx} is out of bounds for sheet {sheet_name}.")
+            logger.debug("df_row_idx %s is out of bounds for sheet %s.", df_row_idx, sheet_name)
             return None # Or handle as an error
 
         value = self.sheets[sheet_name].iloc[df_row_idx, col_idx]
-        print(f"DEBUG: Retrieved value: {value}")
+        logger.debug("Retrieved value: %s", value)
         return value
 
     def get_cell_formula(self, sheet_name, cell_ref):
-        print(f"DEBUG: get_cell_formula called for sheet: {sheet_name}, cell: {cell_ref}")
+        logger.debug("get_cell_formula called for sheet: %s, cell: %s", sheet_name, cell_ref)
         row_idx, col_idx = cell_to_coords(cell_ref) # These are 0-indexed
         if row_idx is None or col_idx is None:
-            print(f"DEBUG: Invalid cell_ref: {cell_ref}")
+            logger.debug("Invalid cell_ref: %s", cell_ref)
             return None
 
         if sheet_name not in self.formula_sheets:
-            print(f"DEBUG: Sheet '{sheet_name}' not found in self.formula_sheets.")
+            logger.debug("Sheet '%s' not found in self.formula_sheets.", sheet_name)
             return None
         
         config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
@@ -236,14 +249,19 @@ class CalculationEngine:
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
         df_row_idx = row_idx - (data_starts_at - 1)
         
-        print(f"DEBUG: Excel row_idx={row_idx}, col_idx={col_idx} -> DataFrame df_row_idx={df_row_idx}")
+        logger.debug(
+            "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
+            row_idx,
+            col_idx,
+            df_row_idx,
+        )
 
         if df_row_idx < 0 or df_row_idx >= len(self.formula_sheets[sheet_name]):
-            print(f"DEBUG: df_row_idx {df_row_idx} is out of bounds for sheet {sheet_name}.")
+            logger.debug("df_row_idx %s is out of bounds for sheet %s.", df_row_idx, sheet_name)
             return None # Or handle as an error
 
         formula = self.formula_sheets[sheet_name].iloc[df_row_idx, col_idx]
-        print(f"DEBUG: Retrieved formula: {formula}")
+        logger.debug("Retrieved formula: %s", formula)
         return formula
 
     def execute_formula(self, formula_or_parsed, sheet_name, cell_ref):
@@ -255,15 +273,14 @@ class CalculationEngine:
             self.call_stack.pop()
             return self.memoization_cache[(sheet_name, cell_ref)]
 
-        if not isinstance(formula_or_parsed, str):
+        if isinstance(formula_or_parsed, dict):
+            parsed_formula = formula_or_parsed
+        elif isinstance(formula_or_parsed, str):
+            parsed_formula = parse_formula(formula_or_parsed)
+        else:
             # It's a literal value, not a formula string
             self.call_stack.pop()
             return formula_or_parsed
-
-        if isinstance(formula_or_parsed, str):
-            parsed_formula = parse_formula(formula_or_parsed)
-        else:
-            parsed_formula = formula_or_parsed
 
         if parsed_formula is None:
             self.call_stack.pop()
