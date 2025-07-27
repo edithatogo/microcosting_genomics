@@ -2,6 +2,12 @@ import pandas as pd
 from pathlib import Path
 import openpyxl
 import re
+import warnings
+
+# The data tables contain thousands of columns which trigger Pandas
+# PerformanceWarnings when coercing types. These flood the test output, so we
+# silence them globally.
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 from .formula_parser import parse_formula
 from .strategies import (
     LiteralStrategy,
@@ -44,7 +50,15 @@ class CalculationEngine:
             # More strategies will be added here
         }
         self.sheet_configs = {
-            'Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
+            # The first four rows in the "Detailed Table" sheet form a complex
+            # multi-level header.  Row five begins the actual data.  The
+            # configuration below reflects that structure so that the loader
+            # correctly builds a ``MultiIndex`` for the columns.
+            'Detailed Table': {
+                'header_rows': 4,
+                'data_starts_at': 5,
+                'string_columns': ['Test', 'Category', 'Sub-Category', 'Step'],
+            },
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
@@ -137,10 +151,13 @@ class CalculationEngine:
             print(f"    Sheet: {sheet_name}, header_df.shape: {header_df.shape}")
             header_df = header_df.ffill(axis=0)
             
+            # Avoid extremely verbose debug output when loading the large
+            # "Detailed Table" sheet.  The header can span more than a thousand
+            # columns, so printing it is not practical during normal test runs.
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Header ---")
-                print(header_df.to_string())
-                print("------------------------------------")
+                print("--- DEBUG: Detailed Table Header (truncated) ---")
+                print(header_df.iloc[:, :10].to_string())
+                print("------------------------------------------------")
 
             data_df = df.iloc[data_starts_at - 1:].copy()
             print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
@@ -148,11 +165,11 @@ class CalculationEngine:
             data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
 
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Columns ---")
-                print(data_df.columns)
-                print("-------------------------------------")
-                print("--- DEBUG: Detailed Table Data (Before Coercion) ---")
-                print(data_df.head().to_string())
+                print("--- DEBUG: Detailed Table Columns (truncated) ---")
+                print(list(data_df.columns[:10]))
+                print("--- DEBUG: Sample Data ---")
+                with pd.option_context('display.max_columns', 20):
+                    print(data_df.iloc[:5, :10].to_string())
                 print("----------------------------------------------------")
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
@@ -170,7 +187,8 @@ class CalculationEngine:
             
             if sheet_name == 'Detailed Table':
                 print("--- DEBUG: Detailed Table Data (After Coercion) ---")
-                print(data_df.head().to_string())
+                with pd.option_context('display.max_columns', 20):
+                    print(data_df.iloc[:5, :10].to_string())
                 print("---------------------------------------------------")
         return data_df
 
