@@ -111,8 +111,8 @@ def test_parse_if():
     expected = {
         "type": "if",
         "condition": "E770=0",
-        "value_if_true": {"type": "literal", "value": 0.0},
-        "value_if_false": {
+        "true_val": {"type": "literal", "value": 0.0},
+        "false_val": {
             "type": "multiplication",
             "operands": [
                 {"sheet": None, "cell": "E770"},

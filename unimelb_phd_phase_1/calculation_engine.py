@@ -13,6 +13,8 @@ from .strategies import (
     MultiplicationThreeValuesStrategy,
     DivisionThreeValuesStrategy,
     IfStrategy,
+    IfErrorStrategy,
+    VLookupStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
 
@@ -32,10 +34,12 @@ class CalculationEngine:
             'multiplication_by_number': MultiplicationByNumberStrategy(),
             'division_three_values': DivisionThreeValuesStrategy(),
             'if': IfStrategy(),
+            'iferror': IfErrorStrategy(),
+            'vlookup': VLookupStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
-            '1. Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
+            'Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
