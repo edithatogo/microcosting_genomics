@@ -48,3 +48,4 @@ The project is divided into the following phases:
 ## Next Steps
 
 The next steps for this project are outlined in the `agents.md` file.
+For a summary of the Excel workbook's sheets and how they relate to the detailed table see [docs/table_overview.md](docs/table_overview.md).

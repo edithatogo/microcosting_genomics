@@ -91,6 +91,16 @@ def test_parse_sum_cells():
     expected = {"type": "sum_cells", "cells": ["M744", "M748", "M752"]}
     assert parse_formula(formula) == expected
 
+def test_parse_multiplication_by_number_with_sheet():
+    formula = "='Sheet2'!A2*3"
+    expected = {
+        "type": "multiplication_by_number",
+        "sheet": "Sheet2",
+        "cell": "A2",
+        "number": 3,
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_vlookup():
     formula = "=VLOOKUP(C12,'3. Estimates'!$A$4:$G$13,7,FALSE)"
     expected = {
