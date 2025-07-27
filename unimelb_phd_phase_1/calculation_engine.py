@@ -25,6 +25,8 @@ from .strategies import (
 )
 from .utils import cell_to_coords, coords_to_cell
 
+logger = logging.getLogger(__name__)
+
 class CalculationEngine:
     def __init__(self, excel_file_path: Path | str | None = None):
         if excel_file_path is None:
@@ -60,6 +62,7 @@ class CalculationEngine:
             '8. PSA': {'header_rows': 1, 'data_starts_at': 2},
             'Process': {'header_rows': 1, 'data_starts_at': 2},
             'Sheet1': {'header_rows': 1, 'data_starts_at': 2},
+            'Sheet2': {'header_rows': 1, 'data_starts_at': 2},
             'Summary Table': {'header_rows': 1, 'data_starts_at': 2},
             'At a Glance': {'header_rows': 1, 'data_starts_at': 2},
             'Labour - Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
@@ -253,15 +256,14 @@ class CalculationEngine:
             self.call_stack.pop()
             return self.memoization_cache[(sheet_name, cell_ref)]
 
-        if not isinstance(formula_or_parsed, str):
+        if isinstance(formula_or_parsed, dict):
+            parsed_formula = formula_or_parsed
+        elif isinstance(formula_or_parsed, str):
+            parsed_formula = parse_formula(formula_or_parsed)
+        else:
             # It's a literal value, not a formula string
             self.call_stack.pop()
             return formula_or_parsed
-
-        if isinstance(formula_or_parsed, str):
-            parsed_formula = parse_formula(formula_or_parsed)
-        else:
-            parsed_formula = formula_or_parsed
 
         if parsed_formula is None:
             self.call_stack.pop()
