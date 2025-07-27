@@ -27,20 +27,20 @@ Python 3.8 or later is required. Runtime dependencies are declared in
 - `pandas`
 - `openpyxl`
 
-The test suite relies on `pytest`.
+The test suite and developer utilities rely on additional optional
+dependencies.
 
-Install the dependencies with:
+Install all requirements with:
 
 ```bash
-pip install -e .
-pip install pytest
+pip install -e .[dev]
 ```
 
 If you have `just` installed you can instead run `just install`.
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above.
+2. Install the required packages as shown above with `pip install -e .[dev]`.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
