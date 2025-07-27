@@ -48,6 +48,26 @@ This command reads the `1. Detailed Table` sheet from the Excel workbook in the
 `data/` directory and writes the cleaned data to
 `data/prepared/ground_truth.parquet`.
 
+## Configuration
+Workbook locations and sheet names are defined in `config.yaml` at the project
+root. A minimal configuration looks like:
+
+```yaml
+default_workbook: main
+workbooks:
+  main:
+    path: data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm
+    sheets:
+      detailed_table: "Detailed Table"
+  validation:
+    path: data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx
+    sheets:
+      detailed_table: "1. Detailed Table"
+```
+
+Scripts such as `prepare_data.py` and `validate_engine.py` load this file to
+determine which workbook and sheet to use.
+
 ## Running tests
 Execute the test suite from the repository root with:
 

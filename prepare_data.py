@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from unimelb_phd_phase_1.config import load_config
 
 def create_unique_column_names(columns):
     """
@@ -21,8 +22,10 @@ def main():
     This main function orchestrates the process of reading a complex Excel file,
     cleaning its headers, and saving the processed data to a Parquet file.
     """
-    source_file = 'data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'
-    sheet_name = 'Detailed Table'
+    config = load_config()
+    workbook_key = config.get("default_workbook", "main")
+    source_file = config["workbooks"][workbook_key]["path"]
+    sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
     output_file = 'data/prepared/ground_truth.parquet'
 
     print(f"Preparing ground truth data from {source_file}...")

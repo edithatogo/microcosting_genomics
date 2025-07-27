@@ -18,6 +18,7 @@ classifiers = [
 dependencies = [
     "openpyxl",
     "pandas",
+    "PyYAML",
 ]
 
 [tool.ruff]
