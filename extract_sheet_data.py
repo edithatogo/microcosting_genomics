@@ -1,14 +1,22 @@
+"""Extract formula and value CSVs from the detailed Excel sheet.
+
+Data files are stored in the repository ``data`` directory located at
+``Path(__file__).resolve().parents[0] / 'data'``.
+"""
+
+from pathlib import Path
 import openpyxl
 import csv
 import os
 from openpyxl.cell import MergedCell
 
 # Define the output directory
-output_dir = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted'
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+output_dir = DATA_DIR / 'extracted'
 os.makedirs(output_dir, exist_ok=True)
 
 # Load the workbook to get formulas
-workbook = openpyxl.load_workbook('/home/doughnut/github/unimelb-phd-phase-1/data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm', data_only=False)
+workbook = openpyxl.load_workbook(DATA_DIR / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm', data_only=False)
 
 # Select the sheet
 sheet_name = 'Detailed Table'
@@ -31,7 +39,7 @@ with open(formulas_file_path, 'w', newline="") as f:
         c.writerow(row_data)
 
 # Now get values by loading with data_only=True
-workbook_values = openpyxl.load_workbook('/home/doughnut/github/unimelb-phd-phase-1/data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm', data_only=True)
+workbook_values = openpyxl.load_workbook(DATA_DIR / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm', data_only=True)
 sheet_values = workbook_values[sheet_name]
 
 # Extract values

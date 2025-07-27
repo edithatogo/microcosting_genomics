@@ -1,11 +1,14 @@
 
+"""Replicate the detailed table calculations using extracted CSV files."""
 
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+
 # Load the Detailed Table data
-detailed_table_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Detailed Table_values.csv'
-df_detailed = pd.read_csv(detailed_table_path, header=2)
+df_detailed = pd.read_csv(DATA_DIR / 'Detailed Table_values.csv', header=2)
 df_detailed.dropna(how='all', inplace=True)
 df_detailed.reset_index(drop=True, inplace=True)
 
@@ -24,8 +27,7 @@ df_detailed.columns = detailed_columns[:len(df_detailed.columns)]
 
 
 # Load the Labour Costs data
-labour_costs_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Labour - Costs - VCGS_values.csv'
-df_labour = pd.read_csv(labour_costs_path, header=1)
+df_labour = pd.read_csv(DATA_DIR / 'Labour - Costs - VCGS_values.csv', header=1)
 df_labour.dropna(how='all', inplace=True)
 df_labour.reset_index(drop=True, inplace=True)
 
@@ -46,8 +48,7 @@ labour_columns = [
 df_labour.columns = labour_columns
 
 # Load the mapping
-mapping_file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/step_to_label_mapping.csv'
-df_mapping = pd.read_csv(mapping_file_path)
+df_mapping = pd.read_csv(Path(__file__).resolve().parents[0] / 'data' / 'step_to_label_mapping.csv')
 
 # Merge the mapping with the detailed table
 df_detailed = pd.merge(df_detailed, df_mapping, on='Step', how='left')

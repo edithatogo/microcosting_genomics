@@ -1,3 +1,6 @@
+"""Run basic analysis on the microcosting detailed table."""
+
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
@@ -16,7 +19,8 @@ def extract_last_number(s):
     return np.nan
 
 # Load the data, skipping the first row and using the next two as headers
-df = pd.read_csv('/home/doughnut/github/unimelb-phd-phase-1/data/Detailed Table.csv', header=[1, 2], skiprows=[0])
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+df = pd.read_csv(DATA_DIR / 'Detailed Table.csv', header=[1, 2], skiprows=[0])
 
 # Select columns that contain 'Unit Cost' in the top-level header
 unit_cost_cols = [col for col in df.columns if 'Unit Cost' in col[0]]
