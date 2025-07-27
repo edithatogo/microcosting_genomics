@@ -1,6 +1,7 @@
 import openpyxl
 import math
 import re
+from numbers import Number
 from .utils import coords_to_cell, cell_to_coords
 from .formula_parser import parse_formula
 
@@ -145,14 +146,16 @@ class MultiplicationByNumberStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         cell = parsed_formula['cell']
         number = parsed_formula['number']
-        
-        formula = engine.get_cell_formula(sheet_name, cell)
+
+        target_sheet = parsed_formula.get('sheet', sheet_name)
+
+        formula = engine.get_cell_formula(target_sheet, cell)
         if formula and isinstance(formula, str) and formula.startswith('='):
-            value = engine.execute_formula(formula, sheet_name, cell)
+            value = engine.execute_formula(formula, target_sheet, cell)
         else:
-            value = engine.get_cell_value(sheet_name, cell)
+            value = engine.get_cell_value(target_sheet, cell)
             
-        if isinstance(value, (int, float)):
+        if isinstance(value, Number):
             return value * number
         else:
             return None
