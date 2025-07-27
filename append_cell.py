@@ -1,6 +1,16 @@
+"""Append a code cell to the Microcosting analysis notebook.
+
+The notebook is expected to reside in the ``notebooks`` directory at
+``Path(__file__).resolve().parents[0] / 'notebooks'`` and uses data from the
+repository ``data`` directory.
+"""
+
+from pathlib import Path
 import json
 
-notebook_path = '/home/doughnut/github/unimelb-phd-phase_1/notebooks/Microcosting_Analysis.ipynb'
+NOTEBOOK_DIR = Path(__file__).resolve().parents[0] / 'notebooks'
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+notebook_path = NOTEBOOK_DIR / 'Microcosting_Analysis.ipynb'
 
 with open(notebook_path, 'r') as f:
     notebook = json.load(f)
@@ -16,7 +26,9 @@ new_cell = {
         "import pandas as pd\n",
         "\n",
         "# Read the cleaned data\n",
-        "df = pd.read_csv('/home/doughnut/github/unimelb-phd-phase_1/data/cleaned_detailed_table.csv')\n",
+        "from pathlib import Path\n",
+        "data_dir = Path(__file__).resolve().parents[1] / 'data'\n",
+        "df = pd.read_csv(data_dir / 'cleaned_detailed_table.csv')\n",
         "\n",
         "# Get the unit cost columns\n",
         "unit_cost_cols = [col for col in df.columns if 'Unit Cost' in col]\n",

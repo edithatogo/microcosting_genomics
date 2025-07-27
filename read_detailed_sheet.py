@@ -1,7 +1,11 @@
+"""Convert the detailed sheet to a long-format parquet file."""
+
+from pathlib import Path
 import pandas as pd
 
 # Read the detailed sheet from the Excel file with a multi-level header
-df = pd.read_excel('/home/doughnut/github/unimelb-phd-phase_1/data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx', sheet_name='1. Detailed Table', header=[0, 1])
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+df = pd.read_excel(DATA_DIR / 'Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx', sheet_name='1. Detailed Table', header=[0, 1])
 
 # Flatten the multi-level column headers
 df.columns = ['_ '.join(col).strip() for col in df.columns.values]
@@ -13,6 +17,6 @@ df_long = df.melt(id_vars=[col for col in df.columns if 'Unnamed' in col], var_n
 df_long['value'] = df_long['value'].astype(str)
 
 # Save the long format dataframe to a parquet file
-df_long.to_parquet('/home/doughnut/github/unimelb-phd-phase_1/data/detailed_table.parquet')
+df_long.to_parquet(DATA_DIR / 'detailed_table.parquet')
 
 print('Successfully converted the detailed table to a long format parquet file.')

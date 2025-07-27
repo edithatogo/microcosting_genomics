@@ -1,10 +1,18 @@
 
 
+"""Replicate the labour cost calculations using the extracted CSV data.
+
+The required CSV files are stored in the repository ``data`` directory which is
+located at ``Path(__file__).resolve().parents[0] / 'data'``.
+"""
+
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
 # Load the data, skipping the first row and using the second row as the header
-file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Labour - Costs - VCGS_values.csv'
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+file_path = DATA_DIR / 'Labour - Costs - VCGS_values.csv'
 df = pd.read_csv(file_path, header=1)
 
 # Drop empty rows

@@ -1,16 +1,21 @@
 
+"""Analyze mappings between steps and labels.
 
+Data files are expected in the repository ``data`` directory located at
+``Path(__file__).resolve().parents[0] / 'data'``.
+"""
+
+from pathlib import Path
 import pandas as pd
 
 # Load the Detailed Table data
-detailed_table_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Detailed Table_values.csv'
-df_detailed = pd.read_csv(detailed_table_path, header=2)
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+df_detailed = pd.read_csv(DATA_DIR / 'Detailed Table_values.csv', header=2)
 df_detailed.dropna(how='all', inplace=True)
 df_detailed.reset_index(drop=True)
 
 # Load the Labour Costs data
-labour_costs_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Labour - Costs - VCGS_values.csv'
-df_labour = pd.read_csv(labour_costs_path, header=1)
+df_labour = pd.read_csv(DATA_DIR / 'Labour - Costs - VCGS_values.csv', header=1)
 df_labour.dropna(how='all', inplace=True)
 df_labour.reset_index(drop=True)
 
