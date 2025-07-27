@@ -38,9 +38,18 @@ Python 3.8 or later is required. Runtime dependencies are declared in
 
 - `pandas`
 - `openpyxl`
+- `numpy-financial`
+- `PyYAML`
 
 The test suite and developer utilities rely on additional optional
-dependencies.
+dependencies, installed via the `dev` extras:
+
+- `pytest`
+- `pre-commit`
+- `ruff`
+- `isort`
+- `black`
+- `bandit`
 
 Install all requirements with:
 
