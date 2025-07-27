@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "unimelb-phd-phase_1"
 version = "0.1.0"
 description = "{{PROJECT_DESCRIPTION}}"
-packages = ["unimelb_phd_phase_1"]
 
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -19,18 +18,26 @@ classifiers = [
 dependencies = [
     "openpyxl",
     "pandas",
+    "numpy",
     "numpy-financial",
     "PyYAML",
+    "scipy",
 ]
 
-[project.optional-dependencies.dev]
-pytest = "*"
-pre-commit = "*"
-ruff = "*"
-black = "*"
-isort = "*"
-bandit = "*"
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+    "ruff",
+    "black",
+    "isort",
+    "bandit",
+]
 
 [project.scripts]
 validate-engine = "validate_engine:validate_engine"
 prepare-data = "prepare_data:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["unimelb_phd_phase_1*"]
