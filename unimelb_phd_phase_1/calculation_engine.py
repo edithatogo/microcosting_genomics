@@ -1,5 +1,5 @@
 import pandas as pd
-import os
+from pathlib import Path
 import openpyxl
 import re
 from .formula_parser import parse_formula
@@ -19,8 +19,11 @@ from .strategies import (
 from .utils import cell_to_coords, coords_to_cell
 
 class CalculationEngine:
-    def __init__(self, excel_file_path='data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'):
-        self.excel_file_path = excel_file_path
+    def __init__(self, excel_file_path: Path | str | None = None):
+        if excel_file_path is None:
+            data_dir = Path(__file__).resolve().parents[1] / "data"
+            excel_file_path = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+        self.excel_file_path = Path(excel_file_path)
         self.sheets = {}
         self.formula_sheets = {} # This will be populated on demand
         self.memoization_cache = {}

@@ -1,6 +1,5 @@
 import pytest
-import os
-print(os.getcwd())
+from pathlib import Path
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -16,9 +15,7 @@ def test_engine():
     """
     Provides a CalculationEngine instance initialized with test data.
     """
-    # Construct an absolute path to the test data file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    test_data_path = os.path.join(current_dir, 'test_data.xlsx')
+    test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
     return CalculationEngine(test_data_path)
 
 @pytest.fixture
@@ -26,7 +23,9 @@ def main_excel_engine():
     """
     Provides a CalculationEngine instance initialized with the main Excel file.
     """
-    return CalculationEngine('data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm')
+    data_dir = Path(__file__).resolve().parents[1] / "data"
+    excel_path = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    return CalculationEngine(excel_path)
 
 def test_coords_to_cell():
     assert coords_to_cell(0, 0) == 'A1'
