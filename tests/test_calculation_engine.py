@@ -1,6 +1,12 @@
 import pytest
 from pathlib import Path
 import os
+import pandas as pd
+import math
+import warnings
+
+# Silence very verbose PerformanceWarnings emitted during data loading
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -78,6 +84,26 @@ def test_engine_initialization(engine):
     assert 'Detailed Table' in sheet_names
 
 
+def test_detailed_table_header(engine):
+    df = engine.get_data('Detailed Table')
+    assert df.columns.nlevels == 4
+
+    expected = [
+        (float('nan'), 'Test', 'Test', 'Test'),
+        (float('nan'), 'Category', 'Category', 'Category'),
+        (float('nan'), 'Sub-Category', 'Sub-Category', 'Sub-Category'),
+        (float('nan'), 'Step', 'Step', 'Step'),
+        ('Estimates', 'Quantity of Use per Test', 'LL', 'LL'),
+    ]
+
+    for actual, exp in zip(list(df.columns[:5]), expected):
+        for a, e in zip(actual, exp):
+            if isinstance(e, float) and math.isnan(e):
+                assert pd.isna(a)
+            else:
+                assert a == e
+
+
 def test_get_cell_formula(test_engine):
     """
     Tests the get_cell_formula method.
@@ -147,3 +173,18 @@ def test_addition_cell_references(test_engine):
 def test_multiplication_by_number_other_sheet(test_engine):
     result = test_engine.execute_formula("='Sheet2'!A2*3", 'Sheet1', 'D1')
     assert result == 30
+
+def test_nested_if_with_sum(test_engine):
+    result = test_engine.execute_formula('=IF(1=1, SUM(A2:A4), 0)', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_absolute_relative_references(test_engine):
+    result = test_engine.execute_formula('=$A$2+B$3', 'Sheet1', 'E1')
+    assert result == 6
+
+
+def test_vlookup_cross_sheet(test_engine):
+    formula = '=VLOOKUP(A2+19, Sheet2!$A$1:$B$3, 2, FALSE)'
+    result = test_engine.execute_formula(formula, 'Sheet1', 'E1')
+    assert result == 50
