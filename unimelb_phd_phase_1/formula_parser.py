@@ -72,6 +72,17 @@ def parse_formula(formula):
             "range_lookup": range_lookup
         }
 
+    # PMT
+    match = re.match(r"^PMT\(([^,]+),([^,]+),([^,)]+)\)$", formula)
+    if match:
+        rate, nper, pv = [s.strip() for s in match.groups()]
+        return {
+            "type": "pmt",
+            "rate": rate,
+            "nper": nper,
+            "pv": pv,
+        }
+
     # Multiplication of three values
     match = re.match(r"(\w+\d+)\*(\w+\d+)\*(\d+)", formula)
     if match:

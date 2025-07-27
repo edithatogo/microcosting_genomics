@@ -274,6 +274,38 @@ class IfErrorStrategy(CalculationStrategy):
             fallback = parsed_formula['value_if_error'].strip()
             return engine.execute_formula(f'={fallback}', sheet_name, f"{cell_ref}_ERR")
 
+class PmtStrategy(CalculationStrategy):
+    """Strategy for handling PMT formulas."""
+
+    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
+        import numpy_financial as npf
+
+        def _eval_token(token: str, suffix: str):
+            tok = token.strip()
+            negative = False
+            if tok.startswith('-'):
+                negative = True
+                tok = tok[1:].strip()
+            if tok.endswith('%'):
+                val = float(tok.rstrip('%')) / 100
+            else:
+                try:
+                    val = float(tok)
+                except ValueError:
+                    val = engine.execute_formula(f"={tok}", sheet_name, f"{cell_ref}_{suffix}")
+            if negative:
+                val = -val
+            return val
+
+        rate = _eval_token(parsed_formula['rate'], 'RATE')
+        nper = _eval_token(parsed_formula['nper'], 'NPER')
+        pv = _eval_token(parsed_formula['pv'], 'PV')
+
+        try:
+            return float(npf.pmt(rate, nper, pv))
+        except Exception:
+            return None
+
 class VLookupStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         lookup_token = parsed_formula['lookup_value'].strip()

@@ -112,6 +112,26 @@ def test_parse_vlookup():
     }
     assert parse_formula(formula) == expected
 
+def test_parse_pmt_simple():
+    formula = "=PMT(0.05,10,-1000)"
+    expected = {
+        "type": "pmt",
+        "rate": "0.05",
+        "nper": "10",
+        "pv": "-1000",
+    }
+    assert parse_formula(formula) == expected
+
+def test_parse_pmt_percent_and_cells():
+    formula = "=PMT(4.52%, E5, -H5)"
+    expected = {
+        "type": "pmt",
+        "rate": "4.52%",
+        "nper": "E5",
+        "pv": "-H5",
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_iferror_with_vlookup():
     formula = "=IFERROR(VLOOKUP(C12,'3. Estimates'!$A$4:$G$13,7,FALSE),0)"
     expected = {
