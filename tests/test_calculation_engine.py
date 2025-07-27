@@ -214,6 +214,31 @@ def test_multilevel_header_loader(tmp_path):
     assert isinstance(df.columns, pd.MultiIndex)
     assert df.columns.equals(expected)
 
+
+def test_multilevel_header_loader_engine(tmp_path):
+    """Load multi-level header using CalculationEngine internals."""
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    ws.append(["lvl1a", "lvl1a", "lvl1b"])
+    ws.append(["col1", "col2", "col3"])
+    ws.append([1, 2, 3])
+    wb.save(tmp_path / "multi.xlsx")
+    wb.close()
+
+    engine = CalculationEngine(tmp_path / "multi.xlsx")
+    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    sheet_obj = engine._workbook["Sheet1"]
+    values, _ = engine._load_raw_sheet_data(sheet_obj)
+    df = engine._process_raw_dataframe(values, sheet_obj, "Sheet1", data_only=True)
+
+    expected = pd.MultiIndex.from_arrays([
+        ["lvl1a", "lvl1a", "lvl1b"],
+        ["col1", "col2", "col3"],
+    ])
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
+
 def test_multiplication_by_number_other_sheet(test_engine):
     result = test_engine.execute_formula("='Sheet2'!A2*3", 'Sheet1', 'D1')
     assert result == 30
