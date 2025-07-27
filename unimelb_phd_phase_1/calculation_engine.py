@@ -1,7 +1,10 @@
-import pandas as pd
+import logging
 from pathlib import Path
+
 import openpyxl
+import pandas as pd
 import re
+import warnings
 
 from .config import load_config
 from .formula_parser import parse_formula
@@ -21,6 +24,9 @@ from .strategies import (
     PmtStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
+
+
+logger = logging.getLogger(__name__)
 
 class CalculationEngine:
     def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
