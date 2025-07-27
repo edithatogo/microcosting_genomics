@@ -16,4 +16,3 @@ def test_load_sheet_with_headers():
     assert df.columns[0][1] == "Test"
     assert df.dtypes.iloc[0] == object
     assert df.dtypes.iloc[4] == "float64"
-
