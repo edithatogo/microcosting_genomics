@@ -15,6 +15,8 @@ DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
 The processed and extracted files referenced in the notebooks and scripts should
 be placed inside this directory.
 
+The canonical source workbook is `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm`.
+
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
 workbook in Python.  A calculation engine parses the Excel formulas and
@@ -27,13 +29,13 @@ Python 3.8 or later is required. Runtime dependencies are declared in
 - `pandas`
 - `openpyxl`
 
-The test suite relies on `pytest`.
+The test suite and developer utilities rely on additional optional
+dependencies.
 
-Install the dependencies with:
+Install all requirements with:
 
 ```bash
-pip install -e .
-pip install pytest
+pip install -e .[dev]
 ```
 
 If you have `just` installed you can instead run `just install`.

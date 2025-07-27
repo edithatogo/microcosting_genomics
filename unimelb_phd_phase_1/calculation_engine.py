@@ -12,6 +12,7 @@ import pandas as pd
 # warning class is available.
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from .formula_parser import parse_formula
