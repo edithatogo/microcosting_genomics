@@ -40,7 +40,7 @@ If you have `just` installed you can instead run `just install`.
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above with `pip install -e .[dev]`.
+2. Install the required packages as shown above.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
