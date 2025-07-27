@@ -1,8 +1,14 @@
 import logging
 import pandas as pd
 from pathlib import Path
+
 import openpyxl
+import pandas as pd
 import re
+import logging
+import warnings
+
+logger = logging.getLogger(__name__)
 
 from .config import load_config
 from .formula_parser import parse_formula
@@ -398,153 +404,3 @@ class CalculationEngine:
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
 
-    def get_cell_value(self, sheet_name, cell_ref):
-        print(f"DEBUG: get_cell_value called for sheet: {sheet_name}, cell: {cell_ref}")
-        row_idx, col_idx = cell_to_coords(cell_ref) # These are 0-indexed
-        if row_idx is None or col_idx is None:
-            print(f"DEBUG: Invalid cell_ref: {cell_ref}")
-            return None
-
-        if sheet_name not in self.sheets:
-            print(f"DEBUG: Sheet '{sheet_name}' not found in self.sheets.")
-            return None
-
-        config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
-        data_starts_at = config['data_starts_at']
-        
-        # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
-        df_row_idx = row_idx - (data_starts_at - 1)
-        
-        print(f"DEBUG: Excel row_idx={row_idx}, col_idx={col_idx} -> DataFrame df_row_idx={df_row_idx}")
-
-        if df_row_idx < 0 or df_row_idx >= len(self.sheets[sheet_name]):
-            print(f"DEBUG: df_row_idx {df_row_idx} is out of bounds for sheet {sheet_name}.")
-            return None # Or handle as an error
-
-        value = self.sheets[sheet_name].iloc[df_row_idx, col_idx]
-        print(f"DEBUG: Retrieved value: {value}")
-        return value
-
-    def get_cell_formula(self, sheet_name, cell_ref):
-        print(f"DEBUG: get_cell_formula called for sheet: {sheet_name}, cell: {cell_ref}")
-        row_idx, col_idx = cell_to_coords(cell_ref) # These are 0-indexed
-        if row_idx is None or col_idx is None:
-            print(f"DEBUG: Invalid cell_ref: {cell_ref}")
-            return None
-
-        if sheet_name not in self.formula_sheets:
-            print(f"DEBUG: Sheet '{sheet_name}' not found in self.formula_sheets.")
-            return None
-        
-        config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
-        data_starts_at = config['data_starts_at']
-
-        # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
-        df_row_idx = row_idx - (data_starts_at - 1)
-        
-        print(f"DEBUG: Excel row_idx={row_idx}, col_idx={col_idx} -> DataFrame df_row_idx={df_row_idx}")
-
-        if df_row_idx < 0 or df_row_idx >= len(self.formula_sheets[sheet_name]):
-            print(f"DEBUG: df_row_idx {df_row_idx} is out of bounds for sheet {sheet_name}.")
-            return None # Or handle as an error
-
-        formula = self.formula_sheets[sheet_name].iloc[df_row_idx, col_idx]
-        print(f"DEBUG: Retrieved formula: {formula}")
-        return formula
-
-    def execute_formula(self, formula_or_parsed, sheet_name, cell_ref):
-        if (sheet_name, cell_ref) in self.call_stack:
-            raise Exception(f"Circular reference detected: {self.call_stack + [(sheet_name, cell_ref)]}")
-        self.call_stack.append((sheet_name, cell_ref))
-
-        if (sheet_name, cell_ref) in self.memoization_cache:
-            self.call_stack.pop()
-            return self.memoization_cache[(sheet_name, cell_ref)]
-
-        if isinstance(formula_or_parsed, dict):
-            parsed_formula = formula_or_parsed
-        elif isinstance(formula_or_parsed, str):
-            parsed_formula = parse_formula(formula_or_parsed)
-        else:
-            # It's a literal value, not a formula string
-            self.call_stack.pop()
-            return formula_or_parsed
-
-        if parsed_formula is None:
-            self.call_stack.pop()
-            return None
-
-        strategy = self.strategy_map.get(parsed_formula['type'])
-
-        if strategy:
-            result = strategy.execute(self, parsed_formula, sheet_name, cell_ref)
-        else:
-            result = f"UNSUPPORTED[{parsed_formula['type']}]"
-
-        self.memoization_cache[(sheet_name, cell_ref)] = result
-        self.call_stack.pop()
-        return result
-
-
-    def get_sheet_names(self):
-        """Returns a list of all sheet names in the workbook."""
-        return list(self.sheets.keys())
-
-    def get_data(self, sheet_name):
-        """Returns the entire DataFrame for a given sheet."""
-        return self.sheets.get(sheet_name)
-
-    def get_formulas(self, sheet_name):
-        """Returns the entire DataFrame of formulas for a given sheet."""
-        if sheet_name not in self.formula_sheets:
-            sheet_obj = self._workbook[sheet_name]
-            # _load_raw_sheet_data returns (all_data_values, all_data_formulas)
-            _, raw_data_formulas = self._load_raw_sheet_data(sheet_obj)
-            self.formula_sheets[sheet_name] = self._process_raw_dataframe(raw_data_formulas, sheet_obj, sheet_name, data_only=False)
-        return self.formula_sheets.get(sheet_name)
-
-    def get_ground_truth(self, sheet_name: str | None = None):
-        """
-        Returns a DataFrame with the ground truth values from the original Excel file.
-        """
-        if sheet_name is None:
-            sheet_name = self.default_sheet_names["detailed_table"]
-        return self.sheets[sheet_name]
-
-    def run_engine(self, sheet_name: str | None = None, fail_on_error: bool = True):
-        """
-        Runs the calculation engine on the specified sheet and returns a DataFrame with the results.
-        If fail_on_error is False, it will log errors and continue.
-        """
-        if sheet_name is None:
-            sheet_name = self.default_sheet_names["detailed_table"]
-        formulas_df = self.get_formulas(sheet_name)
-        if formulas_df is None:
-            return None, []
-
-        results_df = formulas_df.copy()
-        errors = []
-        for r_idx in range(formulas_df.shape[0]):
-            for c_idx in range(formulas_df.shape[1]):
-                formula = formulas_df.iloc[r_idx, c_idx]
-                cell_ref = coords_to_cell(r_idx + self.sheet_configs.get(sheet_name, {'data_starts_at': 1})['data_starts_at'] - 1, c_idx)
-                if isinstance(formula, str) and formula.startswith('='):
-                    try:
-                        result = self.execute_formula(formula, sheet_name, cell_ref)
-                        results_df.iloc[r_idx, c_idx] = result
-                    except Exception as e:
-                        error_info = {
-                            "cell": cell_ref,
-                            "formula": formula,
-                            "error": str(e),
-                            "call_stack": self.call_stack,
-                        }
-                        errors.append(error_info)
-                        results_df.iloc[r_idx, c_idx] = f"ERROR[{str(e)}]"
-                        if fail_on_error:
-                            raise
-                else:
-                    # For non-formula cells, we can just take the value from the original sheet
-                    value = self.get_cell_value(sheet_name, cell_ref)
-                    results_df.iloc[r_idx, c_idx] = value
-        return results_df, errors
