@@ -22,6 +22,7 @@ dependencies = [
 
 [tool.ruff]
 line-length = 88
+extend-select = ["W292"]
 
 [tool.setuptools]
 packages = ["unimelb_phd_phase_1"]

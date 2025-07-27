@@ -1,6 +1,6 @@
 import pytest
+from pathlib import Path
 import os
-print(os.getcwd())
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -16,9 +16,7 @@ def test_engine():
     """
     Provides a CalculationEngine instance initialized with test data.
     """
-    # Construct an absolute path to the test data file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    test_data_path = os.path.join(current_dir, 'test_data.xlsx')
+    test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
     return CalculationEngine(test_data_path)
 
 @pytest.fixture
@@ -26,7 +24,9 @@ def main_excel_engine():
     """
     Provides a CalculationEngine instance initialized with the main Excel file.
     """
-    return CalculationEngine('data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm')
+    data_dir = Path(__file__).resolve().parents[1] / "data"
+    excel_path = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    return CalculationEngine(excel_path)
 
 def test_coords_to_cell():
     assert coords_to_cell(0, 0) == 'A1'
@@ -129,3 +129,11 @@ def test_iferror_with_error(test_engine):
     # Test IFERROR when there is an error
     result = test_engine.execute_formula('=IFERROR(1/0, 0)', 'Sheet1', 'D1')
     assert result == 0
+
+def test_addition_literals(test_engine):
+    result = test_engine.execute_formula('=1+2', 'Sheet1', 'D1')
+    assert result == 3
+
+def test_addition_cell_references(test_engine):
+    result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
+    assert result == 3

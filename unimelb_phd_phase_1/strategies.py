@@ -30,6 +30,35 @@ class ReferenceStrategy(CalculationStrategy):
         
         return engine.get_cell_value(referenced_sheet, referenced_cell)
 
+class AdditionStrategy(CalculationStrategy):
+    """Strategy for handling addition formulas."""
+
+    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
+        total = 0
+        for idx, operand in enumerate(parsed_formula['operands']):
+            value = None
+            if isinstance(operand, dict) and operand.get('type') == 'literal':
+                value = operand['value']
+            elif isinstance(operand, dict) and operand.get('type') == 'reference':
+                op_sheet = operand['sheet'] if operand['sheet'] else sheet_name
+                op_cell = operand['cell']
+                formula = engine.get_cell_formula(op_sheet, op_cell)
+                if formula is not None:
+                    if isinstance(formula, str) and formula.startswith('='):
+                        value = engine.execute_formula(formula, op_sheet, op_cell)
+                    else:
+                        value = engine.execute_formula(formula, op_sheet, op_cell)
+                else:
+                    value = engine.get_cell_value(op_sheet, op_cell)
+            else:
+                value = engine.execute_formula(operand, sheet_name, f"{cell_ref}_{idx}")
+
+            if isinstance(value, (int, float)) and not math.isnan(value):
+                total += value
+            else:
+                return None
+        return total
+
 class MultiplicationStrategy(CalculationStrategy):
     """Strategy for handling multiplication formulas."""
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
