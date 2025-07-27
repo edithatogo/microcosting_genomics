@@ -6,17 +6,36 @@ def validate_engine():
     Validates the CalculationEngine against the ground truth data.
     """
     print("Initializing CalculationEngine...")
-    engine = CalculationEngine(
+
+    # Path to the Excel workbook used for validation. The R1 workbook (Nov 2023)
+    # uses a sheet named ``"1. Detailed Table"`` while earlier versions simply
+    # use ``"Detailed Table"``.
+    workbook_path = (
         "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
     )
+
+    # Determine the correct sheet name based on the workbook being used.
+    sheet_name = (
+        "1. Detailed Table"
+        if "Supp Tables" in workbook_path
+        else "Detailed Table"
+    )
+
+    engine = CalculationEngine(workbook_path)
+
+    # Update the CalculationEngine configuration if the workbook uses the
+    # ``"1. Detailed Table"`` sheet name.
+    if sheet_name != "Detailed Table":
+        engine.sheet_configs[sheet_name] = engine.sheet_configs.pop("Detailed Table")
+
     print("CalculationEngine initialized.")
 
     print("Loading ground truth data...")
-    ground_truth_df = engine.get_ground_truth('1. Detailed Table')
+    ground_truth_df = engine.get_ground_truth(sheet_name)
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
-    results_df, errors = engine.run_engine('1. Detailed Table', fail_on_error=False)
+    results_df, errors = engine.run_engine(sheet_name, fail_on_error=False)
     print("Calculation engine finished.")
 
     if errors:
