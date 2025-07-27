@@ -1,23 +1,37 @@
-"""Convert the detailed sheet to a long-format parquet file."""
+"""Convert the detailed table sheet to a long-format Parquet file."""
 
 from pathlib import Path
 import pandas as pd
 
-# Read the detailed sheet from the Excel file with a multi-level header
-DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
-<<<<<<< HEAD
-df = pd.read_excel(DATA_DIR / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm', sheet_name='1. Detailed Table', header=[0, 1])
+from unimelb_phd_phase_1.config import load_config
 
-# Flatten the multi-level column headers
-df.columns = ['_ '.join(col).strip() for col in df.columns.values]
+DATA_DIR = Path(__file__).resolve().parents[0] / "data"
 
-# Melt the dataframe to long format
-df_long = df.melt(id_vars=[col for col in df.columns if 'Unnamed' in col], var_name='variable', value_name='value')
 
-# Convert the 'value' column to string type
-df_long['value'] = df_long['value'].astype(str)
+def main() -> None:
+    config = load_config()
+    workbook_key = config.get("default_workbook", "main")
+    try:
+        file_path = Path(config["workbooks"][workbook_key]["path"])
+        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    except KeyError as e:
+        raise KeyError(
+            f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}"
+        ) from e
 
-# Save the long format dataframe to a parquet file
-df_long.to_parquet(DATA_DIR / 'detailed_table.parquet')
+    df = pd.read_excel(file_path, sheet_name=sheet_name, header=[0, 1, 2, 3])
 
-print('Successfully converted the detailed table to a long format parquet file.')
+    df.columns = [
+        " ".join(str(p).strip() for p in col if pd.notna(p)) for col in df.columns
+    ]
+
+    id_vars = [c for c in df.columns if c.lower().startswith("unnamed")]
+    df_long = df.melt(id_vars=id_vars, var_name="variable", value_name="value")
+    df_long["value"] = df_long["value"].astype(str)
+
+    df_long.to_parquet(DATA_DIR / "detailed_table.parquet")
+    print("Successfully converted the detailed table to a long format parquet file.")
+
+
+if __name__ == "__main__":
+    main()
