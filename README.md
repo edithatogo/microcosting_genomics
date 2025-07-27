@@ -71,6 +71,7 @@ This loads the workbook and returns a `CalculationEngine` instance ready for
 use.
 
 ## Validation
+With the prepared parquet files you can verify the engine against every table:
 Before tackling the full detailed table you can verify the simpler reference
 tables. Run:
 
@@ -89,5 +90,7 @@ expected values:
 python validate_engine.py
 ```
 
-The script runs the calculation engine on the detailed table, compares the
-results to the ground truth and prints a summary of any differences.
+For each table the script reports how many cells were compared, how many
+differences were detected and summary error statistics. Rows with differences
+larger than `1e-4` are printed with their expected and calculated values so you
+can quickly spot any mismatches.
