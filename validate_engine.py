@@ -10,8 +10,11 @@ def validate_engine():
 
     config = load_config()
     workbook_key = "validation"
-    workbook_path = config["workbooks"][workbook_key]["path"]
-    sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    try:
+        workbook_path = config["workbooks"][workbook_key]["path"]
+        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    except KeyError as e:
+        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
 
     engine = CalculationEngine(workbook_path)
 
