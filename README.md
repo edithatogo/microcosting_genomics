@@ -44,12 +44,12 @@ Python 3.8 or later is required. Runtime dependencies are declared in
 The test suite and developer utilities rely on additional optional
 dependencies, installed via the `dev` extras:
 
-- `pytest`
-- `pre-commit`
-- `ruff`
-- `isort`
-- `black`
 - `bandit`
+- `black`
+- `isort`
+- `pre-commit`
+- `pytest`
+- `ruff`
 
 Install all requirements with:
 
