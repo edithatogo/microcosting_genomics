@@ -15,6 +15,8 @@ DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
 The processed and extracted files referenced in the notebooks and scripts should
 be placed inside this directory.
 
+The canonical source workbook is `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm`.
+
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
 workbook in Python.  A calculation engine parses the Excel formulas and

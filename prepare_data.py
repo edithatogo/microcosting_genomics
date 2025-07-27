@@ -64,7 +64,7 @@ def main() -> None:
     print("Saved ground_truth.parquet")
 
     # --- 2. Labor Prices & 3. Estimates -----------------------------------
-    supp_wb = data_dir / "Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    supp_wb = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
 
     labor_prices = _parse_generic_sheet(supp_wb, "2. Labor Prices", header_rows=2)
     labor_prices.to_parquet(data_dir / "prepared" / "2._labor_prices.parquet")
