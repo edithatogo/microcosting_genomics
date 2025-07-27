@@ -1,8 +1,8 @@
 # Todo
 
 - [ ] Analyze the existing codebase.
-- [ ] Consolidate and document project dependencies.
-- [ ] Implement a testing framework.
-- [ ] Write tests for the existing code.
-- [ ] Set up a CI/CD pipeline.
-- [ ] Improve project documentation.
+- [x] Consolidate and document project dependencies.
+- [x] Implement a testing framework.
+- [x] Write tests for the existing code.
+- [x] Set up a CI/CD pipeline.
+- [x] Improve project documentation.

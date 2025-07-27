@@ -21,10 +21,13 @@ workbook in Python.  A calculation engine parses the Excel formulas and
 recreates the results so they can be tested and validated programmatically.
 
 ## Requirements
-- Python 3.8+
+Python 3.8 or later is required. Runtime dependencies are declared in
+`pyproject.toml` and include:
+
 - `pandas`
 - `openpyxl`
-- `pytest` (for running the tests)
+
+The test suite relies on `pytest`.
 
 Install the dependencies with:
 
