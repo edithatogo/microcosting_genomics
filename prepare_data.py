@@ -1,11 +1,12 @@
-import pandas as pd
-import numpy as np
+"""Prepare cleaned datasets from the microcosting workbooks."""
 
-def create_unique_column_names(columns):
-    """
-    Given a list of column names, ensures each name is unique by appending a suffix if needed.
-    """
-    seen = {}
+from pathlib import Path
+import pandas as pd
+
+def create_unique_column_names(columns: list[str]) -> list[str]:
+    """Ensure column names are unique by appending a suffix if required."""
+
+    seen: dict[str, int] = {}
     unique_columns = []
     for col in columns:
         if col in seen:
@@ -16,58 +17,64 @@ def create_unique_column_names(columns):
             unique_columns.append(col)
     return unique_columns
 
-def main():
-    """
-    This main function orchestrates the process of reading a complex Excel file,
-    cleaning its headers, and saving the processed data to a Parquet file.
-    """
-    source_file = 'data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'
-    sheet_name = 'Detailed Table'
-    output_file = 'data/prepared/ground_truth.parquet'
 
-    print(f"Preparing ground truth data from {source_file}...")
+def _parse_generic_sheet(
+    file_path: Path | str,
+    sheet_name: str,
+    header_rows: int,
+    skip_rows: int = 0,
+) -> pd.DataFrame:
+    """Parse a sheet with a fixed number of header rows."""
 
-    # 1. Read the header rows separately
-    header_df = pd.read_excel(source_file, sheet_name=sheet_name, header=None, nrows=3)
+    df_raw = pd.read_excel(file_path, sheet_name=sheet_name, header=None)
+    header_df = df_raw.iloc[skip_rows : skip_rows + header_rows].copy()
+    header_df = header_df.ffill(axis=0)
 
-    # 2. Construct the new column names manually and robustly
-    # Forward fill the first row to handle merged cells
-    header_df.iloc[0] = header_df.iloc[0].ffill()
-    
-    new_columns = []
+    columns: list[str] = []
     for i in range(header_df.shape[1]):
-        # Combine row 0 and 1 for the main part of the header
-        h1 = str(header_df.iloc[0, i]) if pd.notna(header_df.iloc[0, i]) else ''
-        h2 = str(header_df.iloc[1, i]) if pd.notna(header_df.iloc[1, i]) else ''
-        
-        # The third row is a sub-header
-        h3 = str(header_df.iloc[2, i]) if pd.notna(header_df.iloc[2, i]) else ''
+        parts = [
+            str(val).strip()
+            for val in header_df.iloc[:, i].values
+            if pd.notna(val)
+        ]
+        name = " ".join(parts).replace("nan", "").strip()
+        name = " ".join(name.split())
+        if not name:
+            name = f"unnamed_{i}"
+        columns.append(name)
 
-        # Combine them, cleaning up extra spaces
-        full_header = f"{h1} {h2} {h3}".replace('nan', '').strip()
-        full_header = ' '.join(full_header.split()) # Consolidate whitespace
-        
-        if not full_header:
-            full_header = f"unnamed_{i}"
-            
-        new_columns.append(full_header)
+    data_df = df_raw.iloc[skip_rows + header_rows :].reset_index(drop=True)
+    data_df.columns = create_unique_column_names(columns)
 
-    # 3. Ensure all column names are unique
-    unique_columns = create_unique_column_names(new_columns)
+    for col in data_df.columns:
+        data_df[col] = pd.to_numeric(data_df[col], errors="coerce")
 
-    # 4. Read the data, skipping the header rows, and assign the new column names
-    df = pd.read_excel(source_file, sheet_name=sheet_name, header=None, skiprows=3)
-    df.columns = unique_columns
+    return data_df
 
-    # 5. Coerce all columns to numeric where possible
-    for col in df.columns:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
+def main() -> None:
+    """Create cleaned Parquet datasets used for validation."""
 
-    # 6. Save the cleaned DataFrame
-    df.to_parquet(output_file)
+    data_dir = Path(__file__).resolve().parents[0] / "data"
 
-    print(f"Ground truth data has been prepared and saved to {output_file}")
+    # --- 1. Detailed Table -------------------------------------------------
+    main_wb = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    ground_truth = _parse_generic_sheet(main_wb, "Detailed Table", header_rows=3)
+    (data_dir / "prepared").mkdir(exist_ok=True)
+    ground_truth.to_parquet(data_dir / "prepared" / "ground_truth.parquet")
+    print("Saved ground_truth.parquet")
+
+    # --- 2. Labor Prices & 3. Estimates -----------------------------------
+    supp_wb = data_dir / "Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+
+    labor_prices = _parse_generic_sheet(supp_wb, "2. Labor Prices", header_rows=2)
+    labor_prices.to_parquet(data_dir / "prepared" / "2._labor_prices.parquet")
+    print("Saved 2._labor_prices.parquet")
+
+    estimates = _parse_generic_sheet(supp_wb, "3. Estimates", header_rows=3, skip_rows=1)
+    estimates.to_parquet(data_dir / "prepared" / "3._estimates.parquet")
+    print("Saved 3._estimates.parquet")
 
 
 if __name__ == "__main__":
     main()
+
