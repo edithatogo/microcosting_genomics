@@ -109,8 +109,28 @@ def parse_formula(formula):
             ]
         }
 
-    # Multiplication with a number
-    match = re.match(r"(\w+\d+)\*(\d+)", formula)
+    # Multiplication with a number and optional sheet name
+    match = re.match(r"'([^']*)'!(\$?\w+\$?\d+)\*(\d+)", formula)
+    if match:
+        sheet, cell, number = match.groups()
+        return {
+            "type": "multiplication_by_number",
+            "sheet": sheet,
+            "cell": cell,
+            "number": int(number)
+        }
+
+    match = re.match(r"([\w\s\.-]+)!(\$?\w+\$?\d+)\*(\d+)", formula)
+    if match:
+        sheet, cell, number = match.groups()
+        return {
+            "type": "multiplication_by_number",
+            "sheet": sheet.strip(),
+            "cell": cell,
+            "number": int(number)
+        }
+
+    match = re.match(r"(\$?\w+\$?\d+)\*(\d+)", formula)
     if match:
         cell, number = match.groups()
         return {

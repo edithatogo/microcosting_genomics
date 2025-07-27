@@ -23,7 +23,13 @@ def test_engine():
     Provides a CalculationEngine instance initialized with test data.
     """
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
-    return CalculationEngine(test_data_path)
+    engine = CalculationEngine(test_data_path)
+    engine.sheet_configs['Sheet2'] = {'header_rows': 1, 'data_starts_at': 2}
+    sheet_obj = engine._workbook['Sheet2']
+    values, formulas = engine._load_raw_sheet_data(sheet_obj)
+    engine.sheets['Sheet2'] = engine._process_raw_dataframe(values, sheet_obj, 'Sheet2', data_only=True)
+    engine.formula_sheets['Sheet2'] = engine._process_raw_dataframe(formulas, sheet_obj, 'Sheet2', data_only=False)
+    return engine
 
 @pytest.fixture
 def main_excel_engine():
@@ -164,6 +170,9 @@ def test_addition_cell_references(test_engine):
     result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
     assert result == 3
 
+def test_multiplication_by_number_other_sheet(test_engine):
+    result = test_engine.execute_formula("='Sheet2'!A2*3", 'Sheet1', 'D1')
+    assert result == 30
 
 def test_nested_if_with_sum(test_engine):
     result = test_engine.execute_formula('=IF(1=1, SUM(A2:A4), 0)', 'Sheet1', 'E1')
