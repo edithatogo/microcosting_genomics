@@ -1,6 +1,15 @@
 # unimelb-phd-phase_1
 University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Microcosting Genomics
 
+## Installation
+
+Install the project in editable mode so that changes to the source are immediately
+reflected when running the package:
+
+```bash
+pip install -e .
+```
+
 ## Data Directory
 
 All input files used by the helper scripts live in the `data/` directory at the
