@@ -170,6 +170,15 @@ def test_addition_cell_references(test_engine):
     result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
     assert result == 3
 
+def test_multilevel_header_parsing(test_engine):
+    """Ensure headers are loaded as a MultiIndex."""
+    df = test_engine.get_data('Sheet1')
+    expected = pd.MultiIndex.from_arrays([
+        ['col1', 'col2', 'col3'],
+    ])
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
+
 def test_multiplication_by_number_other_sheet(test_engine):
     result = test_engine.execute_formula("='Sheet2'!A2*3", 'Sheet1', 'D1')
     assert result == 30

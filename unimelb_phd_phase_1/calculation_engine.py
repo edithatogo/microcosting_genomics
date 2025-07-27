@@ -176,6 +176,13 @@ class CalculationEngine:
                 self.logger.debug("------------------------------------")
 
             data_df = df.iloc[data_starts_at - 1:].copy()
+            print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
+            print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
+            level_names = [f"level_{i}" for i in range(header_rows)]
+            data_df.columns = pd.MultiIndex.from_arrays(
+                header_df.values,
+                names=level_names,
+            )
             self.logger.debug("    Sheet: %s, data_df.shape: %s", sheet_name, data_df.shape)
             self.logger.debug("    Sheet: %s, header_df.shape[1]: %s", sheet_name, header_df.shape[1])
             data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
