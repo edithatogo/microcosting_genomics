@@ -23,13 +23,19 @@ dependencies = [
     "PyYAML",
 ]
 
-[project.optional-dependencies.dev]
-pytest = "*"
-pre-commit = "*"
-ruff = "*"
-black = "*"
-isort = "*"
-bandit = "*"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["unimelb_phd_phase_1*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+    "ruff",
+    "isort",
+    "black",
+    "bandit",
+]
 
 [project.scripts]
 validate-engine = "validate_engine:validate_engine"
