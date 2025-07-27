@@ -1,24 +1,12 @@
 import logging
 from pathlib import Path
 import re
-<<<<<<< HEAD
 import warnings
 
 import openpyxl
 import pandas as pd
 
-# The data tables contain thousands of columns which trigger Pandas
-# PerformanceWarnings when coercing types. These flood the test output, so we
-# silence them globally.  This must occur after pandas is imported so the
-# warning class is available.
-warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-=======
 from .config import load_config
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
 from .formula_parser import parse_formula
 from .strategies import (
     LiteralStrategy,
@@ -40,7 +28,6 @@ from .utils import cell_to_coords, coords_to_cell
 logger = logging.getLogger(__name__)
 
 class CalculationEngine:
-<<<<<<< HEAD
     def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
@@ -49,11 +36,9 @@ class CalculationEngine:
             handler = logging.StreamHandler()
             handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s:%(message)s"))
             self.logger.addHandler(handler)
-=======
-    def __init__(self, excel_file_path: Path | str | None = None):
+
         config = load_config()
         self.config = config
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
         if excel_file_path is None:
             workbook_key = config.get("default_workbook", "main")
             excel_file_path = config["workbooks"][workbook_key]["path"]
@@ -138,181 +123,6 @@ class CalculationEngine:
                 self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_obj, sheet_name, data_only=False)
             else:
                 self.logger.info("  No config found for %s, skipping.", sheet_name)
-
-    def _load_raw_sheet_data(self, sheet_obj):
-        """
-        Loads the raw data from a sheet.
-        It handles merged cells by looking up the value from the top-left cell.
-        """
-        sheet_name = sheet_obj.title
-        self.logger.debug("  _load_raw_sheet_data called for sheet: %s", sheet_name)
-
-        ws = sheet_obj
-
-        # Pre-process merged cells for fast lookup
-        merged_lookup = {}
-        for merged_range in ws.merged_cells.ranges:
-            min_row, min_col, max_row, max_col = merged_range.bounds
-            top_left_cell = ws.cell(row=min_row, column=min_col)
-            val = top_left_cell.value
-            for row in range(min_row, max_row + 1):
-                for col in range(min_col, max_col + 1):
-                    merged_lookup[(row, col)] = val
-        
-        # Extract data using the lookup for merged cells
-        data = []
-        for row_idx, row in enumerate(ws.iter_rows(), start=1):
-            row_data = []
-            for col_idx, cell in enumerate(row, start=1):
-                if (row_idx, col_idx) in merged_lookup:
-                    row_data.append(merged_lookup[(row_idx, col_idx)])
-                else:
-                    row_data.append(cell.value)
-            data.append(row_data)
-
-        # Since we only have one workbook view (data_only=False),
-        # we return the same data for both values and formulas.
-        return data, data
-
-    def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
-        self.logger.debug("  _process_raw_dataframe called for sheet: %s, data_only: %s", sheet_name, data_only)
-        config = self.sheet_configs[sheet_name]
-        header_rows = config['header_rows']
-        data_starts_at = config['data_starts_at']
-
-        df = pd.DataFrame(raw_data)
-        self.logger.debug("    Sheet: %s, df.shape: %s", sheet_name, df.shape)
-
-        if header_rows > 0:
-            header_df = df.iloc[:header_rows].copy()
-            self.logger.debug("    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape)
-            header_df = header_df.ffill(axis=0)
-            
-<<<<<<< HEAD
-            # Avoid extremely verbose debug output when loading the large
-            # "Detailed Table" sheet.  The header can span more than a thousand
-            # columns, so printing it is not practical during normal test runs.
-            import logging
-from pathlib import Path
-import re
-import warnings
-
-import openpyxl
-import pandas as pd
-
-# The data tables contain thousands of columns which trigger Pandas
-# PerformanceWarnings when coercing types. These flood the test output, so we
-# silence them globally.  This must occur after pandas is imported so the
-# warning class is available.
-warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-from .config import load_config
-from .formula_parser import parse_formula
-from .strategies import (
-    LiteralStrategy,
-    ReferenceStrategy,
-    MultiplicationStrategy,
-    SumRangeStrategy,
-    SumCellsStrategy,
-    MultiplicationByNumberStrategy,
-    MultiplicationThreeValuesStrategy,
-    DivisionThreeValuesStrategy,
-    AdditionStrategy,
-    IfStrategy,
-    IfErrorStrategy,
-    VLookupStrategy,
-    PmtStrategy,
-)
-from .utils import cell_to_coords, coords_to_cell
-
-class CalculationEngine:
-    def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
-        self.logger = logger.getChild(self.__class__.__name__)
-        level = logging.DEBUG if verbose else logging.INFO
-        self.logger.setLevel(level)
-        if not self.logger.handlers:
-            handler = logging.StreamHandler()
-            handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s:%(message)s"))
-            self.logger.addHandler(handler)
-
-        config = load_config()
-        self.config = config
-
-        if excel_file_path is None:
-            workbook_key = config.get("default_workbook", "main")
-            try:
-                excel_file_path = config["workbooks"][workbook_key]["path"]
-            except KeyError as e:
-                raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
-
-        self.excel_file_path = Path(excel_file_path)
-
-        workbook_config = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {})
-        sheet_names = workbook_config.get("sheets", {})
-
-        self.default_sheet_names = {
-            "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
-        }
-        self.sheets = {}
-        self.formula_sheets = {} # This will be populated on demand
-        self.memoization_cache = {}
-        self.call_stack = []
-        self.strategy_map = {
-            'literal': LiteralStrategy(),
-            'reference': ReferenceStrategy(),
-            'multiplication': MultiplicationStrategy(),
-            'addition': AdditionStrategy(),
-            'sum_range': SumRangeStrategy(),
-            'sum_cells': SumCellsStrategy(),
-            'multiplication_by_number': MultiplicationByNumberStrategy(),
-            'division_three_values': DivisionThreeValuesStrategy(),
-            'if': IfStrategy(),
-            'iferror': IfErrorStrategy(),
-            'vlookup': VLookupStrategy(),
-            'pmt': PmtStrategy(),
-            # More strategies will be added here
-        }
-        self.sheet_configs = {
-            # The first four rows in the "Detailed Table" sheet form a complex
-            # multi-level header.  Row five begins the actual data.  The
-            # configuration below reflects that structure so that the loader
-            # correctly builds a ``MultiIndex`` for the columns.
-            'Detailed Table': {
-                'header_rows': 4,
-                'data_starts_at': 5,
-                'string_columns': ['Test', 'Category', 'Sub-Category', 'Step'],
-            },
-            '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
-            '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
-            '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
-            '5. DSA - Overheads': {'header_rows': 1, 'data_starts_at': 2},
-            '6. DSA - Consumable Discounts': {'header_rows': 1, 'data_starts_at': 2},
-            '7. DSA - Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
-            '8. PSA': {'header_rows': 1, 'data_starts_at': 2},
-            'Process': {'header_rows': 1, 'data_starts_at': 2},
-            'Sheet1': {'header_rows': 1, 'data_starts_at': 2},
-            'Sheet2': {'header_rows': 1, 'data_starts_at': 2},
-            'Summary Table': {'header_rows': 1, 'data_starts_at': 2},
-            'At a Glance': {'header_rows': 1, 'data_starts_at': 2},
-            'Labour - Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
-            'Cons -  Costs and Util - VCGS': {'header_rows': 1, 'data_starts_at': 2},
-            'Eq - Costs and Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
-            'Labour - Costs - VCGS': {'header_rows': 1, 'data_starts_at': 2},
-        }
-
-        # Allow the detailed table sheet name to be overridden by configuration
-        configured_name = self.default_sheet_names["detailed_table"]
-        if configured_name != "Detailed Table":
-            if "Detailed Table" in self.sheet_configs:
-                self.sheet_configs[configured_name] = self.sheet_configs.pop("Detailed Table")
-
-        # Load workbook once with data_only=False to access formulas and merged cells
-        self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
-
-        self._load_all_sheets()
 
     def _load_raw_sheet_data(self, sheet_obj):
         """
@@ -570,70 +380,6 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
-=======
-            if sheet_name == self.default_sheet_names["detailed_table"]:
-                print("--- DEBUG: Detailed Table Header ---")
-                print(header_df.to_string())
-                print("------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
-
-            data_df = df.iloc[data_starts_at - 1:].copy()
-            print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
-            print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
-            level_names = [f"level_{i}" for i in range(header_rows)]
-            data_df.columns = pd.MultiIndex.from_arrays(
-                header_df.values,
-                names=level_names,
-            )
-            self.logger.debug("    Sheet: %s, data_df.shape: %s", sheet_name, data_df.shape)
-            self.logger.debug("    Sheet: %s, header_df.shape[1]: %s", sheet_name, header_df.shape[1])
-            data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
-
-<<<<<<< HEAD
-            if sheet_name == 'Detailed Table':
-                self.logger.debug("--- DEBUG: Detailed Table Columns ---")
-                self.logger.debug("%s", data_df.columns)
-                self.logger.debug("-------------------------------------")
-                self.logger.debug("--- DEBUG: Detailed Table Data (Before Coercion) ---")
-                self.logger.debug("%s", data_df.head().to_string())
-                self.logger.debug("----------------------------------------------------")
-=======
-            if sheet_name == self.default_sheet_names["detailed_table"]:
-                print("--- DEBUG: Detailed Table Columns ---")
-                print(data_df.columns)
-                print("-------------------------------------")
-                print("--- DEBUG: Detailed Table Data (Before Coercion) ---")
-                print(data_df.head().to_string())
-                print("----------------------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
-        else:
-            data_df = df.iloc[data_starts_at - 1:].copy()
-        
-        data_df.reset_index(drop=True, inplace=True)
-
-        if data_only:
-            string_columns = config.get('string_columns', [])
-            # Coerce all columns to numeric where possible, but don't fill NaNs
-            for col_name, series in data_df.items():
-                # col_name can be a tuple if there's a multi-index
-                col_name_str = col_name[0] if isinstance(col_name, tuple) else col_name
-                if col_name_str not in string_columns:
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
-                        data_df[col_name] = pd.to_numeric(series, errors="coerce")
-            
-<<<<<<< HEAD
-            if sheet_name == 'Detailed Table':
-                self.logger.debug("--- DEBUG: Detailed Table Data (After Coercion) ---")
-                self.logger.debug("%s", data_df.head().to_string())
-                self.logger.debug("---------------------------------------------------")
-=======
-            if sheet_name == self.default_sheet_names["detailed_table"]:
-                print("--- DEBUG: Detailed Table Data (After Coercion) ---")
-                print(data_df.head().to_string())
-                print("---------------------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
-        return data_df
 
     def get_cell_value(self, sheet_name, cell_ref):
         self.logger.debug("get_cell_value called for sheet: %s, cell: %s", sheet_name, cell_ref)
