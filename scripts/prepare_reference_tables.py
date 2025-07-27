@@ -30,7 +30,7 @@ def main() -> None:
     excel_path = Path(workbook["path"])
     sheets = workbook["sheets"]
 
-    prepared_dir = Path(__file__).resolve().parents[0] / "data" / "prepared"
+    prepared_dir = Path(__file__).resolve().parents[1] / "data" / "prepared"
     prepared_dir.mkdir(exist_ok=True)
 
     labor_df = _parse_generic_sheet(excel_path, sheets["labor_prices"], header_rows=2)
