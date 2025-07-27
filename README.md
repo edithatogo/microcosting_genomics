@@ -69,7 +69,8 @@ use.
 
 ## Validation
 With `ground_truth.parquet` prepared you can compare the engine's output to the
-expected values:
+expected values. The `validate_engine.py` script reads the dataset from
+`data/prepared/ground_truth.parquet` rather than reloading the Excel file:
 
 ```bash
 python validate_engine.py

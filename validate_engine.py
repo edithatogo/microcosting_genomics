@@ -30,8 +30,9 @@ def validate_engine():
 
     print("CalculationEngine initialized.")
 
-    print("Loading ground truth data...")
-    ground_truth_df = engine.get_ground_truth(sheet_name)
+    print("Loading ground truth data from Parquet file...")
+    ground_truth_path = "data/prepared/ground_truth.parquet"
+    ground_truth_df = pd.read_parquet(ground_truth_path)
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
