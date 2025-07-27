@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
 import os
+import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
@@ -137,3 +138,13 @@ def test_addition_literals(test_engine):
 def test_addition_cell_references(test_engine):
     result = test_engine.execute_formula('=A2+A3', 'Sheet1', 'D1')
     assert result == 3
+
+
+def test_multilevel_header_parsing(test_engine):
+    """Ensure headers are loaded as a MultiIndex."""
+    df = test_engine.get_data('Sheet1')
+    expected = pd.MultiIndex.from_arrays([
+        ['col1', 'col2', 'col3'],
+    ])
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
