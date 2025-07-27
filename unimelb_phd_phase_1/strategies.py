@@ -202,7 +202,7 @@ class DivisionThreeValuesStrategy(CalculationStrategy):
         val2 = engine.get_cell_value(sheet_name, cell2)
         formula2 = engine.get_cell_formula(sheet_name, cell2)
         if formula2 and isinstance(formula2, str) and formula2.startswith('='):
-            val2 = engine.execute_formula(formula2, sheet_name, val2_cell)
+            val2 = engine.execute_formula(formula2, sheet_name, cell2)
         else:
             val2 = engine.get_cell_value(sheet_name, cell2)
 
