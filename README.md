@@ -21,10 +21,13 @@ workbook in Python.  A calculation engine parses the Excel formulas and
 recreates the results so they can be tested and validated programmatically.
 
 ## Requirements
-- Python 3.8+
+Python 3.8 or later is required. Runtime dependencies are declared in
+`pyproject.toml` and include:
+
 - `pandas`
 - `openpyxl`
-- `pytest` (for running the tests)
+
+The test suite relies on `pytest`.
 
 Install the dependencies with:
 
@@ -69,6 +72,19 @@ use.
 
 ## Validation
 With the prepared parquet files you can verify the engine against every table:
+Before tackling the full detailed table you can verify the simpler reference
+tables. Run:
+
+```bash
+python validate_simple_tables.py
+```
+
+This script loads the "2. Labor Prices" and "3. Estimates" sheets, computes the
+formulas with `CalculationEngine` and compares the results to the corresponding
+parquet files.
+
+With `ground_truth.parquet` prepared you can compare the engine's output to the
+expected values:
 
 ```bash
 python validate_engine.py
