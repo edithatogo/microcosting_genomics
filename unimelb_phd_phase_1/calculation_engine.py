@@ -3,13 +3,13 @@ from pathlib import Path
 import re
 import warnings
 
+import openpyxl
+import pandas as pd
+
 # The data tables contain thousands of columns which trigger Pandas
 # PerformanceWarnings when coercing types. These flood the test output, so we
 # silence them globally.
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
-
-import openpyxl
-import pandas as pd
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
