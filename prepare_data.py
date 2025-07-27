@@ -24,8 +24,11 @@ def main():
     """
     config = load_config()
     workbook_key = config.get("default_workbook", "main")
-    source_file = config["workbooks"][workbook_key]["path"]
-    sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    try:
+        source_file = config["workbooks"][workbook_key]["path"]
+        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    except KeyError as e:
+        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
     output_file = 'data/prepared/ground_truth.parquet'
 
     print(f"Preparing ground truth data from {source_file}...")
