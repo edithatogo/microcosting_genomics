@@ -6,7 +6,7 @@
 - [x] Write tests for the existing code.
 - [x] Set up a CI/CD pipeline.
 - [x] Improve project documentation.
-- [ ] Adopt `src/` layout for packaging (optional).
+- [x] Adopt `src/` layout for packaging.
 
 ## Calculation Engine
 
@@ -19,6 +19,7 @@
 
 - [ ] Document dependencies between Excel tables.
 - [ ] Create scripts and tests for supporting tables.
+- Reference-table scripts have been consolidated into `prepare_data.py`.
 - [x] Consolidate and document project dependencies.
 - [x] Implement a testing framework.
 - [x] Write tests for the existing code.
