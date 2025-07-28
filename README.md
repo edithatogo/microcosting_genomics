@@ -77,14 +77,8 @@ pre-commit install
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above.
-3. Install the pre-commit hooks:
-
-```bash
-pre-commit install
-```
-
-4. Generate the parquet reference tables used for validation:
+2. Install the required packages as shown above, then run `pre-commit install` to set up the Git hooks.
+3. Prepare the ground truth dataset used for validation:
 
 ```bash
 python prepare_data.py
