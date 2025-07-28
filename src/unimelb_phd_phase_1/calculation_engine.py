@@ -29,6 +29,20 @@ class CalculationEngine:
         verbose: bool = False,
         prepared_data_path: Path | str | None = None,
     ):
+        """Create a new engine instance and load all configured sheets.
+
+        Parameters
+        ----------
+        excel_file_path:
+            Path to the Excel workbook.  If ``None`` the default workbook from
+            the configuration is used.
+        verbose:
+            When ``True`` debug level logging is enabled.
+        prepared_data_path:
+            Directory containing prepared parquet tables.  These tables will
+            overwrite any matching worksheets when :meth:`_load_all_sheets`
+            completes.
+        """
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)
