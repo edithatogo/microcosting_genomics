@@ -10,6 +10,12 @@ reflected when running the package:
 pip install -e .
 ```
 
+## Project Structure
+The Python package lives in the `unimelb_phd_phase_1/` directory at the
+repository root alongside helper scripts such as `prepare_data.py` and
+`validate_engine.py`. All input files reside in `data/`. A future refactor
+will adopt a `src/` layout for the package.
+
 ## Data Directory
 
 All input files used by the helper scripts live in the `data/` directory at the
