@@ -11,9 +11,12 @@ def parse_formula(formula):
 
     formula = formula.lstrip('=+').strip()
 
-    # Handle numeric literals
-    if formula.isnumeric():
-        return {"type": "literal", "value": float(formula)}
+    # Handle numeric literals (integers or floats)
+    if re.fullmatch(r"-?\d+(?:\.\d+)?", formula):
+        value = float(formula)
+        if value.is_integer():
+            value = int(value)
+        return {"type": "literal", "value": value}
     
     # Handle string literals
     match = re.match(r'"([^"]*)"', formula)

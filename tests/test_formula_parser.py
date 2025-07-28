@@ -152,7 +152,7 @@ def test_parse_if():
     expected = {
         "type": "if",
         "condition": "E770=0",
-        "true_val": {"type": "literal", "value": 0.0},
+        "true_val": {"type": "literal", "value": 0},
         "false_val": {
             "type": "multiplication",
             "operands": [
@@ -162,6 +162,10 @@ def test_parse_if():
         }
     }
     assert parse_formula(formula) == expected
+
+def test_parse_numeric_literal_formula():
+    formula = "=3"
+    assert parse_formula(formula) == {"type": "literal", "value": 3}
 
 def test_parse_string_literal():
     formula = '="Test"'
