@@ -4,14 +4,14 @@ workbooks:
     # The main workbook contains the supplemental tables referenced by
     # the Detailed Table sheet. Use this file so ``prepare_data.py`` can
     # load the ``2. Labor Prices`` and ``3. Estimates`` worksheets.
-    path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
-      detailed_table: "1. Detailed Table"
+      detailed_table: "Detailed Table"
       labor_prices: "2. Labor Prices"
       estimates: "3. Estimates"
   validation:
-    path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
-      detailed_table: "1. Detailed Table"
+      detailed_table: "Detailed Table"
       labor_prices: "2. Labor Prices"
       estimates: "3. Estimates"

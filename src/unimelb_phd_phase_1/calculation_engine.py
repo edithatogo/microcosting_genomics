@@ -120,7 +120,14 @@ class CalculationEngine:
         self._load_all_sheets()
 
     def _load_all_sheets(self):
-        """Load all configured sheets from the workbook."""
+        """Load every configured sheet into ``self.sheets``.
+
+        This reads each worksheet twice via :meth:`_load_raw_sheet_data`, once
+        to capture the numeric values and again to retain formulas. The
+        resulting DataFrames are stored in ``self.sheets`` and
+        ``self.formula_sheets``.  Prepared parquet tables are loaded last to
+        override any matching sheets.
+        """
         self.logger.debug("Loading all sheets from %s", self.excel_file_path)
 
         for sheet_name in self._workbook.sheetnames:
