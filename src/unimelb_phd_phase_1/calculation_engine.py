@@ -51,6 +51,17 @@ class CalculationEngine:
                     f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}"
                 ) from e
 
+        # Fallback to the validation workbook if the configured file is missing
+        if not Path(excel_file_path).exists():
+            alt_path = config.get("workbooks", {}).get("validation", {}).get("path")
+            if alt_path and Path(alt_path).exists():
+                self.logger.warning(
+                    "Excel file %s not found, falling back to %s",
+                    excel_file_path,
+                    alt_path,
+                )
+                excel_file_path = alt_path
+
         self.excel_file_path = Path(excel_file_path)
 
         if prepared_data_path is None:
@@ -139,23 +150,31 @@ class CalculationEngine:
         """
         self.logger.debug("Loading all sheets from %s", self.excel_file_path)
 
-        for sheet_name in self._workbook.sheetnames:
-            if sheet_name not in self.sheet_configs:
-                continue
+        workbook_values = openpyxl.load_workbook(self.excel_file_path, data_only=True)
+        try:
+            for sheet_name in self._workbook.sheetnames:
+                if sheet_name not in self.sheet_configs:
+                    continue
 
-            sheet_obj = self._workbook[sheet_name]
-            self.logger.debug("  Loading sheet: %s", sheet_name)
+                self.logger.debug("  Loading sheet: %s", sheet_name)
 
-            raw_values, raw_formulas = self._load_raw_sheet_data(sheet_obj)
-            values_df = self._process_raw_dataframe(
-                raw_values, sheet_obj, sheet_name, data_only=True
-            )
-            formulas_df = self._process_raw_dataframe(
-                raw_formulas, sheet_obj, sheet_name, data_only=False
-            )
+                sheet_obj_formulas = self._workbook[sheet_name]
+                sheet_obj_values = workbook_values[sheet_name]
 
-            self.sheets[sheet_name] = values_df
-            self.formula_sheets[sheet_name] = formulas_df
+                raw_values, _ = self._load_raw_sheet_data(sheet_obj_values)
+                _, raw_formulas = self._load_raw_sheet_data(sheet_obj_formulas)
+
+                values_df = self._process_raw_dataframe(
+                    raw_values, sheet_obj_values, sheet_name, data_only=True
+                )
+                formulas_df = self._process_raw_dataframe(
+                    raw_formulas, sheet_obj_formulas, sheet_name, data_only=False
+                )
+
+                self.sheets[sheet_name] = values_df
+                self.formula_sheets[sheet_name] = formulas_df
+        finally:
+            workbook_values.close()
 
         # Replace with any available prepared parquet tables
         self._load_prepared_tables()
@@ -168,6 +187,17 @@ class CalculationEngine:
         mapping = {
             "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
             "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
+            "4. DSA - Equipment Throughput": self.prepared_data_path / "4._dsa_equipment_throughput.parquet",
+            "5. DSA - Overheads": self.prepared_data_path / "5._dsa_overheads.parquet",
+            "6. DSA - Consumable Discounts": self.prepared_data_path / "6._dsa_consumable_discounts.parquet",
+            "7. DSA - Labor Prices": self.prepared_data_path / "7._dsa_labour_prices.parquet",
+            "Summary Table": self.prepared_data_path / "summary_table.parquet",
+            "Process": self.prepared_data_path / "process.parquet",
+            "At a Glance": self.prepared_data_path / "at_a_glance.parquet",
+            "PSA": self.prepared_data_path / "psa.parquet",
+            "Eq - Costs and Usage - VCGS": self.prepared_data_path / "equipment_costs.parquet",
+            "Cons -  Costs and Util - VCGS": self.prepared_data_path / "consumable_costs.parquet",
+            "Labour - Costs - VCGS": self.prepared_data_path / "labour_costs.parquet",
         }
 
         for name, path in mapping.items():
