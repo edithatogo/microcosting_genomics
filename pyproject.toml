@@ -24,13 +24,6 @@ dependencies = [
     "scipy",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["unimelb_phd_phase_1*"]
-
-[tool.setuptools.package-dir]
-"" = "src"
-
 [project.optional-dependencies]
 dev = [
     "pytest",
@@ -44,3 +37,9 @@ dev = [
 [project.scripts]
 validate-engine = "validate_engine:validate_engine"
 prepare-data = "prepare_data:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["unimelb_phd_phase_1*"]
