@@ -130,23 +130,31 @@ class CalculationEngine:
         """
         self.logger.debug("Loading all sheets from %s", self.excel_file_path)
 
-        for sheet_name in self._workbook.sheetnames:
-            if sheet_name not in self.sheet_configs:
-                continue
+        workbook_values = openpyxl.load_workbook(self.excel_file_path, data_only=True)
+        try:
+            for sheet_name in self._workbook.sheetnames:
+                if sheet_name not in self.sheet_configs:
+                    continue
 
-            sheet_obj = self._workbook[sheet_name]
-            self.logger.debug("  Loading sheet: %s", sheet_name)
+                self.logger.debug("  Loading sheet: %s", sheet_name)
 
-            raw_values, raw_formulas = self._load_raw_sheet_data(sheet_obj)
-            values_df = self._process_raw_dataframe(
-                raw_values, sheet_obj, sheet_name, data_only=True
-            )
-            formulas_df = self._process_raw_dataframe(
-                raw_formulas, sheet_obj, sheet_name, data_only=False
-            )
+                sheet_obj_formulas = self._workbook[sheet_name]
+                sheet_obj_values = workbook_values[sheet_name]
 
-            self.sheets[sheet_name] = values_df
-            self.formula_sheets[sheet_name] = formulas_df
+                raw_values, _ = self._load_raw_sheet_data(sheet_obj_values)
+                _, raw_formulas = self._load_raw_sheet_data(sheet_obj_formulas)
+
+                values_df = self._process_raw_dataframe(
+                    raw_values, sheet_obj_values, sheet_name, data_only=True
+                )
+                formulas_df = self._process_raw_dataframe(
+                    raw_formulas, sheet_obj_formulas, sheet_name, data_only=False
+                )
+
+                self.sheets[sheet_name] = values_df
+                self.formula_sheets[sheet_name] = formulas_df
+        finally:
+            workbook_values.close()
 
         # Replace with any available prepared parquet tables
         self._load_prepared_tables()
