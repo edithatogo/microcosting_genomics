@@ -207,6 +207,8 @@ def test_multilevel_header_loader(tmp_path):
 
     engine = CalculationEngine(file_path)
     engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+
+    # Reload the sheet using the updated configuration
     sheet_obj = engine._workbook["Sheet1"]
     values, _ = engine._load_raw_sheet_data(sheet_obj)
     engine.sheets["Sheet1"] = engine._process_raw_dataframe(
