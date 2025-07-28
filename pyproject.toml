@@ -18,15 +18,35 @@ classifiers = [
 dependencies = [
     "openpyxl",
     "pandas",
-"numpy-financial",
+    "numpy",
+    "numpy-financial",
     "PyYAML",
+    "scipy",
 ]
 
-[tool.setuptools]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["unimelb_phd_phase_1*"]
+package-dir = { "" = "src" }
 
 [tool.setuptools.package-dir]
 "" = "src"
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+    "ruff",
+    "black",
+    "isort",
+    "bandit",
+]
+
+[project.scripts]
+validate-engine = "validate_engine:validate_engine"
+prepare-data = "prepare_data:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
-

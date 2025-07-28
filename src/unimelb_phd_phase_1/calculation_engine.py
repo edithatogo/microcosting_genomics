@@ -1,7 +1,6 @@
 import logging
 from pathlib import Path
 import re
-<<<<<<< HEAD
 import warnings
 
 import openpyxl
@@ -16,9 +15,10 @@ warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-=======
 from .config import load_config
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
+
+logger = logging.getLogger(__name__)
+
 from .formula_parser import parse_formula
 from .strategies import (
     LiteralStrategy,
@@ -40,8 +40,12 @@ from .utils import cell_to_coords, coords_to_cell
 logger = logging.getLogger(__name__)
 
 class CalculationEngine:
-<<<<<<< HEAD
-    def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
+    def __init__(
+        self,
+        excel_file_path: Path | str | None = None,
+        verbose: bool = False,
+        prepared_data_path: Path | str | None = None,
+    ):
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)
@@ -49,15 +53,19 @@ class CalculationEngine:
             handler = logging.StreamHandler()
             handler.setFormatter(logging.Formatter("%(levelname)s:%(name)s:%(message)s"))
             self.logger.addHandler(handler)
-=======
     def __init__(self, excel_file_path: Path | str | None = None):
         config = load_config()
         self.config = config
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
+
+        config = load_config()
+        self.config = config
         if excel_file_path is None:
             workbook_key = config.get("default_workbook", "main")
             excel_file_path = config["workbooks"][workbook_key]["path"]
         self.excel_file_path = Path(excel_file_path)
+        if prepared_data_path is None:
+            prepared_data_path = Path(__file__).resolve().parents[1] / "data" / "prepared"
+        self.prepared_data_path = Path(prepared_data_path)
         sheet_names = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {}).get("sheets", {})
         self.default_sheet_names = {
             "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
@@ -188,7 +196,6 @@ class CalculationEngine:
             self.logger.debug("    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape)
             header_df = header_df.ffill(axis=0)
             
-<<<<<<< HEAD
             # Avoid extremely verbose debug output when loading the large
             # "Detailed Table" sheet.  The header can span more than a thousand
             # columns, so printing it is not practical during normal test runs.
@@ -313,6 +320,22 @@ class CalculationEngine:
         self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
 
         self._load_all_sheets()
+    def _load_prepared_tables(self):
+        """Load pre-parsed parquet tables if available."""
+        if not self.prepared_data_path.exists():
+            return
+
+        mapping = {
+            "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
+            "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
+        }
+
+        for name, path in mapping.items():
+            if path.exists():
+                self.logger.debug("Loading prepared table %s from %s", name, path)
+                df = pd.read_parquet(path)
+                self.sheets[name] = df
+                self.formula_sheets[name] = df
 
     def _load_raw_sheet_data(self, sheet_obj):
         """
@@ -570,12 +593,10 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
-=======
             if sheet_name == self.default_sheet_names["detailed_table"]:
                 print("--- DEBUG: Detailed Table Header ---")
                 print(header_df.to_string())
                 print("------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
 
             data_df = df.iloc[data_starts_at - 1:].copy()
             print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
@@ -589,7 +610,6 @@ class CalculationEngine:
             self.logger.debug("    Sheet: %s, header_df.shape[1]: %s", sheet_name, header_df.shape[1])
             data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
 
-<<<<<<< HEAD
             if sheet_name == 'Detailed Table':
                 self.logger.debug("--- DEBUG: Detailed Table Columns ---")
                 self.logger.debug("%s", data_df.columns)
@@ -597,15 +617,6 @@ class CalculationEngine:
                 self.logger.debug("--- DEBUG: Detailed Table Data (Before Coercion) ---")
                 self.logger.debug("%s", data_df.head().to_string())
                 self.logger.debug("----------------------------------------------------")
-=======
-            if sheet_name == self.default_sheet_names["detailed_table"]:
-                print("--- DEBUG: Detailed Table Columns ---")
-                print(data_df.columns)
-                print("-------------------------------------")
-                print("--- DEBUG: Detailed Table Data (Before Coercion) ---")
-                print(data_df.head().to_string())
-                print("----------------------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
         
@@ -622,17 +633,10 @@ class CalculationEngine:
                         warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
                         data_df[col_name] = pd.to_numeric(series, errors="coerce")
             
-<<<<<<< HEAD
             if sheet_name == 'Detailed Table':
                 self.logger.debug("--- DEBUG: Detailed Table Data (After Coercion) ---")
                 self.logger.debug("%s", data_df.head().to_string())
                 self.logger.debug("---------------------------------------------------")
-=======
-            if sheet_name == self.default_sheet_names["detailed_table"]:
-                print("--- DEBUG: Detailed Table Data (After Coercion) ---")
-                print(data_df.head().to_string())
-                print("---------------------------------------------------")
->>>>>>> origin/codex/add-configuration-file-for-workbook-paths
         return data_df
 
     def get_cell_value(self, sheet_name, cell_ref):

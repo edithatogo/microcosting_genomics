@@ -9,6 +9,8 @@ import warnings
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
+from unimelb_phd_phase_1 import excel_utils
+import openpyxl
 
 @pytest.fixture
 def engine():
@@ -185,6 +187,65 @@ def test_multilevel_header_parsing(test_engine):
     df = test_engine.get_data('Sheet1')
     expected = pd.MultiIndex.from_arrays([
         ['col1', 'col2', 'col3'],
+    ])
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
+
+
+def test_multilevel_header_loader(tmp_path):
+    """Load a simple sheet with two header rows using CalculationEngine."""
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    ws.append(["lvl1a", "lvl1a", "lvl1b"])
+    ws.append(["col1", "col2", "col3"])
+    ws.append([1, 2, 3])
+    ws.append([4, 5, 6])
+    file_path = tmp_path / "multi.xlsx"
+    wb.save(file_path)
+    wb.close()
+
+    engine = CalculationEngine(file_path)
+    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+
+    # Reload the sheet using the updated configuration
+    sheet_obj = engine._workbook["Sheet1"]
+    values, _ = engine._load_raw_sheet_data(sheet_obj)
+    engine.sheets["Sheet1"] = engine._process_raw_dataframe(
+        values, sheet_obj, "Sheet1", data_only=True
+    )
+    df = engine.get_data("Sheet1")
+
+    expected = pd.MultiIndex.from_arrays(
+        [
+            ["lvl1a", "lvl1a", "lvl1b"],
+            ["col1", "col2", "col3"],
+        ]
+    )
+    assert isinstance(df.columns, pd.MultiIndex)
+    assert df.columns.equals(expected)
+
+
+def test_multilevel_header_loader_engine(tmp_path):
+    """Load multi-level header using CalculationEngine internals."""
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    ws.append(["lvl1a", "lvl1a", "lvl1b"])
+    ws.append(["col1", "col2", "col3"])
+    ws.append([1, 2, 3])
+    wb.save(tmp_path / "multi.xlsx")
+    wb.close()
+
+    engine = CalculationEngine(tmp_path / "multi.xlsx")
+    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    sheet_obj = engine._workbook["Sheet1"]
+    values, _ = engine._load_raw_sheet_data(sheet_obj)
+    df = engine._process_raw_dataframe(values, sheet_obj, "Sheet1", data_only=True)
+
+    expected = pd.MultiIndex.from_arrays([
+        ["lvl1a", "lvl1a", "lvl1b"],
+        ["col1", "col2", "col3"],
     ])
     assert isinstance(df.columns, pd.MultiIndex)
     assert df.columns.equals(expected)
