@@ -26,7 +26,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["unimelb_phd_phase_1*"]
+include = ["unimelb_phd_phase_1"]
 
 [project.optional-dependencies]
 dev = [
@@ -42,6 +42,3 @@ dev = [
 validate-engine = "validate_engine:validate_engine"
 prepare-data = "prepare_data:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["unimelb_phd_phase_1*"]
