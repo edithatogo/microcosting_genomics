@@ -24,13 +24,6 @@ dependencies = [
     "scipy",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["unimelb_phd_phase_1*"]
-package-dir = { "" = "src" }
-
-[tool.setuptools.package-dir]
-"" = "src"
 
 [project.optional-dependencies]
 dev = [
@@ -50,3 +43,5 @@ prepare-data = "prepare_data:main"
 package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["unimelb_phd_phase_1*"]
+
