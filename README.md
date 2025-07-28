@@ -113,9 +113,10 @@ These same checks run in CI to ensure consistent style.
 
 ## Configuration
 Workbook locations and sheet names are defined in `config.yaml` at the
-repository root. For backwards compatibility the loader will also check
-`src/config.yaml` if the root file is missing. A minimal configuration looks
-like:
+repository root. `load_config()` now looks for this file in the project
+root first and, for backwards compatibility, falls back to
+`src/config.yaml` if the root file is missing. A minimal configuration
+looks like:
 
 default_workbook: main
 workbooks:
