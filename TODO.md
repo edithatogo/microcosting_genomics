@@ -6,7 +6,7 @@
 - [x] Write tests for the existing code.
 - [x] Set up a CI/CD pipeline.
 - [x] Improve project documentation.
-- [ ] Adopt a `src` layout for the Python package.
+- [ ] Adopt `src/` layout for packaging (optional).
 
 ## Calculation Engine
 
