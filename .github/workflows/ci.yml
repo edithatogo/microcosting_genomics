@@ -20,6 +20,8 @@ jobs:
       - name: Install dependencies
         run: pip install -e .[dev]
       - name: Run pre-commit
-        run: pre-commit run --all-files --color=always --show-diff-on-failure
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --all-files --color=always
       - name: Run tests
         run: pytest -q

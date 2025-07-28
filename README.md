@@ -61,7 +61,7 @@ If you have `just` installed you can instead run `just install`.
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above.
+2. Install the required packages as shown above, then run `pre-commit install` to set up the Git hooks.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
