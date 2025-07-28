@@ -140,7 +140,7 @@ python prepare_data.py
 Run the tests from the repository root with:
 
 ```bash
-pytest
+python prepare_data.py
 ```
 
 You can also run `just test` if `just` is available.
