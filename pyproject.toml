@@ -24,7 +24,6 @@ dependencies = [
     "scipy",
 ]
 
-
 [project.optional-dependencies]
 dev = [
     "pytest",
@@ -44,4 +43,3 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["unimelb_phd_phase_1*"]
-
