@@ -3,8 +3,8 @@ University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Micro
 
 ## Installation
 
-Install the project in editable mode so that changes to the source are immediately
-reflected when running the package:
+The Python sources live under the `src/` directory. Install the project in editable
+mode so changes are immediately available when running the package:
 
 ```bash
 pip install -e .
@@ -61,7 +61,8 @@ If you have `just` installed you can instead run `just install`.
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above.
+2. Install the required packages as shown above. This installs the code from
+   `src/` so the helper scripts can be executed directly.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
