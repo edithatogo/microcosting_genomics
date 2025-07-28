@@ -32,6 +32,7 @@ dev = [
     "black",
     "isort",
     "bandit",
+    "pyarrow",
 ]
 
 [project.scripts]
