@@ -3,8 +3,8 @@ University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Micro
 
 ## Installation
 
-Install the project in editable mode so that changes to the source are immediately
-reflected when running the package:
+The source code lives inside the `src/` directory. Install the project in editable
+mode so that changes are immediately available when running the package:
 
 ```bash
 pip install -e .

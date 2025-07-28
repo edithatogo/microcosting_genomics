@@ -24,8 +24,11 @@ dependencies = [
     "scipy",
 ]
 
+[tool.setuptools.package-dir]
+"" = "src"
+
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 include = ["unimelb_phd_phase_1*"]
 
 [project.optional-dependencies]
@@ -42,6 +45,3 @@ dev = [
 validate-engine = "validate_engine:validate_engine"
 prepare-data = "prepare_data:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["unimelb_phd_phase_1*"]
