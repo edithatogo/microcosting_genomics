@@ -1,8 +1,17 @@
 import re
 
 def parse_formula(formula):
-    """
-    Parses a simple Excel formula.
+    """Parse a subset of Excel formulas used in the project.
+
+    The parser recognises numeric and string literals, references, and several
+    common Excel functions. Numeric literals such as ``=3`` or ``=1.5`` are
+    returned as ``{"type": "literal", "value": 3}``.
+
+    Multiplication patterns that involve two cells and a trailing numeric value
+    (e.g. ``=A1*B1*3``) are matched before simpler multiplication cases to avoid
+    incorrect parsing. ``IF`` expressions recursively parse both
+    ``value_if_true`` and ``value_if_false`` so that literal branches are
+    returned in the same structure as top‑level numeric literals.
     """
     if not isinstance(formula, str) or not formula.startswith('='):
         if isinstance(formula, (int, float)):
