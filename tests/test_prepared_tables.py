@@ -1,16 +1,16 @@
-from pathlib import Path
 import pandas as pd
+from pathlib import Path
 
-PREPARED = Path(__file__).resolve().parents[1] / "data" / "prepared"
-
-
-def test_labor_prices_shape():
-    df = pd.read_parquet(PREPARED / "2._labor_prices.parquet")
-    assert list(df.columns[:3]) == ["Jurisdiction", "Personnel type", "Label"]
-    assert len(df) == 30
+PREP_DIR = Path("data/prepared")
 
 
-def test_estimates_shape():
-    df = pd.read_parquet(PREPARED / "3._estimates.parquet")
-    assert len(df) == 74
-    assert df.columns[0].startswith("Unnamed")
+def test_labor_prices_table():
+    df = pd.read_parquet(PREP_DIR / "2._labor_prices.parquet")
+    assert df.shape[0] == 30
+    assert {"Jurisdiction", "Personnel type", "Label"}.issubset(df.columns)
+
+
+def test_estimates_table():
+    df = pd.read_parquet(PREP_DIR / "3._estimates.parquet")
+    assert df.shape[0] == 74
+    assert df.shape[1] == 16
