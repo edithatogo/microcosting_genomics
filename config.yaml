@@ -15,3 +15,8 @@ workbooks:
       detailed_table: "Detailed Table"
       labor_prices: "2. Labor Prices"
       estimates: "3. Estimates"
+  original:
+    # Original model workbook used for manual inspection
+    path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    sheets:
+      detailed_table: "Detailed Table"
