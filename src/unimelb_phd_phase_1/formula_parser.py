@@ -24,7 +24,7 @@ def parse_formula(formula):
         return {"type": "string_literal", "value": match.group(1)}
 
     # IFERROR
-    match = re.match(r"IFERROR\((.+),(.+)\)", formula)
+    match = re.fullmatch(r"IFERROR\((.+),(.+)\)", formula)
     if match:
         value, value_if_error = match.groups()
         # This is a recursive call to handle nested formulas
@@ -64,7 +64,7 @@ def parse_formula(formula):
             }
 
     # VLOOKUP
-    match = re.match(r"VLOOKUP\((.+),(.+),(.+),(.+)\)", formula)
+    match = re.fullmatch(r"VLOOKUP\((.+),(.+),(.+),(.+)\)", formula)
     if match:
         lookup_value, table_array, col_index_num, range_lookup = match.groups()
         return {
@@ -76,7 +76,7 @@ def parse_formula(formula):
         }
 
     # PMT
-    match = re.match(r"^PMT\(([^,]+),([^,]+),([^,)]+)\)$", formula)
+    match = re.fullmatch(r"PMT\(([^,]+),([^,]+),([^,)]+)\)", formula)
     if match:
         rate, nper, pv = [s.strip() for s in match.groups()]
         return {
@@ -87,7 +87,7 @@ def parse_formula(formula):
         }
 
     # Multiplication of three values
-    match = re.match(r"(\w+\d+)\*(\w+\d+)\*(\d+)", formula)
+    match = re.fullmatch(r"(\w+\d+)\*(\w+\d+)\*(\d+)", formula)
     if match:
         cell1, cell2, number = match.groups()
         return {
@@ -100,7 +100,7 @@ def parse_formula(formula):
         }
 
     # Simple multiplication with sheet names
-    match = re.match(r"'([^']*)'!(\$?\w+\$?\d+)\*'([^']*)'!(\$?\w+\$?\d+)", formula)
+    match = re.fullmatch(r"'([^']*)'!(\$?\w+\$?\d+)\*'([^']*)'!(\$?\w+\$?\d+)", formula)
     if match:
         sheet1, cell1, sheet2, cell2 = match.groups()
         return {
@@ -112,7 +112,7 @@ def parse_formula(formula):
         }
 
     # Simple multiplication without sheet names
-    match = re.match(r"(\w+\d+)\*(\w+\d+)", formula)
+    match = re.fullmatch(r"(\w+\d+)\*(\w+\d+)", formula)
     if match:
         cell1, cell2 = match.groups()
         return {
@@ -124,7 +124,7 @@ def parse_formula(formula):
         }
 
     # Multiplication with a number and optional sheet name
-    match = re.match(r"'([^']*)'!(\$?\w+\$?\d+)\*(\d+)", formula)
+    match = re.fullmatch(r"'([^']*)'!(\$?\w+\$?\d+)\*(\d+)", formula)
     if match:
         sheet, cell, number = match.groups()
         return {
@@ -134,7 +134,7 @@ def parse_formula(formula):
             "number": int(number)
         }
 
-    match = re.match(r"([\w\s\.-]+)!(\$?\w+\$?\d+)\*(\d+)", formula)
+    match = re.fullmatch(r"([\w\s\.-]+)!(\$?\w+\$?\d+)\*(\d+)", formula)
     if match:
         sheet, cell, number = match.groups()
         return {
@@ -144,7 +144,7 @@ def parse_formula(formula):
             "number": int(number)
         }
 
-    match = re.match(r"(\$?\w+\$?\d+)\*(\d+)", formula)
+    match = re.fullmatch(r"(\$?\w+\$?\d+)\*(\d+)", formula)
     if match:
         cell, number = match.groups()
         return {
@@ -163,7 +163,7 @@ def parse_formula(formula):
             }
 
     # Division of cell / number / cell
-    match = re.match(r"(\$?\w+\$?\d+)/(\d+)/(\$?\w+\$?\d+)", formula)
+    match = re.fullmatch(r"(\$?\w+\$?\d+)/(\d+)/(\$?\w+\$?\d+)", formula)
     if match:
         cell1, number, cell2 = match.groups()
         return {
@@ -174,7 +174,7 @@ def parse_formula(formula):
         }
 
     # Simple SUM
-    match = re.match(r"SUM\((.+)\)", formula)
+    match = re.fullmatch(r"SUM\((.+)\)", formula)
     if match:
         # This is a simplified SUM parser, it will need to be improved
         # to handle multiple arguments
@@ -186,19 +186,19 @@ def parse_formula(formula):
             return {"type": "sum_cells", "cells": args}
 
     # Simple cell reference with quoted sheet name
-    match = re.match(r"'([^']*)'!(\$?\w+\$?\d+)", formula)
+    match = re.fullmatch(r"'([^']*)'!(\$?\w+\$?\d+)", formula)
     if match:
         sheet, cell = match.groups()
         return {"type": "reference", "sheet": sheet, "cell": cell}
 
     # Simple cell reference with unquoted sheet name
-    match = re.match(r"([\w\s\.-]+)!(\$?\w+\$?\d+)", formula)
+    match = re.fullmatch(r"([\w\s\.-]+)!(\$?\w+\$?\d+)", formula)
     if match:
         sheet, cell = match.groups()
         return {"type": "reference", "sheet": sheet.strip(), "cell": cell}
 
     # Simple cell reference without sheet name
-    match = re.match(r"^(\$?\w+\$?\d+)$", formula)
+    match = re.fullmatch(r"(\$?\w+\$?\d+)", formula)
     if match:
         cell = match.group(1)
         return {"type": "reference", "sheet": None, "cell": cell}
