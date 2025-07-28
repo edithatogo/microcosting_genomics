@@ -28,6 +28,9 @@ dependencies = [
 where = ["src"]
 include = ["unimelb_phd_phase_1*"]
 
+[tool.setuptools.package-dir]
+"" = "src"
+
 [project.optional-dependencies]
 dev = [
     "pytest",

@@ -53,7 +53,7 @@ class CalculationEngine:
             excel_file_path = config["workbooks"][workbook_key]["path"]
         self.excel_file_path = Path(excel_file_path)
         if prepared_data_path is None:
-            prepared_data_path = Path(__file__).resolve().parents[2] / "data" / "prepared"
+            prepared_data_path = Path(__file__).resolve().parents[1] / "data" / "prepared"
         self.prepared_data_path = Path(prepared_data_path)
         sheet_names = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {}).get("sheets", {})
         self.default_sheet_names = {
