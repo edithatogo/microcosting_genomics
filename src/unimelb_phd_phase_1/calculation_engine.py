@@ -1,10 +1,14 @@
 import logging
+import pandas as pd
 from pathlib import Path
-import re
-import warnings
 
 import openpyxl
 import pandas as pd
+import re
+import logging
+import warnings
+
+logger = logging.getLogger(__name__)
 
 from .config import load_config
 from .formula_parser import parse_formula
@@ -28,7 +32,12 @@ from .utils import cell_to_coords, coords_to_cell
 logger = logging.getLogger(__name__)
 
 class CalculationEngine:
-    def __init__(self, excel_file_path: Path | str | None = None, verbose: bool = False):
+    def __init__(
+        self,
+        excel_file_path: Path | str | None = None,
+        verbose: bool = False,
+        prepared_data_path: Path | str | None = None,
+    ):
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)
@@ -43,6 +52,9 @@ class CalculationEngine:
             workbook_key = config.get("default_workbook", "main")
             excel_file_path = config["workbooks"][workbook_key]["path"]
         self.excel_file_path = Path(excel_file_path)
+        if prepared_data_path is None:
+            prepared_data_path = Path(__file__).resolve().parents[1] / "data" / "prepared"
+        self.prepared_data_path = Path(prepared_data_path)
         sheet_names = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {}).get("sheets", {})
         self.default_sheet_names = {
             "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
@@ -123,6 +135,23 @@ class CalculationEngine:
                 self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_obj, sheet_name, data_only=False)
             else:
                 self.logger.info("  No config found for %s, skipping.", sheet_name)
+
+    def _load_prepared_tables(self):
+        """Load pre-parsed parquet tables if available."""
+        if not self.prepared_data_path.exists():
+            return
+
+        mapping = {
+            "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
+            "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
+        }
+
+        for name, path in mapping.items():
+            if path.exists():
+                self.logger.debug("Loading prepared table %s from %s", name, path)
+                df = pd.read_parquet(path)
+                self.sheets[name] = df
+                self.formula_sheets[name] = df
 
     def _load_raw_sheet_data(self, sheet_obj):
         """

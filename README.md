@@ -2,7 +2,6 @@
 University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Microcosting Genomics
 
 ## Installation
-
 The Python sources now live inside the `src/` directory. Install the project in
 editable mode so that changes are immediately reflected when running the
 package:
@@ -10,6 +9,11 @@ package:
 ```bash
 pip install -e .
 ```
+
+## Project Structure
+The Python package lives in `src/unimelb_phd_phase_1/` alongside helper
+scripts such as `prepare_data.py` and `validate_engine.py`. All input files
+reside in the `data/` directory.
 
 ## Data Directory
 
@@ -42,9 +46,18 @@ Python 3.8 or later is required. Runtime dependencies are declared in
 
 - `pandas`
 - `openpyxl`
+- `numpy-financial`
+- `PyYAML`
 
 The test suite and developer utilities rely on additional optional
-dependencies.
+dependencies, installed via the `dev` extras:
+
+- `bandit`
+- `black`
+- `isort`
+- `pre-commit`
+- `pytest`
+- `ruff`
 
 Install all requirements with:
 
@@ -56,7 +69,8 @@ If you have `just` installed you can instead run `just install`.
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above.
+2. Install the required packages as shown above. This installs the code from
+   `src/` so the helper scripts can be executed directly.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
@@ -66,6 +80,22 @@ python prepare_data.py
 This command reads the `1. Detailed Table` sheet from the Excel workbook in the
 `data/` directory and writes the cleaned data to
 `data/prepared/ground_truth.parquet`.
+
+## Pre-commit hooks
+Install the Git hooks so that formatting and linting run automatically on each
+commit:
+
+```bash
+pre-commit install
+```
+
+You can run all hooks manually with:
+
+```bash
+pre-commit run --all-files
+```
+
+These same checks run in CI to ensure consistent style.
 
 ## Configuration
 Workbook locations and sheet names are defined in `config.yaml` at the project
