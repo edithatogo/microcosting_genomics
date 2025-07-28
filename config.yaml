@@ -1,4 +1,4 @@
-default_workbook: main
+default_workbook: validation
 workbooks:
   main:
     # The main workbook contains the supplemental tables referenced by
@@ -12,9 +12,9 @@ workbooks:
   validation:
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
-      detailed_table: "1. Detailed Table"
-      labor_prices: "2. Labor Prices"
-      estimates: "3. Estimates"
+      detailed_table: "Detailed Table"
+      labor_prices: "DSA - Labour Prices"
+      estimates: "DSA - Test Throughput"
   original:
     # Original model workbook used for manual inspection
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
