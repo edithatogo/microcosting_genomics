@@ -193,7 +193,7 @@ def test_multilevel_header_parsing(test_engine):
 
 
 def test_multilevel_header_loader(tmp_path):
-    """Load a simple sheet with two header rows and ensure MultiIndex columns."""
+    """Load a simple sheet with two header rows using CalculationEngine."""
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Sheet1"
@@ -205,12 +205,21 @@ def test_multilevel_header_loader(tmp_path):
     wb.save(file_path)
     wb.close()
 
-    df = excel_utils.load_sheet_with_headers(file_path, "Sheet1", header_rows=2)
+    engine = CalculationEngine(file_path)
+    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    sheet_obj = engine._workbook["Sheet1"]
+    values, _ = engine._load_raw_sheet_data(sheet_obj)
+    engine.sheets["Sheet1"] = engine._process_raw_dataframe(
+        values, sheet_obj, "Sheet1", data_only=True
+    )
+    df = engine.get_data("Sheet1")
 
-    expected = pd.MultiIndex.from_arrays([
-        ["lvl1a", "lvl1a", "lvl1b"],
-        ["col1", "col2", "col3"],
-    ])
+    expected = pd.MultiIndex.from_arrays(
+        [
+            ["lvl1a", "lvl1a", "lvl1b"],
+            ["col1", "col2", "col3"],
+        ]
+    )
     assert isinstance(df.columns, pd.MultiIndex)
     assert df.columns.equals(expected)
 
