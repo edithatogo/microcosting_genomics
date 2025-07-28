@@ -19,7 +19,7 @@
 
 - [x] Document dependencies between Excel tables.
 - [x] Create scripts and tests for supporting tables.
-- Reference-table scripts have been consolidated into `prepare_data.py`.
+- [x] Reference-table scripts have been consolidated into `prepare_data.py`.
 - [x] Consolidate and document project dependencies.
 - [x] Implement a testing framework.
 - [x] Write tests for the existing code.
