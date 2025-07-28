@@ -4,7 +4,11 @@ workbooks:
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
       detailed_table: "Detailed Table"
+      labor_prices: "2. Labor Prices"
+      estimates: "3. Estimates"
   validation:
     path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
     sheets:
       detailed_table: "1. Detailed Table"
+      labor_prices: "2. Labor Prices"
+      estimates: "3. Estimates"

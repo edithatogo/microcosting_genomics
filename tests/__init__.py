@@ -8,4 +8,6 @@ except ModuleNotFoundError:  # pragma: no cover - only executed in CI without in
     from pathlib import Path
 
     repo_root = Path(__file__).resolve().parents[1]
+    src_path = repo_root / "src"
+    sys.path.insert(0, str(src_path))
     sys.path.insert(0, str(repo_root))

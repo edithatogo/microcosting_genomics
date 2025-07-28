@@ -1,35 +1,27 @@
 import logging
-import pandas as pd
+import warnings
 from pathlib import Path
 
 import openpyxl
 import pandas as pd
-import re
-import logging
-import warnings
 
+# The data tables contain thousands of columns which trigger Pandas warnings
+warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from .config import load_config
 from .formula_parser import parse_formula
-from .strategies import (
-    LiteralStrategy,
-    ReferenceStrategy,
-    MultiplicationStrategy,
-    SumRangeStrategy,
-    SumCellsStrategy,
-    MultiplicationByNumberStrategy,
-    MultiplicationThreeValuesStrategy,
-    DivisionThreeValuesStrategy,
-    AdditionStrategy,
-    IfStrategy,
-    IfErrorStrategy,
-    VLookupStrategy,
-    PmtStrategy,
-)
+from .strategies import (AdditionStrategy, DivisionThreeValuesStrategy,
+                         IfErrorStrategy, IfStrategy, LiteralStrategy,
+                         MultiplicationByNumberStrategy,
+                         MultiplicationStrategy,
+                         MultiplicationThreeValuesStrategy, PmtStrategy,
+                         ReferenceStrategy, SumCellsStrategy, SumRangeStrategy,
+                         VLookupStrategy)
 from .utils import cell_to_coords, coords_to_cell
 
-logger = logging.getLogger(__name__)
 
 class CalculationEngine:
     def __init__(
@@ -48,14 +40,23 @@ class CalculationEngine:
 
         config = load_config()
         self.config = config
+
         if excel_file_path is None:
             workbook_key = config.get("default_workbook", "main")
-            excel_file_path = config["workbooks"][workbook_key]["path"]
+            try:
+                excel_file_path = config["workbooks"][workbook_key]["path"]
+            except KeyError as e:
+                raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
+
         self.excel_file_path = Path(excel_file_path)
+
         if prepared_data_path is None:
             prepared_data_path = Path(__file__).resolve().parents[1] / "data" / "prepared"
         self.prepared_data_path = Path(prepared_data_path)
-        sheet_names = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {}).get("sheets", {})
+
+        workbook_config = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {})
+        sheet_names = workbook_config.get("sheets", {})
+
         self.default_sheet_names = {
             "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
         }
@@ -79,7 +80,15 @@ class CalculationEngine:
             # More strategies will be added here
         }
         self.sheet_configs = {
-            'Detailed Table': {'header_rows': 4, 'data_starts_at': 5, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
+            # The first four rows in the "Detailed Table" sheet form a complex
+            # multi-level header.  Row five begins the actual data.  The
+            # configuration below reflects that structure so that the loader
+            # correctly builds a ``MultiIndex`` for the columns.
+            'Detailed Table': {
+                'header_rows': 4,
+                'data_starts_at': 5,
+                'string_columns': ['Test', 'Category', 'Sub-Category', 'Step'],
+            },
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
@@ -89,6 +98,7 @@ class CalculationEngine:
             '8. PSA': {'header_rows': 1, 'data_starts_at': 2},
             'Process': {'header_rows': 1, 'data_starts_at': 2},
             'Sheet1': {'header_rows': 1, 'data_starts_at': 2},
+            'Sheet2': {'header_rows': 1, 'data_starts_at': 2},
             'Summary Table': {'header_rows': 1, 'data_starts_at': 2},
             'At a Glance': {'header_rows': 1, 'data_starts_at': 2},
             'Labour - Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
@@ -100,34 +110,13 @@ class CalculationEngine:
         # Allow the detailed table sheet name to be overridden by configuration
         configured_name = self.default_sheet_names["detailed_table"]
         if configured_name != "Detailed Table":
-            self.sheet_configs[configured_name] = self.sheet_configs.pop("Detailed Table")
+            if "Detailed Table" in self.sheet_configs:
+                self.sheet_configs[configured_name] = self.sheet_configs.pop("Detailed Table")
 
         # Load workbook once with data_only=False to access formulas and merged cells
         self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
 
         self._load_all_sheets()
-        self._load_prepared_tables()
-
-    def _load_all_sheets(self):
-        """Loads all sheets from the Excel file into the engine."""
-        print(f"Loading sheets from: {self.excel_file_path}")
-        print(f"Workbook sheet names: {self._workbook.sheetnames}")
-
-        for sheet_name in self._workbook.sheetnames:
-            print(f"Processing sheet: {sheet_name}")
-            if sheet_name in self.sheet_configs:
-                print(f"  Config found for {sheet_name}: {self.sheet_configs[sheet_name]}")
-                sheet_obj = self._workbook[sheet_name]
-                
-                # Load raw data (values and formulas) using openpyxl
-                all_data_values, all_data_formulas = self._load_raw_sheet_data(sheet_obj)
-
-                # Process raw dataframes (handle headers, fill merged cells, coerce types)
-                self.sheets[sheet_name] = self._process_raw_dataframe(all_data_values, sheet_obj, sheet_name, data_only=True)
-                self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_obj, sheet_name, data_only=False)
-            else:
-                print(f"  No config found for {sheet_name}, skipping.")
-
     def _load_prepared_tables(self):
         """Load pre-parsed parquet tables if available."""
         if not self.prepared_data_path.exists():
@@ -151,7 +140,7 @@ class CalculationEngine:
         It handles merged cells by looking up the value from the top-left cell.
         """
         sheet_name = sheet_obj.title
-        print(f"  _load_raw_sheet_data called for sheet: {sheet_name}")
+        self.logger.debug("  _load_raw_sheet_data called for sheet: %s", sheet_name)
 
         ws = sheet_obj
 
@@ -164,7 +153,7 @@ class CalculationEngine:
             for row in range(min_row, max_row + 1):
                 for col in range(min_col, max_col + 1):
                     merged_lookup[(row, col)] = val
-        
+
         # Extract data using the lookup for merged cells
         data = []
         for row_idx, row in enumerate(ws.iter_rows(), start=1):
@@ -181,8 +170,6 @@ class CalculationEngine:
         return data, data
 
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
-        print(f"  _process_raw_dataframe called for sheet: {sheet_name}, data_only: {data_only}")
-
         self.logger.debug("  _process_raw_dataframe called for sheet: %s, data_only: %s", sheet_name, data_only)
         config = self.sheet_configs[sheet_name]
         header_rows = config['header_rows']
@@ -195,7 +182,7 @@ class CalculationEngine:
             header_df = df.iloc[:header_rows].copy()
             self.logger.debug("    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape)
             header_df = header_df.ffill(axis=0)
-            
+
             if sheet_name == self.default_sheet_names["detailed_table"]:
                 self.logger.debug("--- DEBUG: Detailed Table Header ---")
                 self.logger.debug("%s", header_df.to_string())
@@ -222,7 +209,7 @@ class CalculationEngine:
                 self.logger.debug("----------------------------------------------------")
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
-        
+
         data_df.reset_index(drop=True, inplace=True)
 
         if data_only:
@@ -235,7 +222,7 @@ class CalculationEngine:
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
                         data_df[col_name] = pd.to_numeric(series, errors="coerce")
-            
+
             if sheet_name == self.default_sheet_names["detailed_table"]:
                 self.logger.debug("--- DEBUG: Detailed Table Data (After Coercion) ---")
                 self.logger.debug("%s", data_df.head().to_string())
@@ -255,11 +242,11 @@ class CalculationEngine:
 
         config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
         data_starts_at = config['data_starts_at']
-        
+
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
         df_row_idx = row_idx - (data_starts_at - 1)
-        
-       
+
+
         self.logger.debug(
             "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
             row_idx,
@@ -285,13 +272,13 @@ class CalculationEngine:
         if sheet_name not in self.formula_sheets:
             self.logger.debug("Sheet '%s' not found in self.formula_sheets.", sheet_name)
             return None
-        
+
         config = self.sheet_configs.get(sheet_name, {'header_rows': 0, 'data_starts_at': 1})
         data_starts_at = config['data_starts_at']
 
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
         df_row_idx = row_idx - (data_starts_at - 1)
-        
+
         self.logger.debug(
             "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
             row_idx,
@@ -403,4 +390,3 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
-
