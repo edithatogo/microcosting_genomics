@@ -111,8 +111,10 @@ pre-commit run --all-files
 These same checks run in CI to ensure consistent style.
 
 ## Configuration
-Workbook locations and sheet names are defined in `src/config.yaml`. A minimal
-configuration looks like:
+Workbook locations and sheet names are defined in `config.yaml` at the
+repository root. For backwards compatibility the loader will also check
+`src/config.yaml` if the root file is missing. A minimal configuration looks
+like:
 
 default_workbook: main
 workbooks:
