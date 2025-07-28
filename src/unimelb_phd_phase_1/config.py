@@ -8,11 +8,19 @@ import yaml
 def load_config(config_path: str | Path | None = None) -> dict:
     """Load the YAML configuration file."""
     if config_path is None:
-        # first look for config in the src directory
-        config_path = Path(__file__).resolve().parents[1] / "config.yaml"
-        if not config_path.exists():
-            # fall back to the repository root
-            config_path = Path(__file__).resolve().parents[2] / "config.yaml"
+        # By default look for ``config.yaml`` in the repository root and fall
+        # back to ``src`` for legacy setups. ``parents[2]`` points at the
+        # repository root when installed in editable mode.
+        repo_candidate = Path(__file__).resolve().parents[2] / "config.yaml"
+        src_candidate = Path(__file__).resolve().parents[1] / "config.yaml"
+
+        if repo_candidate.exists():
+            config_path = repo_candidate
+        elif src_candidate.exists():
+            config_path = src_candidate
+        else:
+            # default to the repository path for a clearer error message
+            config_path = repo_candidate
     else:
         config_path = Path(config_path)
 
