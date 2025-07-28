@@ -77,6 +77,22 @@ This command reads the `1. Detailed Table` sheet from the Excel workbook in the
 `data/` directory and writes the cleaned data to
 `data/prepared/ground_truth.parquet`.
 
+## Pre-commit hooks
+Install the Git hooks so that formatting and linting run automatically on each
+commit:
+
+```bash
+pre-commit install
+```
+
+You can run all hooks manually with:
+
+```bash
+pre-commit run --all-files
+```
+
+These same checks run in CI to ensure consistent style.
+
 ## Configuration
 Workbook locations and sheet names are defined in `config.yaml` at the project
 root. A minimal configuration looks like:
