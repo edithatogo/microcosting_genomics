@@ -8,6 +8,17 @@ from prepare_data import _parse_generic_sheet
 from unimelb_phd_phase_1.config import load_config
 
 
+def _get_workbook_path() -> Path:
+    cfg = load_config()
+    key = cfg.get("default_workbook", "main")
+    path = Path(cfg["workbooks"][key]["path"])
+    if not path.exists():
+        alt = cfg.get("workbooks", {}).get("validation", {}).get("path")
+        if alt and Path(alt).exists():
+            path = Path(alt)
+    return path
+
+
 def parse_dsa_equipment_throughput(path: Path) -> pd.DataFrame:
     return _parse_generic_sheet(path, "DSA - Test Throughput", 4)
 
@@ -55,9 +66,7 @@ PARSERS = {
 
 
 def main() -> None:
-    config = load_config()
-    workbook_key = config.get("default_workbook", "main")
-    source_file = Path(config["workbooks"][workbook_key]["path"])
+    source_file = _get_workbook_path()
     data_dir = Path(__file__).resolve().parents[1] / "data"
     prepared_dir = data_dir / "prepared"
     prepared_dir.mkdir(exist_ok=True)
