@@ -46,7 +46,20 @@ class CalculationEngine:
             try:
                 excel_file_path = config["workbooks"][workbook_key]["path"]
             except KeyError as e:
-                raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
+                raise KeyError(
+                    f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}"
+                ) from e
+
+        # Fallback to the validation workbook if the configured file is missing
+        if not Path(excel_file_path).exists():
+            alt_path = config.get("workbooks", {}).get("validation", {}).get("path")
+            if alt_path and Path(alt_path).exists():
+                self.logger.warning(
+                    "Excel file %s not found, falling back to %s",
+                    excel_file_path,
+                    alt_path,
+                )
+                excel_file_path = alt_path
 
         self.excel_file_path = Path(excel_file_path)
 
@@ -174,6 +187,9 @@ class CalculationEngine:
             "Process": self.prepared_data_path / "process.parquet",
             "At a Glance": self.prepared_data_path / "at_a_glance.parquet",
             "PSA": self.prepared_data_path / "psa.parquet",
+            "Eq - Costs and Usage - VCGS": self.prepared_data_path / "equipment_costs.parquet",
+            "Cons -  Costs and Util - VCGS": self.prepared_data_path / "consumable_costs.parquet",
+            "Labour - Costs - VCGS": self.prepared_data_path / "labour_costs.parquet",
         }
 
         for name, path in mapping.items():

@@ -15,7 +15,12 @@ from unimelb_phd_phase_1.config import load_config
 def get_workbook_path() -> Path:
     cfg = load_config()
     key = cfg.get("default_workbook", "main")
-    return Path(cfg["workbooks"][key]["path"])
+    path = Path(cfg["workbooks"][key]["path"])
+    if not path.exists():
+        alt = cfg.get("workbooks", {}).get("validation", {}).get("path")
+        if alt and Path(alt).exists():
+            path = Path(alt)
+    return path
 
 def test_parse_dsa_equipment_throughput():
     df = parse_dsa_equipment_throughput(get_workbook_path())
