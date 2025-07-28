@@ -106,9 +106,8 @@ pre-commit run --all-files
 These same checks run in CI to ensure consistent style.
 
 ## Configuration
-Workbook locations and sheet names are defined in `config.yaml`.  `load_config`
-searches `src/config.yaml` first and then falls back to the project root.
- A minimal configuration looks like:
+Workbook locations and sheet names are defined in `src/config.yaml`. A minimal
+configuration looks like:
 
 default_workbook: main
 workbooks:
@@ -130,6 +129,10 @@ After installing the package you can run the tests from the repository root with
 ```bash
 pytest
 ```
+
+Before running the tests make sure the prepared datasets exist by running
+`python prepare_data.py`. The tests rely on the Parquet files produced by this
+script.
 
 or use `just test` if `just` is available.
 
