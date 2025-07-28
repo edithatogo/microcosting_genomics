@@ -80,7 +80,8 @@ pre-commit install
 
 ## Setup
 1. Clone this repository.
-2. Install the required packages as shown above, then run `pre-commit install` to set up the Git hooks.
+2. Install the package in editable mode with the developer extras, then run
+   `pre-commit install` to set up the Git hooks.
 3. Prepare the ground truth dataset used for validation:
 
 ```bash
@@ -130,8 +131,9 @@ Scripts such as `prepare_data.py` and `validate_engine.py` load this file to
 determine which workbook and sheet to use.
 
 ## Testing
-Install the developer extras and prepare the Parquet files used by the test
-suite:
+Before running the tests make sure the developer extras are installed and the
+prepared Parquet files exist. Install the package in editable mode with the dev
+extras and generate the Parquet files with `prepare_data.py`:
 
 ```bash
 pip install -e .[dev]
