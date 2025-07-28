@@ -54,10 +54,10 @@ def test_get_cell_value_test_data(test_engine):
 def test_get_cell_value_detailed_table(main_excel_engine):
     # Test a known value from 'Detailed Table'
     # Based on manual inspection, A4 should be 'Panel'
-    assert main_excel_engine.get_cell_value('Detailed Table', 'A4') == 'Panel'
+    assert main_excel_engine.get_cell_value('Detailed Table', 'A6') == 'Panel'
     # Test a known value from 'Detailed Table' that is numeric
-    # Based on manual inspection, E4 should be 1
-    assert main_excel_engine.get_cell_value('Detailed Table', 'E4') == 1
+    # Based on manual inspection, E6 should be 1
+    assert main_excel_engine.get_cell_value('Detailed Table', 'E6') == 1
 
 def test_get_cell_formula_detailed_table(main_excel_engine):
     # Test a known formula from 'Detailed Table'

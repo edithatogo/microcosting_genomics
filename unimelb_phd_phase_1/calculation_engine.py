@@ -73,8 +73,8 @@ class CalculationEngine:
                 all_data_values, all_data_formulas = self._load_raw_sheet_data(sheet_obj)
 
                 # Process raw dataframes (handle headers, fill merged cells, coerce types)
-                self.sheets[sheet_name] = self._process_raw_dataframe(all_data_values, sheet_obj, sheet_name, data_only=True)
-                self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_obj, sheet_name, data_only=False)
+                self.sheets[sheet_name] = self._process_raw_dataframe(all_data_values, sheet_name, data_only=True)
+                self.formula_sheets[sheet_name] = self._process_raw_dataframe(all_data_formulas, sheet_name, data_only=False)
             else:
                 print(f"  No config found for {sheet_name}, skipping.")
 
@@ -113,38 +113,58 @@ class CalculationEngine:
         # we return the same data for both values and formulas.
         return data, data
 
-    def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
+    def _process_raw_dataframe(self, raw_data, sheet_name, data_only):
         print(f"  _process_raw_dataframe called for sheet: {sheet_name}, data_only: {data_only}")
 
         config = self.sheet_configs[sheet_name]
         header_rows = config['header_rows']
         data_starts_at = config['data_starts_at']
+        string_columns = config.get('string_columns', [])
 
         df = pd.DataFrame(raw_data)
         print(f"    Sheet: {sheet_name}, df.shape: {df.shape}")
 
         if header_rows > 0:
-            header_df = df.iloc[:header_rows].copy()
-            print(f"    Sheet: {sheet_name}, header_df.shape: {header_df.shape}")
-            header_df = header_df.ffill(axis=0)
+            # Extract header rows and data rows
+            header_rows_data = df.iloc[:header_rows, :].copy()
+            data_df = df.iloc[data_starts_at - 1:, :].copy()
+
+            # Forward fill header rows to propagate merged cell values
+            header_rows_data = header_rows_data.ffill(axis=1).ffill(axis=0)
+
+            # Create MultiIndex from the processed header data
+            # Replace None with empty string for MultiIndex creation
+            multi_index_levels = []
+            for r_idx in range(header_rows):
+                level_data = ['' if val is None else str(val) for val in header_rows_data.iloc[r_idx].tolist()]
+                multi_index_levels.append(level_data)
             
+            # Ensure that the number of levels matches the number of columns in data_df
+            # This is a critical step to prevent MultiIndex creation errors
+            # If header_rows_data has more columns than data_df, truncate it.
+            # If header_rows_data has fewer columns, pad it with empty strings.
+            num_data_cols = data_df.shape[1]
+            processed_multi_index_levels = []
+            for level in multi_index_levels:
+                if len(level) > num_data_cols:
+                    processed_multi_index_levels.append(level[:num_data_cols])
+                elif len(level) < num_data_cols:
+                    processed_multi_index_levels.append(level + [''] * (num_data_cols - len(level)))
+                else:
+                    processed_multi_index_levels.append(level)
+
+            data_df.columns = pd.MultiIndex.from_arrays(processed_multi_index_levels)
+
             if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Header ---")
-                print(header_df.to_string())
+                print("--- DEBUG: Detailed Table Header (after ffill) ---")
+                print(header_rows_data.to_string())
                 print("------------------------------------")
-
-            data_df = df.iloc[data_starts_at - 1:].copy()
-            print(f"    Sheet: {sheet_name}, data_df.shape: {data_df.shape}")
-            print(f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}")
-            data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
-
-            if sheet_name == 'Detailed Table':
-                print("--- DEBUG: Detailed Table Columns ---")
-                print(data_df.columns)
-                print("-------------------------------------")
-                print("--- DEBUG: Detailed Table Data (Before Coercion) ---")
+                print("--- DEBUG: Detailed Table Data (after slicing) ---")
                 print(data_df.head().to_string())
                 print("----------------------------------------------------")
+                print("--- DEBUG: Detailed Table Columns (before MultiIndex assignment) ---")
+                print(data_df.columns)
+                print("--------------------------------------------------------------------")
         else:
             data_df = df.iloc[data_starts_at - 1:].copy()
         
@@ -153,16 +173,29 @@ class CalculationEngine:
         if data_only:
             string_columns = config.get('string_columns', [])
             # Coerce all columns to numeric where possible, but don't fill NaNs
-            for col_name, series in data_df.items():
-                # col_name can be a tuple if there's a multi-index
-                col_name_str = col_name[0] if isinstance(col_name, tuple) else col_name
-                if col_name_str not in string_columns:
-                    data_df[col_name] = pd.to_numeric(series, errors='coerce')
+            for col_name in data_df.columns:
+                is_string_column = False
+                if isinstance(col_name, tuple):
+                    # Check if any level of the MultiIndex is in string_columns
+                    if any(level in string_columns for level in col_name):
+                        is_string_column = True
+                elif col_name in string_columns:
+                    is_string_column = True
+
+                if not is_string_column:
+                    # Replace non-numeric indicators like '-' with NaN before coercion
+                    data_df[col_name] = data_df[col_name].replace('-', pd.NA)
+                    # Attempt to convert to numeric, coercing errors to NaN
+                    data_df[col_name] = pd.to_numeric(data_df[col_name], errors='coerce')
             
             if sheet_name == 'Detailed Table':
                 print("--- DEBUG: Detailed Table Data (After Coercion) ---")
                 print(data_df.head().to_string())
                 print("---------------------------------------------------")
+            if sheet_name == 'Eq - Costs and Usage - VCGS':
+                print("--- DEBUG: Eq - Costs and Usage - VCGS Data (After Coercion) ---")
+                print(data_df.head().to_string())
+                print("---------------------------------------------------------------------")
         return data_df
 
     def get_cell_value(self, sheet_name, cell_ref):
