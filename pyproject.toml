@@ -18,23 +18,30 @@ classifiers = [
 dependencies = [
     "openpyxl",
     "pandas",
+    "numpy",
+    "numpy-financial",
+    "PyYAML",
+    "scipy",
 ]
 
-[tool.ruff]
-line-length = 88
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+    "ruff",
+    "black",
+    "isort",
+    "bandit",
+    "pyarrow",
+]
+
+[project.scripts]
+validate-engine = "validate_engine:validate_engine"
+prepare-data = "prepare_data:main"
 
 [tool.setuptools]
-packages = ["unimelb_phd_phase_1"]
+package-dir = {"" = "src"}
 
-[tool.mypy]
-strict = true
-
-[tool.bandit]
-skips = ["B101"]
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra -q"
-testpaths = [
-    "tests",
-]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["unimelb_phd_phase_1*"]

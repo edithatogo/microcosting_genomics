@@ -55,6 +55,17 @@ def test_parse_multiplication_three_values():
     }
     assert parse_formula(formula) == expected
 
+def test_parse_addition_simple():
+    formula = "=A1+A2"
+    expected = {
+        "type": "addition",
+        "operands": [
+            {"type": "reference", "sheet": None, "cell": "A1"},
+            {"type": "reference", "sheet": None, "cell": "A2"},
+        ],
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_reference_with_sheet():
     formula = "='3. Estimates'!F5"
     expected = {"type": "reference", "sheet": "3. Estimates", "cell": "F5"}
@@ -80,6 +91,16 @@ def test_parse_sum_cells():
     expected = {"type": "sum_cells", "cells": ["M744", "M748", "M752"]}
     assert parse_formula(formula) == expected
 
+def test_parse_multiplication_by_number_with_sheet():
+    formula = "='Sheet2'!A2*3"
+    expected = {
+        "type": "multiplication_by_number",
+        "sheet": "Sheet2",
+        "cell": "A2",
+        "number": 3,
+    }
+    assert parse_formula(formula) == expected
+
 def test_parse_vlookup():
     formula = "=VLOOKUP(C12,'3. Estimates'!$A$4:$G$13,7,FALSE)"
     expected = {
@@ -88,6 +109,26 @@ def test_parse_vlookup():
         "table_array": "'3. Estimates'!$A$4:$G$13",
         "col_index_num": "7",
         "range_lookup": "FALSE"
+    }
+    assert parse_formula(formula) == expected
+
+def test_parse_pmt_simple():
+    formula = "=PMT(0.05,10,-1000)"
+    expected = {
+        "type": "pmt",
+        "rate": "0.05",
+        "nper": "10",
+        "pv": "-1000",
+    }
+    assert parse_formula(formula) == expected
+
+def test_parse_pmt_percent_and_cells():
+    formula = "=PMT(4.52%, E5, -H5)"
+    expected = {
+        "type": "pmt",
+        "rate": "4.52%",
+        "nper": "E5",
+        "pv": "-H5",
     }
     assert parse_formula(formula) == expected
 
@@ -111,8 +152,8 @@ def test_parse_if():
     expected = {
         "type": "if",
         "condition": "E770=0",
-        "value_if_true": {"type": "literal", "value": 0.0},
-        "value_if_false": {
+        "true_val": {"type": "literal", "value": 0},
+        "false_val": {
             "type": "multiplication",
             "operands": [
                 {"sheet": None, "cell": "E770"},
@@ -121,6 +162,10 @@ def test_parse_if():
         }
     }
     assert parse_formula(formula) == expected
+
+def test_parse_numeric_literal_formula():
+    formula = "=3"
+    assert parse_formula(formula) == {"type": "literal", "value": 3}
 
 def test_parse_string_literal():
     formula = '="Test"'

@@ -1,5 +1,8 @@
 
 
+"""Validate calculated costs against the original Excel data."""
+
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
@@ -9,14 +12,14 @@ def validate_calculations():
     """
     # Load the calculated data
     try:
-        calculated_df = pd.read_parquet('/home/doughnut/github/unimelb-phd-phase-1/data/calculated_costs_tidy.parquet')
+        calculated_df = pd.read_parquet(Path(__file__).resolve().parents[0] / 'data' / 'calculated_costs_tidy.parquet')
     except FileNotFoundError:
         print("Error: calculated_costs_tidy.parquet not found.")
         print("Please run replicate_calculations.py to generate the file.")
         return
 
     # Load the original data from the Excel sheet
-    file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx'
+    file_path = Path(__file__).resolve().parents[0] / 'data' / 'Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'
     try:
         original_df_raw = pd.read_excel(file_path, sheet_name='1. Detailed Table', header=None)
     except FileNotFoundError:

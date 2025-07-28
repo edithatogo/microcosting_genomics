@@ -1,22 +1,37 @@
 import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from unimelb_phd_phase_1.config import load_config
 
 def validate_engine():
     """
     Validates the CalculationEngine against the ground truth data.
     """
     print("Initializing CalculationEngine...")
-    engine = CalculationEngine(
-        "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
-    )
+
+    config = load_config()
+    workbook_key = "validation"
+    try:
+        workbook_path = config["workbooks"][workbook_key]["path"]
+        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
+    except KeyError as e:
+        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
+
+    engine = CalculationEngine(workbook_path)
+
+    # Update the CalculationEngine configuration if the workbook uses the
+    # ``"1. Detailed Table"`` sheet name.
+    if sheet_name != "Detailed Table":
+        engine.sheet_configs[sheet_name] = engine.sheet_configs.pop("Detailed Table")
+
     print("CalculationEngine initialized.")
 
-    print("Loading ground truth data...")
-    ground_truth_df = engine.get_ground_truth('1. Detailed Table')
+    print("Loading ground truth data from Parquet file...")
+    ground_truth_path = "data/prepared/ground_truth.parquet"
+    ground_truth_df = pd.read_parquet(ground_truth_path)
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
-    results_df, errors = engine.run_engine('1. Detailed Table', fail_on_error=False)
+    results_df, errors = engine.run_engine(sheet_name, fail_on_error=False)
     print("Calculation engine finished.")
 
     if errors:

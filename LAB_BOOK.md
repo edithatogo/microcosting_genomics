@@ -6,7 +6,7 @@ This document records the findings from the analysis of the microcosting Excel m
 
 ### File Identification
 
-- **Primary Data Source:** `data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx`
+- **Primary Data Source:** `data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm`
 - **Primary Sheet:** `1. Detailed Table`
 
 ### Spreadsheet Structure
@@ -27,6 +27,19 @@ The sheet contains columns for:
 - `Unit Cost (AUD $/unit)`: The calculated cost for the test.
 
 Each of these has sub-columns for `LL` (Lower Limit), `Estimate`, and `UL` (Upper Limit).
+
+### Models in the Detailed Table
+
+The `Test` column divides the sheet into five distinct costing models:
+1. **Panel**
+2. **WES (P)** - Whole Exome Sequencing for a proband only.
+3. **WES (T)** - Whole Exome Sequencing for a trio (proband plus parents).
+4. **WGS (P)** - Whole Genome Sequencing for a proband only.
+5. **WGS (T)** - Whole Genome Sequencing for a trio.
+
+Each model uses the same core set of columns:
+- **Inputs:** `Quantity of Use per Test` *(LL, Estimate, UL, Source)* and `Price (AUD $/unit)` *(LL, Estimate, UL, Source)*.
+- **Outputs:** `Unit Cost (AUD $/unit)` *(LL, Estimate, UL)* plus deterministic sensitivity analysis columns for **SA**, **NSW**, **QLD**, and **WA** (each with LL, Estimate, UL).
 
 ### Column Categorization
 
@@ -69,6 +82,7 @@ Each of these has sub-columns for `LL` (Lower Limit), `Estimate`, and `UL` (Uppe
 - **Summation:** Some cells are the sum of a range of cells above them, or a list of individual cells.
 - **Conditional Logic:** `IF` and `IFERROR` are used to handle different scenarios and prevent errors.
 - **Lookups:** `VLOOKUP` is used to find data in other tables.
+- **Shared Structures:** The same set of patterns recurs across all five models. Refactoring common multiplications, summations, and cross-sheet lookups into reusable functions should greatly simplify the code.
 
 ### Semantic Meanings
 

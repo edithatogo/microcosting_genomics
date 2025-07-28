@@ -1,4 +1,10 @@
+"""Create a step to label mapping CSV.
 
+Data files are stored in the repository ``data`` directory located at
+``Path(__file__).resolve().parents[0] / 'data'``.
+"""
+
+from pathlib import Path
 import pandas as pd
 
 # Create a dictionary with the mappings
@@ -18,7 +24,8 @@ mapping = {
 df_mapping = pd.DataFrame(mapping)
 
 # Save the mapping to a CSV file
-mapping_file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/step_to_label_mapping.csv'
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
+mapping_file_path = DATA_DIR / 'step_to_label_mapping.csv'
 df_mapping.to_csv(mapping_file_path, index=False)
 
 print(f"Mapping saved to {mapping_file_path}")

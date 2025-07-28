@@ -1,10 +1,12 @@
+"""Replicate the consumable cost calculations from the extracted CSV."""
 
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
 # Load the data, reading all as string initially
-file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Cons -  Costs and Util - VCGS_values.csv'
-df = pd.read_csv(file_path, header=2, dtype=str) # Using the 3rd row as header
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+df = pd.read_csv(DATA_DIR / 'Cons -  Costs and Util - VCGS_values.csv', header=2, dtype=str)
 
 # Drop empty rows
 df.dropna(how='all', inplace=True)

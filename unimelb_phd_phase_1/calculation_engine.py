@@ -1,7 +1,8 @@
 import pandas as pd
-import os
+from pathlib import Path
 import openpyxl
 import re
+from .config import load_config
 from .formula_parser import parse_formula
 from .strategies import (
     LiteralStrategy,
@@ -12,13 +13,25 @@ from .strategies import (
     MultiplicationByNumberStrategy,
     MultiplicationThreeValuesStrategy,
     DivisionThreeValuesStrategy,
+    AdditionStrategy,
     IfStrategy,
+    IfErrorStrategy,
+    VLookupStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
 
 class CalculationEngine:
-    def __init__(self, excel_file_path='data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm'):
-        self.excel_file_path = excel_file_path
+    def __init__(self, excel_file_path: Path | str | None = None):
+        config = load_config()
+        self.config = config
+        if excel_file_path is None:
+            workbook_key = config.get("default_workbook", "main")
+            excel_file_path = config["workbooks"][workbook_key]["path"]
+        self.excel_file_path = Path(excel_file_path)
+        sheet_names = config.get("workbooks", {}).get(config.get("default_workbook", "main"), {}).get("sheets", {})
+        self.default_sheet_names = {
+            "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
+        }
         self.sheets = {}
         self.formula_sheets = {} # This will be populated on demand
         self.memoization_cache = {}
@@ -27,15 +40,18 @@ class CalculationEngine:
             'literal': LiteralStrategy(),
             'reference': ReferenceStrategy(),
             'multiplication': MultiplicationStrategy(),
+            'addition': AdditionStrategy(),
             'sum_range': SumRangeStrategy(),
             'sum_cells': SumCellsStrategy(),
             'multiplication_by_number': MultiplicationByNumberStrategy(),
             'division_three_values': DivisionThreeValuesStrategy(),
             'if': IfStrategy(),
+            'iferror': IfErrorStrategy(),
+            'vlookup': VLookupStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
-            '1. Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
+            'Detailed Table': {'header_rows': 5, 'data_starts_at': 6, 'string_columns': ['Test', 'Category', 'Sub-Category', 'Step']},
             '2. Labor Prices': {'header_rows': 1, 'data_starts_at': 2},
             '3. Estimates': {'header_rows': 1, 'data_starts_at': 2},
             '4. DSA - Equipment Throughput': {'header_rows': 1, 'data_starts_at': 2},
@@ -52,6 +68,11 @@ class CalculationEngine:
             'Eq - Costs and Usage - VCGS': {'header_rows': 1, 'data_starts_at': 2},
             'Labour - Costs - VCGS': {'header_rows': 1, 'data_starts_at': 2},
         }
+
+        # Allow the detailed table sheet name to be overridden by configuration
+        configured_name = self.default_sheet_names["detailed_table"]
+        if configured_name != "Detailed Table":
+            self.sheet_configs[configured_name] = self.sheet_configs.pop("Detailed Table")
 
         # Load workbook once with data_only=False to access formulas and merged cells
         self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
@@ -188,7 +209,7 @@ class CalculationEngine:
                     # Attempt to convert to numeric, coercing errors to NaN
                     data_df[col_name] = pd.to_numeric(data_df[col_name], errors='coerce')
             
-            if sheet_name == 'Detailed Table':
+            if sheet_name == self.default_sheet_names["detailed_table"]:
                 print("--- DEBUG: Detailed Table Data (After Coercion) ---")
                 print(data_df.head().to_string())
                 print("---------------------------------------------------")
@@ -304,17 +325,21 @@ class CalculationEngine:
             self.formula_sheets[sheet_name] = self._process_raw_dataframe(raw_data_formulas, sheet_obj, sheet_name, data_only=False)
         return self.formula_sheets.get(sheet_name)
 
-    def get_ground_truth(self, sheet_name='Detailed Table'):
+    def get_ground_truth(self, sheet_name: str | None = None):
         """
         Returns a DataFrame with the ground truth values from the original Excel file.
         """
+        if sheet_name is None:
+            sheet_name = self.default_sheet_names["detailed_table"]
         return self.sheets[sheet_name]
 
-    def run_engine(self, sheet_name='Detailed Table', fail_on_error=True):
+    def run_engine(self, sheet_name: str | None = None, fail_on_error: bool = True):
         """
         Runs the calculation engine on the specified sheet and returns a DataFrame with the results.
         If fail_on_error is False, it will log errors and continue.
         """
+        if sheet_name is None:
+            sheet_name = self.default_sheet_names["detailed_table"]
         formulas_df = self.get_formulas(sheet_name)
         if formulas_df is None:
             return None, []

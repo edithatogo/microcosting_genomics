@@ -1,12 +1,14 @@
 
+"""Replicate equipment cost calculations using the extracted CSV data."""
 
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import numpy_financial as npf
 
 # Load the data, skipping initial rows and setting a header row
-file_path = '/home/doughnut/github/unimelb-phd-phase-1/data/extracted/Eq - Costs and Usage - VCGS_values.csv'
-df = pd.read_csv(file_path, header=3, dtype=str) # Read all as string to be safe
+DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+df = pd.read_csv(DATA_DIR / 'Eq - Costs and Usage - VCGS_values.csv', header=3, dtype=str)
 
 # Drop empty rows
 df.dropna(how='all', inplace=True)
