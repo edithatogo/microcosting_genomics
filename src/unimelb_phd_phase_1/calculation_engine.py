@@ -158,6 +158,14 @@ class CalculationEngine:
         mapping = {
             "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
             "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
+            "4. DSA - Equipment Throughput": self.prepared_data_path / "4._dsa_equipment_throughput.parquet",
+            "5. DSA - Overheads": self.prepared_data_path / "5._dsa_overheads.parquet",
+            "6. DSA - Consumable Discounts": self.prepared_data_path / "6._dsa_consumable_discounts.parquet",
+            "7. DSA - Labor Prices": self.prepared_data_path / "7._dsa_labour_prices.parquet",
+            "Summary Table": self.prepared_data_path / "summary_table.parquet",
+            "Process": self.prepared_data_path / "process.parquet",
+            "At a Glance": self.prepared_data_path / "at_a_glance.parquet",
+            "PSA": self.prepared_data_path / "psa.parquet",
         }
 
         for name, path in mapping.items():
