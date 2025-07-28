@@ -65,10 +65,22 @@ pip install -e .[dev]
 
 If you have `just` installed you can instead run `just install`.
 
+After installing the packages enable the git hooks with:
+
+```bash
+pre-commit install
+```
+
 ## Setup
 1. Clone this repository.
 2. Install the required packages as shown above.
-3. Prepare the ground truth dataset used for validation:
+3. Install the pre-commit hooks:
+
+```bash
+pre-commit install
+```
+
+4. Prepare the ground truth dataset used for validation:
 
 ```bash
 python prepare_data.py
