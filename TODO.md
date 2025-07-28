@@ -11,7 +11,7 @@
 ## Calculation Engine
 
 - [x] Extract ground truth dataset (`prepare_data.py`).
-- [ ] Add TDD test for multi-level header parsing in the data loader.
+- [x] Add TDD test for multi-level header parsing in the data loader.
 - [x] Implement interpreter strategies and memoization cache.
 - [x] Create validation harness (`validate_engine.py`).
 

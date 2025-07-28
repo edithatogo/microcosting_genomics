@@ -3,12 +3,18 @@ University of Melbourne PhD (Economics of Rare Disease Genomics) - Phase 1 Micro
 
 ## Installation
 
-Install the project in editable mode so that changes to the source are immediately
-reflected when running the package:
+The source code lives inside the `src/` directory. Install the project in editable
+mode so that changes are immediately available when running the package:
 
 ```bash
 pip install -e .
 ```
+
+## Project Structure
+The Python package lives in the `unimelb_phd_phase_1/` directory at the
+repository root alongside helper scripts such as `prepare_data.py` and
+`validate_engine.py`. All input files reside in `data/`. A future refactor
+will adopt a `src/` layout for the package.
 
 ## Data Directory
 
