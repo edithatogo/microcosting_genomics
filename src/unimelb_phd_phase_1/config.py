@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 from pathlib import Path
+
 import yaml
 
 
 def load_config(config_path: str | Path | None = None) -> dict:
     """Load the YAML configuration file."""
     if config_path is None:
+        # first look for config in the src directory
         config_path = Path(__file__).resolve().parents[1] / "config.yaml"
+        if not config_path.exists():
+            # fall back to the repository root
+            config_path = Path(__file__).resolve().parents[2] / "config.yaml"
     else:
         config_path = Path(config_path)
 
@@ -18,4 +23,6 @@ def load_config(config_path: str | Path | None = None) -> dict:
     except FileNotFoundError:
         raise FileNotFoundError(f"Configuration file not found at: {config_path}")
     except yaml.YAMLError as e:
-        raise ValueError(f"Error parsing configuration file at {config_path}: {e}") from e
+        raise ValueError(
+            f"Error parsing configuration file at {config_path}: {e}"
+        ) from e
