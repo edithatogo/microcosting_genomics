@@ -1,8 +1,17 @@
 default_workbook: main
 workbooks:
   main:
-    # Primary workbook containing the supplemental tables with Labor Prices
-    # and Estimates referenced by prepare_data.py
+    # The primary workbook used throughout the project. It contains the
+    # supplemental tables referenced by ``1. Detailed Table`` including
+    # the ``2. Labor Prices`` and ``3. Estimates`` sheets.
+    path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
+    sheets:
+      detailed_table: "1. Detailed Table"
+      labor_prices: "2. Labor Prices"
+      estimates: "3. Estimates"
+  supp_tables:
+    # Explicit entry for the supplemental tables workbook. This mirrors the
+    # ``main`` workbook but allows scripts to reference it directly if needed.
     path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
     sheets:
       detailed_table: "1. Detailed Table"
