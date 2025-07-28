@@ -116,7 +116,33 @@ class CalculationEngine:
         # Load workbook once with data_only=False to access formulas and merged cells
         self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
 
+        # Populate ``self.sheets`` and ``self.formula_sheets``
         self._load_all_sheets()
+
+    def _load_all_sheets(self):
+        """Load all configured sheets from the workbook."""
+        self.logger.debug("Loading all sheets from %s", self.excel_file_path)
+
+        for sheet_name in self._workbook.sheetnames:
+            if sheet_name not in self.sheet_configs:
+                continue
+
+            sheet_obj = self._workbook[sheet_name]
+            self.logger.debug("  Loading sheet: %s", sheet_name)
+
+            raw_values, raw_formulas = self._load_raw_sheet_data(sheet_obj)
+            values_df = self._process_raw_dataframe(
+                raw_values, sheet_obj, sheet_name, data_only=True
+            )
+            formulas_df = self._process_raw_dataframe(
+                raw_formulas, sheet_obj, sheet_name, data_only=False
+            )
+
+            self.sheets[sheet_name] = values_df
+            self.formula_sheets[sheet_name] = formulas_df
+
+        # Replace with any available prepared parquet tables
+        self._load_prepared_tables()
     def _load_prepared_tables(self):
         """Load pre-parsed parquet tables if available."""
         if not self.prepared_data_path.exists():
