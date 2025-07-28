@@ -26,7 +26,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["unimelb_phd_phase_1"]
+include = ["unimelb_phd_phase_1*"]
 
 [project.optional-dependencies]
 dev = [
