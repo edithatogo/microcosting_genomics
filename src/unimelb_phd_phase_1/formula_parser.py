@@ -5,13 +5,19 @@ def parse_formula(formula):
 
     The parser recognises numeric and string literals, references, and several
     common Excel functions. Numeric literals such as ``=3`` or ``=1.5`` are
-    returned as ``{"type": "literal", "value": 3}``.
+    returned as ``{"type": "literal", "value": 3}`` so that arithmetic on
+    constants behaves the same as on values extracted from cells.
 
     Multiplication patterns that involve two cells and a trailing numeric value
-    (e.g. ``=A1*B1*3``) are matched before simpler multiplication cases to avoid
-    incorrect parsing. ``IF`` expressions recursively parse both
-    ``value_if_true`` and ``value_if_false`` so that literal branches are
-    returned in the same structure as top‑level numeric literals.
+    (e.g. ``=A1*B1*3``) are matched **before** simpler multiplication cases. This
+    ordering prevents a formula like ``A1*B1*3`` from being prematurely
+    interpreted as ``A1*B1`` followed by an unknown ``*3`` segment.
+
+    ``IF`` expressions recursively parse both ``value_if_true`` and
+    ``value_if_false``. Literal branches therefore return the same structure as
+    top‑level numeric literals, e.g. ``IF(A1>0,0,B1*C1)`` yields
+    ``{"type": "literal", "value": 0}`` for the true branch and a nested
+    multiplication structure for the false branch.
     """
     if not isinstance(formula, str) or not formula.startswith('='):
         if isinstance(formula, (int, float)):
@@ -65,6 +71,8 @@ def parse_formula(formula):
 
         if len(args) == 3:
             condition, value_if_true, value_if_false = args
+            # Recursively parse both result branches so that literals are
+            # returned in the same structure as top-level numeric literals.
             return {
                 "type": "if",
                 "condition": condition.strip(),
@@ -96,6 +104,10 @@ def parse_formula(formula):
         }
 
     # Multiplication of three values
+    # NOTE: this check is intentionally placed before the simpler
+    # ``cell*cell`` pattern below so that expressions like ``A1*B1*3`` are
+    # parsed as a three-value multiplication rather than ``A1*B1`` with a
+    # dangling ``*3``.
     match = re.fullmatch(r"(\w+\d+)\*(\w+\d+)\*(\d+)", formula)
     if match:
         cell1, cell2, number = match.groups()
