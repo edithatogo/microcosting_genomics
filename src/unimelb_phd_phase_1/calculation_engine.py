@@ -274,6 +274,7 @@ class CalculationEngine:
             self.logger.debug(
                 "    Sheet: %s, header_df.shape: %s", sheet_name, header_df.shape
             )
+            header_df.iloc[0] = df.iloc[0]
             header_df = header_df.ffill(axis=0)
 
             if sheet_name == self.default_sheet_names["detailed_table"]:
@@ -289,17 +290,13 @@ class CalculationEngine:
                 f"    Sheet: {sheet_name}, header_df.shape[1]: {header_df.shape[1]}"
             )
             level_names = [f"level_{i}" for i in range(header_rows)]
-            data_df.columns = pd.MultiIndex.from_arrays(
-                header_df.values,
-                names=level_names,
-            )
+            data_df.columns = pd.MultiIndex.from_frame(header_df.transpose())
             self.logger.debug(
                 "    Sheet: %s, data_df.shape: %s", sheet_name, data_df.shape
             )
             self.logger.debug(
                 "    Sheet: %s, header_df.shape[1]: %s", sheet_name, header_df.shape[1]
             )
-            data_df.columns = pd.MultiIndex.from_arrays(header_df.values)
 
             if sheet_name == self.default_sheet_names["detailed_table"]:
                 self.logger.debug("--- DEBUG: Detailed Table Columns ---")
@@ -353,7 +350,7 @@ class CalculationEngine:
         data_starts_at = config["data_starts_at"]
 
         # Adjust row_idx for DataFrame indexing (data_starts_at is 1-indexed Excel row)
-        df_row_idx = row_idx - (data_starts_at - 1)
+        df_row_idx = row_idx - data_starts_at
 
         self.logger.debug(
             "Excel row_idx=%s, col_idx=%s -> DataFrame df_row_idx=%s",
@@ -518,3 +515,4 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
+[end of file]
