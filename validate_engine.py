@@ -1,5 +1,6 @@
 import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from unimelb_phd_phase_1.sheet_manager import SheetManager
 from unimelb_phd_phase_1.config import load_config
 
 def validate_engine():
@@ -16,18 +17,18 @@ def validate_engine():
     except KeyError as e:
         raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
 
-    engine = CalculationEngine(workbook_path)
+    sheet_manager = SheetManager(workbook_path)
+    engine = CalculationEngine(sheet_manager=sheet_manager)
 
     # Update the CalculationEngine configuration if the workbook uses the
     # ``"1. Detailed Table"`` sheet name.
     if sheet_name != "Detailed Table":
-        engine.sheet_configs[sheet_name] = engine.sheet_configs.pop("Detailed Table")
+        engine.sheet_manager.sheet_configs[sheet_name] = engine.sheet_manager.sheet_configs.pop("Detailed Table")
 
     print("CalculationEngine initialized.")
 
     print("Loading ground truth data from Parquet file...")
-    ground_truth_path = "data/prepared/ground_truth.parquet"
-    ground_truth_df = pd.read_parquet(ground_truth_path)
+    ground_truth_df = sheet_manager.get_ground_truth(sheet_name)
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
@@ -41,15 +42,14 @@ def validate_engine():
         print("--------------------------\n")
 
     # To ensure comparable columns, flatten any MultiIndex to a single level.
+    if isinstance(ground_truth_df.columns, pd.MultiIndex):
+        ground_truth_df.columns = [' '.join(map(str, col)).strip().replace('nan ', '') for col in ground_truth_df.columns.values]
     if isinstance(results_df.columns, pd.MultiIndex):
-        results_df.columns = results_df.columns.get_level_values(-1)
+        results_df.columns = [' '.join(map(str, col)).strip().replace('nan ', '') for col in results_df.columns.values]
 
     # Extract the 'Unit Cost (AUD $/test)' columns for comparison from flattened dataframes.
     ground_truth_costs = ground_truth_df.filter(like='Unit Cost (AUD $/test)', axis=1)
     calculated_costs = results_df.filter(like='Unit Cost (AUD $/test)', axis=1)
-
-    print("Ground truth costs columns:", ground_truth_costs.columns.tolist())
-    print("Calculated costs columns:", calculated_costs.columns.tolist())
 
     # Align the dataframes to ensure comparison is correct
     ground_truth_costs, calculated_costs = ground_truth_costs.align(calculated_costs, join='inner', axis=0)
