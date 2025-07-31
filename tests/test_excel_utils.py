@@ -8,7 +8,7 @@ def test_load_sheet_with_headers():
     file = Path(__file__).resolve().parents[1] / "data" / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     df = load_sheet_with_headers(
         file,
-        "1. Detailed Table",
+        "Detailed Table",
         header_rows=5,
         string_columns=["Test", "Category", "Sub-Category", "Step"],
     )
