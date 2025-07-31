@@ -1,0 +1,58 @@
+VCGS Rare Disease (Germline) Genomic Sequencing Workflow,,
+Stage,Sub-Stage,Step
+,,
+Speciment Reception,Order Management,
+,,Order Receipt
+,,Packaging with testing documentation
+,,Service recipient primary registration
+,,Gatekeeping Review
+,,Printing and sorting of specimen labels
+,,Sending Tubes for Collection
+,,
+,Specimen Receipt,
+,,Sample received by specimen reception
+,,Sample processed by specimen reception
+,,Speciment sent for storage (DNA)
+,,Specimen sent to DNA extraction specimen reception (saliva or blood)
+,,
+Speciment preparation,DNA Extraction,
+,,Extraction using an automated kit 
+,,Extraction using a manual kit 
+,,DNA QC (Basic)
+,,DNA returned to specimen lab for processing
+,,
+,Library preparation,Automated unless sample failure
+,,DNA quantification (higher sensitivity)
+,,Pre-prep reagents
+,,Sequencing
+,,
+Sequencing,,"Allocation to instrument depending on 1) clinical urgency, 2) capacity-demand, 3) pool sample type and 4) complexity; maximise flow cell utilisation"
+,,Sample loaded into sequencer
+,,HiSeq wash
+,,Sequencing prep 
+,,HiSeq post-run wash
+,,Run quality control
+,,cBot
+,,Data exported into working storage
+,,
+Bioinformatics,,
+,,Data loaded
+,,Alignment
+,,Mark Duplicates
+,,Recalibration
+,,Post-recalibration merge 
+,,Indel realignment
+,,SNV/indel variant calling
+,,SNV/indel Annotation
+,,SNV/indel Prioritization
+,,CNV detection
+,,CNV annotation
+,,SV detection
+,,SV Annotation
+,,
+Interpretation and report writing,,
+,,Filtering and triage
+,,Classification
+,,1.      Low clinical complexity – scientists and senior scientist
+,,"2.      Mod clinical complexity – scientist, clinician, pathologist"
+,,3.      High clinical complexity – MDT (all of above + others)

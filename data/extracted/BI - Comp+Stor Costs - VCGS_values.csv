@@ -1,0 +1,23 @@
+,,,,,,,,,List Price (AUD),,Annual Cost (straight-line),,,Cost/component,,,,Total hours,,Cost/component/hr - 70%,,,,Cost/component/hr - 100%,,,
+Description,Source,Date,CPUs,Cores/CPU,Threads/CPU,Total Cores,Total Threads,Memory,ex-GST,inc. GST,3-yr,5-yr,,Cost/CPU,Cost/Core,Cost/Thread,Cost/GB,LL,UL,Cost/CPU/hr,Cost/Core/hr,Cost/thread/hr,cost/gb/hr,Cost/CPU/hr,Cost/Core/hr,Cost/thread/hr,cost/gb/hr
+PowerEdge R760 Server,"Dell, 2023",2023-03-30 00:00:00,2,16,32,32,64,1024,54321.28,59753.41,18107.093333333334,10864.256,,27160.64,1697.54,933.64703125,53.048125,30659.999999999996,43800,0.8858656229615135,0.055366601435094594,0.03045163180854534,0.001730206294846706,0.6201059360730593,0.03875662100456621,0.021316142265981736,0.001211144406392694
+"Xenon NItro GPU Server, 2U, X12, A30 GPU","Xenon, 2023",2023-03-29 00:00:00,2,16,32,32,64,1024,49380,54318.00000000001,16460,9876,,24690,1543.125,848.7187500000001,48.22265625,30659.999999999996,43800,0.805283757338552,0.0503302348336595,0.027681629158512727,0.0015728198385518593,0.5636986301369863,0.03523116438356164,0.019377140410958907,0.0011009738869863013
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Equipment,Brand,Model,Useful Life,List Price (USD),List Price (EUR),List Price (AUD),Date Accessed,Source,Annualised cost,Workflows,,Initial Estimate,,,Unit Cost ($/sample),,,,,,,,,,,,
+,,,,,,,,,,WES/Panel,WGS,Actual,0.7,Max,Actual,0.7,Max,,,,,,,,,,
+Dragan Hardware,Illumina,Dragen v4,5,28088,-,40165,2023-08-16 00:00:00,"Illumina, 2022",8033,n,y,2000,35000.0,50000,4.0165,0.22951428571428573,0.16066,,,,,,,,,,
+Dragan Software,Illumina,Dragen CS L1 1-year license,1,15000,-,21450,2023-08-16 00:00:00,"Illumina, 2022",21450,n,y,2000,35000.0,50000,10.725,0.6128571428571429,0.429,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Description,Source,Date,Total Space (GB),ex-GST,inc. GST,Useable life (years),Cost/GB,Cost/GB/year,Cost/test,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Fast Storage (HDD),,Step,,,,,,,,,,,,,,,,,,,,,,,,,
+"2U R-Series with integrateed controller (96TB, 50.8 TB Useable in RAID-6)","Xenon, 2023",,50800,23800,,5,0.468503937007874,0.09370078740157481,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Archival Storage (Tape),,,,,,,,,,,,,,,,,,,,,,,,,,,
+LTO-7 or LTO-8 Tape Drive Module,"Xenon, 2023",2023-03-29 00:00:00,-,21000,,5,-,-,0.21,,,,,,,,,,,,,,,,,,
+LTO 7 Tape (uncompressed),"Xenon, 2023",2023-03-29 00:00:00,6000,75,,5,0.0125,0.0025,,,,,,,,,,,,,,,,,,,
+LTO 8 Tape (uncompressed),"Xenon, 2023",2023-03-29 00:00:00,12000,115,,5,0.009583333333333333,0.0019166666666666666,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+LTO-7 Tape + Module,"Xenon, 2023",2023-03-29 00:00:00,6000/tape,-,,5,,,,,,,,,,,,,,,,,,,,,
+LTO-7 Tape + Module,"Xenon, 2023",2023-03-29 00:00:00,12000/tape,-,,5,,,,,,,,,,,,,,,,,,,,,
