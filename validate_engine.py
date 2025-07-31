@@ -40,9 +40,19 @@ def validate_engine():
             print(f"Cell: {error['cell']}, Formula: {error['formula']}, Error: {error['error']}")
         print("--------------------------\n")
 
-    # Extract the 'Unit Cost (AUD $/test)' columns for comparison
-    ground_truth_costs = ground_truth_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
-    calculated_costs = results_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
+    # Extract the 'Unit Cost (AUD $/test)' columns for comparison. The
+    # prepared ``ground_truth.parquet`` file stores flat column labels while
+    # ``CalculationEngine`` returns a ``MultiIndex``.  Handle both cases.
+    COST_LABEL = 'Unit Cost (AUD $/test)'
+
+    def _extract_costs(df: pd.DataFrame) -> pd.DataFrame:
+        """Extracts cost columns from a DataFrame, handling both MultiIndex and flat columns."""
+        if isinstance(df.columns, pd.MultiIndex):
+            return df.xs(COST_LABEL, level=0, axis=1)
+        return df.filter(like=COST_LABEL)
+
+    ground_truth_costs = _extract_costs(ground_truth_df)
+    calculated_costs = _extract_costs(results_df)
 
     # Align the dataframes to ensure comparison is correct
     ground_truth_costs, calculated_costs = ground_truth_costs.align(calculated_costs, join='inner', axis=0)
