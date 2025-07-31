@@ -227,31 +227,40 @@ class IfStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         condition = parsed_formula['condition']
         match = re.match(r"(.+?)(<=|>=|<>|=|<|>)(.+)", condition)
-        if not match:
-            return None
+        if match:
+            left_expr, operator, right_expr = [s.strip() for s in match.groups()]
 
-        left_expr, operator, right_expr = [s.strip() for s in match.groups()]
+            left_val = engine.execute_formula(
+                f"={left_expr}", sheet_name, f"{cell_ref}_L"
+            )
+            right_val = engine.execute_formula(
+                f"={right_expr}", sheet_name, f"{cell_ref}_R"
+            )
 
-        left_val = engine.execute_formula(f"={left_expr}", sheet_name, f"{cell_ref}_L")
-        right_val = engine.execute_formula(f"={right_expr}", sheet_name, f"{cell_ref}_R")
-
-        try:
-            if operator == '=':
-                cond_result = left_val == right_val
-            elif operator == '<>':
-                cond_result = left_val != right_val
-            elif operator == '>':
-                cond_result = left_val > right_val
-            elif operator == '<':
-                cond_result = left_val < right_val
-            elif operator == '>=':
-                cond_result = left_val >= right_val
-            elif operator == '<=':
-                cond_result = left_val <= right_val
-            else:
+            try:
+                if operator == "=":
+                    cond_result = left_val == right_val
+                elif operator == "<>":
+                    cond_result = left_val != right_val
+                elif operator == ">":
+                    cond_result = left_val > right_val
+                elif operator == "<":
+                    cond_result = left_val < right_val
+                elif operator == ">=":
+                    cond_result = left_val >= right_val
+                elif operator == "<=":
+                    cond_result = left_val <= right_val
+                else:
+                    cond_result = False
+            except Exception:
                 cond_result = False
-        except Exception:
-            cond_result = False
+        else:
+            # When the condition does not contain an explicit comparison, treat
+            # it as a formula whose truthiness determines the branch.
+            cond_val = engine.execute_formula(
+                f"={condition}", sheet_name, f"{cell_ref}_COND"
+            )
+            cond_result = bool(cond_val)
 
         def _eval(val, suffix):
             if isinstance(val, dict):
@@ -279,8 +288,11 @@ class IfErrorStrategy(CalculationStrategy):
                 raise Exception('Error')
             return value_result
         except Exception:
-            fallback = parsed_formula['value_if_error'].strip()
-            return engine.execute_formula(f'={fallback}', sheet_name, f"{cell_ref}_ERR")
+            fallback = parsed_formula["value_if_error"].strip()
+            # ``value_if_error`` may itself be a literal, reference or complex
+            # formula.  Delegating to ``execute_formula`` ensures it is handled
+            # consistently with other expressions.
+            return engine.execute_formula(f"={fallback}", sheet_name, f"{cell_ref}_ERR")
 
 class PmtStrategy(CalculationStrategy):
     """Strategy for handling PMT formulas."""
@@ -321,12 +333,15 @@ class PmtStrategy(CalculationStrategy):
                 val = -val
             return val
 
-        rate = _eval_token(parsed_formula['rate'], 'RATE')
-        nper = _eval_token(parsed_formula['nper'], 'NPER')
-        pv = _eval_token(parsed_formula['pv'], 'PV')
+        rate = _eval_token(parsed_formula["rate"], "RATE")
+        nper = _eval_token(parsed_formula["nper"], "NPER")
+        pv = _eval_token(parsed_formula["pv"], "PV")
 
-        # Ensure all inputs to npf.pmt are numeric
-        if not all(isinstance(v, (int, float)) for v in [rate, nper, pv]):
+        # Ensure all inputs to npf.pmt are numeric.  ``numbers.Number`` includes
+        # numpy integer and floating point types which appear in prepared
+        # datasets, so using it allows the strategy to handle those values
+        # transparently.
+        if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 
         try:
@@ -338,13 +353,16 @@ class PmtStrategy(CalculationStrategy):
 
 class VLookupStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        lookup_token = parsed_formula['lookup_value'].strip()
-        try:
-            lookup_value = float(lookup_token)
-        except ValueError:
-            lookup_value = engine.execute_formula(
-                f"={lookup_token}", sheet_name, f"{cell_ref}_lk"
-            )
+        lookup_token = parsed_formula["lookup_value"].strip()
+        if lookup_token.startswith("\"") and lookup_token.endswith("\""):
+            lookup_value = lookup_token.strip("\"")
+        else:
+            try:
+                lookup_value = float(lookup_token)
+            except ValueError:
+                lookup_value = engine.execute_formula(
+                    f"={lookup_token}", sheet_name, f"{cell_ref}_lk"
+                )
 
         table_array = parsed_formula['table_array'].strip()
         if '!' in table_array:
