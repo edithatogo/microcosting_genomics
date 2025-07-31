@@ -1014,3 +1014,7 @@ Discrepancies found:
 Replicate Detailed Table discrepancy:
 Registration step - Price Estimate expected 122.62269511055744 but got 100.17089785113671
 Registration step - Unit Cost Estimate expected 4.087423170351914 but got 200.34179570227343
+Replicate Detailed Table discrepancy:
+Registration step - Price Estimate expected 122.62269511055744 but got 100.17089785113671
+Registration step - Unit Cost Estimate expected 4.087423170351914 but got 200.34179570227343
+
