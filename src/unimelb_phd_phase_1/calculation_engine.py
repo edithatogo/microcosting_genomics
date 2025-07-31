@@ -276,6 +276,7 @@ class CalculationEngine:
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
         config = self.sheet_configs[sheet_name]
         header_rows = config.get("header_rows", 1)
+        data_starts_at = config.get("data_starts_at", header_rows + 1)
 
         df = pd.DataFrame(raw_data)
 
@@ -285,8 +286,11 @@ class CalculationEngine:
                 columns = pd.MultiIndex.from_frame(header_df.T)
             else:
                 columns = pd.MultiIndex.from_arrays([header_df.iloc[0].tolist()])
-            df = df.iloc[header_rows:].reset_index(drop=True)
-            df.columns = columns
+        else:
+            columns = df.columns
+
+        df = df.iloc[data_starts_at - 1 :].reset_index(drop=True)
+        df.columns = columns
 
         df.reset_index(drop=True, inplace=True)
 
@@ -299,26 +303,11 @@ class CalculationEngine:
                     return any(c in string_columns for c in col_names)
                 return col in string_columns
 
-            for col in df.columns:
-                if not is_string_col(col):
-                    try:
-                        df[col] = pd.to_numeric(df[col], errors="coerce")
-                    except TypeError:
-                        # Columns with duplicate labels may return a DataFrame;
-                        # skip conversion in that case.
-                        continue
-
-            # ``pandas.DataFrame.__getitem__`` returns a ``DataFrame`` when a
-            # column label occurs multiple times.  This happens in the
-            # multi-level headers of the workbook and causes ``pd.to_numeric``
-            # to raise ``TypeError``.  Process each column series individually
-            # via ``DataFrame.apply`` so duplicates are handled safely.
-            def _convert(series: pd.Series) -> pd.Series:
-                if not is_string_col(series.name):
-                    return pd.to_numeric(series, errors="coerce")
-                return series
-
-            df = df.apply(_convert)
+            df = df.apply(
+                lambda series: pd.to_numeric(series, errors="coerce")
+                if not is_string_col(series.name)
+                else series
+            )
 
         return df
 
