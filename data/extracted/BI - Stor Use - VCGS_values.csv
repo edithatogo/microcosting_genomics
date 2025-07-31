@@ -44,3 +44,4 @@ Archival Storage (Tape only; uncompressed),,,,,,,,,,,,,,,,,
 ,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,105,120,135,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",1.0062499999999999,1.325,1.6875
 ,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,135,150,165,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",1.29375,1.65625,2.0625
 ,,Total,"Bioinformatics Lead, VCGS, 2023",,240,270,300,,,,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",2.3,2.98125,3.75
+,,,,,,,,,,,,,,,,,
