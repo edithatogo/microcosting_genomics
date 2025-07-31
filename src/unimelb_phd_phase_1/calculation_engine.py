@@ -302,7 +302,7 @@ class CalculationEngine:
             return None
 
         data_starts_at = config.get("data_starts_at", 2)
-        df_row_idx = row_idx - data_starts_at
+        df_row_idx = row_idx - (data_starts_at - 1)
 
         if 0 <= df_row_idx < len(df):
             return df.iloc[df_row_idx, col_idx]
