@@ -250,9 +250,7 @@ class IfStrategy(CalculationStrategy):
                     cond_result = left_val >= right_val
                 elif operator == "<=":
                     cond_result = left_val <= right_val
-                else:
-                    cond_result = False
-            except Exception:
+            except TypeError:
                 cond_result = False
         else:
             # When the condition does not contain an explicit comparison, treat
