@@ -23,13 +23,6 @@ The overall goal is to build a robust and validated Python-based calculation eng
         1.  In `tests/test_calculation_engine.py`, write a new, specific test that asserts the correct parsing of the multi-level headers into a clean pandas DataFrame. This test should fail initially.
         2.  Modify the `_load_sheet` method in `unimelb_phd_phase_1/calculation_engine.py` until the new test passes, ensuring the data loading is robust.
 
-3.  **Implement and Refactor the Interpreter (CS & SE Focus):**
-    *   **Priority:** Third, after the data loader is fixed.
-    *   **Action:**
-        1.  **Memoization:** Add a caching dictionary to the `CalculationEngine` to store and retrieve previously calculated cell values.
-        2.  **Strategy Pattern:** Create a new module (`unimelb_phd_phase_1/strategies.py`) and implement a separate strategy class for each formula type (`MultiplyStrategy`, `SumStrategy`, etc.).
-        3.  **Interpreter:** Refactor the `execute_formula` method to be a clean, recursive interpreter that delegates the actual computation to the appropriate strategy object.
-
 4.  **Validate the Engine (Data Science Focus):**
     *   **Priority:** Last, once the engine is fully implemented.
     *   **Action:** Create a `validate_engine.py` script that:
