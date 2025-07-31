@@ -69,43 +69,13 @@ class SheetManager:
         workbook_config = config.get("workbooks", {}).get(
             config.get("default_workbook", "main"), {}
         )
-        sheet_names = workbook_config.get("sheets", {})
+        self.sheet_configs = workbook_config.get("sheets", {})
 
         self.default_sheet_names = {
-            "detailed_table": sheet_names.get("detailed_table", "Detailed Table")
+            "detailed_table": next(iter(self.sheet_configs.keys()))
         }
         self.sheets = {}
         self.formula_sheets = {}
-        self.sheet_configs = {
-            "Detailed Table": {
-                "header_rows": 4,
-                "data_starts_at": 5,
-                "string_columns": ["Test", "Category", "Sub-Category", "Step"],
-            },
-            "2. Labor Prices": {"header_rows": 1, "data_starts_at": 2},
-            "3. Estimates": {"header_rows": 1, "data_starts_at": 2},
-            "4. DSA - Equipment Throughput": {"header_rows": 1, "data_starts_at": 2},
-            "5. DSA - Overheads": {"header_rows": 1, "data_starts_at": 2},
-            "6. DSA - Consumable Discounts": {"header_rows": 1, "data_starts_at": 2},
-            "7. DSA - Labor Prices": {"header_rows": 1, "data_starts_at": 2},
-            "8. PSA": {"header_rows": 1, "data_starts_at": 2},
-            "Process": {"header_rows": 1, "data_starts_at": 2},
-            "Sheet1": {"header_rows": 1, "data_starts_at": 2},
-            "Sheet2": {"header_rows": 1, "data_starts_at": 2},
-            "Summary Table": {"header_rows": 1, "data_starts_at": 2},
-            "At a Glance": {"header_rows": 1, "data_starts_at": 2},
-            "Labour - Usage - VCGS": {"header_rows": 1, "data_starts_at": 2},
-            "Cons -  Costs and Util - VCGS": {"header_rows": 1, "data_starts_at": 2},
-            "Eq - Costs and Usage - VCGS": {"header_rows": 1, "data_starts_at": 2},
-            "Labour - Costs - VCGS": {"header_rows": 1, "data_starts_at": 2},
-        }
-
-        configured_name = self.default_sheet_names["detailed_table"]
-        if configured_name != "Detailed Table":
-            if "Detailed Table" in self.sheet_configs:
-                self.sheet_configs[configured_name] = self.sheet_configs.pop(
-                    "Detailed Table"
-                )
 
         self._workbook = openpyxl.load_workbook(self.excel_file_path, data_only=False)
         self._load_all_sheets()
@@ -116,8 +86,8 @@ class SheetManager:
 
         workbook_values = openpyxl.load_workbook(self.excel_file_path, data_only=True)
         try:
-            for sheet_name in self._workbook.sheetnames:
-                if sheet_name not in self.sheet_configs:
+            for sheet_name, sheet_config in self.sheet_configs.items():
+                if sheet_name not in self._workbook.sheetnames:
                     continue
 
                 self.logger.debug("  Loading sheet: %s", sheet_name)

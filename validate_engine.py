@@ -13,22 +13,20 @@ def validate_engine():
     workbook_key = "validation"
     try:
         workbook_path = config["workbooks"][workbook_key]["path"]
-        sheet_name = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
-    except KeyError as e:
+        sheet_name = next(iter(config["workbooks"][workbook_key]["sheets"]))
+    except (KeyError, StopIteration) as e:
         raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
 
     sheet_manager = SheetManager(workbook_path)
     engine = CalculationEngine(sheet_manager=sheet_manager)
 
-    # Update the CalculationEngine configuration if the workbook uses the
-    # ``"1. Detailed Table"`` sheet name.
-    if sheet_name != "Detailed Table":
-        engine.sheet_manager.sheet_configs[sheet_name] = engine.sheet_manager.sheet_configs.pop("Detailed Table")
-
     print("CalculationEngine initialized.")
 
     print("Loading ground truth data from Parquet file...")
-    ground_truth_df = sheet_manager.get_ground_truth(sheet_name)
+    sanitized_name = "".join(c for c in sheet_name if c.isalnum() or c in (' ', '_')).rstrip()
+    sanitized_name = sanitized_name.lower().replace(' ', '_')
+    ground_truth_path = f"data/prepared/{sanitized_name}.parquet"
+    ground_truth_df = pd.read_parquet(ground_truth_path)
     print("Ground truth data loaded.")
 
     print("Running calculation engine...")
