@@ -304,13 +304,11 @@ class PmtStrategy(CalculationStrategy):
             # Ensure val is a number, default to 0 if it's None or NaN
             if val is None or (isinstance(val, float) and math.isnan(val)):
                 val = 0
-
             if isinstance(val, str):
                 try:
                     val = float(val)
                 except (ValueError, TypeError):
                     val = 0
-
             if negative:
                 val = -val
             return val
