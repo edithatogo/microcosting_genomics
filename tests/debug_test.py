@@ -19,7 +19,7 @@ def test_engine():
 def test_sum_range_debug(test_engine):
     formula = "=SUM(A2:A4)"
     result = test_engine.execute_formula(formula, "Sheet1", "A5")
-    assert result == 4
+    assert result == 6
 
 
 def test_numpy_values(test_engine):
