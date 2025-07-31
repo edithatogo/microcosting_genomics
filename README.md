@@ -40,6 +40,10 @@ along with the reference tables ``2._labor_prices.parquet`` and
 generate or update these reference tables.
 
 The canonical source workbook is `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm`.
+## Workbook dependencies
+Several scripts rely on the original Excel workbook being available in the `data/` directory as configured in `config.yaml`.
+`prepare_data.py` loads sheets like "1. Detailed Table", "2. Labor Prices" and "3. Estimates" and writes them as Parquet files under `data/prepared/`. These reference files must exist before running the test suite or validation scripts.
+
 
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
