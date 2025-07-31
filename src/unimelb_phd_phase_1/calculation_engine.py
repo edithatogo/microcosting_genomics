@@ -108,7 +108,7 @@ class CalculationEngine:
         self.call_stack = []
         self.strategy_map = {
             "literal": LiteralStrategy(),
-            "string_literal": StringLiteralStrategy(),
+            "string_literal": LiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
             "addition": AdditionStrategy(),
