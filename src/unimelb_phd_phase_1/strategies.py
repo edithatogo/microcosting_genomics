@@ -309,14 +309,17 @@ class PmtStrategy(CalculationStrategy):
                     # If it fails, it might be a cell reference
                     val = engine.execute_formula(f"={tok}", sheet_name, f"{cell_ref}_{suffix}")
 
-            # Ensure val is a number, default to 0 if it's None or NaN
-            if val is None or (isinstance(val, float) and math.isnan(val)):
+            # Ensure val is numeric
+            if val is None:
                 val = 0
-            if isinstance(val, str):
+            elif isinstance(val, str):
                 try:
                     val = float(val)
                 except (ValueError, TypeError):
                     val = 0
+            elif isinstance(val, Number) and isinstance(val, float) and math.isnan(val):
+                val = 0
+
             if negative:
                 val = -val
             return val
@@ -325,8 +328,8 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula['nper'], 'NPER')
         pv = _eval_token(parsed_formula['pv'], 'PV')
 
-        # Ensure all inputs to npf.pmt are numeric
-        if not all(isinstance(v, (int, float)) for v in [rate, nper, pv]):
+        # Ensure all inputs to npf.pmt are numeric (support numpy types)
+        if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 
         try:
