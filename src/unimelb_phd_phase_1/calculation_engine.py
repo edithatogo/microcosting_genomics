@@ -270,7 +270,7 @@ class CalculationEngine:
         if header_rows > 1:
             header = df.iloc[0:header_rows]
             if not header.empty:
-                header = header.T.ffill().T
+                header = header.ffill()
                 df.columns = pd.MultiIndex.from_frame(header.T)
             df = df.iloc[header_rows:]
         elif header_rows == 1:
@@ -288,9 +288,10 @@ class CalculationEngine:
                     return any(c in string_columns for c in col_names)
                 return col in string_columns
 
-            for col in df.columns:
-                if not is_string_col(col):
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
+            numeric_idxs = [i for i, col in enumerate(df.columns) if not is_string_col(col)]
+            if numeric_idxs:
+                df_numeric = df.iloc[:, numeric_idxs].apply(pd.to_numeric, errors="coerce")
+                df.iloc[:, numeric_idxs] = df_numeric
 
         return df
 
