@@ -286,13 +286,25 @@ class PmtStrategy(CalculationStrategy):
             if tok.startswith('-'):
                 negative = True
                 tok = tok[1:].strip()
+
+            # Check for percentage
             if tok.endswith('%'):
-                val = float(tok.rstrip('%')) / 100
+                try:
+                    val = float(tok.rstrip('%')) / 100
+                except (ValueError, TypeError):
+                    val = 0
             else:
                 try:
+                    # Try to convert to float directly
                     val = float(tok)
-                except ValueError:
+                except (ValueError, TypeError):
+                    # If it fails, it might be a cell reference
                     val = engine.execute_formula(f"={tok}", sheet_name, f"{cell_ref}_{suffix}")
+
+            # Ensure val is a number, default to 0 if it's None or NaN
+            if val is None or (isinstance(val, float) and math.isnan(val)):
+                val = 0
+
             if negative:
                 val = -val
             return val
@@ -301,10 +313,16 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula['nper'], 'NPER')
         pv = _eval_token(parsed_formula['pv'], 'PV')
 
+        # Ensure all inputs to npf.pmt are numeric
+        if not all(isinstance(v, (int, float)) for v in [rate, nper, pv]):
+            return 0.0
+
         try:
-            return float(npf.pmt(rate, nper, pv))
+            # npf.pmt can return NaN if inputs are invalid, handle this
+            result = npf.pmt(rate, nper, pv)
+            return float(result) if not math.isnan(result) else 0.0
         except Exception:
-            return None
+            return 0.0
 
 class VLookupStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
