@@ -1011,3 +1011,6 @@ Discrepancies found:
 {'cell': 'M1314', 'formula': "='BI - Stor Use - VCGS'!P45", 'excel_value': np.float64(nan), 'calculated_value': None}
 {'cell': 'M1315', 'formula': "='BI - Stor Use - VCGS'!P46", 'excel_value': np.float64(nan), 'calculated_value': None}
 {'cell': 'M1317', 'formula': '=SUM(M1264:M1315)', 'excel_value': np.float64(nan), 'calculated_value': 0}
+Replicate Detailed Table discrepancy:
+Registration step - Price Estimate expected 122.62269511055744 but got 100.17089785113671
+Registration step - Unit Cost Estimate expected 4.087423170351914 but got 200.34179570227343
