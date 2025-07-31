@@ -268,19 +268,17 @@ class IfStrategy(CalculationStrategy):
 class IfErrorStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         try:
-            value = parsed_formula['value']
-            if isinstance(value, dict) and value.get('type') == 'unknown':
-                expr = value.get('formula', '').lstrip('=')
-                value_result = eval(expr)
-            else:
-                value_result = engine.execute_formula(value, sheet_name, f"{cell_ref}_VAL")
+            value = parsed_formula["value"]
+            value_result = engine.execute_formula(value, sheet_name, f"{cell_ref}_VAL")
 
-            if value_result is None or (isinstance(value_result, float) and math.isnan(value_result)):
-                raise Exception('Error')
+            if value_result is None or (
+                isinstance(value_result, float) and math.isnan(value_result)
+            ):
+                raise Exception("Error")
             return value_result
         except Exception:
-            fallback = parsed_formula['value_if_error'].strip()
-            return engine.execute_formula(f'={fallback}', sheet_name, f"{cell_ref}_ERR")
+            fallback = parsed_formula["value_if_error"].strip()
+            return engine.execute_formula(f"={fallback}", sheet_name, f"{cell_ref}_ERR")
 
 class PmtStrategy(CalculationStrategy):
     """Strategy for handling PMT formulas."""
@@ -325,8 +323,10 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula['nper'], 'NPER')
         pv = _eval_token(parsed_formula['pv'], 'PV')
 
-        # Ensure all inputs to npf.pmt are numeric
-        if not all(isinstance(v, (int, float)) for v in [rate, nper, pv]):
+        # Ensure all inputs to npf.pmt are numeric. ``numbers.Number`` also
+        # matches ``numpy`` scalar types so values loaded by pandas from Excel
+        # sheets won't be incorrectly rejected.
+        if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 
         try:
