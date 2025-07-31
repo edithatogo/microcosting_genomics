@@ -62,7 +62,7 @@ class AdditionStrategy(CalculationStrategy):
             else:
                 value = engine.execute_formula(operand, sheet_name, f"{cell_ref}_{idx}")
 
-            if isinstance(value, (int, float)) and not math.isnan(value):
+            if isinstance(value, Number) and not (isinstance(value, float) and math.isnan(value)):
                 total += value
             else:
                 return None
@@ -89,7 +89,7 @@ class MultiplicationStrategy(CalculationStrategy):
                 # It's a literal value
                 value = operand['value']
 
-            if isinstance(value, (int, float)):
+            if isinstance(value, Number):
                 result *= value
             else:
                 # If any operand is not a number, the result is invalid
@@ -118,7 +118,7 @@ class SumRangeStrategy(CalculationStrategy):
                 else:
                     value = engine.get_cell_value(sheet_name, cell)
                 
-                if isinstance(value, (int, float)) and not math.isnan(value):
+                if isinstance(value, Number) and not (isinstance(value, float) and math.isnan(value)):
                     total += value
         return total
 
@@ -145,7 +145,7 @@ class SumCellsStrategy(CalculationStrategy):
             else:
                 value = engine.get_cell_value(sheet, cell)
 
-            if isinstance(value, (int, float)) and not math.isnan(value):
+            if isinstance(value, Number) and not (isinstance(value, float) and math.isnan(value)):
                 total += value
         return total
 
@@ -191,7 +191,7 @@ class MultiplicationThreeValuesStrategy(CalculationStrategy):
         else:
             val2 = engine.get_cell_value(sheet_name, val2_cell)
 
-        if isinstance(val1, (int, float)) and isinstance(val2, (int, float)):
+        if isinstance(val1, Number) and isinstance(val2, Number):
             return val1 * val2 * number
         else:
             return None
@@ -217,7 +217,7 @@ class DivisionThreeValuesStrategy(CalculationStrategy):
         else:
             val2 = engine.get_cell_value(sheet_name, val2)
 
-        if isinstance(val1, (int, float)) and isinstance(val2, (int, float)) and val2 != 0 and number != 0:
+        if isinstance(val1, Number) and isinstance(val2, Number) and val2 != 0 and number != 0:
             return val1 / number / val2
         else:
             return None
