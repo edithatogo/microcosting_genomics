@@ -5,7 +5,9 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-DATA_DIR = Path(__file__).resolve().parents[0] / 'data' / 'extracted'
+# The data directory lives at the repository root under ``data/extracted``.
+# ``parents[1]`` points one level above ``scripts`` (the repo root).
+DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "extracted"
 
 # Load the Detailed Table data
 df_detailed = pd.read_csv(DATA_DIR / 'Detailed Table_values.csv', header=2)
@@ -48,7 +50,7 @@ labour_columns = [
 df_labour.columns = labour_columns
 
 # Load the mapping
-df_mapping = pd.read_csv(Path(__file__).resolve().parents[0] / 'data' / 'step_to_label_mapping.csv')
+df_mapping = pd.read_csv(Path(__file__).resolve().parents[1] / "data" / "step_to_label_mapping.csv")
 
 # Merge the mapping with the detailed table
 df_detailed = pd.merge(df_detailed, df_mapping, on='Step', how='left')
