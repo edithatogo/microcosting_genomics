@@ -7,12 +7,22 @@ import pandas as pd
 
 from .config import load_config
 from .formula_parser import parse_formula
-from .strategies import (AdditionStrategy, DivisionThreeValuesStrategy,
-                         IfErrorStrategy, IfStrategy, LiteralStrategy,
-                         MultiplicationByNumberStrategy,
-                         MultiplicationStrategy, PmtStrategy,
-                         ReferenceStrategy, SumCellsStrategy, SumRangeStrategy,
-                         VLookupStrategy)
+from .strategies import (
+    AdditionStrategy,
+    DivisionThreeValuesStrategy,
+    IfErrorStrategy,
+    IfStrategy,
+    LiteralStrategy,
+    MultiplicationByNumberStrategy,
+    MultiplicationStrategy,
+    PmtStrategy,
+    ReferenceStrategy,
+    StringLiteralStrategy,
+    SumCellsStrategy,
+    SumRangeStrategy,
+    UnknownStrategy,
+    VLookupStrategy,
+)
 from .utils import cell_to_coords, coords_to_cell
 
 # The data tables contain thousands of columns which trigger Pandas warnings
@@ -98,6 +108,7 @@ class CalculationEngine:
         self.call_stack = []
         self.strategy_map = {
             "literal": LiteralStrategy(),
+            "string_literal": LiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
             "addition": AdditionStrategy(),
@@ -109,6 +120,7 @@ class CalculationEngine:
             "iferror": IfErrorStrategy(),
             "vlookup": VLookupStrategy(),
             "pmt": PmtStrategy(),
+            "unknown": UnknownStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
@@ -270,7 +282,7 @@ class CalculationEngine:
         if header_rows > 1:
             header = df.iloc[0:header_rows]
             if not header.empty:
-                header = header.T.ffill().T
+                header = header.ffill()
                 df.columns = pd.MultiIndex.from_frame(header.T)
             df = df.iloc[header_rows:]
         elif header_rows == 1:
