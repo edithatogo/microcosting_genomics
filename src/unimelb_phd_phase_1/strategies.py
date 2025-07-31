@@ -207,7 +207,7 @@ class DivisionThreeValuesStrategy(CalculationStrategy):
         if formula2 and isinstance(formula2, str) and formula2.startswith('='):
             val2 = engine.execute_formula(formula2, sheet_name, cell2)
         else:
-            val2 = engine.get_cell_value(sheet_name, cell2)
+            val2 = engine.get_cell_value(sheet_name, val2)
 
         if isinstance(val1, (int, float)) and isinstance(val2, (int, float)) and val2 != 0 and number != 0:
             return val1 / number / val2
@@ -304,7 +304,11 @@ class PmtStrategy(CalculationStrategy):
             # Ensure val is a number, default to 0 if it's None or NaN
             if val is None or (isinstance(val, float) and math.isnan(val)):
                 val = 0
-
+            if isinstance(val, str):
+                try:
+                    val = float(val)
+                except (ValueError, TypeError):
+                    val = 0
             if negative:
                 val = -val
             return val
@@ -365,18 +369,17 @@ class VLookupStrategy(CalculationStrategy):
 
         if range_lookup == 'FALSE':
             for row in table_data:
-                if row[0] == lookup_value:
+                if row and row[0] == lookup_value:
                     return row[col_index] if col_index < len(row) else None
             return None
         else:
             last_match = None
             for row in table_data:
-                if row[0] is None:
-                    continue
-                if row[0] <= lookup_value:
-                    last_match = row
-                else:
-                    break
+                if row and row[0] is not None:
+                    if row[0] <= lookup_value:
+                        last_match = row
+                    else:
+                        break
             if last_match:
                 return last_match[col_index] if col_index < len(last_match) else None
             return None
