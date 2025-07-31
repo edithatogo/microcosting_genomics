@@ -45,6 +45,9 @@ Several scripts rely on the original Excel workbook being available in the `data
 `prepare_data.py` loads sheets like "1. Detailed Table", "2. Labor Prices" and "3. Estimates" and writes them as Parquet files under `data/prepared/`. These reference files must exist before running the test suite or validation scripts.
 
 
+## Workbook Dependencies
+Most helper scripts expect the original workbook to be present in the `data/` directory.  Run `python prepare_data.py` after updating the Excel file to regenerate `ground_truth.parquet` along with the reference tables `2._labor_prices.parquet` and `3._estimates.parquet`.  These Parquet files provide stable inputs for the tests and the calculation engine.
+
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
 workbook in Python.  A calculation engine parses the Excel formulas and

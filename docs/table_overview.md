@@ -1,9 +1,9 @@
 # Overview of Workbook Tables
 
-The Excel file `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm` contains several numbered worksheets.  The `1. Detailed Table` sheet is the core of the model: every costed step is listed here and formulas combine quantities and prices to generate the final unit costs.  The remaining sheets either provide inputs used by these formulas or summarise the outputs for sensitivity analyses.
+The Excel file `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm` contains several numbered worksheets.  The `1. Detailed Table` sheet is the core of the model: every costed step is listed here and formulas combine quantities and prices to generate the final unit costs.  All other sheets either supply the raw inputs referenced by these formulas or summarise the results for various sensitivity analyses.
 
 ## 1. Detailed Table
-This sheet lists every process step alongside quantity and price information.  The "Unit Cost" columns are calculated here and serve as the primary outputs of the workbook.  Cells in this sheet pull data from the supplemental tables described below.
+Lists every process step alongside quantity and price information.  The `Unit Cost` columns are calculated here and serve as the primary outputs of the workbook.  Formulas in this sheet draw values from all of the supporting tables below so that each modelled activity has the correct quantities, prices and sensitivity adjustments.
 
 ## 2. Labor Prices
 Contains hourly salary rates for different personnel categories across jurisdictions.  The Detailed Table references these rates when filling labour price columns.
