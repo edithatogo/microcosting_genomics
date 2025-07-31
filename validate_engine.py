@@ -41,11 +41,16 @@ def validate_engine():
         print("--------------------------\n")
 
     # Extract the 'Unit Cost (AUD $/test)' columns for comparison
-    if isinstance(ground_truth_df.columns, pd.MultiIndex):
-        ground_truth_costs = ground_truth_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
-    else:
-        ground_truth_costs = ground_truth_df.filter(like='Unit Cost (AUD $/test)', axis=1)
-    calculated_costs = results_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
+    # To ensure comparable columns, flatten any MultiIndex to a single level.
+    def _flatten_columns(df):
+        if isinstance(df.columns, pd.MultiIndex):
+            df = df.copy()
+            df.columns = [' '.join(map(str, col)).strip().replace('nan ', '') for col in df.columns.values]
+        return df
+
+    # Extract the 'Unit Cost (AUD $/test)' columns for comparison from flattened dataframes.
+    ground_truth_costs = _flatten_columns(ground_truth_df).filter(like='Unit Cost (AUD $/test)', axis=1)
+    calculated_costs = _flatten_columns(results_df).filter(like='Unit Cost (AUD $/test)', axis=1)
 
     # Align the dataframes to ensure comparison is correct
     ground_truth_costs, calculated_costs = ground_truth_costs.align(calculated_costs, join='inner', axis=0)
