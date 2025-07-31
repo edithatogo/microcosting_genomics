@@ -7,12 +7,22 @@ import pandas as pd
 
 from .config import load_config
 from .formula_parser import parse_formula
-from .strategies import (AdditionStrategy, DivisionThreeValuesStrategy,
-                         IfErrorStrategy, IfStrategy, LiteralStrategy,
-                         MultiplicationByNumberStrategy,
-                         MultiplicationStrategy, PmtStrategy,
-                         ReferenceStrategy, SumCellsStrategy, SumRangeStrategy,
-                         VLookupStrategy)
+from .strategies import (
+    AdditionStrategy,
+    DivisionThreeValuesStrategy,
+    IfErrorStrategy,
+    IfStrategy,
+    LiteralStrategy,
+    MultiplicationByNumberStrategy,
+    MultiplicationStrategy,
+    PmtStrategy,
+    ReferenceStrategy,
+    StringLiteralStrategy,
+    SumCellsStrategy,
+    SumRangeStrategy,
+    UnknownStrategy,
+    VLookupStrategy,
+)
 from .utils import cell_to_coords, coords_to_cell
 
 # The data tables contain thousands of columns which trigger Pandas warnings
@@ -98,6 +108,7 @@ class CalculationEngine:
         self.call_stack = []
         self.strategy_map = {
             "literal": LiteralStrategy(),
+            "string_literal": LiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
             "addition": AdditionStrategy(),
@@ -109,6 +120,7 @@ class CalculationEngine:
             "iferror": IfErrorStrategy(),
             "vlookup": VLookupStrategy(),
             "pmt": PmtStrategy(),
+            "unknown": UnknownStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
@@ -267,15 +279,14 @@ class CalculationEngine:
 
         df = pd.DataFrame(raw_data)
 
-        if header_rows > 1:
-            header = df.iloc[0:header_rows]
-            if not header.empty:
-                header = header.T.ffill().T
-                df.columns = pd.MultiIndex.from_frame(header.T)
-            df = df.iloc[header_rows:]
-        elif header_rows == 1:
-            df.columns = df.iloc[0]
-            df = df.iloc[1:]
+        if header_rows > 0:
+            header_df = df.iloc[:header_rows].ffill(axis=0)
+            if header_rows > 1:
+                columns = pd.MultiIndex.from_frame(header_df.T)
+            else:
+                columns = pd.MultiIndex.from_arrays([header_df.iloc[0].tolist()])
+            df = df.iloc[header_rows:].reset_index(drop=True)
+            df.columns = columns
 
         df.reset_index(drop=True, inplace=True)
 
@@ -290,7 +301,24 @@ class CalculationEngine:
 
             for col in df.columns:
                 if not is_string_col(col):
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
+                    try:
+                        df[col] = pd.to_numeric(df[col], errors="coerce")
+                    except TypeError:
+                        # Columns with duplicate labels may return a DataFrame;
+                        # skip conversion in that case.
+                        continue
+
+            # ``pandas.DataFrame.__getitem__`` returns a ``DataFrame`` when a
+            # column label occurs multiple times.  This happens in the
+            # multi-level headers of the workbook and causes ``pd.to_numeric``
+            # to raise ``TypeError``.  Process each column series individually
+            # via ``DataFrame.apply`` so duplicates are handled safely.
+            def _convert(series: pd.Series) -> pd.Series:
+                if not is_string_col(series.name):
+                    return pd.to_numeric(series, errors="coerce")
+                return series
+
+            df = df.apply(_convert)
 
         return df
 
