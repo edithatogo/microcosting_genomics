@@ -11,9 +11,17 @@ class CalculationStrategy:
         raise NotImplementedError
 
 class LiteralStrategy(CalculationStrategy):
-    """Strategy for handling literal values."""
+    """Strategy for handling numeric literals."""
+
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        return parsed_formula['value']
+        return parsed_formula["value"]
+
+
+class StringLiteralStrategy(CalculationStrategy):
+    """Strategy for handling string literals."""
+
+    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
+        return parsed_formula["value"]
 
 class ReferenceStrategy(CalculationStrategy):
     """Strategy for handling cell references."""
@@ -383,3 +391,10 @@ class VLookupStrategy(CalculationStrategy):
             if last_match:
                 return last_match[col_index] if col_index < len(last_match) else None
             return None
+
+
+class UnknownStrategy(CalculationStrategy):
+    """Fallback strategy for unsupported formulas."""
+
+    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
+        return None

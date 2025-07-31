@@ -7,12 +7,22 @@ import pandas as pd
 
 from .config import load_config
 from .formula_parser import parse_formula
-from .strategies import (AdditionStrategy, DivisionThreeValuesStrategy,
-                         IfErrorStrategy, IfStrategy, LiteralStrategy,
-                         MultiplicationByNumberStrategy,
-                         MultiplicationStrategy, PmtStrategy,
-                         ReferenceStrategy, SumCellsStrategy, SumRangeStrategy,
-                         VLookupStrategy)
+from .strategies import (
+    AdditionStrategy,
+    DivisionThreeValuesStrategy,
+    IfErrorStrategy,
+    IfStrategy,
+    LiteralStrategy,
+    MultiplicationByNumberStrategy,
+    MultiplicationStrategy,
+    PmtStrategy,
+    ReferenceStrategy,
+    StringLiteralStrategy,
+    SumCellsStrategy,
+    SumRangeStrategy,
+    UnknownStrategy,
+    VLookupStrategy,
+)
 from .utils import cell_to_coords, coords_to_cell
 
 # The data tables contain thousands of columns which trigger Pandas warnings
@@ -98,6 +108,7 @@ class CalculationEngine:
         self.call_stack = []
         self.strategy_map = {
             "literal": LiteralStrategy(),
+            "string_literal": LiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
             "addition": AdditionStrategy(),
@@ -109,6 +120,7 @@ class CalculationEngine:
             "iferror": IfErrorStrategy(),
             "vlookup": VLookupStrategy(),
             "pmt": PmtStrategy(),
+            "unknown": UnknownStrategy(),
             # More strategies will be added here
         }
         self.sheet_configs = {
@@ -201,16 +213,21 @@ class CalculationEngine:
         mapping = {
             "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
             "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
-            "4. DSA - Equipment Throughput": self.prepared_data_path / "4._dsa_equipment_throughput.parquet",
+            "4. DSA - Equipment Throughput": self.prepared_data_path
+            / "4._dsa_equipment_throughput.parquet",
             "5. DSA - Overheads": self.prepared_data_path / "5._dsa_overheads.parquet",
-            "6. DSA - Consumable Discounts": self.prepared_data_path / "6._dsa_consumable_discounts.parquet",
-            "7. DSA - Labor Prices": self.prepared_data_path / "7._dsa_labour_prices.parquet",
+            "6. DSA - Consumable Discounts": self.prepared_data_path
+            / "6._dsa_consumable_discounts.parquet",
+            "7. DSA - Labor Prices": self.prepared_data_path
+            / "7._dsa_labour_prices.parquet",
             "Summary Table": self.prepared_data_path / "summary_table.parquet",
             "Process": self.prepared_data_path / "process.parquet",
             "At a Glance": self.prepared_data_path / "at_a_glance.parquet",
             "PSA": self.prepared_data_path / "psa.parquet",
-            "Eq - Costs and Usage - VCGS": self.prepared_data_path / "equipment_costs.parquet",
-            "Cons -  Costs and Util - VCGS": self.prepared_data_path / "consumable_costs.parquet",
+            "Eq - Costs and Usage - VCGS": self.prepared_data_path
+            / "equipment_costs.parquet",
+            "Cons -  Costs and Util - VCGS": self.prepared_data_path
+            / "consumable_costs.parquet",
             "Labour - Costs - VCGS": self.prepared_data_path / "labour_costs.parquet",
         }
 
@@ -290,6 +307,18 @@ class CalculationEngine:
                         # Columns with duplicate labels may return a DataFrame;
                         # skip conversion in that case.
                         continue
+
+            # ``pandas.DataFrame.__getitem__`` returns a ``DataFrame`` when a
+            # column label occurs multiple times.  This happens in the
+            # multi-level headers of the workbook and causes ``pd.to_numeric``
+            # to raise ``TypeError``.  Process each column series individually
+            # via ``DataFrame.apply`` so duplicates are handled safely.
+            def _convert(series: pd.Series) -> pd.Series:
+                if not is_string_col(series.name):
+                    return pd.to_numeric(series, errors="coerce")
+                return series
+
+            df = df.apply(_convert)
 
         return df
 
