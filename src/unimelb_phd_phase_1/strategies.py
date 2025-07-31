@@ -325,8 +325,9 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula['nper'], 'NPER')
         pv = _eval_token(parsed_formula['pv'], 'PV')
 
-        # Ensure all inputs to npf.pmt are numeric
-        if not all(isinstance(v, (int, float)) for v in [rate, nper, pv]):
+        # Ensure all inputs to npf.pmt are numeric. Using ``numbers.Number``
+        # allows numpy numeric types (e.g. ``np.int64``) to be recognised.
+        if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 
         try:
