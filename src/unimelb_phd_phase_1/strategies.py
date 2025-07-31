@@ -333,13 +333,11 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula['nper'], 'NPER')
         pv = _eval_token(parsed_formula['pv'], 'PV')
 
-        # Ensure all inputs to npf.pmt are numeric.  ``numpy`` dtypes such as
-        # ``numpy.int64`` or ``numpy.float64`` should be treated as valid
-        # numbers so we rely on ``numbers.Number`` instead of ``int``/``float``
-        # checks.  This allows the engine to operate on values loaded from
-        # ``pandas`` DataFrames without explicit type casting.
-        from numbers import Number
-
+        # Ensure all inputs to npf.pmt are numeric. ``numbers.Number`` also
+        # covers numpy numeric types such as ``np.int64`` and ``np.float64``
+        # which appear when reading values from pandas DataFrames. This allows
+        # the engine to operate on values loaded from ``pandas`` DataFrames
+        # without explicit type casting.
         if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 
