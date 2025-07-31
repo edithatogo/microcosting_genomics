@@ -13,7 +13,7 @@ def test_load_sheet_with_headers():
     )
     df = load_sheet_with_headers(
         file,
-        "Detailed Table",
+        sheet_name="Detailed Table",
         header_rows=5,
         string_columns=["Test", "Category", "Sub-Category", "Step"],
     )
