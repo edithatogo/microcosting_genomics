@@ -41,6 +41,16 @@ generate or update these reference tables.
 
 The canonical source workbook is `Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm`.
 
+## Workbook Setup
+The workbook is not included in the repository. Copy the file referenced in `config.yaml` into the `data/` directory and run:
+
+```bash
+python prepare_data.py
+```
+
+This extracts all required sheets and creates `ground_truth.parquet`, `2._labor_prices.parquet` and `3._estimates.parquet` under `data/prepared/`. The tests and validation scripts rely on these Parquet files.
+
+
 ## Workbook Dependencies
 Most helper scripts read from the Excel workbook specified in `config.yaml`.  After copying the workbook to the `data/` directory, run `python prepare_data.py` to extract the needed sheets.  This script creates `ground_truth.parquet`, `2._labor_prices.parquet` and `3._estimates.parquet` under `data/prepared/`.  These Parquet files must exist before running the test suite or validation scripts.
 
