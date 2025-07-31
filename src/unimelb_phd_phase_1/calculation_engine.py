@@ -201,16 +201,21 @@ class CalculationEngine:
         mapping = {
             "2. Labor Prices": self.prepared_data_path / "2._labor_prices.parquet",
             "3. Estimates": self.prepared_data_path / "3._estimates.parquet",
-            "4. DSA - Equipment Throughput": self.prepared_data_path / "4._dsa_equipment_throughput.parquet",
+            "4. DSA - Equipment Throughput": self.prepared_data_path
+            / "4._dsa_equipment_throughput.parquet",
             "5. DSA - Overheads": self.prepared_data_path / "5._dsa_overheads.parquet",
-            "6. DSA - Consumable Discounts": self.prepared_data_path / "6._dsa_consumable_discounts.parquet",
-            "7. DSA - Labor Prices": self.prepared_data_path / "7._dsa_labour_prices.parquet",
+            "6. DSA - Consumable Discounts": self.prepared_data_path
+            / "6._dsa_consumable_discounts.parquet",
+            "7. DSA - Labor Prices": self.prepared_data_path
+            / "7._dsa_labour_prices.parquet",
             "Summary Table": self.prepared_data_path / "summary_table.parquet",
             "Process": self.prepared_data_path / "process.parquet",
             "At a Glance": self.prepared_data_path / "at_a_glance.parquet",
             "PSA": self.prepared_data_path / "psa.parquet",
-            "Eq - Costs and Usage - VCGS": self.prepared_data_path / "equipment_costs.parquet",
-            "Cons -  Costs and Util - VCGS": self.prepared_data_path / "consumable_costs.parquet",
+            "Eq - Costs and Usage - VCGS": self.prepared_data_path
+            / "equipment_costs.parquet",
+            "Cons -  Costs and Util - VCGS": self.prepared_data_path
+            / "consumable_costs.parquet",
             "Labour - Costs - VCGS": self.prepared_data_path / "labour_costs.parquet",
         }
 
@@ -285,7 +290,7 @@ class CalculationEngine:
 
             for col in df.columns:
                 if not is_string_col(col):
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                    df[col] = pd.to_numeric(df[col], errors="coerce")
 
         return df
 
@@ -432,4 +437,3 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
-[end of file]
