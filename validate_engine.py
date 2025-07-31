@@ -41,7 +41,10 @@ def validate_engine():
         print("--------------------------\n")
 
     # Extract the 'Unit Cost (AUD $/test)' columns for comparison
-    ground_truth_costs = ground_truth_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
+    if isinstance(ground_truth_df.columns, pd.MultiIndex):
+        ground_truth_costs = ground_truth_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
+    else:
+        ground_truth_costs = ground_truth_df.filter(like='Unit Cost (AUD $/test)', axis=1)
     calculated_costs = results_df.xs('Unit Cost (AUD $/test)', level=0, axis=1)
 
     # Align the dataframes to ensure comparison is correct

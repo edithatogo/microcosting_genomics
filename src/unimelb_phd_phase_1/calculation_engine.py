@@ -262,15 +262,14 @@ class CalculationEngine:
 
         df = pd.DataFrame(raw_data)
 
-        if header_rows > 1:
-            header = df.iloc[0:header_rows]
-            if not header.empty:
-                header = header.T.ffill().T
-                df.columns = pd.MultiIndex.from_frame(header.T)
-            df = df.iloc[header_rows:]
-        elif header_rows == 1:
-            df.columns = df.iloc[0]
-            df = df.iloc[1:]
+        if header_rows > 0:
+            header_df = df.iloc[:header_rows].ffill(axis=0)
+            if header_rows > 1:
+                columns = pd.MultiIndex.from_frame(header_df.T)
+            else:
+                columns = pd.MultiIndex.from_arrays([header_df.iloc[0].tolist()])
+            df = df.iloc[header_rows:].reset_index(drop=True)
+            df.columns = columns
 
         df.reset_index(drop=True, inplace=True)
 
@@ -285,7 +284,12 @@ class CalculationEngine:
 
             for col in df.columns:
                 if not is_string_col(col):
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
+                    try:
+                        df[col] = pd.to_numeric(df[col], errors="coerce")
+                    except TypeError:
+                        # Columns with duplicate labels may return a DataFrame;
+                        # skip conversion in that case.
+                        continue
 
         return df
 
@@ -432,4 +436,3 @@ class CalculationEngine:
                     value = self.get_cell_value(sheet_name, cell_ref)
                     results_df.iloc[r_idx, c_idx] = value
         return results_df, errors
-[end of file]
