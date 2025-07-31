@@ -288,9 +288,17 @@ class CalculationEngine:
                     return any(c in string_columns for c in col_names)
                 return col in string_columns
 
-            for col in df.columns:
-                if not is_string_col(col):
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
+            # ``pandas.DataFrame.__getitem__`` returns a ``DataFrame`` when a
+            # column label occurs multiple times.  This happens in the
+            # multi-level headers of the workbook and causes ``pd.to_numeric``
+            # to raise ``TypeError``.  Process each column series individually
+            # via ``DataFrame.apply`` so duplicates are handled safely.
+            def _convert(series: pd.Series) -> pd.Series:
+                if not is_string_col(series.name):
+                    return pd.to_numeric(series, errors="coerce")
+                return series
+
+            df = df.apply(_convert)
 
         return df
 
