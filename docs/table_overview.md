@@ -21,7 +21,7 @@ Lists overhead percentages used in DSA scenarios.  The Detailed Table applies th
 Supplies discount rates for consumables in each scenario.  The DSA formulas on the Detailed Table multiply baseline consumable prices by these discounts.
 
 ## 7. DSA - Labor Prices
-Contains alternative labour cost assumptions used for sensitivity testing.  The DSA labour cost columns in the Detailed Table look up these rates instead of the base values from sheet 2.
+Contains alternative labour cost assumptions used for sensitivity testing.  The DSA labour cost columns in the Detailed Table look up these rates instead of the base values from the `2. Labor Prices` sheet.
 
 ## 8. PSA
 Summarises distribution parameters (for example means and percentiles) required for probabilistic sensitivity analysis.  These statistics are derived from the Detailed Table outputs and then fed into downstream modelling tools.
