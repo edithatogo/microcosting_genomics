@@ -40,7 +40,7 @@ def main_excel_engine():
     """
     data_dir = Path(__file__).resolve().parents[1] / "data"
     excel_path = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
-    return CalculationEngine(excel_path)
+    return CalculationEngine(excel_path, verbose=True)
 
 def test_coords_to_cell():
     assert coords_to_cell(0, 0) == 'A1'
