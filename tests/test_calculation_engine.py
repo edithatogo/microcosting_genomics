@@ -115,9 +115,11 @@ def test_get_cell_formula(test_engine):
     """
     Tests the get_cell_formula method.
     """
-    # Assuming 'test_data.xlsx' has a formula in cell 'C2'
+    # Non-formula cell should return None
+    assert test_engine.get_cell_formula('Sheet1', 'A2') is None
+
+    # Cells containing formulas should return the formula string
     formula = test_engine.get_cell_formula('Sheet1', 'C2')
-    assert formula is not None
     assert formula == "=A2*B2"
 
 
