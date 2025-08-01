@@ -59,9 +59,7 @@ def main() -> None:
     workbook_key = config.get("default_workbook", "main")
     try:
         source_file = Path(config["workbooks"][workbook_key]["path"])
-        detailed_table_sheet = config["workbooks"][workbook_key]["sheets"]["detailed_table"]
-        labor_prices_sheet = config["workbooks"][workbook_key]["sheets"]["labor_prices"]
-        estimates_sheet = config["workbooks"][workbook_key]["sheets"]["estimates"]
+        sheet_configs = config["workbooks"][workbook_key]["sheets"]
     except KeyError as e:
         raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
 
@@ -69,20 +67,21 @@ def main() -> None:
     prepared_dir = data_dir / "prepared"
     prepared_dir.mkdir(exist_ok=True)
 
-    # --- 1. Detailed Table -------------------------------------------------
-    ground_truth = _parse_generic_sheet(source_file, detailed_table_sheet, header_rows=3)
-    ground_truth.to_parquet(prepared_dir / "ground_truth.parquet")
-    print("Saved ground_truth.parquet")
-
-    # --- 2. Labor Prices & 3. Estimates -----------------------------------
-    labor_prices = _parse_generic_sheet(source_file, labor_prices_sheet, header_rows=2)
-    labor_prices.to_parquet(prepared_dir / "2._labor_prices.parquet")
-    print("Saved 2._labor_prices.parquet")
-
-    estimates = _parse_generic_sheet(source_file, estimates_sheet, header_rows=3, skip_rows=1)
-    estimates.to_parquet(prepared_dir / "3._estimates.parquet")
-    print("Saved 3._estimates.parquet")
-
+    for sheet_name, sheet_config in sheet_configs.items():
+        df = _parse_generic_sheet(
+            source_file,
+            sheet_name,
+            header_rows=sheet_config.get("header_rows", 1),
+            skip_rows=sheet_config.get("skip_rows", 0),
+        )
+        
+        # Use a sanitized version of the sheet name for the file name
+        sanitized_name = "".join(c for c in sheet_name if c.isalnum() or c in (' ', '_')).rstrip()
+        sanitized_name = sanitized_name.lower().replace(' ', '_')
+        
+        output_path = prepared_dir / f"{sanitized_name}.parquet"
+        df.to_parquet(output_path)
+        print(f"Saved {output_path}")
 
 if __name__ == "__main__":
     main()
