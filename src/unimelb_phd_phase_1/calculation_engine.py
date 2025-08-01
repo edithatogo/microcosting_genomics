@@ -4,11 +4,10 @@ from pathlib import Path
 from .formula_parser import parse_formula
 from .strategies import (
     AdditionStrategy,
-    DivisionThreeValuesStrategy,
+    DivisionStrategy,
     IfErrorStrategy,
     IfStrategy,
     LiteralStrategy,
-    MultiplicationByNumberStrategy,
     MultiplicationStrategy,
     PmtStrategy,
     ReferenceStrategy,
@@ -47,7 +46,7 @@ class CalculationEngine:
         self.call_stack = []
         self.strategy_map = {
             "literal": LiteralStrategy(),
-            "string_literal": LiteralStrategy(),
+            "string_literal": StringLiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
             "addition": AdditionStrategy(),
