@@ -162,24 +162,23 @@ class IfStrategy(CalculationStrategy):
             )
 
             try:
-                if operator == '=':
+                if operator == "=":
                     cond_result = left_val == right_val
-                elif operator == '<>':
+                elif operator == "<>":
                     cond_result = left_val != right_val
-                elif operator == '>':
+                elif operator == ">":
                     cond_result = left_val > right_val
-                elif operator == '<':
+                elif operator == "<":
                     cond_result = left_val < right_val
-                elif operator == '>=':
+                elif operator == ">=":
                     cond_result = left_val >= right_val
-                elif operator == '<=':
+                elif operator == "<=":
                     cond_result = left_val <= right_val
-                else:
-                    cond_result = False
-            except Exception:
+            except TypeError:
                 cond_result = False
         else:
-            # Condition without explicit comparison, e.g. ``IF(A1, 1, 0)``.
+            # When the condition does not contain an explicit comparison, treat
+            # it as a formula whose truthiness determines the branch.
             cond_val = engine.execute_formula(
                 f"={condition}", sheet_name, f"{cell_ref}_COND"
             )
@@ -211,8 +210,11 @@ class IfErrorStrategy(CalculationStrategy):
                 raise Exception('Error')
             return value_result
         except Exception:
-            fallback = parsed_formula['value_if_error'].strip()
-            return engine.execute_formula(f'={fallback}', sheet_name, f"{cell_ref}_ERR")
+            fallback = parsed_formula["value_if_error"].strip()
+            # ``value_if_error`` may itself be a literal, reference or complex
+            # formula.  Delegating to ``execute_formula`` ensures it is handled
+            # consistently with other expressions.
+            return engine.execute_formula(f"={fallback}", sheet_name, f"{cell_ref}_ERR")
 
 class PmtStrategy(CalculationStrategy):
     """Strategy for handling PMT formulas."""
@@ -253,9 +255,9 @@ class PmtStrategy(CalculationStrategy):
                 val = -val
             return val
 
-        rate = _eval_token(parsed_formula['rate'], 'RATE')
-        nper = _eval_token(parsed_formula['nper'], 'NPER')
-        pv = _eval_token(parsed_formula['pv'], 'PV')
+        rate = _eval_token(parsed_formula["rate"], "RATE")
+        nper = _eval_token(parsed_formula["nper"], "NPER")
+        pv = _eval_token(parsed_formula["pv"], "PV")
 
         # Ensure all inputs to npf.pmt are numeric. ``numbers.Number`` also
         # covers numpy numeric types such as ``np.int64`` and ``np.float64``
@@ -274,9 +276,9 @@ class PmtStrategy(CalculationStrategy):
 
 class VLookupStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        lookup_token = parsed_formula['lookup_value'].strip()
-        if lookup_token.startswith('"') and lookup_token.endswith('"'):
-            lookup_value = lookup_token.strip('"')
+        lookup_token = parsed_formula["lookup_value"].strip()
+        if lookup_token.startswith("\"") and lookup_token.endswith("\""):
+            lookup_value = lookup_token.strip("\"")
         else:
             try:
                 lookup_value = float(lookup_token)
