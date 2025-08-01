@@ -39,29 +39,28 @@ class ReferenceStrategy(CalculationStrategy):
         
         return engine.get_cell_value(referenced_sheet, referenced_cell)
 
+def _evaluate_operand(engine, operand, sheet_name, cell_ref):
+    """Helper function to evaluate an operand."""
+    if isinstance(operand, dict):
+        if operand.get('type') == 'literal':
+            return operand['value']
+        elif operand.get('type') == 'reference':
+            op_sheet = operand['sheet'] if operand['sheet'] else sheet_name
+            op_cell = operand['cell']
+            formula = engine.get_cell_formula(op_sheet, op_cell)
+            if formula and isinstance(formula, str) and formula.startswith('='):
+                return engine.execute_formula(formula, op_sheet, op_cell)
+            else:
+                return engine.get_cell_value(op_sheet, op_cell)
+    return engine.execute_formula(operand, sheet_name, cell_ref)
+
 class AdditionStrategy(CalculationStrategy):
     """Strategy for handling addition formulas."""
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         total = 0
         for idx, operand in enumerate(parsed_formula['operands']):
-            value = None
-            if isinstance(operand, dict) and operand.get('type') == 'literal':
-                value = operand['value']
-            elif isinstance(operand, dict) and operand.get('type') == 'reference':
-                op_sheet = operand['sheet'] if operand['sheet'] else sheet_name
-                op_cell = operand['cell']
-                formula = engine.get_cell_formula(op_sheet, op_cell)
-                if formula is not None:
-                    if isinstance(formula, str) and formula.startswith('='):
-                        value = engine.execute_formula(formula, op_sheet, op_cell)
-                    else:
-                        value = engine.execute_formula(formula, op_sheet, op_cell)
-                else:
-                    value = engine.get_cell_value(op_sheet, op_cell)
-            else:
-                value = engine.execute_formula(operand, sheet_name, f"{cell_ref}_{idx}")
-
+            value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx}")
             if isinstance(value, Number) and not (isinstance(value, float) and math.isnan(value)):
                 total += value
             else:
@@ -72,29 +71,14 @@ class MultiplicationStrategy(CalculationStrategy):
     """Strategy for handling multiplication formulas."""
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         result = 1
-        for operand in parsed_formula['operands']:
-            value = None
-            if 'sheet' in operand and 'cell' in operand:
-                # It's a cell reference
-                op_sheet = operand['sheet'] if operand['sheet'] else sheet_name
-                op_cell = operand['cell']
-                
-                formula = engine.get_cell_formula(op_sheet, op_cell)
-                if formula and isinstance(formula, str) and formula.startswith('='):
-                    value = engine.execute_formula(formula, op_sheet, op_cell)
-                else:
-                    value = engine.get_cell_value(op_sheet, op_cell)
-                
-            elif 'type' in operand and operand['type'] == 'literal':
-                # It's a literal value
-                value = operand['value']
-
+        for idx, operand in enumerate(parsed_formula['operands']):
+            value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx}")
             if isinstance(value, Number):
                 result *= value
             else:
-                # If any operand is not a number, the result is invalid
                 return None
         return result
+
 
 class SumRangeStrategy(CalculationStrategy):
     """Strategy for handling SUM formulas with a range."""
@@ -149,78 +133,18 @@ class SumCellsStrategy(CalculationStrategy):
                 total += value
         return total
 
-class MultiplicationByNumberStrategy(CalculationStrategy):
-    """Strategy for handling multiplication by a number."""
+class DivisionStrategy(CalculationStrategy):
+    """Strategy for handling division formulas."""
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        cell = parsed_formula['cell']
-        number = parsed_formula['number']
+        result = _evaluate_operand(engine, parsed_formula['operands'][0], sheet_name, f"{cell_ref}_0")
+        for idx, operand in enumerate(parsed_formula['operands'][1:]):
+            value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx+1}")
+            if isinstance(value, Number) and value != 0:
+                result /= value
+            else:
+                return None
+        return result
 
-        target_sheet = parsed_formula.get('sheet', sheet_name)
-
-        formula = engine.get_cell_formula(target_sheet, cell)
-        if formula and isinstance(formula, str) and formula.startswith('='):
-            value = engine.execute_formula(formula, target_sheet, cell)
-        else:
-            value = engine.get_cell_value(target_sheet, cell)
-            
-        if isinstance(value, Number):
-            return value * number
-        else:
-            return None
-
-class MultiplicationThreeValuesStrategy(CalculationStrategy):
-    """Strategy for handling multiplication of three values (cell*cell*number)."""
-    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        operands = parsed_formula['operands']
-        number = parsed_formula['number']
-
-        val1_cell = operands[0]['cell']
-        val2_cell = operands[1]['cell']
-
-        val1 = engine.get_cell_value(sheet_name, val1_cell)
-        formula1 = engine.get_cell_formula(sheet_name, val1_cell)
-        if formula1 and isinstance(formula1, str) and formula1.startswith('='):
-            val1 = engine.execute_formula(formula1, sheet_name, val1_cell)
-        else:
-            val1 = engine.get_cell_value(sheet_name, val1_cell)
-
-        val2 = engine.get_cell_value(sheet_name, val2_cell)
-        formula2 = engine.get_cell_formula(sheet_name, val2_cell)
-        if formula2 and isinstance(formula2, str) and formula2.startswith('='):
-            val2 = engine.execute_formula(formula2, sheet_name, val2_cell)
-        else:
-            val2 = engine.get_cell_value(sheet_name, val2_cell)
-
-        if isinstance(val1, Number) and isinstance(val2, Number):
-            return val1 * val2 * number
-        else:
-            return None
-
-class DivisionThreeValuesStrategy(CalculationStrategy):
-    """Strategy for handling division of three values (cell/number/cell)."""
-    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        cell1 = parsed_formula['cell1']
-        number = parsed_formula['number']
-        cell2 = parsed_formula['cell2']
-
-        val1 = engine.get_cell_value(sheet_name, cell1)
-        formula1 = engine.get_cell_formula(sheet_name, cell1)
-        if formula1 and isinstance(formula1, str) and formula1.startswith('='):
-            val1 = engine.execute_formula(formula1, sheet_name, cell1)
-        else:
-            val1 = engine.get_cell_value(sheet_name, cell1)
-
-        val2 = engine.get_cell_value(sheet_name, cell2)
-        formula2 = engine.get_cell_formula(sheet_name, cell2)
-        if formula2 and isinstance(formula2, str) and formula2.startswith('='):
-            val2 = engine.execute_formula(formula2, sheet_name, cell2)
-        else:
-            val2 = engine.get_cell_value(sheet_name, val2)
-
-        if isinstance(val1, Number) and isinstance(val2, Number) and val2 != 0 and number != 0:
-            return val1 / number / val2
-        else:
-            return None
 
 class IfStrategy(CalculationStrategy):
     """Strategy for handling IF formulas."""
@@ -335,10 +259,11 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula["nper"], "NPER")
         pv = _eval_token(parsed_formula["pv"], "PV")
 
-        # Ensure all inputs to npf.pmt are numeric.  ``numbers.Number`` includes
-        # numpy integer and floating point types which appear in prepared
-        # datasets, so using it allows the strategy to handle those values
-        # transparently.
+        # Ensure all inputs to npf.pmt are numeric. ``numbers.Number`` also
+        # covers numpy numeric types such as ``np.int64`` and ``np.float64``
+        # which appear when reading values from pandas DataFrames. This allows
+        # the engine to operate on values loaded from ``pandas`` DataFrames
+        # without explicit type casting.
         if not all(isinstance(v, Number) for v in [rate, nper, pv]):
             return 0.0
 

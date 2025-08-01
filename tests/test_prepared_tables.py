@@ -15,3 +15,4 @@ def test_estimates_table():
     df = pd.read_parquet(PREP_DIR / "3._estimates.parquet")
     assert df.shape[0] == 77
     assert df.shape[1] == 16
+

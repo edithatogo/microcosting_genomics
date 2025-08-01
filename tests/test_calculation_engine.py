@@ -275,3 +275,29 @@ def test_vlookup_cross_sheet(test_engine):
     formula = '=VLOOKUP(A2+19, Sheet2!$A$1:$B$3, 2, FALSE)'
     result = test_engine.execute_formula(formula, 'Sheet1', 'E1')
     assert result == 50
+
+
+def test_multiplication_cross_sheet_cells(test_engine):
+    result = test_engine.execute_formula("='Sheet2'!A2*'Sheet2'!B2", 'Sheet1', 'F1')
+    assert result == 400
+
+
+def test_sum_range_absolute(test_engine):
+    result = test_engine.execute_formula('=SUM($A$2:$A$4)', 'Sheet1', 'F2')
+    assert result == 6
+
+
+def test_sum_cells_literal_reference(test_engine):
+    result = test_engine.execute_formula('=SUM(1,A2)', 'Sheet1', 'F3')
+    assert result == 2
+
+
+def test_if_cross_sheet(test_engine):
+    result = test_engine.execute_formula("=IF('Sheet2'!A3>15,'Sheet2'!B3,0)", 'Sheet1', 'F4')
+    assert result == 50
+
+
+def test_iferror_vlookup_missing(test_engine):
+    formula = "=IFERROR(VLOOKUP(99, Sheet2!$A$1:$B$3, 2, FALSE), 0)"
+    result = test_engine.execute_formula(formula, 'Sheet1', 'F5')
+    assert result == 0
