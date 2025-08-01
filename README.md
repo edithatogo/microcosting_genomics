@@ -18,6 +18,11 @@ The Python package lives in `src/unimelb_phd_phase_1/` alongside helper
 scripts such as `prepare_data.py` and `validate_engine.py`. All input files
 reside in the `data/` directory.
 
+> **Note**
+> The Excel workbook referenced in `config.yaml` is required by most helper
+> scripts. Run `python prepare_data.py` whenever the workbook changes so the
+> Parquet files in `data/prepared/` stay in sync.
+
 ## Data Directory
 
 All input files used by the helper scripts live in the `data/` directory at the

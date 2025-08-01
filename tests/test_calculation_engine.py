@@ -8,6 +8,7 @@ import pytest
 
 # Silence very verbose PerformanceWarnings emitted during data loading
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from unimelb_phd_phase_1.sheet_manager import SheetManager
 from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
 
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
@@ -18,7 +19,8 @@ def engine():
     """
     Provides a CalculationEngine instance initialized with prepared data.
     """
-    return CalculationEngine()
+    sheet_manager = SheetManager()
+    return CalculationEngine(sheet_manager)
 
 
 @pytest.fixture
@@ -27,14 +29,15 @@ def test_engine():
     Provides a CalculationEngine instance initialized with test data.
     """
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
-    engine = CalculationEngine(test_data_path)
-    engine.sheet_configs["Sheet2"] = {"header_rows": 1, "data_starts_at": 2}
-    sheet_obj = engine._workbook["Sheet2"]
-    values, formulas = engine._load_raw_sheet_data(sheet_obj)
-    engine.sheets["Sheet2"] = engine._process_raw_dataframe(
+    sheet_manager = SheetManager(test_data_path)
+    engine = CalculationEngine(sheet_manager)
+    engine.sheet_manager.sheet_configs["Sheet2"] = {"header_rows": 1, "data_starts_at": 2}
+    sheet_obj = engine.sheet_manager._workbook["Sheet2"]
+    values, formulas = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
+    engine.sheet_manager.sheets["Sheet2"] = engine.sheet_manager._process_raw_dataframe(
         values, sheet_obj, "Sheet2", data_only=True
     )
-    engine.formula_sheets["Sheet2"] = engine._process_raw_dataframe(
+    engine.sheet_manager.formula_sheets["Sheet2"] = engine.sheet_manager._process_raw_dataframe(
         formulas, sheet_obj, "Sheet2", data_only=False
     )
     return engine
@@ -50,7 +53,8 @@ def main_excel_engine():
         data_dir
         / "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     )
-    return CalculationEngine(excel_path, verbose=True)
+    sheet_manager = SheetManager(excel_path, verbose=True)
+    return CalculationEngine(sheet_manager, verbose=True)
 
 
 def test_coords_to_cell():
@@ -102,13 +106,13 @@ def test_engine_initialization(engine):
     Tests the basic initialization of the CalculationEngine.
     """
     assert engine is not None
-    sheet_names = engine.get_sheet_names()
+    sheet_names = engine.sheet_manager.get_sheet_names()
     assert isinstance(sheet_names, list)
     assert "Detailed Table" in sheet_names
 
 
 def test_detailed_table_header(engine):
-    df = engine.get_data("Detailed Table")
+    df = engine.sheet_manager.get_data("Detailed Table")
     assert df.columns.nlevels == 4
 
     expected = [
@@ -217,10 +221,21 @@ def test_pmt_percent_and_cells(test_engine):
     # rate 50% => 0.5, nper=1, pv=-4 -> payment should be approx 6.0
     assert pytest.approx(result, rel=1e-2) == 6.0
 
+def test_pmt_with_numpy_types(test_engine):
+    """PMT should accept numpy numeric types via ``numbers.Number``."""
+    import numpy as np
+
+    # Cast values to numpy types to mimic how pandas may store them
+    df = test_engine.sheet_manager.sheets['Sheet1']
+    df.iloc[0, 0] = np.int64(1)
+    df.iloc[0, 1] = np.float64(4)
+
+    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    assert pytest.approx(result, rel=1e-2) == 6.0
 
 def test_multilevel_header_parsing(test_engine):
     """Ensure headers are loaded as a MultiIndex."""
-    df = test_engine.get_data("Sheet1")
+    df = test_engine.sheet_manager.get_data("Sheet1")
     expected = pd.MultiIndex.from_arrays(
         [
             ["col1", "col2", "col3"],
@@ -243,16 +258,17 @@ def test_multilevel_header_loader(tmp_path):
     wb.save(file_path)
     wb.close()
 
-    engine = CalculationEngine(file_path)
-    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    sheet_manager = SheetManager(file_path)
+    engine = CalculationEngine(sheet_manager)
+    engine.sheet_manager.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
 
     # Reload the sheet using the updated configuration
-    sheet_obj = engine._workbook["Sheet1"]
-    values, _ = engine._load_raw_sheet_data(sheet_obj)
-    engine.sheets["Sheet1"] = engine._process_raw_dataframe(
+    sheet_obj = engine.sheet_manager._workbook["Sheet1"]
+    values, _ = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
+    engine.sheet_manager.sheets["Sheet1"] = engine.sheet_manager._process_raw_dataframe(
         values, sheet_obj, "Sheet1", data_only=True
     )
-    df = engine.get_data("Sheet1")
+    df = engine.sheet_manager.get_data("Sheet1")
 
     expected = pd.MultiIndex.from_arrays(
         [
@@ -275,11 +291,12 @@ def test_multilevel_header_loader_engine(tmp_path):
     wb.save(tmp_path / "multi.xlsx")
     wb.close()
 
-    engine = CalculationEngine(tmp_path / "multi.xlsx")
-    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
-    sheet_obj = engine._workbook["Sheet1"]
-    values, _ = engine._load_raw_sheet_data(sheet_obj)
-    df = engine._process_raw_dataframe(values, sheet_obj, "Sheet1", data_only=True)
+    sheet_manager = SheetManager(tmp_path / "multi.xlsx")
+    engine = CalculationEngine(sheet_manager)
+    engine.sheet_manager.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    sheet_obj = engine.sheet_manager._workbook["Sheet1"]
+    values, _ = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
+    df = engine.sheet_manager._process_raw_dataframe(values, sheet_obj, "Sheet1", data_only=True)
 
     expected = pd.MultiIndex.from_arrays(
         [
@@ -310,3 +327,29 @@ def test_vlookup_cross_sheet(test_engine):
     formula = "=VLOOKUP(A2+19, Sheet2!$A$1:$B$3, 2, FALSE)"
     result = test_engine.execute_formula(formula, "Sheet1", "E1")
     assert result == 50
+
+
+def test_multiplication_cross_sheet_cells(test_engine):
+    result = test_engine.execute_formula("='Sheet2'!A2*'Sheet2'!B2", 'Sheet1', 'F1')
+    assert result == 400
+
+
+def test_sum_range_absolute(test_engine):
+    result = test_engine.execute_formula('=SUM($A$2:$A$4)', 'Sheet1', 'F2')
+    assert result == 6
+
+
+def test_sum_cells_literal_reference(test_engine):
+    result = test_engine.execute_formula('=SUM(1,A2)', 'Sheet1', 'F3')
+    assert result == 2
+
+
+def test_if_cross_sheet(test_engine):
+    result = test_engine.execute_formula("=IF('Sheet2'!A3>15,'Sheet2'!B3,0)", 'Sheet1', 'F4')
+    assert result == 50
+
+
+def test_iferror_vlookup_missing(test_engine):
+    formula = "=IFERROR(VLOOKUP(99, Sheet2!$A$1:$B$3, 2, FALSE), 0)"
+    result = test_engine.execute_formula(formula, 'Sheet1', 'F5')
+    assert result == 0

@@ -1,24 +1,41 @@
 default_workbook: validation
 workbooks:
   main:
-    # The main workbook contains the supplemental tables referenced by
-    # the Detailed Table sheet. Use this file so ``prepare_data.py`` can
-    # load the ``2. Labor Prices`` and ``3. Estimates`` worksheets.
     path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
     sheets:
-      detailed_table: "Detailed Table"
-      labor_prices: "2. Labor Prices"
-      estimates: "3. Estimates"
+      "Detailed Table":
+        header_rows: 4
+        data_starts_at: 5
+        string_columns: ["Test", "Category", "Sub-Category", "Step"]
+      "2. Labor Prices":
+        header_rows: 1
+        data_starts_at: 2
+      "3. Estimates":
+        header_rows: 1
+        data_starts_at: 2
   validation:
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
-      detailed_table: "Detailed Table"
-      labor_prices: "DSA - Labour Prices"
-      estimates: "DSA - Test Throughput"
+      "Detailed Table":
+        header_rows: 4
+        data_starts_at: 5
+        string_columns": ["Test", "Category", "Sub-Category", "Step"]
+      "DSA - Labour Prices":
+        header_rows: 1
+        data_starts_at: 2
+      "DSA - Test Throughput":
+        header_rows: 1
+        data_starts_at: 2
   original:
-    # Original model workbook used for manual inspection
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
-      detailed_table: "Detailed Table"
-      labor_prices: "2. Labor Prices"
-      estimates: "3. Estimates"
+      "Detailed Table":
+        header_rows: 4
+        data_starts_at: 5
+        string_columns: ["Test", "Category", "Sub-Category", "Step"]
+      "2. Labor Prices":
+        header_rows: 1
+        data_starts_at: 2
+      "3. Estimates":
+        header_rows: 1
+        data_starts_at: 2

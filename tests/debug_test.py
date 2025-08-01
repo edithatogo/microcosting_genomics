@@ -43,3 +43,4 @@ def test_numpy_values(test_engine):
 
     result_mul = test_engine.execute_formula("=A2*B2", "Sheet1", "D2")
     assert result_mul == 4
+
