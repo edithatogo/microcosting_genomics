@@ -189,6 +189,18 @@ def test_pmt_percent_and_cells(test_engine):
     # rate 50% => 0.5, nper=1, pv=-4 -> payment should be approx 6.0
     assert pytest.approx(result, rel=1e-2) == 6.0
 
+def test_pmt_with_numpy_types(test_engine):
+    """PMT should accept numpy numeric types via ``numbers.Number``."""
+    import numpy as np
+
+    # Cast values to numpy types to mimic how pandas may store them
+    df = test_engine.sheets['Sheet1']
+    df.iloc[0, 0] = np.int64(1)
+    df.iloc[0, 1] = np.float64(4)
+
+    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    assert pytest.approx(result, rel=1e-2) == 6.0
+
 def test_multilevel_header_parsing(test_engine):
     """Ensure headers are loaded as a MultiIndex."""
     df = test_engine.get_data('Sheet1')
