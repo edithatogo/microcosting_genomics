@@ -1,0 +1,5 @@
+Description,Total Space (GB),ex-GST,Useable life (years),Cost/GB,Cost/GB/year,Cost/test
+"2U R-Series with integrateed controller (96TB, 50.8 TB Useable in RAID-6)",50800.0,23800,5,0.468503937007874,0.09370078740157481,
+LTO-7 or LTO-8 Tape Drive Module,,21000,5,,,0.21
+LTO 7 Tape (uncompressed),6000.0,75,5,0.0125,0.0025,
+LTO 8 Tape (uncompressed),12000.0,115,5,0.009583333333333333,0.0019166666666666666,

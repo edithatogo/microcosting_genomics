@@ -1,0 +1,47 @@
+,,,,,Total space on disk (GB),,,Duration (Months),,,Price (AUD $/unit),,,,Unit Cost ($/sample),,
+Network Storage,,Step,Source,Comment,LL,MP,UL,LL,MP,UL,LL,MP,UL,Source,LL,MP,UL
+,WES/Panel (S),,,,,,,,,,$/GB/year,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",0.5622047244094488,0.7027559055118111,0.8433070866141733
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",0.5622047244094488,0.7027559055118111,0.8433070866141733
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,5,8,15,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",0.7027559055118111,1.1244094488188976,2.1082677165354333
+,,Total,"Bioinformatics Lead, VCGS, 2023",,13,18,27,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",1.8271653543307087,2.52992125984252,3.7948818897637797
+,,,,,,,,,,,,,,,,,
+,WES/Panel (T),,,,,,,,,,,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,9,11.25,13.5,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",1.26496062992126,1.581200787401575,1.8974409448818899
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,9,11.25,13.5,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",1.26496062992126,1.581200787401575,1.8974409448818899
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,15,24,45,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",2.1082677165354333,3.3732283464566932,6.3248031496063
+,,Total,"Bioinformatics Lead, VCGS, 2023",,33,46.5,72,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",4.638188976377953,6.535629921259843,10.11968503937008
+,,,,,,,,,,,,,,,,,
+,WGS (S),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,35,40,45,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",4.919291338582678,5.622047244094489,6.3248031496063
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,45,50,55,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",6.3248031496063,7.027559055118111,7.730314960629921
+,,Total,"Bioinformatics Lead, VCGS, 2023",,80,90,100,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",11.244094488188978,12.6496062992126,14.055118110236222
+,,,,,,,,,,,,,,,,,
+,WGS (T),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,105,120,135,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",14.757874015748033,16.866141732283467,18.9744094488189
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,135,150,165,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",18.9744094488189,21.082677165354333,23.190944881889767
+,,Total,"Bioinformatics Lead, VCGS, 2023",,240,270,300,-,18,-,-,0.09370078740157481,-,"Xenon, 2023",33.73228346456693,37.9488188976378,42.16535433070867
+,,,,,,,,,,,,,,,,,
+Archival Storage (Tape only; uncompressed),,,,,,,,,,,,,,,,,
+,WES/Panel (S),,,,,,,,,,$/GB,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.03833333333333333,0.05520833333333333,0.07500000000000001
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.03833333333333333,0.05520833333333333,0.07500000000000001
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,5,8,15,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.04791666666666666,0.08833333333333333,0.1875
+,,Total,"Bioinformatics Lead, VCGS, 2023",,13,18,27,,,,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.12458333333333332,0.19875,0.3375
+,,,,,,,,,,,,,,,,,
+,WES/Panel (T),,,,,,,,,,,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,9,11.25,13.5,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.08625,0.12421875,0.16875
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,9,11.25,13.5,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.08625,0.12421875,0.16875
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,15,24,45,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.14375,0.265,0.5625
+,,Total,"Bioinformatics Lead, VCGS, 2023",,33,46.5,72,,,,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.31625,0.5134375,0.9
+,,,,,,,,,,,,,,,,,
+,WGS (S),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,35,40,45,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.33541666666666664,0.44166666666666665,0.5625
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,45,50,55,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.43124999999999997,0.5520833333333334,0.6875
+,,Total,"Bioinformatics Lead, VCGS, 2023",,80,90,100,,,,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",0.7666666666666666,0.99375,1.25
+,,,,,,,,,,,,,,,,,
+,WGS (T),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,105,120,135,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",1.0062499999999999,1.325,1.6875
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,135,150,165,-,-,-,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",1.29375,1.65625,2.0625
+,,Total,"Bioinformatics Lead, VCGS, 2023",,240,270,300,,,,0.009583333333333333,0.011041666666666667,0.0125,"Xenon, 2023",2.3,2.98125,3.75
+,,,,,,,,,,,,,,,,,

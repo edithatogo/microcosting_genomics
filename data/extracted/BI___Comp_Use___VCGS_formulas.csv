@@ -1,0 +1,126 @@
+Exome – 50 Samples (16 trios+2),,,,,,,,,,,,,,,,,,,,,,
+Step,,Utilisation Estimates,,,,,,,,,,,,,,Price (AUD $/unit),,,,Unit Cost ($/sample),,
+, Count ,Count,     Min     ,         Mean         ,Mean,,,Average Time,Average Time,Cores,Total time,Time per sample,Total core time,Core time per sample,Source,LL,MP,UL,Source,LL,MP,UL
+,,,,,,,,,,,,,,,,($/core/h),,,,,,
+check_tools                    , 1     ,1, -           , -                    ,0,0,0,0,=(((H5/60)+G5)/60)+F5,1,=J5*C5,=L5/50,=L5*K5,=N5/50,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O5*R5,-
+build_capture_stats            , 1     ,1, 1  minutes  , 1  minutes           ,0,1,0,0.016666666666666666,=(((H6/60)+G6)/60)+F6,1,=J6*C6,=L6/50,=L6*K6,=N6/50,"BI Lead, VCGS, 2024",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O6*R6,-
+generate_pipeline_id           , 1     ,1, -           , -                    ,,,,0,=(((H7/60)+G7)/60)+F7,1,=J7*C7,=L7/50,=L7*K7,=N7/50,"BI Lead, VCGS, 2025",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O7*R7,-
+create_batch_ped_file          , 1     ,1, 7 seconds   , 7 seconds            ,0,0,7,0.0019444444444444444,=(((H8/60)+G8)/60)+F8,1,=J8*C8,=L8/50,=L8*K8,=N8/50,"BI Lead, VCGS, 2026",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O8*R8,-
+generate_ped_files             , 1     ,1, -           , -                    ,,,,0,=(((H9/60)+G9)/60)+F9,1,=J9*C9,=L9/50,=L9*K9,=N9/50,"BI Lead, VCGS, 2027",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O9*R9,-
+create_sample_metadata         , 1     ,1, -           , -                    ,,,,0,=(((H10/60)+G10)/60)+F10,1,=J10*C10,=L10/50,=L10*K10,=N10/50,"BI Lead, VCGS, 2028",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O10*R10,-
+fastqc                         , 100   ,100, 6 seconds   , 6  minutes           ,0,6,0,0.1,=(((H11/60)+G11)/60)+F11,1,=J11*C11,=L11/50,=L11*K11,=N11/50,"BI Lead, VCGS, 2029",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O11*R11,-
+align_bwa                      , 50    ,50, 6 seconds   ," 1 hours, 22  minutes ",1,22,0,1.3666666666666667,=(((H12/60)+G12)/60)+F12,6,=J12*C12,=L12/50,=L12*K12,=N12/50,"BI Lead, VCGS, 2030",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O12*R12,-
+check_fastqc                   , 96    ,96, -           , 1 seconds            ,0,0,1,0.0002777777777777778,=(((H13/60)+G13)/60)+F13,1,=J13*C13,=L13/50,=L13*K13,=N13/50,"BI Lead, VCGS, 2031",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O13*R13,-
+index_bam                      , 150   ,150, 1 seconds   , 1  minutes           ,,1,,0.016666666666666666,=(((H14/60)+G14)/60)+F14,1,=J14*C14,=L14/50,=L14*K14,=N14/50,"BI Lead, VCGS, 2032",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O14*R14,-
+dedup                          , 98    ,98, -           , 11  minutes          ,,11,,0.18333333333333332,=(((H15/60)+G15)/60)+F15,1,=J15*C15,=L15/50,=L15*K15,=N15/50,"BI Lead, VCGS, 2033",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O15*R15,-
+realignIntervals               , 50    ,50, 39 seconds  , 4  minutes           ,,4,,0.06666666666666667,=(((H16/60)+G16)/60)+F16,4,=J16*C16,=L16/50,=L16*K16,=N16/50,"BI Lead, VCGS, 2034",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O16*R16,-
+realign                        , 50    ,50, 15 seconds  , 22  minutes          ,,22,,0.36666666666666664,=(((H17/60)+G17)/60)+F17,1,=J17*C17,=L17/50,=L17*K17,=N17/50,"BI Lead, VCGS, 2035",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O17*R17,-
+recal_count                    , 50    ,50, 1  minutes  , 19  minutes          ,,19,,0.31666666666666665,=(((H18/60)+G18)/60)+F18,8,=J18*C18,=L18/50,=L18*K18,=N18/50,"BI Lead, VCGS, 2036",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O18*R18,-
+recal                          , 50    ,50, 12 seconds  , 47  minutes          ,,47,,0.7833333333333333,=(((H19/60)+G19)/60)+F19,8,=J19*C19,=L19/50,=L19*K19,=N19/50,"BI Lead, VCGS, 2037",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O19*R19,-
+call_variants_individual_gvcf  , 50    ,50, 7  minutes  ," 1 hours, 59  minutes ",1,59,,1.9833333333333334,=(((H20/60)+G20)/60)+F20,4,=J20*C20,=L20/50,=L20*K20,=N20/50,"BI Lead, VCGS, 2038",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O20*R20,-
+calc_exome_target              , 50    ,50, -           , 2  minutes           ,,2,,0.03333333333333333,=(((H21/60)+G21)/60)+F21,1,=J21*C21,=L21/50,=L21*K21,=N21/50,"BI Lead, VCGS, 2039",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O21*R21,-
+gc_bias                        , 50    ,50, 1  minutes  , 5  minutes           ,,5,,0.08333333333333333,=(((H22/60)+G22)/60)+F22,1,=J22*C22,=L22/50,=L22*K22,=N22/50,"BI Lead, VCGS, 2040",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O22*R22,-
+multicov_coverage_in_target    , 50    ,50, 2  minutes  , 3  minutes           ,,3,,0.05,=(((H23/60)+G23)/60)+F23,3,=J23*C23,=L23/50,=L23*K23,=N23/50,"BI Lead, VCGS, 2041",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O23*R23,-
+calculate_qc_statistics        , 50    ,50, 1 seconds   , 3  minutes           ,,3,,0.05,=(((H24/60)+G24)/60)+F24,1,=J24*C24,=L24/50,=L24*K24,=N24/50,"BI Lead, VCGS, 2042",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O24*R24,-
+summary_report                 , 50    ,50, 5  minutes  , 8  minutes           ,,8,,0.13333333333333333,=(((H25/60)+G25)/60)+F25,1,=J25*C25,=L25/50,=L25*K25,=N25/50,"BI Lead, VCGS, 2043",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O25*R25,-
+check_coverage                 , 50    ,50, -           , 0 seconds            ,,0,0,0,=(((H26/60)+G26)/60)+F26,1,=J26*C26,=L26/50,=L26*K26,=N26/50,"BI Lead, VCGS, 2044",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O26*R26,-
+check_karyotype                , 50    ,50, -           , 1 seconds            ,,,1,0.0002777777777777778,=(((H27/60)+G27)/60)+F27,1,=J27*C27,=L27/50,=L27*K27,=N27/50,"BI Lead, VCGS, 2045",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O27*R27,-
+upload_alissa_asset            , 208   ,208, 3 seconds   , 16 seconds           ,,,16,0.0044444444444444444,=(((H28/60)+G28)/60)+F28,1,=J28*C28,=L28/50,=L28*K28,=N28/50,"BI Lead, VCGS, 2046",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O28*R28,-
+check_ontarget_perc            , 48    ,48, -           , 0 seconds            ,,,0,0,=(((H29/60)+G29)/60)+F29,1,=J29*C29,=L29/50,=L29*K29,=N29/50,"BI Lead, VCGS, 2047",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O29*R29,-
+multicov_gap_report            , 48    ,48, 45 seconds  , 54 seconds           ,,,54,0.015000000000000001,=(((H30/60)+G30)/60)+F30,1,=J30*C30,=L30/50,=L30*K30,=N30/50,"BI Lead, VCGS, 2048",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O30*R30,-
+insert_size_metrics            , 96    ,96, -           , 1  minutes           ,,1,0,0.016666666666666666,=(((H31/60)+G31)/60)+F31,1,=J31*C31,=L31/50,=L31*K31,=N31/50,"BI Lead, VCGS, 2049",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O31*R31,-
+check_mean_coverage            , 48    ,48, 3 seconds   , 4 seconds            ,,,4,0.0011111111111111111,=(((H32/60)+G32)/60)+F32,1,=J32*C32,=L32/50,=L32*K32,=N32/50,"BI Lead, VCGS, 2050",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O32*R32,-
+check_perc_bases_above_10X     , 48    ,48, 3 seconds   , 4 seconds            ,,,4,0.0011111111111111111,=(((H33/60)+G33)/60)+F33,1,=J33*C33,=L33/50,=L33*K33,=N33/50,"BI Lead, VCGS, 2051",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O33*R33,-
+check_perc_bases_above_Q30     , 48    ,48, 3 seconds   , 4 seconds            ,,,4,0.0011111111111111111,=(((H34/60)+G34)/60)+F34,1,=J34*C34,=L34/50,=L34*K34,=N34/50,"BI Lead, VCGS, 2052",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O34*R34,-
+create_alissa_lowcov_bed       , 48    ,48, 3 seconds   , 6 seconds            ,,,6,0.0016666666666666668,=(((H35/60)+G35)/60)+F35,1,=J35*C35,=L35/50,=L35*K35,=N35/50,"BI Lead, VCGS, 2053",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O35*R35,-
+germline_genotype_gvcfs        , 50    ,50, 36  minutes , 58  minutes          ,,58,,0.9666666666666667,=(((H36/60)+G36)/60)+F36,4,=J36*C36,=L36/50,=L36*K36,=N36/50,"BI Lead, VCGS, 2054",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O36*R36,-
+trio_genotype_gvcfs            , 16    ,16, 32  minutes , 38  minutes          ,,38,,0.6333333333333333,=(((H37/60)+G37)/60)+F37,4,=J37*C37,=L37/50,=L37*K37,=N37/50,"BI Lead, VCGS, 2055",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O37*R37,-
+filter_variants                , 132   ,132, 12 seconds  , 31 seconds           ,,,31,0.008611111111111113,=(((H38/60)+G38)/60)+F38,1,=J38*C38,=L38/50,=L38*K38,=N38/50,"BI Lead, VCGS, 2056",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O38*R38,-
+merge_variants                 , 66    ,66, 9 seconds   , 29 seconds           ,,,29,0.008055555555555555,=(((H39/60)+G39)/60)+F39,1,=J39*C39,=L39/50,=L39*K39,=N39/50,"BI Lead, VCGS, 2057",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O39*R39,-
+genotype_refinement_trio       , 16    ,16, 17  minutes , 20  minutes          ,,20,,0.3333333333333333,=(((H40/60)+G40)/60)+F40,1,=J40*C40,=L40/50,=L40*K40,=N40/50,"BI Lead, VCGS, 2058",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O40*R40,-
+genotype_refinement_individual , 50    ,50, -           , 0 seconds            ,,,0,0,=(((H41/60)+G41)/60)+F41,1,=J41*C41,=L41/50,=L41*K41,=N41/50,"BI Lead, VCGS, 2059",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O41*R41,-
+vcf_normalize                  , 66    ,66, 1 seconds   , 4 seconds            ,,,4,0.0011111111111111111,=(((H42/60)+G42)/60)+F42,1,=J42*C42,=L42/50,=L42*K42,=N42/50,"BI Lead, VCGS, 2060",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O42*R42,-
+check_variant_fraction         , 64    ,64, 10 seconds  , 14 seconds           ,,,14,0.0038888888888888888,=(((H43/60)+G43)/60)+F43,1,=J43*C43,=L43/50,=L43*K43,=N43/50,"BI Lead, VCGS, 2061",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O43*R43,-
+vcf_filter_child               , 66    ,66, 6 seconds   , 29 seconds           ,,,29,0.008055555555555555,=(((H44/60)+G44)/60)+F44,1,=J44*C44,=L44/50,=L44*K44,=N44/50,"BI Lead, VCGS, 2062",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O44*R44,-
+vcf_annotate                   , 66    ,66, 16 seconds  , 18  minutes          ,,18,,0.3,=(((H45/60)+G45)/60)+F45,8,=J45*C45,=L45/50,=L45*K45,=N45/50,"BI Lead, VCGS, 2063",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O45*R45,-
+vcf_post_annotation_filter     , 66    ,66, 1 seconds   , 55 seconds           ,,,55,0.015277777777777777,=(((H46/60)+G46)/60)+F46,1,=J46*C46,=L46/50,=L46*K46,=N46/50,"BI Lead, VCGS, 2064",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O46*R46,-
+vcf_vcfanno                    , 66    ,66, -           , 0 seconds            ,,,0,0,=(((H47/60)+G47)/60)+F47,1,=J47*C47,=L47/50,=L47*K47,=N47/50,"BI Lead, VCGS, 2065",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O47*R47,-
+gnomad_filter                  , 66    ,66, 45 seconds  , 1  minutes           ,,1,,0.016666666666666666,=(((H48/60)+G48)/60)+F48,1,=J48*C48,=L48/50,=L48*K48,=N48/50,"BI Lead, VCGS, 2066",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O48*R48,-
+add_custom_annotations         , 66    ,66, 6 seconds   , 14 seconds           ,,,14,0.0038888888888888888,=(((H49/60)+G49)/60)+F49,1,=J49*C49,=L49/50,=L49*K49,=N49/50,"BI Lead, VCGS, 2067",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O49*R49,-
+annotate_custom_regions        , 66    ,66, -           , 0 seconds            ,,,0,0,=(((H50/60)+G50)/60)+F50,1,=J50*C50,=L50/50,=L50*K50,=N50/50,"BI Lead, VCGS, 2068",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O50*R50,-
+snpid_analysis                 , 48    ,48, 12 seconds  , 19 seconds           ,,,19,0.005277777777777778,=(((H51/60)+G51)/60)+F51,1,=J51*C51,=L51/50,=L51*K51,=N51/50,"BI Lead, VCGS, 2069",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O51*R51,-
+post_denovo_rate_to_longqc     , 16    ,16, 9 seconds   , 12 seconds           ,,,12,0.0033333333333333335,=(((H52/60)+G52)/60)+F52,1,=J52*C52,=L52/50,=L52*K52,=N52/50,"BI Lead, VCGS, 2070",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O52*R52,-
+summary_report_trio            , 16    ,16, 15 seconds  , 25 seconds           ,,,25,0.006944444444444445,=(((H53/60)+G53)/60)+F53,1,=J53*C53,=L53/50,=L53*K53,=N53/50,"BI Lead, VCGS, 2071",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O53*R53,-
+somalier_extract               , 48    ,48, 39 seconds  , 59 seconds           ,,,59,0.016388888888888887,=(((H54/60)+G54)/60)+F54,1,=J54*C54,=L54/50,=L54*K54,=N54/50,"BI Lead, VCGS, 2072",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O54*R54,-
+omalier_relate                , 1     ,1, 3 seconds   , 3 seconds            ,,,3,0.0008333333333333334,=(((H55/60)+G55)/60)+F55,1,=J55*C55,=L55/50,=L55*K55,=N55/50,"BI Lead, VCGS, 2073",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O55*R55,-
+omalier_append_vaf_checks     , 1     ,1, -           , -                    ,,,,0,=(((H56/60)+G56)/60)+F56,1,=J56*C56,=L56/50,=L56*K56,=N56/50,"BI Lead, VCGS, 2074",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O56*R56,-
+sample_similarity_report       , 1     ,1, 1  minutes  , 1  minutes           ,,1,,0.016666666666666666,=(((H57/60)+G57)/60)+F57,1,=J57*C57,=L57/50,=L57*K57,=N57/50,"BI Lead, VCGS, 2075",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O57*R57,-
+validate_batch                 , 1     ,1, 8 seconds   , 8 seconds            ,,,8,0.0022222222222222222,=(((H58/60)+G58)/60)+F58,1,=J58*C58,=L58/50,=L58*K58,=N58/50,"BI Lead, VCGS, 2076",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O58*R58,-
+write_run_info                 , 1     ,1, -           , -                    ,,,,0,=(((H59/60)+G59)/60)+F59,1,=J59*C59,=L59/50,=L59*K59,=N59/50,"BI Lead, VCGS, 2077",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O59*R59,-
+mark_batch_finished            , 1     ,1, -           , -                    ,,,,0,=(((H60/60)+G60)/60)+F60,1,=J60*C60,=L60/50,=L60*K60,=N60/50,"BI Lead, VCGS, 2078",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O60*R60,-
+qc_loader                      , 240   ,240, -           , 0 seconds            ,,,0,0,=(((H61/60)+G61)/60)+F61,1,=J61*C61,=L61/50,=L61*K61,=N61/50,"BI Lead, VCGS, 2079",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O61*R61,-
+batch_qc                       , 1     ,1, -           , -                    ,,,,0,=(((H62/60)+G62)/60)+F62,1,=J62*C62,=L62/50,=L62*K62,=N62/50,"BI Lead, VCGS, 2080",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O62*R62,-
+Total,,,,,,,,,,,,,,,,,,,,,=SUM(V5:V62),
+,,,,,,,,,,,,,,,,,,,,,,
+"Whole Genome – 6 samples (1 trio, 3 singletons)",,,,,,,,,,,,,,,,,,,,,,
+Step,,Utilisation Estimates,,,,,,,,,,,,,,Price (AUD $/unit),,,,Unit Cost ($/sample),,
+, Count ,Count,     Min     ,         Mean         ,Mean,,,Average Time,Average Time,Cores,Total time,Time per sample,Total core time,Core time per sample,,LL,MP,UL,Source,LL,MP,UL
+,,,,,,,,,,,,,,,,($/core/h),,,,,,
+check_tools                  , 1     ,1, -           , -           ,,,0,0,=(((H69/60)+G69)/60)+F69,1,=J69*C69,=L69/6,=L69*K69,=N69/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O69*R69,-
+generate_pipeline_id         , 1     ,1, -           , -           ,,,0,0,=(((H70/60)+G70)/60)+F70,1,=J70*C70,=L70/6,=L70*K70,=N70/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O70*R70,-
+create_sample_metadata       , 1     ,1, -           , -           ,,,0,0,=(((H71/60)+G71)/60)+F71,1,=J71*C71,=L71/6,=L71*K71,=N71/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O71*R71,-
+create_padded_target_bed     , 1     ,1, -           , -           ,,,0,0,=(((H72/60)+G72)/60)+F72,1,=J72*C72,=L72/6,=L72*K72,=N72/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O72*R72,-
+create_batch_ped_file        , 1     ,1, 9 seconds   , 9 seconds   ,,,9,0.0025,=(((H73/60)+G73)/60)+F73,1,=J73*C73,=L73/6,=L73*K73,=N73/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O73*R73,-
+delay_ntc                    , 2     ,2, -           , -           ,,,0,0,=(((H74/60)+G74)/60)+F74,1,=J74*C74,=L74/6,=L74*K74,=N74/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O74*R74,-
+create_dragen_csv            , 8     ,8, 3 seconds   , 5 seconds   ,,,5,0.0013888888888888887,=(((H75/60)+G75)/60)+F75,1,=J75*C75,=L75/6,=L75*K75,=N75/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O75*R75,-
+targeted_fastq_to_bam_to_vcf , 8     ,8, 1  minutes  , 27  minutes ,,27,,0.45,=(((H76/60)+G76)/60)+F76,55,=J76*C76,=L76/6,=L76*K76,=N76/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O76*R76,-
+upload_alissa_asset          , 19    ,19, 3 seconds   , 57 seconds  ,,,57,0.01583333333333333,=(((H77/60)+G77)/60)+F77,1,=J77*C77,=L77/6,=L77*K77,=N77/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O77*R77,-
+dragen_qc_approximate        , 8     ,8, -           , 30  minutes ,,30,,0.5,=(((H78/60)+G78)/60)+F78,1,=J78*C78,=L78/6,=L78*K78,=N78/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O78*R78,-
+normalize_dragen_vcf         , 6     ,6, -           , 1  minutes  ,,1,,0.016666666666666666,=(((H79/60)+G79)/60)+F79,1,=J79*C79,=L79/6,=L79*K79,=N79/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O79*R79,-
+somalier_extract             , 6     ,6, 1  minutes  , 2  minutes  ,,2,,0.03333333333333333,=(((H80/60)+G80)/60)+F80,1,=J80*C80,=L80/6,=L80*K80,=N80/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O80*R80,-
+dragen_calc_exome_target     , 8     ,8, -           , 17  minutes ,,17,,0.2833333333333333,=(((H81/60)+G81)/60)+F81,1,=J81*C81,=L81/6,=L81*K81,=N81/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O81*R81,-
+dragen_calc_alignment_stats  , 8     ,8, -           , 4  minutes  ,,4,,0.06666666666666667,=(((H82/60)+G82)/60)+F82,6,=J82*C82,=L82/6,=L82*K82,=N82/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O82*R82,-
+calc_coverage_in_target      , 8     ,8, 14  minutes , 35  minutes ,,35,,0.5833333333333334,=(((H83/60)+G83)/60)+F83,4,=J83*C83,=L83/6,=L83*K83,=N83/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O83*R83,-
+index_vcf                    , 11    ,11, -           , 3 seconds   ,,,3,0.0008333333333333334,=(((H84/60)+G84)/60)+F84,1,=J84*C84,=L84/6,=L84*K84,=N84/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O84*R84,-
+vcf_annotate                 , 24    ,24, 16  minutes , 29  minutes ,,29,,0.48333333333333334,=(((H85/60)+G85)/60)+F85,4,=J85*C85,=L85/6,=L85*K85,=N85/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O85*R85,-
+copy_gap_report              , 6     ,6, -           , -           ,,,,0,=(((H86/60)+G86)/60)+F86,1,=J86*C86,=L86/6,=L86*K86,=N86/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O86*R86,-
+check_mean_coverage          , 6     ,6, 3 seconds   , 5 seconds   ,,,5,0.0013888888888888887,=(((H87/60)+G87)/60)+F87,1,=J87*C87,=L87/6,=L87*K87,=N87/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O87*R87,-
+create_ploidy_plot           , 6     ,6, 1  minutes  , 1  minutes  ,,1,,0.016666666666666666,=(((H88/60)+G88)/60)+F88,1,=J88*C88,=L88/6,=L88*K88,=N88/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O88*R88,-
+check_perc_bases_above_10X   , 6     ,6, 3 seconds   , 4 seconds   ,,,4,0.0011111111111111111,=(((H89/60)+G89)/60)+F89,1,=J89*C89,=L89/6,=L89*K89,=N89/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O89*R89,-
+dragen_to_cpipe              , 8     ,8, -           , 1 seconds   ,,,1,0.0002777777777777778,=(((H90/60)+G90)/60)+F90,1,=J90*C90,=L90/6,=L90*K90,=N90/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O90*R90,-
+merge_partitioned_vcfs       , 3     ,3, 2  minutes  , 2  minutes  ,,2,,0.03333333333333333,=(((H91/60)+G91)/60)+F91,8,=J91*C91,=L91/6,=L91*K91,=N91/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O91*R91,-
+gnomad_filter                , 6     ,6, 39 seconds  , 2  minutes  ,,2,,0.03333333333333333,=(((H92/60)+G92)/60)+F92,1,=J92*C92,=L92/6,=L92*K92,=N92/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O92*R92,-
+infer_sex_from_vcf           , 8     ,8, 6 seconds   , 11 seconds  ,,,11,0.0030555555555555553,=(((H93/60)+G93)/60)+F93,1,=J93*C93,=L93/6,=L93*K93,=N93/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O93*R93,-
+check_karyotype_wgs          , 8     ,8, 3 seconds   , 5 seconds   ,,,5,0.0013888888888888887,=(((H94/60)+G94)/60)+F94,1,=J94*C94,=L94/6,=L94*K94,=N94/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O94*R94,-
+rescale_qual                 , 6     ,6, 6 seconds   , 28 seconds  ,,,28,0.0077777777777777776,=(((H95/60)+G95)/60)+F95,1,=J95*C95,=L95/6,=L95*K95,=N95/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O95*R95,-
+add_custom_annotations       , 6     ,6, 6 seconds   , 29 seconds  ,,,29,0.008055555555555555,=(((H96/60)+G96)/60)+F96,1,=J96*C96,=L96/6,=L96*K96,=N96/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O96*R96,-
+dragen_filter_proband        , 6     ,6, 6 seconds   , 32 seconds  ,,,32,0.008888888888888889,=(((H97/60)+G97)/60)+F97,1,=J97*C97,=L97/6,=L97*K97,=N97/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O97*R97,-
+create_alissa_lowcov_bed     , 6     ,6, 6 seconds   , 9 seconds   ,,,9,0.0025,=(((H98/60)+G98)/60)+F98,1,=J98*C98,=L98/6,=L98*K98,=N98/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O98*R98,-
+check_variant_fraction       , 12    ,12, 3 seconds   , 1  minutes  ,,1,,0.016666666666666666,=(((H99/60)+G99)/60)+F99,1,=J99*C99,=L99/6,=L99*K99,=N99/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O99*R99,-
+dragen_joint_genotyping      , 1     ,1, 2  minutes  , 2  minutes  ,,2,,0.03333333333333333,=(((H100/60)+G100)/60)+F100,55,=J100*C100,=L100/6,=L100*K100,=N100/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O100*R100,-
+post_denovo_rate_to_longqc   , 1     ,1, 1  minutes  , 1  minutes  ,,1,,0.016666666666666666,=(((H101/60)+G101)/60)+F101,1,=J101*C101,=L101/6,=L101*K101,=N101/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O101*R101,-
+dragen_batch_qc              , 1     ,1, -           , -           ,,,0,0,=(((H102/60)+G102)/60)+F102,1,=J102*C102,=L102/6,=L102*K102,=N102/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O102*R102,-
+somalier_relate              , 1     ,1, 3 seconds   , 3 seconds   ,,,3,0.0008333333333333334,=(((H103/60)+G103)/60)+F103,1,=J103*C103,=L103/6,=L103*K103,=N103/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O103*R103,-
+somalier_append_vaf_checks   , 1     ,1, -           , -           ,,,0,0,=(((H104/60)+G104)/60)+F104,1,=J104*C104,=L104/6,=L104*K104,=N104/6,"BI Lead, VCGS, 2023",-,='BI - Comp+Stor Costs - VCGS'!V$3,-,"Dell, 2023",-,=O104*R104,-
+,,,,,,,,,,,,,,,,,,,,,=SUM(V47:V104),
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,

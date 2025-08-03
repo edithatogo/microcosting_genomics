@@ -1,0 +1,81 @@
+,,,,,,,,,,,,,,,
+Panel,,,,,,,,,,,,,,,
+Stage,Equipment,,,Consumables,,,Labor,,,Overheads,,,Total,,
+,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%
+Specimen Collection,0,=B5*$B$81,=B5/$N$15,0,=E5*$B$81,=E5/$N$15,='Detailed Table'!N9,=H5*$B$81,=H5/$N$15,"=SUM(B5,E5,H5)*0.27",=K5*$B$81,=K5/$N$15,"=SUM(B5,E5,H5,K5)",=N5*$B$81,=N5/$N$15
+Specimen Reception,0,=B6*$B$81,=B6/$N$15,0,=E6*$B$81,=E6/$N$15,='Detailed Table'!N15,=H6*$B$81,=H6/$N$15,"=SUM(B6,E6,H6)*0.27",=K6*$B$81,=K6/$N$15,"=SUM(B6,E6,H6,K6)",=N6*$B$81,=N6/$N$15
+DNA Extraction,='Detailed Table'!N81,=B7*$B$81,=B7/$N$15,='Detailed Table'!N117,=E7*$B$81,=E7/$N$15,='Detailed Table'!N25,=H7*$B$81,=H7/$N$15,"=SUM(B7,E7,H7)*0.27",=K7*$B$81,=K7/$N$15,"=SUM(B7,E7,H7,K7)",=N7*$B$81,=N7/$N$15
+Library Preparation,='Detailed Table'!N88,=B8*$B$81,=B8/$N$15,='Detailed Table'!N166,=E8*$B$81,=E8/$N$15,='Detailed Table'!N42,=H8*$B$81,=H8/$N$15,"=SUM(B8,E8,H8)*0.27",=K8*$B$81,=K8/$N$15,"=SUM(B8,E8,H8,K8)",=N8*$B$81,=N8/$N$15
+Sequencing,='Detailed Table'!N93,=B9*$B$81,=B9/$N$15,='Detailed Table'!N187,=E9*$B$81,=E9/$N$15,='Detailed Table'!N52,=H9*$B$81,=H9/$N$15,"=SUM(B9,E9,H9)*0.27",=K9*$B$81,=K9/$N$15,"=SUM(B9,E9,H9,K9)",=N9*$B$81,=N9/$N$15
+Processing,='Detailed Table'!N247,=B10*$B$81,=B10/$N$15,0,=E10*$B$81,=E10/$N$15,='Detailed Table'!N58,=H10*$B$81,=H10/$N$15,"=SUM(B10,E10,H10)*0.27",=K10*$B$81,=K10/$N$15,"=SUM(B10,E10,H10,K10)",=N10*$B$81,=N10/$N$15
+Storage,='Detailed Table'!N259,=B11*$B$81,=B11/$N$15,0,=E11*$B$81,=E11/$N$15,0,=H11*$B$81,=H11/$N$15,"=SUM(B11,E11,H11)*0.27",=K11*$B$81,=K11/$N$15,"=SUM(B11,E11,H11,K11)",=N11*$B$81,=N11/$N$15
+Filtering,0,=B12*$B$81,=B12/$N$15,0,=E12*$B$81,=E12/$N$15,='Detailed Table'!N67,=H12*$B$81,=H12/$N$15,"=SUM(B12,E12,H12)*0.27",=K12*$B$81,=K12/$N$15,"=SUM(B12,E12,H12,K12)",=N12*$B$81,=N12/$N$15
+Interpretation,='Detailed Table'!N97,=B13*$B$81,=B13/$N$15,0,=E13*$B$81,=E13/$N$15,0,=H13*$B$81,=H13/$N$15,"=SUM(B13,E13,H13)*0.27",=K13*$B$81,=K13/$N$15,"=SUM(B13,E13,H13,K13)",=N13*$B$81,=N13/$N$15
+Report Writing,0,=B14*$B$81,=B14/$N$15,0,=E14*$B$81,=E14/$N$15,='Detailed Table'!N75,=H14*$B$81,=H14/$N$15,"=SUM(B14,E14,H14)*0.27",=K14*$B$81,=K14/$N$15,"=SUM(B14,E14,H14,K14)",=N14*$B$81,=N14/$N$15
+Total,=SUM(B5:B14),=B15*$B$81,=B15/$N$15,=SUM(E5:E14),=E15*$B$81,=E15/$N$15,=SUM(H5:H14),=H15*$B$81,=H15/$N$15,=SUM(K5:K14),=K15*$B$81,=K15/$N$15,=SUM(N5:N14),=N15*$B$81,=N15/$N$15
+,,,,,,,,,,,,,,,
+EA-P,,,,,,,,,,,,,,,
+Stage,Equipment,,,Consumables,,,Labor,,,Overheads,,,Total,,
+,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%
+Specimen Collection,0,=B20*$B$81,=B20/$N$30,0,=E20*$B$81,=E20/$N$30,='Detailed Table'!N265,=H20*$B$81,=H20/$N$30,"=SUM(B20,E20,H20)*0.27",=K20*$B$81,=K20/$N$30,"=SUM(B20,E20,H20,K20)",=N20*$B$81,=N20/$N$30
+Specimen Reception,0,=B21*$B$81,=B21/$N$30,0,=E21*$B$81,=E21/$N$30,='Detailed Table'!N273,=H21*$B$81,=H21/$N$30,"=SUM(B21,E21,H21)*0.27",=K21*$B$81,=K21/$N$30,"=SUM(B21,E21,H21,K21)",=N21*$B$81,=N21/$N$30
+DNA Extraction,='Detailed Table'!N345,=B22*$B$81,=B22/$N$30,='Detailed Table'!N381,=E22*$B$81,=E22/$N$30,='Detailed Table'!N283,=H22*$B$81,=H22/$N$30,"=SUM(B22,E22,H22)*0.27",=K22*$B$81,=K22/$N$30,"=SUM(B22,E22,H22,K22)",=N22*$B$81,=N22/$N$30
+Library Preparation,='Detailed Table'!N352,=B23*$B$81,=B23/$N$30,='Detailed Table'!N430,=E23*$B$81,=E23/$N$30,='Detailed Table'!N300,=H23*$B$81,=H23/$N$30,"=SUM(B23,E23,H23)*0.27",=K23*$B$81,=K23/$N$30,"=SUM(B23,E23,H23,K23)",=N23*$B$81,=N23/$N$30
+Sequencing,='Detailed Table'!N357,=B24*$B$81,=B24/$N$30,='Detailed Table'!N451,=E24*$B$81,=E24/$N$30,='Detailed Table'!N310,=H24*$B$81,=H24/$N$30,"=SUM(B24,E24,H24)*0.27",=K24*$B$81,=K24/$N$30,"=SUM(B24,E24,H24,K24)",=N24*$B$81,=N24/$N$30
+Processing,='Detailed Table'!N247,=B25*$B$81,=B25/$N$30,0,=E25*$B$81,=E25/$N$30,='Detailed Table'!N316,=H25*$B$81,=H25/$N$30,"=SUM(B25,E25,H25)*0.27",=K25*$B$81,=K25/$N$30,"=SUM(B25,E25,H25,K25)",=N25*$B$81,=N25/$N$30
+Storage,='Detailed Table'!N513,=B26*$B$81,=B26/$N$30,=('BI - Stor Use - VCGS'!Q30),=E26*$B$81,=E26/$N$30,0,=H26*$B$81,=H26/$N$30,"=SUM(B26,E26,H26)*0.27",=K26*$B$81,=K26/$N$30,"=SUM(B26,E26,H26,K26)",=N26*$B$81,=N26/$N$30
+Filtering,0,=B27*$B$81,=B27/$N$30,0,=E27*$B$81,=E27/$N$30,='Detailed Table'!N325,=H27*$B$81,=H27/$N$30,"=SUM(B27,E27,H27)*0.27",=K27*$B$81,=K27/$N$30,"=SUM(B27,E27,H27,K27)",=N27*$B$81,=N27/$N$30
+Interpretation,='Detailed Table'!N361,=B28*$B$81,=B28/$N$30,0,=E28*$B$81,=E28/$N$30,='Detailed Table'!N333,=H28*$B$81,=H28/$N$30,"=SUM(B28,E28,H28)*0.27",=K28*$B$81,=K28/$N$30,"=SUM(B28,E28,H28,K28)",=N28*$B$81,=N28/$N$30
+Report Writing,0,=B29*$B$81,=B29/$N$30,0,=E29*$B$81,=E29/$N$30,='Detailed Table'!N339,=H29*$B$81,=H29/$N$30,"=SUM(B29,E29,H29)*0.27",=K29*$B$81,=K29/$N$30,"=SUM(B29,E29,H29,K29)",=N29*$B$81,=N29/$N$30
+Total,=SUM(B20:B29),=B30*$B$81,=B30/$N$30,=SUM(E20:E29),=E30*$B$81,=E30/$N$30,=SUM(H20:H29),=H30*$B$81,=H30/$N$30,=SUM(K20:K29),=K30*$B$81,=K30/$N$30,=SUM(N20:N29),=N30*$B$81,=N30/$N$30
+,,,,,,,,,,,,,,,
+EA-T,,,,,,,,,,,,,,,
+Stage,Equipment,,,Consumables,,,Labor,,,Overheads,,,Total,,
+,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%
+Specimen Collection,0,=B35*$B$81,=B35/$N$45,0,=E35*$B$81,=E35/$N$45,='Detailed Table'!N529,=H35*$B$81,=H35/$N$45,"=SUM(B35,E35,H35)*0.27",=K35*$B$81,=K35/$N$45,"=SUM(B35,E35,H35,K35)",=N35*$B$81,=N35/$N$45
+Specimen Reception,0,=B36*$B$81,=B36/$N$45,0,=E36*$B$81,=E36/$N$45,='Detailed Table'!N537,=H36*$B$81,=H36/$N$45,"=SUM(B36,E36,H36)*0.27",=K36*$B$81,=K36/$N$45,"=SUM(B36,E36,H36,K36)",=N36*$B$81,=N36/$N$45
+DNA Extraction,='Detailed Table'!N614,=B37*$B$81,=B37/$N$45,='Detailed Table'!N657,=E37*$B$81,=E37/$N$45,='Detailed Table'!N547,=H37*$B$81,=H37/$N$45,"=SUM(B37,E37,H37)*0.27",=K37*$B$81,=K37/$N$45,"=SUM(B37,E37,H37,K37)",=N37*$B$81,=N37/$N$45
+Library Preparation,='Detailed Table'!N622,=B38*$B$81,=B38/$N$45,='Detailed Table'!N715,=E38*$B$81,=E38/$N$45,='Detailed Table'!N565,=H38*$B$81,=H38/$N$45,"=SUM(B38,E38,H38)*0.27",=K38*$B$81,=K38/$N$45,"=SUM(B38,E38,H38,K38)",=N38*$B$81,=N38/$N$45
+Sequencing,='Detailed Table'!N632,=B39*$B$81,=B39/$N$45,='Detailed Table'!N750,=E39*$B$81,=E39/$N$45,='Detailed Table'!N575,=H39*$B$81,=H39/$N$45,"=SUM(B39,E39,H39)*0.27",=K39*$B$81,=K39/$N$45,"=SUM(B39,E39,H39,K39)",=N39*$B$81,=N39/$N$45
+Processing,='Detailed Table'!N811,=B40*$B$81,=B40/$N$45,0,=E40*$B$81,=E40/$N$45,='Detailed Table'!N582,=H40*$B$81,=H40/$N$45,"=SUM(B40,E40,H40)*0.27",=K40*$B$81,=K40/$N$45,"=SUM(B40,E40,H40,K40)",=N40*$B$81,=N40/$N$45
+Storage,='Detailed Table'!N816,=B41*$B$81,=B41/$N$45,0,=E41*$B$81,=E41/$N$45,-,-,-,"=SUM(B41,E41,H41)*0.27",=K41*$B$81,=K41/$N$45,"=SUM(B41,E41,H41,K41)",=N41*$B$81,=N41/$N$45
+Filtering,0,=B42*$B$81,=B42/$N$45,0,=E42*$B$81,=E42/$N$45,='Detailed Table'!N591,=H42*$B$81,=H42/$N$45,"=SUM(B42,E42,H42)*0.27",=K42*$B$81,=K42/$N$45,"=SUM(B42,E42,H42,K42)",=N42*$B$81,=N42/$N$45
+Interpretation,='Detailed Table'!N636,=B43*$B$81,=B43/$N$45,0,=E43*$B$81,=E43/$N$45,='Detailed Table'!N600,=H43*$B$81,=H43/$N$45,"=SUM(B43,E43,H43)*0.27",=K43*$B$81,=K43/$N$45,"=SUM(B43,E43,H43,K43)",=N43*$B$81,=N43/$N$45
+Report Writing,0,=B44*$B$81,=B44/$N$45,0,=E44*$B$81,=E44/$N$45,='Detailed Table'!N607,=H44*$B$81,=H44/$N$45,"=SUM(B44,E44,H44)*0.27",=K44*$B$81,=K44/$N$45,"=SUM(B44,E44,H44,K44)",=N44*$B$81,=N44/$N$45
+Total,=SUM(B35:B44),=B45*$B$81,=B45/$N$45,=SUM(E35:E44),=E45*$B$81,=E45/$N$45,=SUM(H35:H44),=H45*$B$81,=H45/$N$45,=SUM(K35:K44),=K45*$B$81,=K45/$N$45,=SUM(N35:N44),=N45*$B$81,=N45/$N$45
+,,,,,,,,,,,,,,,
+WGA-P,,,,,,,,,,,,,,,
+Stage,Equipment,,,Consumables,,,Labor,,,Overheads,,,Total,,
+,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%
+Specimen Collection,0,=B50*$B$81,=B50/$N$60,0,=E50*$B$81,=E50/$N$60,='Detailed Table'!N829,=H50*$B$81,=H50/$N$60,"=SUM(B50,E50,H50)*0.27",=K50*$B$81,=K50/$N$60,"=SUM(B50,E50,H50,K50)",=N50*$B$81,=N50/$N$60
+Specimen Reception,0,=B51*$B$81,=B51/$N$60,0,=E51*$B$81,=E51/$N$60,='Detailed Table'!N837,=H51*$B$81,=H51/$N$60,"=SUM(B51,E51,H51)*0.27",=K51*$B$81,=K51/$N$60,"=SUM(B51,E51,H51,K51)",=N51*$B$81,=N51/$N$60
+DNA Extraction,='Detailed Table'!N910,=B52*$B$81,=B52/$N$60,='Detailed Table'!N946,=E52*$B$81,=E52/$N$60,='Detailed Table'!N847,=H52*$B$81,=H52/$N$60,"=SUM(B52,E52,H52)*0.27",=K52*$B$81,=K52/$N$60,"=SUM(B52,E52,H52,K52)",=N52*$B$81,=N52/$N$60
+Library Preparation,='Detailed Table'!N917,=B53*$B$81,=B53/$N$60,='Detailed Table'!N990,=E53*$B$81,=E53/$N$60,='Detailed Table'!N863,=H53*$B$81,=H53/$N$60,"=SUM(B53,E53,H53)*0.27",=K53*$B$81,=K53/$N$60,"=SUM(B53,E53,H53,K53)",=N53*$B$81,=N53/$N$60
+Sequencing,='Detailed Table'!N922,=B54*$B$81,=B54/$N$60,='Detailed Table'!N1011,=E54*$B$81,=E54/$N$60,='Detailed Table'!N873,=H54*$B$81,=H54/$N$60,"=SUM(B54,E54,H54)*0.27",=K54*$B$81,=K54/$N$60,"=SUM(B54,E54,H54,K54)",=N54*$B$81,=N54/$N$60
+Processing,='Detailed Table'!N1058,=B55*$B$81,=B55/$N$60,0,=E55*$B$81,=E55/$N$60,='Detailed Table'!N879,=H55*$B$81,=H55/$N$60,"=SUM(B55,E55,H55)*0.27",=K55*$B$81,=K55/$N$60,"=SUM(B55,E55,H55,K55)",=N55*$B$81,=N55/$N$60
+Storage,='Detailed Table'!N1068,=B56*$B$81,=B56/$N$60,0,=E56*$B$81,=E56/$N$60,0,=H56*$B$81,=H56/$N$60,"=SUM(B56,E56,H56)*0.27",=K56*$B$81,=K56/$N$60,"=SUM(B56,E56,H56,K56)",=N56*$B$81,=N56/$N$60
+Filtering,0,=B57*$B$81,=B57/$N$60,0,=E57*$B$81,=E57/$N$60,='Detailed Table'!N890,=H57*$B$81,=H57/$N$60,"=SUM(B57,E57,H57)*0.27",=K57*$B$81,=K57/$N$60,"=SUM(B57,E57,H57,K57)",=N57*$B$81,=N57/$N$60
+Interpretation,='Detailed Table'!N926,=B58*$B$81,=B58/$N$60,0,=E58*$B$81,=E58/$N$60,='Detailed Table'!N898,=H58*$B$81,=H58/$N$60,"=SUM(B58,E58,H58)*0.27",=K58*$B$81,=K58/$N$60,"=SUM(B58,E58,H58,K58)",=N58*$B$81,=N58/$N$60
+Report Writing,0,=B59*$B$81,=B59/$N$60,0,=E59*$B$81,=E59/$N$60,='Detailed Table'!N904,=H59*$B$81,=H59/$N$60,"=SUM(B59,E59,H59)*0.27",=K59*$B$81,=K59/$N$60,"=SUM(B59,E59,H59,K59)",=N59*$B$81,=N59/$N$60
+Total,=SUM(B50:B59),=B60*$B$81,=B60/$N$60,=SUM(E50:E59),=E60*$B$81,=E60/$N$60,=SUM(H50:H59),=H60*$B$81,=H60/$N$60,=SUM(K50:K59),=K60*$B$81,=K60/$N$60,=SUM(N50:N59),=N60*$B$81,=N60/$N$60
+,,,,,,,,,,,,,,,
+WGA-T,,,,,,,,,,,,,,,
+Stage,Equipment,,,Consumables,,,Labor,,,Overheads,,,Total,,
+,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%,AUD ($),USD ($),%
+Specimen Collection,0,=B65*$B$81,=B65/$N$75,0,=E65*$B$81,=E65/$N$75,='Detailed Table'!N1075,=H65*$B$81,=H65/$N$75,"=SUM(B65,E65,H65)*0.27",=K65*$B$81,=K65/$N$75,"=SUM(B65,E65,H65,K65)",=N65*$B$81,=N65/$N$75
+Specimen Reception,0,=B66*$B$81,=B66/$N$75,0,=E66*$B$81,=E66/$N$75,='Detailed Table'!N1083,=H66*$B$81,=H66/$N$75,"=SUM(B66,E66,H66)*0.27",=K66*$B$81,=K66/$N$75,"=SUM(B66,E66,H66,K66)",=N66*$B$81,=N66/$N$75
+DNA Extraction,='Detailed Table'!N1158,=B67*$B$81,=B67/$N$75,='Detailed Table'!N1195,=E67*$B$81,=E67/$N$75,='Detailed Table'!N1093,=H67*$B$81,=H67/$N$75,"=SUM(B67,E67,H67)*0.27",=K67*$B$81,=K67/$N$75,"=SUM(B67,E67,H67,K67)",=N67*$B$81,=N67/$N$75
+Library Preparation,='Detailed Table'!N1166,=B68*$B$81,=B68/$N$75,='Detailed Table'!N1239,=E68*$B$81,=E68/$N$75,='Detailed Table'!N1109,=H68*$B$81,=H68/$N$75,"=SUM(B68,E68,H68)*0.27",=K68*$B$81,=K68/$N$75,"=SUM(B68,E68,H68,K68)",=N68*$B$81,=N68/$N$75
+Sequencing,='Detailed Table'!N1171,=B69*$B$81,=B69/$N$75,='Detailed Table'!N1260,=E69*$B$81,=E69/$N$75,='Detailed Table'!N1119,=H69*$B$81,=H69/$N$75,"=SUM(B69,E69,H69)*0.27",=K69*$B$81,=K69/$N$75,"=SUM(B69,E69,H69,K69)",=N69*$B$81,=N69/$N$75
+Processing,='Detailed Table'!N1307,=B70*$B$81,=B70/$N$75,0,=E70*$B$81,=E70/$N$75,='Detailed Table'!N1126,=H70*$B$81,=H70/$N$75,"=SUM(B70,E70,H70)*0.27",=K70*$B$81,=K70/$N$75,"=SUM(B70,E70,H70,K70)",=N70*$B$81,=N70/$N$75
+Storage,='Detailed Table'!N1317,=B71*$B$81,=B71/$N$75,0,=E71*$B$81,=E71/$N$75,0,=H71*$B$81,=H71/$N$75,"=SUM(B71,E71,H71)*0.27",=K71*$B$81,=K71/$N$75,"=SUM(B71,E71,H71,K71)",=N71*$B$81,=N71/$N$75
+Filtering,0,=B72*$B$81,=B72/$N$75,0,=E72*$B$81,=E72/$N$75,='Detailed Table'!N1137,=H72*$B$81,=H72/$N$75,"=SUM(B72,E72,H72)*0.27",=K72*$B$81,=K72/$N$75,"=SUM(B72,E72,H72,K72)",=N72*$B$81,=N72/$N$75
+Interpretation,='Detailed Table'!N1175,=B73*$B$81,=B73/$N$75,0,=E73*$B$81,=E73/$N$75,='Detailed Table'!N1145,=H73*$B$81,=H73/$N$75,"=SUM(B73,E73,H73)*0.27",=K73*$B$81,=K73/$N$75,"=SUM(B73,E73,H73,K73)",=N73*$B$81,=N73/$N$75
+Report Writing,0,=B74*$B$81,=B74/$N$75,0,=E74*$B$81,=E74/$N$75,='Detailed Table'!N1151,=H74*$B$81,=H74/$N$75,"=SUM(B74,E74,H74)*0.27",=K74*$B$81,=K74/$N$75,"=SUM(B74,E74,H74,K74)",=N74*$B$81,=N74/$N$75
+Total,=SUM(B65:B74),=B75*$B$81,=B75/$N$75,=SUM(E65:E74),=E75*$B$81,=E75/$N$75,=SUM(H65:H74),=H75*$B$81,=H75/$N$75,=SUM(K65:K74),=K75*$B$81,=K75/$N$75,=SUM(N65:N74),=N75*$B$81,=N75/$N$75
+,,,,,,,,,,,,,,,
+,Xe.com,,,,,,,,,,,,,,
+,1 AUD = 0.673995 USD,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,20230610,,,,,,,,,,,,,,
+,0.673995,,,,,,,,,,,,,,

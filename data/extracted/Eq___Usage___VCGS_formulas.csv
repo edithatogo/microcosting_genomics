@@ -1,0 +1,53 @@
+,,,Estimated throughput for sample/test type,,,,80% throughput for sample/test type,,,,40% throughput for sample/test type,,,,Price (AUD $/unit),,,,Unit Cost (AUD $/unit) - Estimate,,,Unit Cost (AUD $/unit) - 80%,,,Unit Cost (AUD $/unit) - 40%,,
+Equipment,Sub-Category,Equipment,LL,Estimate,UL,Source,LL,Estimate,UL,Source,LL,Estimate,UL,Source,LL,Estimate,UL,Source,LL,Estimate,UL,LL,Estimate,UL,LL,Estimate,UL
+,Specimen Receipt,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,DNA Extraction,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A28,=E6*0.95,='Eq - Costs and Usage - VCGS'!P28,=E6*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q6*0.9,='Eq - Costs and Usage - VCGS'!L28,=Q6*1.1,"Qiagen, 2023",=(1/F6)*R6,=(1/E6)*Q6,=(1/D6)*P6,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A25,=E7*0.95,='Eq - Costs and Usage - VCGS'!P25,=E7*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q7*0.9,='Eq - Costs and Usage - VCGS'!L25,=Q7*1.1,"Thermo-Fisher, 2023",=(1/F7)*R7,=(1/E7)*Q7,=(1/D7)*P7,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A20,=E8*0.95,='Eq - Costs and Usage - VCGS'!P20,=E8*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q8*0.9,='Eq - Costs and Usage - VCGS'!L20,=Q8*1.1,"Eurochill.com, 2023",=(1/F8)*R8,=(1/E8)*Q8,=(1/D8)*P8,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A21,=E9*0.95,='Eq - Costs and Usage - VCGS'!P21,=E9*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q9*0.9,='Eq - Costs and Usage - VCGS'!L21,=Q9*1.1,"Eurochill.com, 2023",=(1/F9)*R9,=(1/E9)*Q9,=(1/D9)*P9,,,,,,
+,,Total,,,,,,,,,,,,,,,,,=SUM(T6:T9),=SUM(U6:U9),=SUM(V6:V9),,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Library Preparation,WES,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A33,=E13*0.95,='Eq - Costs and Usage - VCGS'!P33,=E13*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q13*0.9,='Eq - Costs and Usage - VCGS'!L33,=Q13*1.1,"Thermo-Fisher, 2023",=1/F13*P13,=(1/E13)*Q13,=1/D13*R13,=1/F13*P13,=(1/E13)*Q13,=1/D13*R13,=1/F13*P13,=(1/E13)*Q13,=1/D13*R13
+,,='Eq - Costs and Usage - VCGS'!A25,=E14*0.95,='Eq - Costs and Usage - VCGS'!P25,=E14*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q14*0.9,='Eq - Costs and Usage - VCGS'!L25,=Q14*1.1,"Thermo-Fisher, 2023",=1/F14*P14,=(1/E14)*Q14,=1/D14*R14,=1/F14*P14,=(1/E14)*Q14,=1/D14*R14,=1/F14*P14,=(1/E14)*Q14,=1/D14*R14
+,,='Eq - Costs and Usage - VCGS'!A25,=E15*0.95,='Eq - Costs and Usage - VCGS'!P25,=E15*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q15*0.9,='Eq - Costs and Usage - VCGS'!L25,=Q15*1.1,"Thermo-Fisher, 2023",=1/F15*P15,=(1/E15)*Q15,=1/D15*R15,=1/F15*P15,=(1/E15)*Q15,=1/D15*R15,=1/F15*P15,=(1/E15)*Q15,=1/D15*R15
+,,='Eq - Costs and Usage - VCGS'!A27,=E16*0.95,='Eq - Costs and Usage - VCGS'!P27,=E16*1.05,"WL Lead, VCGS, 2023",=I16*0.95,='Eq - Costs and Usage - VCGS'!R27,=I16*1.05,Calc,=M16*0.95,='Eq - Costs and Usage - VCGS'!S27,=M16*1.05,Calc,=Q16*0.8,='Eq - Costs and Usage - VCGS'!L27,=Q16*1.2,"Govsci.com, 2023",=1/F16*P16,=(1/E16)*Q16,=1/D16*R16,=1/J16*P16,=(1/I16)*Q16,=1/H16*R16,=1/N16*P16,=(1/M16)*Q16,=1/L16*R16
+,,='Eq - Costs and Usage - VCGS'!A13,=E17*0.95,='Eq - Costs and Usage - VCGS'!P13,=E17*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q17*0.8,='Eq - Costs and Usage - VCGS'!L13,=Q17*1.2,"Neuvar.com, 2023",=1/F17*P17,=(1/E17)*Q17,=1/D17*R17,=1/F17*P17,=(1/E17)*Q17,=1/D17*R17,=1/F17*P17,=(1/E17)*Q17,=1/D17*R17
+,,Total,,,,,,,,,,,,,,,,,=SUM(T13:T17),=SUM(U13:U17),=SUM(V13:V17),=SUM(W13:W17),=SUM(X13:X17),=SUM(Y13:Y17),=SUM(Z13:Z17),=SUM(AA13:AA17),=SUM(AB13:AB17)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Library Preparation,WGS,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A33,=E21*0.95,='Eq - Costs and Usage - VCGS'!P33,=E21*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q21*0.9,='Eq - Costs and Usage - VCGS'!L33,=Q21*1.1,"Thermo-Fisher, 2023",=1/F21*P21,=(1/E21)*Q21,=1/D21*R21,=1/F21*P21,=(1/E21)*Q21,=1/D21*R21,=1/F21*P21,=(1/E21)*Q21,=1/D21*R21
+,,='Eq - Costs and Usage - VCGS'!A25,=E22*0.95,='Eq - Costs and Usage - VCGS'!P25,=E22*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q22*0.9,='Eq - Costs and Usage - VCGS'!L25,=Q22*1.1,"Thermo-Fisher, 2023",=1/F22*P22,=(1/E22)*Q22,=1/D22*R22,=1/F22*P22,=(1/E22)*Q22,=1/D22*R22,=1/F22*P22,=(1/E22)*Q22,=1/D22*R22
+,,='Eq - Costs and Usage - VCGS'!A27,=E23*0.95,='Eq - Costs and Usage - VCGS'!P27,=E23*1.05,"WL Lead, VCGS, 2023",=I23*0.95,='Eq - Costs and Usage - VCGS'!R27,=I23*1.05,Calc,=M23*0.95,='Eq - Costs and Usage - VCGS'!S27,=M23*1.05,Calc,=Q23*0.9,='Eq - Costs and Usage - VCGS'!L27,=Q23*1.1,"Thermo-Fisher, 2023",=1/F23*P23,=(1/E23)*Q23,=1/D23*R23,=1/J23*P23,=(1/I23)*Q23,=(1/H23)*R23,=1/N23*P23,=(1/M23)*Q23,=(1/L23)*R23
+,,='Eq - Costs and Usage - VCGS'!A25,=E24*0.95,='Eq - Costs and Usage - VCGS'!P25,=E24*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q24*0.9,='Eq - Costs and Usage - VCGS'!L25,=Q24*1.1,"Thermo-Fisher, 2023",=1/F24*P24,=(1/E24)*Q24,=1/D24*R24,=1/F24*P24,=(1/E24)*Q24,=1/D24*R24,=1/F24*P24,=(1/E24)*Q24,=1/D24*R24
+,,='Eq - Costs and Usage - VCGS'!A33,=E25*0.95,='Eq - Costs and Usage - VCGS'!P33,=E25*1.05,"WL Lead, VCGS, 2023",,,,,,,,,=Q25*0.9,='Eq - Costs and Usage - VCGS'!L33,=Q25*1.1,"Thermo-Fisher, 2023",=1/F25*P25,=(1/E25)*Q25,=1/D25*R25,=1/F25*P25,=(1/E25)*Q25,=1/D25*R25,=1/F25*P25,=(1/E25)*Q25,=1/D25*R25
+,,Total,,,,,,,,,,,,,,,,,=SUM(T21:T25),=SUM(U21:U25),=SUM(V21:V25),=SUM(W21:W25),=SUM(X21:X25),=SUM(Y21:Y25),=SUM(Z21:Z25),=SUM(AA21:AA25),=SUM(AB21:AB25)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Sequencing,WES 80x,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A16,=E29*0.95,='Eq - Costs and Usage - VCGS'!P16,=E29*1.05,"WL Lead, VCGS, 2023",=I29*0.95,='Eq - Costs and Usage - VCGS'!R16,=I29*1.05,Calc,=M29*0.95,='Eq - Costs and Usage - VCGS'!S16,=M29*1.05,Calc,=Q29*0.8,='Eq - Costs and Usage - VCGS'!L16,=Q29*1.2,"Illumina, 2022",=1/F29*P29,=(1/E29)*Q29,=(1/D29)*R29,=1/J29*P29,=(1/I29)*Q29,=(1/H29)*R29,=1/N29*P29,=(1/M29)*Q29,=(1/L29)*R29
+,,='Eq - Costs and Usage - VCGS'!A26,=E30*0.95,='Eq - Costs and Usage - VCGS'!P16,=E30*1.05,"WL Lead, VCGS, 2023",=I30*0.95,='Eq - Costs and Usage - VCGS'!R16,=I30*1.05,Calc,=M30*0.95,='Eq - Costs and Usage - VCGS'!S16,=M30*1.05,Calc,=Q30*0.8,='Eq - Costs and Usage - VCGS'!L26,=Q30*1.2,"Illumina, 2022",=1/F30*P30,=(1/E30)*Q30,=(1/D30)*R30,=1/J30*P30,=(1/I30)*Q30,=(1/H30)*R30,=1/N30*P30,=(1/M30)*Q30,=(1/L30)*R30
+,,Total,,,,,,,,,,,,,,,,,=SUM(T29:T30),=SUM(U29:U30),=SUM(V29:V30),=SUM(W29:W30),=SUM(X29:X30),=SUM(Y29:Y30),=SUM(Z29:Z30),=SUM(AA29:AA30),=SUM(AB29:AB30)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Sequencing,WES 50x,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A15,=E34*0.95,='Eq - Costs and Usage - VCGS'!P15,=E34*1.05,"WL Lead, VCGS, 2023",=I34*0.95,='Eq - Costs and Usage - VCGS'!R15,=I34*1.05,Calc,=M34*0.95,='Eq - Costs and Usage - VCGS'!S15,=M34*1.05,Calc,=Q34*0.8,='Eq - Costs and Usage - VCGS'!L16,=Q34*1.2,"Illumina, 2022",=1/F34*P34,=(1/E34)*Q34,=(1/D34)*R34,=1/J34*P34,=(1/I34)*Q34,=(1/H34)*R34,=1/N34*P34,=(1/M34)*Q34,=(1/L34)*R34
+,,='Eq - Costs and Usage - VCGS'!A26,=E35*0.95,='Eq - Costs and Usage - VCGS'!P15,=E35*1.05,"WL Lead, VCGS, 2023",=I35*0.95,='Eq - Costs and Usage - VCGS'!R15,=I35*1.05,Calc,=M35*0.95,='Eq - Costs and Usage - VCGS'!S15,=M35*1.05,Calc,=Q35*0.8,='Eq - Costs and Usage - VCGS'!L26,=Q35*1.2,"Illumina, 2022",=1/F35*P35,=(1/E35)*Q35,=(1/D35)*R35,=1/J35*P35,=(1/I35)*Q35,=(1/H35)*R35,=1/N35*P35,=(1/M35)*Q35,=(1/L35)*R35
+,,Total,,,,,,,,,,,,,,,,,=SUM(T34:T35),=SUM(U34:U35),=SUM(V34:V35),=SUM(W34:W35),=SUM(X34:X35),=SUM(Y34:Y35),=SUM(Z34:Z35),=SUM(AA34:AA35),=SUM(AB34:AB35)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Sequencing,WGS 30x,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A14,=E39*0.95,='Eq - Costs and Usage - VCGS'!P14,=E39*1.05,"WL Lead, VCGS, 2023",=I39*0.95,='Eq - Costs and Usage - VCGS'!R14,=I39*1.05,Calc,=M39*0.95,='Eq - Costs and Usage - VCGS'!S14,=M39*1.05,Calc,=Q39*0.8,='Eq - Costs and Usage - VCGS'!L14,=Q39*1.2,"Illumina, 2022",=10/F39*P39,=(10/E39)*Q39,=(10/D39)*R39,=1/J39*P39,=(1/I39)*Q39,=(1/H39)*R39,=1/N39*P39,=(1/M39)*Q39,=(1/L39)*R39
+,,='Eq - Costs and Usage - VCGS'!A26,=E40*0.95,='Eq - Costs and Usage - VCGS'!P14,=E40*1.05,"WL Lead, VCGS, 2023",=I40*0.95,='Eq - Costs and Usage - VCGS'!R14,=I40*1.05,Calc,=M40*0.95,='Eq - Costs and Usage - VCGS'!S14,=M40*1.05,Calc,=Q40*0.8,='Eq - Costs and Usage - VCGS'!L26,=Q40*1.2,"Illumina, 2022",=10/F40*P40,=(10/E40)*Q40,=(10/D40)*R40,=1/J40*P40,=(1/I40)*Q40,=(1/H40)*R40,=1/N40*P40,=(1/M40)*Q40,=(1/L40)*R40
+,,Total,,,,,,,,,,,,,,,,,=SUM(T39:T40),=SUM(U39:U40),=SUM(V39:V40),=SUM(W39:W40),=SUM(X39:X40),=SUM(Y39:Y40),=SUM(Z39:Z40),=SUM(AA39:AA40),=SUM(AB39:AB40)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Processing,WGS 30x,,,,,,,,,,,,,,,,,,,,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A22,=E44*0.95,='Eq - Costs and Usage - VCGS'!P22,=E44*1.05,"BI Lead, VCGS, 2023",,,,,,,,,=Q44*0.8,='Eq - Costs and Usage - VCGS'!L22,=Q44*1.2,"BI Lead, VCGS, 2023",=1/F44*P44,=(1/E44)*Q44,=(1/D44)*R44,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A18,=E45*0.95,='Eq - Costs and Usage - VCGS'!P18,=E45*1.05,"BI Lead, VCGS, 2023",=I45*0.95,='Eq - Costs and Usage - VCGS'!R14,=I45*1.05,Calc,=M45*0.95,='Eq - Costs and Usage - VCGS'!S14,=M45*1.05,Calc,=Q45*0.8,='Eq - Costs and Usage - VCGS'!L18,=Q45*1.2,"Illumina, 2022",=1/F45*P45,=(1/E45)*Q45,=(1/D45)*R45,=1/J45*P45,=(1/I45)*Q45,=(1/H45)*R45,=1/N45*P45,=(1/M45)*Q45,=(1/L45)*R45
+,,='Eq - Costs and Usage - VCGS'!A19,=E46*0.95,='Eq - Costs and Usage - VCGS'!P19,=E46*1.05,"BI Lead, VCGS, 2023",=I46*0.95,='Eq - Costs and Usage - VCGS'!R14,=I46*1.05,Calc,=M46*0.95,='Eq - Costs and Usage - VCGS'!S14,=M46*1.05,Calc,=Q46*0.8,='Eq - Costs and Usage - VCGS'!L19,=Q46*1.2,"Illumina, 2022",=1/F46*P46,=(1/E46)*Q46,=(1/D46)*R46,=1/J46*P46,=(1/I46)*Q46,=(1/H46)*R46,=1/N46*P46,=(1/M46)*Q46,=(1/L46)*R46
+,,Total,,,,,,,,,,,,,,,,,=SUM(T44:T46),=SUM(U44:U46),=SUM(V44:V46),=SUM(W45:W46),=SUM(X45:X46),=SUM(Y45:Y46),=SUM(Z45:Z46),=SUM(AA45:AA46),=SUM(AB45:AB46)
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Interpretation,='Eq - Costs and Usage - VCGS'!A24,=E49*0.95,='Eq - Costs and Usage - VCGS'!P24,=E49*1.05,"BI Lead, VCGS, 2023",,,,,,,,,=Q49*0.8,='Eq - Costs and Usage - VCGS'!L24,=Q49*1.2,"BI Lead, VCGS, 2023",=1/F49*P49,=(1/E49)*Q49,=(1/D49)*R49,,,,,,
+,,='Eq - Costs and Usage - VCGS'!A31,=E50*0.95,='Eq - Costs and Usage - VCGS'!P31,=E50*1.05,"BI Lead, VCGS, 2023",,,,,,,,,=Q50*0.8,='Eq - Costs and Usage - VCGS'!L31,=Q50*1.2,"BI Lead, VCGS, 2023",=1/F50*P50,=(1/E50)*Q50,=(1/D50)*R50,,,,,,
+,,Total,,,,,,,,,,,,,,,,,=SUM(T49:T50),=SUM(U49:U50),=SUM(V49:V50),,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,Reporting,,,,,,,,,,,,,,,,,,,,,,,,,,

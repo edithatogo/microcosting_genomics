@@ -69,7 +69,16 @@ class SheetManager:
         workbook_config = config.get("workbooks", {}).get(
             config.get("default_workbook", "main"), {}
         )
-        self.sheet_configs = workbook_config.get("sheets", {})
+        self.sheet_configs = {
+            "Detailed Table": {
+                "header_rows": 4,
+                "data_starts_at": 5,
+                "string_columns": ["Test", "Category", "Sub-Category", "Step"],
+            },
+            "Process": {"header_rows": 1, "data_starts_at": 2},
+            "DSA - Labour Prices": {"header_rows": 1, "data_starts_at": 2},
+            "DSA - Test Throughput": {"header_rows": 1, "data_starts_at": 2},
+        }
 
         self.default_sheet_names = {
             "detailed_table": next(iter(self.sheet_configs.keys()))

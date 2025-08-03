@@ -1,0 +1,56 @@
+ds,Stage,MP,LL,UL
+Equipment,Specimen Collection,-,-,-
+Equipment,Specimen Reception,-,-,-
+Equipment,DNA Extraction,='Detailed Table'!N79,='Detailed Table'!M343,='Detailed Table'!O343
+Equipment,Library Preparation,='Detailed Table'!N86,='Detailed Table'!M350,='Detailed Table'!O350
+Equipment,Sequencing,='Detailed Table'!N91,='Detailed Table'!M355,='Detailed Table'!O355
+Equipment,Processing,='Detailed Table'!N245,='Detailed Table'!M245,='Detailed Table'!O245
+Equipment,Storage,='Detailed Table'!N257,='Detailed Table'!M257,='Detailed Table'!O257
+Equipment,Filtering,-,-,-
+Equipment,Interpretation,='Detailed Table'!N95,='Detailed Table'!M95,='Detailed Table'!O95
+Equipment,Report Writing,-,-,-
+Equipment,Total,=SUM(C3:C11),=SUM(D3:D11),=SUM(E3:E11)
+Consumables,Specimen Collection,-,-,-
+Consumables,Specimen Reception,-,-,-
+Consumables,DNA Extraction,='Detailed Table'!N379,='Detailed Table'!M379,='Detailed Table'!O379
+Consumables,Library Preparation,='Detailed Table'!N428,='Detailed Table'!M428,='Detailed Table'!O428
+Consumables,Sequencing,='Detailed Table'!N448,='Detailed Table'!M448,='Detailed Table'!O448
+Consumables,Processing,-,-,-
+Consumables,Storage,-,-,-
+Consumables,Filtering,-,-,-
+Consumables,Interpretation,-,-,-
+Consumables,Report Writing,-,-,-
+Consumables,Total,=SUM(C14:C22),=SUM(D14:D22),=SUM(E14:E22)
+Labour,Specimen Collection,-,-,-
+Labour,Specimen Reception,='Detailed Table'!N270,='Detailed Table'!M270,='Detailed Table'!O270
+Labour,DNA Extraction,='Detailed Table'!N23,='Detailed Table'!M281,='Detailed Table'!O281
+Labour,Library Preparation,='Detailed Table'!N40,='Detailed Table'!M298,='Detailed Table'!O298
+Labour,Sequencing,='Detailed Table'!N50,='Detailed Table'!M308,='Detailed Table'!O308
+Labour,Processing,='Detailed Table'!N55,='Detailed Table'!M55,='Detailed Table'!O55
+Labour,Storage,-,-,-
+Labour,Filtering,-,-,-
+Labour,Interpretation,-,-,-
+Labour,Report Writing,='Detailed Table'!N337,='Detailed Table'!M337,='Detailed Table'!O337
+Labour,Total,=SUM(C25:C33),=SUM(D25:D33),=SUM(E25:E33)
+Overheads,Specimen Collection,-,-,-
+Overheads,Specimen Reception,"=SUM(C3,C14,C25)*0.2","=SUM(D3,D14,D25)*0.2","=SUM(E3,E14,E25)*0.2"
+Overheads,DNA Extraction,"=SUM(C4,C15,C26)*0.2","=SUM(D4,D15,D26)*0.2","=SUM(E4,E15,E26)*0.2"
+Overheads,Library Preparation,"=SUM(C5,C16,C27)*0.2","=SUM(D5,D16,D27)*0.2","=SUM(E5,E16,E27)*0.2"
+Overheads,Sequencing,"=SUM(C6,C17,C28)*0.2","=SUM(D6,D17,D28)*0.2","=SUM(E6,E17,E28)*0.2"
+Overheads,Processing,"=SUM(C7,C18,C29)*0.2","=SUM(D7,D18,D29)*0.2","=SUM(E7,E18,E29)*0.2"
+Overheads,Storage,"=SUM(C8,C19,C30)*0.2","=SUM(D8,D19,D30)*0.2","=SUM(E8,E19,E30)*0.2"
+Overheads,Filtering,"=SUM(C9,C20,C31)*0.2","=SUM(D9,D20,D31)*0.2","=SUM(E9,E20,E31)*0.2"
+Overheads,Interpretation,"=SUM(C10,C21,C32)*0.2","=SUM(D10,D21,D32)*0.2","=SUM(E10,E21,E32)*0.2"
+Overheads,Report Writing,"=SUM(C11,C22,C33)*0.2","=SUM(D11,D22,D33)*0.2","=SUM(E11,E22,E33)*0.2"
+Overheads,Total,=SUM(C36:C44),=SUM(D36:D44),=SUM(E36:E44)
+Total,Specimen Collection,-,-,-
+Total,Specimen Reception,"=SUM(C3,C14,C25,C36)","=SUM(D3,D14,D25,D36)","=SUM(E3,E14,E25,E36)"
+Total,DNA Extraction,"=SUM(C4,C15,C26,C37)","=SUM(D4,D15,D26,D37)","=SUM(E4,E15,E26,E37)"
+Total,Library Preparation,"=SUM(C5,C16,C27,C38)","=SUM(D5,D16,D27,D38)","=SUM(E5,E16,E27,E38)"
+Total,Sequencing,"=SUM(C6,C17,C28,C39)","=SUM(D6,D17,D28,D39)","=SUM(E6,E17,E28,E39)"
+Total,Processing,"=SUM(C7,C18,C29,C40)","=SUM(D7,D18,D29,D40)","=SUM(E7,E18,E29,E40)"
+Total,Storage,"=SUM(C8,C19,C30,C41)","=SUM(D8,D19,D30,D41)","=SUM(E8,E19,E30,E41)"
+Total,Filtering,"=SUM(C9,C20,C31,C42)","=SUM(D9,D20,D31,D42)","=SUM(E9,E20,E31,E42)"
+Total,Interpretation,"=SUM(C10,C21,C32,C43)","=SUM(D10,D21,D32,D43)","=SUM(E10,E21,E32,E43)"
+Total,Report Writing,"=SUM(C11,C22,C33,C44)","=SUM(D11,D22,D33,D44)","=SUM(E11,E22,E33,E44)"
+Total,Total,=SUM(C47:C55),=SUM(D47:D55),=SUM(E47:E55)

@@ -1,0 +1,25 @@
+Relative,,,,,
+Numerator,Panel,EA-P,EA-T,WGA-P,WGA-T
+Denominator,,,,,
+Panel,='DSA - Summary'!B6/'DSA - Summary'!B6,='DSA - Summary'!H6/'DSA - Summary'!B6,='DSA - Summary'!N6/'DSA - Summary'!B6,='DSA - Summary'!T6/'DSA - Summary'!B6,='DSA - Summary'!Z6/'DSA - Summary'!B6
+EA-P,='DSA - Summary'!B6/'DSA - Summary'!H6,='DSA - Summary'!H6/'DSA - Summary'!H6,='DSA - Summary'!N6/'DSA - Summary'!H6,='DSA - Summary'!T6/'DSA - Summary'!H6,='DSA - Summary'!Z6/'DSA - Summary'!H6
+EA-T,='DSA - Summary'!B6/'DSA - Summary'!N6,='DSA - Summary'!H6/'DSA - Summary'!N6,='DSA - Summary'!N6/'DSA - Summary'!N6,='DSA - Summary'!T6/'DSA - Summary'!N6,='DSA - Summary'!Z6/'DSA - Summary'!N6
+WGA-P,='DSA - Summary'!B6/'DSA - Summary'!T6,='DSA - Summary'!H6/'DSA - Summary'!T6,='DSA - Summary'!N6/'DSA - Summary'!T6,='DSA - Summary'!T6/'DSA - Summary'!T6,='DSA - Summary'!Z6/'DSA - Summary'!T6
+WGA-T,='DSA - Summary'!B6/'DSA - Summary'!Z6,='DSA - Summary'!H6/'DSA - Summary'!Z6,='DSA - Summary'!N6/'DSA - Summary'!Z6,='DSA - Summary'!T6/'DSA - Summary'!Z6,='DSA - Summary'!Z6/'DSA - Summary'!Z6
+,,,,,
+Difference - Base Case,,,,,
+,Panel,EA-P,EA-T,WGA-P,WGA-T
+Panel,,='DSA - Summary'!H6 - 'DSA - Summary'!B6,='DSA - Summary'!N6 - 'DSA - Summary'!B6,='DSA - Summary'!T6 - 'DSA - Summary'!B6,='DSA - Summary'!Z6 - 'DSA - Summary'!B6
+EA-P,,,='DSA - Summary'!N6 - 'DSA - Summary'!H6,='DSA - Summary'!T6 - 'DSA - Summary'!H6,='DSA - Summary'!Z6 - 'DSA - Summary'!H6
+EA-T,,,,='DSA - Summary'!T6 - 'DSA - Summary'!N6,='DSA - Summary'!Z6 - 'DSA - Summary'!N6
+WGA-P,,,,,='DSA - Summary'!Z6 - 'DSA - Summary'!T6
+WGA-T,,,,,
+,,,,,
+Difference,,,,,
+0.7,Panel,EA-P,EA-T,WGA-P,WGA-T
+0.5,,,,,
+Panel,='DSA - Summary'!B11-'DSA - Summary'!B12,='DSA - Summary'!B11-'DSA - Summary'!H12,='DSA - Summary'!B11-'DSA - Summary'!N12,='DSA - Summary'!B11-'DSA - Summary'!T12,='DSA - Summary'!B11-'DSA - Summary'!Z12
+EA-P,='DSA - Summary'!H11-'DSA - Summary'!B12,='DSA - Summary'!H11-'DSA - Summary'!H12,='DSA - Summary'!H11-'DSA - Summary'!N12,='DSA - Summary'!H11-'DSA - Summary'!T12,='DSA - Summary'!H11-'DSA - Summary'!Z12
+EA-T,='DSA - Summary'!N11-'DSA - Summary'!B12,='DSA - Summary'!N11-'DSA - Summary'!H12,='DSA - Summary'!N11-'DSA - Summary'!N12,='DSA - Summary'!N11-'DSA - Summary'!T12,='DSA - Summary'!N11-'DSA - Summary'!Z12
+WGA-P,='DSA - Summary'!T11-'DSA - Summary'!B12,='DSA - Summary'!T11-'DSA - Summary'!H12,='DSA - Summary'!T11-'DSA - Summary'!N12,='DSA - Summary'!T11-'DSA - Summary'!T12,='DSA - Summary'!T11-'DSA - Summary'!Z12
+WGA-T,='DSA - Summary'!Z11-'DSA - Summary'!B12,='DSA - Summary'!Z11-'DSA - Summary'!H12,='DSA - Summary'!Z11-'DSA - Summary'!N12,='DSA - Summary'!Z11-'DSA - Summary'!T12,='DSA - Summary'!Z11-'DSA - Summary'!Z12

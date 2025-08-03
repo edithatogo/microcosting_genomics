@@ -1,0 +1,47 @@
+,,,,,Total space on disk (GB),,,Duration (Months),,,Price (AUD $/unit),,,,Unit Cost ($/sample),,
+Network Storage,,Step,Source,Comment,LL,MP,UL,LL,MP,UL,LL,MP,UL,Source,LL,MP,UL
+,WES/Panel (S),,,,,,,,,,$/GB/year,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F4*$J4/12*$M4,=G4*$J4/12*$M4,=H4*$J4/12*$M4
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F5*$J5/12*$M5,=G5*$J5/12*$M5,=H5*$J5/12*$M5
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,5,8,15,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F6*$J6/12*$M6,=G6*$J6/12*$M6,=H6*$J6/12*$M6
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F4:F6),=SUM(G4:G6),=SUM(H4:H6),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F7*$J7/12*$M7,=G7*$J7/12*$M7,=H7*$J7/12*$M7
+,,,,,,,,,,,,,,,,,
+,WES/Panel (T),,,,,,,,,,,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,=F4+(2*(5/8*F4)),=G4+(2*(5/8*G4)),=H4+(2*(5/8*H4)),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F10*$J10/12*$M10,=G10*$J10/12*$M10,=H10*$J10/12*$M10
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,=F5+(2*(5/8*F5)),=G5+(2*(5/8*G5)),=H5+(2*(5/8*H5)),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F11*$J11/12*$M11,=G11*$J11/12*$M11,=H11*$J11/12*$M11
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F6*3,=G6*3,=H6*3,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F12*$J12/12*$M12,=G12*$J12/12*$M12,=H12*$J12/12*$M12
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F10:F12),=SUM(G10:G12),=SUM(H10:H12),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F13*$J13/12*$M13,=G13*$J13/12*$M13,=H13*$J13/12*$M13
+,,,,,,,,,,,,,,,,,
+,WGS (S),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,35,40,45,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F16*$J16/12*$M16,=G16*$J16/12*$M16,=H16*$J16/12*$M16
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,45,50,55,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F17*$J17/12*$M17,=G17*$J17/12*$M17,=H17*$J17/12*$M17
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F16:F17),=SUM(G16:G17),=SUM(H16:H17),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F18*$J18/12*$M18,=G18*$J18/12*$M18,=H18*$J18/12*$M18
+,,,,,,,,,,,,,,,,,
+,WGS (T),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F16*3,=G16*3,=H16*3,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F21*$J21/12*$M21,=G21*$J21/12*$M21,=H21*$J21/12*$M21
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F17*3,=G17*3,=H17*3,-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F22*$J22/12*$M22,=G22*$J22/12*$M22,=H22*$J22/12*$M22
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F21:F22),=SUM(G21:G22),=SUM(H21:H22),-,18,-,-,='BI - Comp+Stor Costs - VCGS'!I$15,-,"Xenon, 2023",=F23*$J23/12*$M23,=G23*$J23/12*$M23,=H23*$J23/12*$M23
+,,,,,,,,,,,,,,,,,
+Archival Storage (Tape only; uncompressed),,,,,,,,,,,,,,,,,
+,WES/Panel (S),,,,,,,,,,$/GB,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L27,N27)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F27*L27,=G27*M27,=H27*N27
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,4,5,6,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L28,N28)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F28*L28,=G28*M28,=H28*N28
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,5,8,15,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L29,N29)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F29*L29,=G29*M29,=H29*N29
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F27:F29),=SUM(G27:G29),=SUM(H27:H29),,,,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L30,N30)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F30*L30,=G30*M30,=H30*N30
+,,,,,,,,,,,,,,,,,
+,WES/Panel (T),,,,,,,,,,,,,,,,
+,,Trimmed FASTQ,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,=F27+(2*(5/8*F27)),=G27+(2*(5/8*G27)),=H27+(2*(5/8*H27)),-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L33,N33)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F33*L33,=G33*M33,=H33*N33
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 50/80 for proband/parent,=F28+(2*(5/8*F28)),=G28+(2*(5/8*G28)),=H28+(2*(5/8*H28)),-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L34,N34)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F34*L34,=G34*M34,=H34*N34
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F29*3,=G29*3,=H29*3,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L35,N35)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F35*L35,=G35*M35,=H35*N35
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F33:F35),=SUM(G33:G35),=SUM(H33:H35),,,,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L36,N36)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F36*L36,=G36*M36,=H36*N36
+,,,,,,,,,,,,,,,,,
+,WGS (S),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",,35,40,45,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L39,N39)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F39*L39,=G39*M39,=H39*N39
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",,45,50,55,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L40,N40)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F40*L40,=G40*M40,=H40*N40
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F39:F40),=SUM(G39:G40),=SUM(H39:H40),,,,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L41,N41)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F41*L41,=G41*M41,=H41*N41
+,,,,,,,,,,,,,,,,,
+,WGS (T),,,,,,,,,,,,,,,,
+,,Raw BAM file,"Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F39*3,=G39*3,=H39*3,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L44,N44)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F44*L44,=G44*M44,=H44*N44
+,,"Final rem-dup, recalibrated, locally re-aligned BAM file","Bioinformatics Lead, VCGS, 2023",Calculated by 3x singleton,=F40*3,=G40*3,=H40*3,-,-,-,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L45,N45)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F45*L45,=G45*M45,=H45*N45
+,,Total,"Bioinformatics Lead, VCGS, 2023",,=SUM(F44:F45),=SUM(G44:G45),=SUM(H44:H45),,,,='BI - Comp+Stor Costs - VCGS'!H20,"=AVERAGE(L46,N46)",='BI - Comp+Stor Costs - VCGS'!H19,"Xenon, 2023",=F46*L46,=G46*M46,=H46*N46
+,,,,,,,,,,,,,,,,,
