@@ -212,6 +212,7 @@ class CalculationEngine:
     def _process_raw_dataframe(self, raw_data, sheet_obj, sheet_name, data_only):
         config = self.sheet_configs[sheet_name]
         header_rows = config.get("header_rows", 1)
+        data_starts_at = config.get("data_starts_at", header_rows + 1)
 
         df = pd.DataFrame(raw_data)
 
@@ -221,9 +222,12 @@ class CalculationEngine:
                 columns = pd.MultiIndex.from_frame(header_df.T)
             else:
                 columns = pd.MultiIndex.from_arrays([header_df.iloc[0].tolist()])
-            df = df.iloc[header_rows:].reset_index(drop=True)
+            df = df.iloc[data_starts_at - 1 :].reset_index(drop=True)
             df.columns = columns
+        else:
+            df = df.iloc[data_starts_at - 1 :].reset_index(drop=True)
 
+        # Reset index so row 0 corresponds to the first data row
         df.reset_index(drop=True, inplace=True)
 
         if data_only:
