@@ -262,14 +262,17 @@ class PmtStrategy(CalculationStrategy):
                         f"={tok}", sheet_name, f"{cell_ref}_{suffix}"
                     )
 
-            # Ensure val is a number, default to 0 if it's None or NaN
-            if val is None or (isinstance(val, float) and math.isnan(val)):
+            # Ensure val is numeric
+            if val is None:
                 val = 0
-            if isinstance(val, str):
+            elif isinstance(val, str):
                 try:
                     val = float(val)
                 except (ValueError, TypeError):
                     val = 0
+            elif isinstance(val, Number) and isinstance(val, float) and math.isnan(val):
+                val = 0
+
             if negative:
                 val = -val
             return val
