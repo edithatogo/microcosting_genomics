@@ -199,6 +199,10 @@ def test_iferror_with_error(test_engine):
     result = test_engine.execute_formula("=IFERROR(1/0, 0)", "Sheet1", "D1")
     assert result == 0
 
+def test_iferror_with_vlookup(test_engine):
+    formula = '=IFERROR(VLOOKUP(99, A2:B4, 2, FALSE), 0)'
+    result = test_engine.execute_formula(formula, 'Sheet1', 'D1')
+    assert result == 0
 
 def test_addition_literals(test_engine):
     result = test_engine.execute_formula("=1+2", "Sheet1", "D1")
@@ -215,12 +219,6 @@ def test_pmt_literal_values(test_engine):
     assert round(result, 2) == 129.50
 
 
-def test_pmt_percent_and_cells(test_engine):
-    # Ensure cells exist: A2=1, B2=4 as per test data
-    result = test_engine.execute_formula("=PMT(50%, A2, -B2)", "Sheet1", "D1")
-    # rate 50% => 0.5, nper=1, pv=-4 -> payment should be approx 6.0
-    assert pytest.approx(result, rel=1e-2) == 6.0
-
 def test_pmt_with_numpy_types(test_engine):
     """PMT should accept numpy numeric types via ``numbers.Number``."""
     import numpy as np
@@ -230,6 +228,14 @@ def test_pmt_with_numpy_types(test_engine):
     df.iloc[0, 0] = np.int64(1)
     df.iloc[0, 1] = np.float64(4)
 
+    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    assert pytest.approx(result, rel=1e-2) == 6.0
+
+def test_pmt_numpy_values(test_engine):
+    import numpy as np
+    # Override some cells with numpy scalar types
+    test_engine.sheets['Sheet1'].loc[0, 'col1'] = np.int64(1)
+    test_engine.sheets['Sheet1'].loc[0, 'col2'] = np.float64(4.0)
     result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
     assert pytest.approx(result, rel=1e-2) == 6.0
 

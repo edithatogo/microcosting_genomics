@@ -213,7 +213,6 @@ class IfStrategy(CalculationStrategy):
 class IfErrorStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         try:
-            value = parsed_formula["value"]
             if isinstance(value, dict) and value.get("type") == "unknown":
                 expr = value.get("formula", "").lstrip("=")
                 value_result = eval(expr)
@@ -233,7 +232,6 @@ class IfErrorStrategy(CalculationStrategy):
             # formula.  Delegating to ``execute_formula`` ensures it is handled
             # consistently with other expressions.
             return engine.execute_formula(f"={fallback}", sheet_name, f"{cell_ref}_ERR")
-
 
 class PmtStrategy(CalculationStrategy):
     """Strategy for handling PMT formulas."""
