@@ -30,22 +30,7 @@ def test_engine():
     """
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
     sheet_manager = SheetManager(test_data_path)
-    engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet2"] = {
-        "header_rows": 1,
-        "data_starts_at": 2,
-    }
-    sheet_obj = engine.sheet_manager._workbook["Sheet2"]
-    values, formulas = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
-    engine.sheet_manager.sheets["Sheet2"] = engine.sheet_manager._process_raw_dataframe(
-        values, sheet_obj, "Sheet2", data_only=True
-    )
-    engine.sheet_manager.formula_sheets["Sheet2"] = (
-        engine.sheet_manager._process_raw_dataframe(
-            formulas, sheet_obj, "Sheet2", data_only=False
-        )
-    )
-    return engine
+    return CalculationEngine(sheet_manager)
 
 
 @pytest.fixture
@@ -274,53 +259,14 @@ def test_multilevel_header_loader(tmp_path):
     wb.save(file_path)
     wb.close()
 
-    sheet_manager = SheetManager(file_path)
-    engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet1"] = {
-        "header_rows": 2,
-        "data_starts_at": 3,
+    sheet_configs = {
+        "Sheet1": {
+            "header_rows": 2,
+            "data_starts_at": 3,
+        }
     }
-
-    # Reload the sheet using the updated configuration
-    sheet_obj = engine.sheet_manager._workbook["Sheet1"]
-    values, _ = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
-    engine.sheet_manager.sheets["Sheet1"] = engine.sheet_manager._process_raw_dataframe(
-        values, sheet_obj, "Sheet1", data_only=True
-    )
-    df = engine.sheet_manager.get_data("Sheet1")
-
-    expected = pd.MultiIndex.from_arrays(
-        [
-            ["lvl1a", "lvl1a", "lvl1b"],
-            ["col1", "col2", "col3"],
-        ]
-    )
-    assert isinstance(df.columns, pd.MultiIndex)
-    assert df.columns.equals(expected)
-
-
-def test_multilevel_header_loader_engine(tmp_path):
-    """Load multi-level header using CalculationEngine internals."""
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Sheet1"
-    ws.append(["lvl1a", "lvl1a", "lvl1b"])
-    ws.append(["col1", "col2", "col3"])
-    ws.append([1, 2, 3])
-    wb.save(tmp_path / "multi.xlsx")
-    wb.close()
-
-    sheet_manager = SheetManager(tmp_path / "multi.xlsx")
-    engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet1"] = {
-        "header_rows": 2,
-        "data_starts_at": 3,
-    }
-    sheet_obj = engine.sheet_manager._workbook["Sheet1"]
-    values, _ = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
-    df = engine.sheet_manager._process_raw_dataframe(
-        values, sheet_obj, "Sheet1", data_only=True
-    )
+    sheet_manager = SheetManager(file_path, sheet_configs=sheet_configs)
+    df = sheet_manager.get_data("Sheet1")
 
     expected = pd.MultiIndex.from_arrays(
         [
@@ -379,3 +325,49 @@ def test_iferror_vlookup_missing(test_engine):
     formula = "=IFERROR(VLOOKUP(99, Sheet2!$A$1:$B$3, 2, FALSE), 0)"
     result = test_engine.execute_formula(formula, "Sheet1", "F5")
     assert result == 0
+
+
+def test_engine_detailed_table_rename():
+    """
+    Tests if the CalculationEngine correctly renames the "Detailed Table" sheet.
+    """
+    test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
+
+    class CustomEngine(CalculationEngine):
+        def __init__(self, sheet_manager, verbose=False):
+            self.default_sheet_names = {"detailed_table": "My Detailed Table"}
+            super().__init__(sheet_manager, verbose)
+
+    sheet_manager = SheetManager(test_data_path)
+    engine = CustomEngine(sheet_manager)
+
+    assert "Detailed Table" not in engine.sheet_configs
+    assert "My Detailed Table" in engine.sheet_configs
+
+
+def test_engine_sheet_config_override():
+    """
+    Tests that the sheet_configs can be overridden.
+    """
+    test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
+    sheet_manager = SheetManager(test_data_path)
+    engine = CalculationEngine(sheet_manager)
+    engine.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    assert engine.sheet_configs["Sheet1"]["header_rows"] == 2
+
+
+def test_load_prepared_tables(tmp_path):
+    """
+    Tests that prepared tables are loaded correctly.
+    """
+    prepared_data_path = tmp_path / "prepared"
+    prepared_data_path.mkdir()
+    df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+    df.to_parquet(prepared_data_path / "2._labor_prices.parquet")
+
+    test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
+    sheet_manager = SheetManager(test_data_path, prepared_data_path=prepared_data_path)
+    engine = CalculationEngine(sheet_manager)
+
+    assert "2. Labor Prices" in engine.sheets
+    pd.testing.assert_frame_equal(engine.sheets["2. Labor Prices"], df)

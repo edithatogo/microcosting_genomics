@@ -11,17 +11,7 @@ def strategy_engine():
     from unimelb_phd_phase_1.sheet_manager import SheetManager
 
     sheet_manager = SheetManager(test_data_path)
-    engine = CalculationEngine(sheet_manager)
-    engine.sheet_configs["Sheet2"] = {"header_rows": 1, "data_starts_at": 2}
-    sheet_obj = engine._workbook["Sheet2"]
-    values, formulas = engine._load_raw_sheet_data(sheet_obj)
-    engine.sheets["Sheet2"] = engine._process_raw_dataframe(
-        values, sheet_obj, "Sheet2", data_only=True
-    )
-    engine.formula_sheets["Sheet2"] = engine._process_raw_dataframe(
-        formulas, sheet_obj, "Sheet2", data_only=False
-    )
-    return engine
+    return CalculationEngine(sheet_manager)
 
 
 def test_multiplication_absolute(strategy_engine):

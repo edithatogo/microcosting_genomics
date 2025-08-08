@@ -23,6 +23,7 @@ class SheetManager:
         excel_file_path: Path | str | None = None,
         verbose: bool = False,
         prepared_data_path: Path | str | None = None,
+        sheet_configs: dict | None = None,
     ):
         """Create a new SheetManager instance."""
         self.logger = logger.getChild(self.__class__.__name__)
@@ -65,19 +66,22 @@ class SheetManager:
             )
         self.prepared_data_path = Path(prepared_data_path)
 
-        self.sheet_configs = {
-            "Detailed Table": {
-                "header_rows": 4,
-                "data_starts_at": 5,
-                "string_columns": ["Test", "Category", "Sub-Category", "Step"],
-            },
-            "Process": {"header_rows": 1, "data_starts_at": 2},
-            "DSA - Labour Prices": {"header_rows": 1, "data_starts_at": 2},
-            "DSA - Test Throughput": {"header_rows": 1, "data_starts_at": 2},
-            "Sheet1": {"header_rows": 1, "data_starts_at": 2},
-            "Sheet2": {"header_rows": 1, "data_starts_at": 2},
-            "Eq - Costs and Usage - VCGS": {"header_rows": 1, "data_starts_at": 2},
-        }
+        if sheet_configs is None:
+            self.sheet_configs = {
+                "Detailed Table": {
+                    "header_rows": 4,
+                    "data_starts_at": 5,
+                    "string_columns": ["Test", "Category", "Sub-Category", "Step"],
+                },
+                "Process": {"header_rows": 1, "data_starts_at": 2},
+                "DSA - Labour Prices": {"header_rows": 1, "data_starts_at": 2},
+                "DSA - Test Throughput": {"header_rows": 1, "data_starts_at": 2},
+                "Sheet1": {"header_rows": 1, "data_starts_at": 2},
+                "Sheet2": {"header_rows": 1, "data_starts_at": 2},
+                "Eq - Costs and Usage - VCGS": {"header_rows": 1, "data_starts_at": 2},
+            }
+        else:
+            self.sheet_configs = sheet_configs
 
         self.default_sheet_names = {
             "detailed_table": next(iter(self.sheet_configs.keys()))
