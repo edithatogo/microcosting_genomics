@@ -1,5 +1,6 @@
 import re
 
+
 def parse_formula(formula):
     """Parse a subset of Excel formulas used in the project.
 
@@ -19,12 +20,12 @@ def parse_formula(formula):
     ``{"type": "literal", "value": 0}`` for the true branch and a nested
     multiplication structure for the false branch.
     """
-    if not isinstance(formula, str) or not formula.startswith('='):
+    if not isinstance(formula, str) or not formula.startswith("="):
         if isinstance(formula, (int, float)):
             return {"type": "literal", "value": formula}
         return None
 
-    formula = formula.lstrip('=+').strip()
+    formula = formula.lstrip("=+").strip()
 
     # Handle numeric literals (integers or floats)
     if re.fullmatch(r"-?\d+(?:\.\d+)?", formula):
@@ -32,7 +33,7 @@ def parse_formula(formula):
         if value.is_integer():
             value = int(value)
         return {"type": "literal", "value": value}
-    
+
     # Handle string literals
     match = re.match(r'"([^"]*)"', formula)
     if match:
@@ -47,24 +48,24 @@ def parse_formula(formula):
         return {
             "type": "iferror",
             "value": parsed_value,
-            "value_if_error": value_if_error
+            "value_if_error": value_if_error,
         }
 
     # IF
-    if formula.upper().startswith('IF('):
+    if formula.upper().startswith("IF("):
         # More robust parsing for IF statements
         content = formula[3:-1]
         paren_level = 0
         args = []
         current_arg = ""
         for char in content:
-            if char == ',' and paren_level == 0:
+            if char == "," and paren_level == 0:
                 args.append(current_arg)
                 current_arg = ""
             else:
-                if char == '(':
+                if char == "(":
                     paren_level += 1
-                elif char == ')':
+                elif char == ")":
                     paren_level -= 1
                 current_arg += char
         args.append(current_arg)
@@ -77,7 +78,7 @@ def parse_formula(formula):
                 "type": "if",
                 "condition": condition.strip(),
                 "true_val": parse_formula(f"={value_if_true.strip()}"),
-                "false_val": parse_formula(f"={value_if_false.strip()}")
+                "false_val": parse_formula(f"={value_if_false.strip()}"),
             }
 
     # VLOOKUP
@@ -89,7 +90,7 @@ def parse_formula(formula):
             "lookup_value": lookup_value,
             "table_array": table_array,
             "col_index_num": col_index_num,
-            "range_lookup": range_lookup
+            "range_lookup": range_lookup,
         }
 
     # PMT
@@ -117,7 +118,7 @@ def parse_formula(formula):
                 {"sheet": None, "cell": cell1},
                 {"sheet": None, "cell": cell2},
             ],
-            "number": int(number)
+            "number": int(number),
         }
 
     # Simple multiplication with sheet names
@@ -127,60 +128,53 @@ def parse_formula(formula):
         return {
             "type": "multiplication",
             "operands": [
-                {"sheet": sheet1, "cell": cell1},
-                {"sheet": sheet2, "cell": cell2},
-            ]
+                {"type": "reference", "sheet": sheet1, "cell": cell1},
+                {"type": "reference", "sheet": sheet2, "cell": cell2},
+            ],
         }
 
     # Simple multiplication without sheet names
-    match = re.fullmatch(r"(\w+\d+)\*(\w+\d+)", formula)
+    match = re.fullmatch(r"(\$?\w+\$?\d+)\*(\$?\w+\$?\d+)", formula)
     if match:
         cell1, cell2 = match.groups()
         return {
             "type": "multiplication",
             "operands": [
-                {"sheet": None, "cell": cell1},
-                {"sheet": None, "cell": cell2},
-            ]
+                {"type": "reference", "sheet": None, "cell": cell1},
+                {"type": "reference", "sheet": None, "cell": cell2},
+            ],
         }
 
     # Multiplication with a number and optional sheet name
-    match = re.fullmatch(r"'([^']*)'!(\$?\w+\$?\d+)\*(\d+)", formula)
+    match = re.fullmatch(
+        r"(?:'([^']*)'!)?(\$?\w+\$?\d+)\*(\d+(?:\.\d+)?)", formula
+    ) or re.fullmatch(r"(\d+(?:\.\d+)?)\*(\$?\w+\$?\d+)", formula)
     if match:
-        sheet, cell, number = match.groups()
-        return {
-            "type": "multiplication_by_number",
-            "sheet": sheet,
-            "cell": cell,
-            "number": int(number)
-        }
-
-    match = re.fullmatch(r"([\w\s\.-]+)!(\$?\w+\$?\d+)\*(\d+)", formula)
-    if match:
-        sheet, cell, number = match.groups()
-        return {
-            "type": "multiplication_by_number",
-            "sheet": sheet.strip(),
-            "cell": cell,
-            "number": int(number)
-        }
-
-    match = re.fullmatch(r"(\$?\w+\$?\d+)\*(\d+)", formula)
-    if match:
-        cell, number = match.groups()
-        return {
-            "type": "multiplication_by_number",
-            "cell": cell,
-            "number": int(number)
-        }
+        groups = match.groups()
+        if len(groups) == 3:
+            sheet, cell, number = groups
+            return {
+                "type": "multiplication_by_number",
+                "sheet": sheet,
+                "cell": cell,
+                "number": float(number),
+            }
+        else:
+            number, cell = groups
+            return {
+                "type": "multiplication_by_number",
+                "sheet": None,
+                "cell": cell,
+                "number": float(number),
+            }
 
     # Addition
-    if '+' in formula:
-        parts = formula.split('+')
+    if "+" in formula:
+        parts = formula.split("+")
         if len(parts) > 1:
             return {
                 "type": "addition",
-                "operands": [parse_formula(f"={p}") for p in parts]
+                "operands": [parse_formula(f"={p}") for p in parts],
             }
 
     # Division of cell / number / cell
@@ -191,7 +185,7 @@ def parse_formula(formula):
             "type": "division_three_values",
             "cell1": cell1,
             "number": int(number),
-            "cell2": cell2
+            "cell2": cell2,
         }
 
     # Simple SUM
@@ -199,9 +193,9 @@ def parse_formula(formula):
     if match:
         # This is a simplified SUM parser, it will need to be improved
         # to handle multiple arguments
-        args = match.group(1).split(',')
-        if len(args) == 1 and ':' in args[0]:
-            start_cell, end_cell = args[0].split(':')
+        args = match.group(1).split(",")
+        if len(args) == 1 and ":" in args[0]:
+            start_cell, end_cell = args[0].split(":")
             return {"type": "sum_range", "start_cell": start_cell, "end_cell": end_cell}
         else:
             return {"type": "sum_cells", "cells": args}

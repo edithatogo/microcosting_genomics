@@ -1,11 +1,11 @@
 import re
 from collections import Counter
-import pandas as pd
-from unimelb_phd_phase_1.formula_parser import parse_formula
+
 
 def is_cross_sheet(formula_str):
     """Check if a formula string contains a sheet reference."""
-    return '!' in formula_str
+    return "!" in formula_str
+
 
 def get_pattern(formula_str):
     """Generate a generic pattern from a formula string."""
@@ -18,6 +18,7 @@ def get_pattern(formula_str):
     pattern = re.sub(r"\d+", "NUM", pattern)
     return pattern
 
+
 def analyze_errors(validation_output_path):
     """
     Analyzes the validation output file to identify and count unsupported and discrepancy-causing formulas,
@@ -28,12 +29,12 @@ def analyze_errors(validation_output_path):
     discrepancy_same_sheet = []
     discrepancy_cross_sheet = []
 
-    with open(validation_output_path, 'r') as f:
+    with open(validation_output_path, "r") as f:
         for line in f:
             match = re.search(r"'formula': \"=(.*?)\"", line)
             if not match:
                 continue
-            
+
             formula_str = match.group(1)
 
             if "'calculated_value': 'UNSUPPORTED[unknown]'" in line:
@@ -57,9 +58,16 @@ def analyze_errors(validation_output_path):
             print(f"{pattern}: {count}")
 
     print_top5("Top 5 Unsupported Same-Sheet Formula Patterns", unsupported_same_sheet)
-    print_top5("Top 5 Unsupported Cross-Sheet Formula Patterns", unsupported_cross_sheet)
-    print_top5("Top 5 Discrepancy-Causing Same-Sheet Formula Patterns", discrepancy_same_sheet)
-    print_top5("Top 5 Discrepancy-Causing Cross-Sheet Formula Patterns", discrepancy_cross_sheet)
+    print_top5(
+        "Top 5 Unsupported Cross-Sheet Formula Patterns", unsupported_cross_sheet
+    )
+    print_top5(
+        "Top 5 Discrepancy-Causing Same-Sheet Formula Patterns", discrepancy_same_sheet
+    )
+    print_top5(
+        "Top 5 Discrepancy-Causing Cross-Sheet Formula Patterns",
+        discrepancy_cross_sheet,
+    )
 
 
 if __name__ == "__main__":

@@ -5,14 +5,14 @@ The notebook is expected to reside in the ``notebooks`` directory at
 repository ``data`` directory.
 """
 
-from pathlib import Path
 import json
+from pathlib import Path
 
-NOTEBOOK_DIR = Path(__file__).resolve().parents[0] / 'notebooks'
-DATA_DIR = Path(__file__).resolve().parents[0] / 'data'
-notebook_path = NOTEBOOK_DIR / 'Microcosting_Analysis.ipynb'
+NOTEBOOK_DIR = Path(__file__).resolve().parents[0] / "notebooks"
+DATA_DIR = Path(__file__).resolve().parents[0] / "data"
+notebook_path = NOTEBOOK_DIR / "Microcosting_Analysis.ipynb"
 
-with open(notebook_path, 'r') as f:
+with open(notebook_path, "r") as f:
     notebook = json.load(f)
 
 new_cell = {
@@ -51,11 +51,11 @@ new_cell = {
         "\n",
         "# Print the results\n",
         "print(f'Gamma Distribution Parameters: shape={shape}, scale={scale}')\n",
-        "print(f'Centiles: 2.5th={centiles[0]}, 50th={centiles[1]}, 97.5th={centiles[2]}')\n"
-    ]
+        "print(f'Centiles: 2.5th={centiles[0]}, 50th={centiles[1]}, 97.5th={centiles[2]}')\n",
+    ],
 }
 
-notebook['cells'].append(new_cell)
+notebook["cells"].append(new_cell)
 
-with open(notebook_path, 'w') as f:
+with open(notebook_path, "w") as f:
     json.dump(notebook, f, indent=1)

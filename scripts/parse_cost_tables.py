@@ -1,7 +1,9 @@
 """Parse cost-related tables and save them as Parquet files."""
+
 from __future__ import annotations
 
 from pathlib import Path
+
 import pandas as pd
 
 from prepare_data import create_unique_column_names
@@ -51,9 +53,18 @@ def main() -> None:
     prepared_dir.mkdir(exist_ok=True)
 
     parsers = {
-        "equipment_costs.parquet": (parse_equipment_costs, data_dir / "Eq - Costs and Usage - VCGS.csv"),
-        "consumable_costs.parquet": (parse_consumable_costs, data_dir / "Cons -  Costs and Util - VCGS.csv"),
-        "labour_costs.parquet": (parse_labour_costs, data_dir / "Labour - Costs - VCGS.csv"),
+        "equipment_costs.parquet": (
+            parse_equipment_costs,
+            data_dir / "Eq - Costs and Usage - VCGS.csv",
+        ),
+        "consumable_costs.parquet": (
+            parse_consumable_costs,
+            data_dir / "Cons -  Costs and Util - VCGS.csv",
+        ),
+        "labour_costs.parquet": (
+            parse_labour_costs,
+            data_dir / "Labour - Costs - VCGS.csv",
+        ),
     }
 
     for name, (parser, path) in parsers.items():

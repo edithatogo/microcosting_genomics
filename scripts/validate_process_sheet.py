@@ -1,13 +1,13 @@
 import sys
 from pathlib import Path
-import pandas as pd
+
+from src.unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from src.unimelb_phd_phase_1.sheet_manager import SheetManager
 
 # Add the project root to the Python path
 project_root = Path(__file__).resolve().parents[1]
 sys.path.append(str(project_root))
 
-from src.unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from src.unimelb_phd_phase_1.sheet_manager import SheetManager
 
 def validate_process_sheet():
     """
@@ -17,7 +17,7 @@ def validate_process_sheet():
     engine = CalculationEngine(sheet_manager)
 
     sheet_name = "Process"
-    
+
     # Ensure the sheet is loaded
     if sheet_name not in sheet_manager.get_sheet_names():
         print(f"Sheet '{sheet_name}' not found in the workbook.")
@@ -43,6 +43,7 @@ def validate_process_sheet():
     else:
         print(f"Validation failed for '{sheet_name}'. Differences found:")
         print(comparison)
+
 
 if __name__ == "__main__":
     validate_process_sheet()

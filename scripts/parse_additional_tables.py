@@ -1,7 +1,9 @@
 """Parse supplemental Excel tables and save them as Parquet files."""
+
 from __future__ import annotations
 
 from pathlib import Path
+
 import pandas as pd
 
 from prepare_data import _parse_generic_sheet
@@ -79,7 +81,10 @@ def main() -> None:
         print(f"Saved {name}")
 
     # PSA table uses a separate CSV file
-    psa_csv = data_dir / "Microcosting - Study 1 - Utilisation and Microcosts v14 (20230814) PSA.csv"
+    psa_csv = (
+        data_dir
+        / "Microcosting - Study 1 - Utilisation and Microcosts v14 (20230814) PSA.csv"
+    )
     if psa_csv.exists():
         df_psa = parse_psa_table(psa_csv)
         df_psa.to_parquet(prepared_dir / "psa.parquet")

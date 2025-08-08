@@ -1,13 +1,12 @@
-
-import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+
 
 def validate_sheet(sheet_name):
     """
     Validates the calculation engine's output for a specific sheet against the ground truth.
     """
     print(f"--- Validating Sheet: {sheet_name} ---")
-    
+
     # Initialize the engine
     engine = CalculationEngine()
 
@@ -29,16 +28,20 @@ def validate_sheet(sheet_name):
         for c_idx in range(ground_truth_df.shape[1]):
             excel_value = ground_truth_df.iloc[r_idx, c_idx]
             calculated_value = calculated_df.iloc[r_idx, c_idx]
-            
+
             # Simple comparison, can be improved for float tolerance
             if str(excel_value) != str(calculated_value):
-                formula = engine.get_cell_formula(sheet_name, f"{chr(ord('A')+c_idx)}{r_idx+1}")
-                discrepancies.append({
-                    'cell': f"{chr(ord('A')+c_idx)}{r_idx+1}",
-                    'formula': formula,
-                    'excel_value': excel_value,
-                    'calculated_value': calculated_value
-                })
+                formula = engine.get_cell_formula(
+                    sheet_name, f"{chr(ord('A') + c_idx)}{r_idx + 1}"
+                )
+                discrepancies.append(
+                    {
+                        "cell": f"{chr(ord('A') + c_idx)}{r_idx + 1}",
+                        "formula": formula,
+                        "excel_value": excel_value,
+                        "calculated_value": calculated_value,
+                    }
+                )
 
     if discrepancies:
         print("Discrepancies found:")
@@ -47,5 +50,6 @@ def validate_sheet(sheet_name):
     else:
         print(f"Success! No discrepancies found for sheet: {sheet_name}")
 
+
 if __name__ == "__main__":
-    validate_sheet('Labour - Usage - VCGS')
+    validate_sheet("Labour - Usage - VCGS")

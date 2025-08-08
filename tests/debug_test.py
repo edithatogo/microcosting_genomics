@@ -11,7 +11,10 @@ def test_engine():
     Provides a CalculationEngine instance initialized with test data.
     """
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
-    engine = CalculationEngine(test_data_path)
+    from unimelb_phd_phase_1.sheet_manager import SheetManager
+
+    sheet_manager = SheetManager(test_data_path)
+    engine = CalculationEngine(sheet_manager)
     engine.sheet_configs["Sheet1"] = {"header_rows": 1, "data_starts_at": 2}
     return engine
 
@@ -43,4 +46,3 @@ def test_numpy_values(test_engine):
 
     result_mul = test_engine.execute_formula("=A2*B2", "Sheet1", "D2")
     assert result_mul == 4
-

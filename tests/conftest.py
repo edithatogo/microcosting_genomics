@@ -1,7 +1,8 @@
 import sys
-from pathlib import Path
-import pandas as pd
 import warnings
+from pathlib import Path
+
+import pandas as pd
 
 # Ensure project root is on sys.path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

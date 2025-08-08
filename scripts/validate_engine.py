@@ -4,8 +4,8 @@ import re
 from pathlib import Path
 
 import pandas as pd
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 
+from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 
 PREPARED_DIR = Path(__file__).resolve().parents[0] / "data" / "prepared"
 TOLERANCE = 1e-4
@@ -15,7 +15,9 @@ def _sheet_from_file(path: Path, workbook_path: str) -> str:
     """Return the workbook sheet name for a prepared parquet file."""
     stem = path.stem
     if stem == "ground_truth":
-        return "1. Detailed Table" if "Supp Tables" in workbook_path else "Detailed Table"
+        return (
+            "1. Detailed Table" if "Supp Tables" in workbook_path else "Detailed Table"
+        )
 
     match = re.match(r"(\d+)\._(.+)", stem)
     if match:
@@ -30,22 +32,25 @@ def _flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
     if isinstance(df.columns, pd.MultiIndex):
         df = df.copy()
         df.columns = [
-            " ".join(str(p) for p in tup if pd.notna(p)).strip()
-            for tup in df.columns
+            " ".join(str(p) for p in tup if pd.notna(p)).strip() for tup in df.columns
         ]
     return df
 
 
 def validate_engine() -> None:
     """Validate the calculation engine across all prepared tables."""
-    workbook_path = "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    workbook_path = (
+        "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
+    )
 
     print("Initializing CalculationEngine...")
     engine = CalculationEngine(workbook_path)
 
     # Ensure the R1 workbook sheet is loaded as '1. Detailed Table'
     if "Supp Tables" in workbook_path and "1. Detailed Table" not in engine.sheets:
-        engine.sheet_configs["1. Detailed Table"] = engine.sheet_configs.pop("Detailed Table")
+        engine.sheet_configs["1. Detailed Table"] = engine.sheet_configs.pop(
+            "Detailed Table"
+        )
         engine._load_all_sheets()
 
     print("CalculationEngine initialized.")
@@ -91,7 +96,11 @@ def validate_engine() -> None:
         if rows_with_diff.any():
             print("Rows with significant differences:")
             combined = pd.concat(
-                {"expected": gt[rows_with_diff], "calculated": calc[rows_with_diff], "diff": diff[rows_with_diff]},
+                {
+                    "expected": gt[rows_with_diff],
+                    "calculated": calc[rows_with_diff],
+                    "diff": diff[rows_with_diff],
+                },
                 axis=1,
             )
             print(combined)

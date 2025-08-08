@@ -1,8 +1,13 @@
 from pathlib import Path
+
 import pandas as pd
+
 from unimelb_phd_phase_1.config import load_config
 
-def _parse_generic_sheet(file_path: Path | str, sheet_name: str, header_rows: int, skip_rows: int = 0) -> pd.DataFrame:
+
+def _parse_generic_sheet(
+    file_path: Path | str, sheet_name: str, header_rows: int, skip_rows: int = 0
+) -> pd.DataFrame:
     df_raw = pd.read_excel(file_path, sheet_name=sheet_name, header=None)
     header_df = df_raw.iloc[skip_rows : skip_rows + header_rows].ffill(axis=0)
 
@@ -23,6 +28,7 @@ def _parse_generic_sheet(file_path: Path | str, sheet_name: str, header_rows: in
 
     return data_df
 
+
 def main() -> None:
     config = load_config()
     workbook_key = config.get("default_workbook", "main")
@@ -37,9 +43,12 @@ def main() -> None:
     labor_df.to_parquet(prepared_dir / "2._labor_prices.parquet")
     print("Saved 2._labor_prices.parquet")
 
-    estimates_df = _parse_generic_sheet(excel_path, sheets["estimates"], header_rows=3, skip_rows=1)
+    estimates_df = _parse_generic_sheet(
+        excel_path, sheets["estimates"], header_rows=3, skip_rows=1
+    )
     estimates_df.to_parquet(prepared_dir / "3._estimates.parquet")
     print("Saved 3._estimates.parquet")
+
 
 if __name__ == "__main__":
     main()

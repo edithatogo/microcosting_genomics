@@ -43,29 +43,33 @@ class ReferenceStrategy(CalculationStrategy):
 
         return engine.get_cell_value(referenced_sheet, referenced_cell)
 
+
 def _evaluate_operand(engine, operand, sheet_name, cell_ref):
     """Helper function to evaluate an operand."""
     if isinstance(operand, dict):
-        if operand.get('type') == 'literal':
-            return operand['value']
-        elif operand.get('type') == 'reference':
-            op_sheet = operand['sheet'] if operand['sheet'] else sheet_name
-            op_cell = operand['cell']
+        if operand.get("type") == "literal":
+            return operand["value"]
+        elif operand.get("type") == "reference":
+            op_sheet = operand["sheet"] if operand["sheet"] else sheet_name
+            op_cell = operand["cell"]
             formula = engine.get_cell_formula(op_sheet, op_cell)
-            if formula and isinstance(formula, str) and formula.startswith('='):
+            if formula and isinstance(formula, str) and formula.startswith("="):
                 return engine.execute_formula(formula, op_sheet, op_cell)
             else:
                 return engine.get_cell_value(op_sheet, op_cell)
     return engine.execute_formula(operand, sheet_name, cell_ref)
+
 
 class AdditionStrategy(CalculationStrategy):
     """Strategy for handling addition formulas."""
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         total = 0
-        for idx, operand in enumerate(parsed_formula['operands']):
+        for idx, operand in enumerate(parsed_formula["operands"]):
             value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx}")
-            if isinstance(value, Number) and not (isinstance(value, float) and math.isnan(value)):
+            if isinstance(value, Number) and not (
+                isinstance(value, float) and math.isnan(value)
+            ):
                 total += value
             else:
                 return None
@@ -74,15 +78,35 @@ class AdditionStrategy(CalculationStrategy):
 
 class MultiplicationStrategy(CalculationStrategy):
     """Strategy for handling multiplication formulas."""
+
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         result = 1
-        for idx, operand in enumerate(parsed_formula['operands']):
+        for idx, operand in enumerate(parsed_formula["operands"]):
             value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx}")
             if isinstance(value, Number):
                 result *= value
             else:
                 return None
         return result
+
+
+class MultiplicationByNumberStrategy(CalculationStrategy):
+    """Strategy for handling multiplication by a number."""
+
+    def execute(self, engine, parsed_formula, sheet_name, cell_ref):
+        cell_value = _evaluate_operand(
+            engine,
+            {
+                "type": "reference",
+                "sheet": parsed_formula["sheet"],
+                "cell": parsed_formula["cell"],
+            },
+            sheet_name,
+            f"{cell_ref}_0",
+        )
+        if isinstance(cell_value, Number):
+            return cell_value * parsed_formula["number"]
+        return None
 
 
 class SumRangeStrategy(CalculationStrategy):
@@ -145,12 +169,18 @@ class SumCellsStrategy(CalculationStrategy):
                 total += value
         return total
 
+
 class DivisionStrategy(CalculationStrategy):
     """Strategy for handling division formulas."""
+
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
-        result = _evaluate_operand(engine, parsed_formula['operands'][0], sheet_name, f"{cell_ref}_0")
-        for idx, operand in enumerate(parsed_formula['operands'][1:]):
-            value = _evaluate_operand(engine, operand, sheet_name, f"{cell_ref}_{idx+1}")
+        result = _evaluate_operand(
+            engine, parsed_formula["operands"][0], sheet_name, f"{cell_ref}_0"
+        )
+        for idx, operand in enumerate(parsed_formula["operands"][1:]):
+            value = _evaluate_operand(
+                engine, operand, sheet_name, f"{cell_ref}_{idx + 1}"
+            )
             if isinstance(value, Number) and value != 0:
                 result /= value
             else:
@@ -213,6 +243,7 @@ class IfStrategy(CalculationStrategy):
 class IfErrorStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         try:
+            value = parsed_formula["value"]
             if isinstance(value, dict) and value.get("type") == "unknown":
                 expr = value.get("formula", "").lstrip("=")
                 value_result = eval(expr)
@@ -233,6 +264,7 @@ class IfErrorStrategy(CalculationStrategy):
             # consistently with other expressions.
             return engine.execute_formula(f"={fallback}", sheet_name, f"{cell_ref}_ERR")
 
+
 class PmtStrategy(CalculationStrategy):
     """Strategy for handling PMT formulas."""
 
@@ -240,6 +272,8 @@ class PmtStrategy(CalculationStrategy):
         import numpy_financial as npf
 
         def _eval_token(token: str, suffix: str):
+            if token is None:
+                return None
             tok = token.strip()
             negative = False
             if tok.startswith("-"):
@@ -281,12 +315,15 @@ class PmtStrategy(CalculationStrategy):
         nper = _eval_token(parsed_formula["nper"], "NPER")
         pv = _eval_token(parsed_formula["pv"], "PV")
 
+        if rate is None or nper is None or pv is None:
+            return 0.0
+
         # Ensure all inputs to npf.pmt are numeric. ``numbers.Number`` also
         # covers numpy numeric types such as ``np.int64`` and ``np.float64``
         # which appear when reading values from pandas DataFrames. This allows
         # the engine to operate on values loaded from ``pandas`` DataFrames
         # without explicit type casting.
-        if not all(isinstance(v, Number) for v in [rate, nper, pv]):
+        if not all(isinstance(v, Number) for v in [rate, nper, pv]) or nper == 0:
             return 0.0
 
         try:
@@ -300,8 +337,8 @@ class PmtStrategy(CalculationStrategy):
 class VLookupStrategy(CalculationStrategy):
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         lookup_token = parsed_formula["lookup_value"].strip()
-        if lookup_token.startswith("\"") and lookup_token.endswith("\""):
-            lookup_value = lookup_token.strip("\"")
+        if lookup_token.startswith('"') and lookup_token.endswith('"'):
+            lookup_value = lookup_token.strip('"')
         else:
             try:
                 lookup_value = float(lookup_token)

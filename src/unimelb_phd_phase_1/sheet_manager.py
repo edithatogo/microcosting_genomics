@@ -1,14 +1,13 @@
 """This module contains the SheetManager class."""
 
 import logging
-from pathlib import Path
 import warnings
+from pathlib import Path
 
 import openpyxl
 import pandas as pd
 
 from .config import load_config
-from .utils import cell_to_coords
 
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
@@ -66,9 +65,6 @@ class SheetManager:
             )
         self.prepared_data_path = Path(prepared_data_path)
 
-        workbook_config = config.get("workbooks", {}).get(
-            config.get("default_workbook", "main"), {}
-        )
         self.sheet_configs = {
             "Detailed Table": {
                 "header_rows": 4,
@@ -78,6 +74,9 @@ class SheetManager:
             "Process": {"header_rows": 1, "data_starts_at": 2},
             "DSA - Labour Prices": {"header_rows": 1, "data_starts_at": 2},
             "DSA - Test Throughput": {"header_rows": 1, "data_starts_at": 2},
+            "Sheet1": {"header_rows": 1, "data_starts_at": 2},
+            "Sheet2": {"header_rows": 1, "data_starts_at": 2},
+            "Eq - Costs and Usage - VCGS": {"header_rows": 1, "data_starts_at": 2},
         }
 
         self.default_sheet_names = {
@@ -216,9 +215,11 @@ class SheetManager:
                 return col in string_columns
 
             df = df.apply(
-                lambda series: pd.to_numeric(series, errors="coerce")
-                if not is_string_col(series.name)
-                else series
+                lambda series: (
+                    pd.to_numeric(series, errors="coerce")
+                    if not is_string_col(series.name)
+                    else series
+                )
             )
 
         return df

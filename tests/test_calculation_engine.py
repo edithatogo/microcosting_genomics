@@ -31,14 +31,19 @@ def test_engine():
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
     sheet_manager = SheetManager(test_data_path)
     engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet2"] = {"header_rows": 1, "data_starts_at": 2}
+    engine.sheet_manager.sheet_configs["Sheet2"] = {
+        "header_rows": 1,
+        "data_starts_at": 2,
+    }
     sheet_obj = engine.sheet_manager._workbook["Sheet2"]
     values, formulas = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
     engine.sheet_manager.sheets["Sheet2"] = engine.sheet_manager._process_raw_dataframe(
         values, sheet_obj, "Sheet2", data_only=True
     )
-    engine.sheet_manager.formula_sheets["Sheet2"] = engine.sheet_manager._process_raw_dataframe(
-        formulas, sheet_obj, "Sheet2", data_only=False
+    engine.sheet_manager.formula_sheets["Sheet2"] = (
+        engine.sheet_manager._process_raw_dataframe(
+            formulas, sheet_obj, "Sheet2", data_only=False
+        )
     )
     return engine
 
@@ -199,10 +204,12 @@ def test_iferror_with_error(test_engine):
     result = test_engine.execute_formula("=IFERROR(1/0, 0)", "Sheet1", "D1")
     assert result == 0
 
+
 def test_iferror_with_vlookup(test_engine):
-    formula = '=IFERROR(VLOOKUP(99, A2:B4, 2, FALSE), 0)'
-    result = test_engine.execute_formula(formula, 'Sheet1', 'D1')
+    formula = "=IFERROR(VLOOKUP(99, A2:B4, 2, FALSE), 0)"
+    result = test_engine.execute_formula(formula, "Sheet1", "D1")
     assert result == 0
+
 
 def test_addition_literals(test_engine):
     result = test_engine.execute_formula("=1+2", "Sheet1", "D1")
@@ -224,20 +231,23 @@ def test_pmt_with_numpy_types(test_engine):
     import numpy as np
 
     # Cast values to numpy types to mimic how pandas may store them
-    df = test_engine.sheet_manager.sheets['Sheet1']
+    df = test_engine.sheet_manager.sheets["Sheet1"]
     df.iloc[0, 0] = np.int64(1)
     df.iloc[0, 1] = np.float64(4)
 
-    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    result = test_engine.execute_formula("=PMT(50%, A2, -B2)", "Sheet1", "D1")
     assert pytest.approx(result, rel=1e-2) == 6.0
+
 
 def test_pmt_numpy_values(test_engine):
     import numpy as np
+
     # Override some cells with numpy scalar types
-    test_engine.sheets['Sheet1'].loc[0, 'col1'] = np.int64(1)
-    test_engine.sheets['Sheet1'].loc[0, 'col2'] = np.float64(4.0)
-    result = test_engine.execute_formula('=PMT(50%, A2, -B2)', 'Sheet1', 'D1')
+    test_engine.sheets["Sheet1"].loc[0, "col1"] = np.int64(1)
+    test_engine.sheets["Sheet1"].loc[0, "col2"] = np.float64(4.0)
+    result = test_engine.execute_formula("=PMT(50%, A2, -B2)", "Sheet1", "D1")
     assert pytest.approx(result, rel=1e-2) == 6.0
+
 
 def test_multilevel_header_parsing(test_engine):
     """Ensure headers are loaded as a MultiIndex."""
@@ -266,7 +276,10 @@ def test_multilevel_header_loader(tmp_path):
 
     sheet_manager = SheetManager(file_path)
     engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    engine.sheet_manager.sheet_configs["Sheet1"] = {
+        "header_rows": 2,
+        "data_starts_at": 3,
+    }
 
     # Reload the sheet using the updated configuration
     sheet_obj = engine.sheet_manager._workbook["Sheet1"]
@@ -299,10 +312,15 @@ def test_multilevel_header_loader_engine(tmp_path):
 
     sheet_manager = SheetManager(tmp_path / "multi.xlsx")
     engine = CalculationEngine(sheet_manager)
-    engine.sheet_manager.sheet_configs["Sheet1"] = {"header_rows": 2, "data_starts_at": 3}
+    engine.sheet_manager.sheet_configs["Sheet1"] = {
+        "header_rows": 2,
+        "data_starts_at": 3,
+    }
     sheet_obj = engine.sheet_manager._workbook["Sheet1"]
     values, _ = engine.sheet_manager._load_raw_sheet_data(sheet_obj)
-    df = engine.sheet_manager._process_raw_dataframe(values, sheet_obj, "Sheet1", data_only=True)
+    df = engine.sheet_manager._process_raw_dataframe(
+        values, sheet_obj, "Sheet1", data_only=True
+    )
 
     expected = pd.MultiIndex.from_arrays(
         [
@@ -336,26 +354,28 @@ def test_vlookup_cross_sheet(test_engine):
 
 
 def test_multiplication_cross_sheet_cells(test_engine):
-    result = test_engine.execute_formula("='Sheet2'!A2*'Sheet2'!B2", 'Sheet1', 'F1')
+    result = test_engine.execute_formula("='Sheet2'!A2*'Sheet2'!B2", "Sheet1", "F1")
     assert result == 400
 
 
 def test_sum_range_absolute(test_engine):
-    result = test_engine.execute_formula('=SUM($A$2:$A$4)', 'Sheet1', 'F2')
+    result = test_engine.execute_formula("=SUM($A$2:$A$4)", "Sheet1", "F2")
     assert result == 6
 
 
 def test_sum_cells_literal_reference(test_engine):
-    result = test_engine.execute_formula('=SUM(1,A2)', 'Sheet1', 'F3')
+    result = test_engine.execute_formula("=SUM(1,A2)", "Sheet1", "F3")
     assert result == 2
 
 
 def test_if_cross_sheet(test_engine):
-    result = test_engine.execute_formula("=IF('Sheet2'!A3>15,'Sheet2'!B3,0)", 'Sheet1', 'F4')
+    result = test_engine.execute_formula(
+        "=IF('Sheet2'!A3>15,'Sheet2'!B3,0)", "Sheet1", "F4"
+    )
     assert result == 50
 
 
 def test_iferror_vlookup_missing(test_engine):
     formula = "=IFERROR(VLOOKUP(99, Sheet2!$A$1:$B$3, 2, FALSE), 0)"
-    result = test_engine.execute_formula(formula, 'Sheet1', 'F5')
+    result = test_engine.execute_formula(formula, "Sheet1", "F5")
     assert result == 0

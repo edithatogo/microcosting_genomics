@@ -3,15 +3,8 @@ repos:
     rev: v0.4.5
     hooks:
       - id: ruff
-  - repo: https://github.com/psf/black
-    rev: 24.2.0
-    hooks:
-      - id: black
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
+        args: [--fix]
+      - id: ruff-format
 
   - repo: local
     hooks:

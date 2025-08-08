@@ -1,13 +1,17 @@
 import logging
-from pathlib import Path
+
+import openpyxl
+import pandas as pd
 
 from .formula_parser import parse_formula
+from .sheet_manager import SheetManager
 from .strategies import (
     AdditionStrategy,
     DivisionStrategy,
     IfErrorStrategy,
     IfStrategy,
     LiteralStrategy,
+    MultiplicationByNumberStrategy,
     MultiplicationStrategy,
     PmtStrategy,
     ReferenceStrategy,
@@ -17,7 +21,6 @@ from .strategies import (
     UnknownStrategy,
     VLookupStrategy,
 )
-from .sheet_manager import SheetManager
 from .utils import cell_to_coords, coords_to_cell
 
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +45,13 @@ class CalculationEngine:
             self.logger.addHandler(handler)
 
         self.sheet_manager = sheet_manager
+        self.excel_file_path = sheet_manager.excel_file_path
+        self.prepared_data_path = sheet_manager.prepared_data_path
+        self.sheets = {}
+        self.formula_sheets = {}
+        self.default_sheet_names = {
+            "detailed_table": "Detailed Table",
+        }
         self.memoization_cache = {}
         self.call_stack = []
         self.strategy_map = {
@@ -49,6 +59,7 @@ class CalculationEngine:
             "string_literal": StringLiteralStrategy(),
             "reference": ReferenceStrategy(),
             "multiplication": MultiplicationStrategy(),
+            "multiplication_by_number": MultiplicationByNumberStrategy(),
             "addition": AdditionStrategy(),
             "division": DivisionStrategy(),
             "sum_range": SumRangeStrategy(),
@@ -252,7 +263,7 @@ class CalculationEngine:
         row_idx, col_idx = cell_to_coords(cell_ref)
         if row_idx is None or col_idx is None:
             return None
-        
+
         df = self.sheet_manager.get_data(sheet_name)
         if df is None:
             return None
@@ -272,11 +283,11 @@ class CalculationEngine:
         row_idx, col_idx = cell_to_coords(cell_ref)
         if row_idx is None or col_idx is None:
             return None
-        
+
         df = self.sheet_manager.get_formulas(sheet_name)
         if df is None:
             return None
-            
+
         config = self.sheet_manager.sheet_configs.get(sheet_name)
         if not config:
             return None
@@ -343,9 +354,9 @@ class CalculationEngine:
                 formula = formulas_df.iloc[r_idx, c_idx]
                 cell_ref = coords_to_cell(
                     r_idx
-                    + self.sheet_manager.sheet_configs.get(sheet_name, {"data_starts_at": 1})[
-                        "data_starts_at"
-                    ]
+                    + self.sheet_manager.sheet_configs.get(
+                        sheet_name, {"data_starts_at": 1}
+                    )["data_starts_at"]
                     - 1,
                     c_idx,
                 )

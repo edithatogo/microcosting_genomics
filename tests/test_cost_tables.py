@@ -1,11 +1,10 @@
 from pathlib import Path
 
 from scripts.parse_cost_tables import (
-    parse_equipment_costs,
     parse_consumable_costs,
+    parse_equipment_costs,
     parse_labour_costs,
 )
-
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 

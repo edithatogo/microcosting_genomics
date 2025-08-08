@@ -1,9 +1,11 @@
 """Prepare cleaned datasets from the microcosting workbooks."""
 
 from pathlib import Path
+
 import pandas as pd
-import numpy as np
+
 from unimelb_phd_phase_1.config import load_config
+
 
 def create_unique_column_names(columns: list[str]) -> list[str]:
     """Ensure column names are unique by appending a suffix if required."""
@@ -18,6 +20,7 @@ def create_unique_column_names(columns: list[str]) -> list[str]:
             seen[col] = 1
             unique_columns.append(col)
     return unique_columns
+
 
 def _parse_generic_sheet(
     file_path: Path | str,
@@ -34,9 +37,7 @@ def _parse_generic_sheet(
     columns: list[str] = []
     for i in range(header_df.shape[1]):
         parts = [
-            str(val).strip()
-            for val in header_df.iloc[:, i].values
-            if pd.notna(val)
+            str(val).strip() for val in header_df.iloc[:, i].values if pd.notna(val)
         ]
         name = " ".join(parts).replace("nan", "").strip()
         name = " ".join(name.split())
@@ -52,6 +53,7 @@ def _parse_generic_sheet(
 
     return data_df
 
+
 def main() -> None:
     """Create cleaned Parquet datasets used for validation."""
 
@@ -61,7 +63,9 @@ def main() -> None:
         source_file = Path(config["workbooks"][workbook_key]["path"])
         sheet_configs = config["workbooks"][workbook_key]["sheets"]
     except KeyError as e:
-        raise KeyError(f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}") from e
+        raise KeyError(
+            f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}"
+        ) from e
 
     data_dir = Path(__file__).resolve().parents[0] / "data"
     prepared_dir = data_dir / "prepared"
@@ -74,15 +78,17 @@ def main() -> None:
             header_rows=sheet_config.get("header_rows", 1),
             skip_rows=sheet_config.get("skip_rows", 0),
         )
-        
+
         # Use a sanitized version of the sheet name for the file name
-        sanitized_name = "".join(c for c in sheet_name if c.isalnum() or c in (' ', '_')).rstrip()
-        sanitized_name = sanitized_name.lower().replace(' ', '_')
-        
+        sanitized_name = "".join(
+            c for c in sheet_name if c.isalnum() or c in (" ", "_")
+        ).rstrip()
+        sanitized_name = sanitized_name.lower().replace(" ", "_")
+
         output_path = prepared_dir / f"{sanitized_name}.parquet"
         df.to_parquet(output_path)
         print(f"Saved {output_path}")
 
+
 if __name__ == "__main__":
     main()
-
