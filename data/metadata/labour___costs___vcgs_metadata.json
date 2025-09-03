@@ -1,0 +1,210 @@
+{
+  "table_name": "Labour - Costs - VCGS",
+  "description": "Labour costs for VCGS",
+  "created_date": "2025-09-03T14:12:04.986467",
+  "row_count": 30,
+  "column_count": 30,
+  "columns": [
+    {
+      "name": "Jurisdiction",
+      "dtype": "object",
+      "null_count": 5,
+      "unique_count": 5
+    },
+    {
+      "name": "Personnel type",
+      "dtype": "object",
+      "null_count": 5,
+      "unique_count": 5
+    },
+    {
+      "name": "Label",
+      "dtype": "object",
+      "null_count": 5,
+      "unique_count": 5
+    },
+    {
+      "name": "Award",
+      "dtype": "object",
+      "null_count": 6,
+      "unique_count": 14
+    },
+    {
+      "name": "Grade(s)",
+      "dtype": "object",
+      "null_count": 9,
+      "unique_count": 20
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Base Salary",
+      "dtype": "object",
+      "null_count": 4,
+      "unique_count": 22
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Base Salary + Costs",
+      "dtype": "object",
+      "null_count": 4,
+      "unique_count": 23
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Base Salary + Costs (hourly)",
+      "dtype": "object",
+      "null_count": 4,
+      "unique_count": 23
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    }
+  ],
+  "sample_data": {
+    "Jurisdiction": [
+      "VIC",
+      "VIC",
+      "VIC"
+    ],
+    "Personnel type": [
+      "Lab technician",
+      "Medical scientist",
+      "Admin staff"
+    ],
+    "Label": [
+      "LT",
+      "MS",
+      "AS"
+    ],
+    "Award": [
+      "HPA",
+      "MSEBA",
+      "HPA"
+    ],
+    "Grade(s)": [
+      "5-7",
+      "MS1-4(RX4)-MS4-5(RZ7)",
+      "3-5"
+    ],
+    "unnamed": [],
+    "Base Salary": [
+      "LL",
+      79624,
+      61204
+    ],
+    "Base Salary + Costs": [
+      "LL",
+      203151.4486153846,
+      157537.919
+    ],
+    "Base Salary + Costs (hourly)": [
+      "LL",
+      102.80943755839301,
+      79.72566751012145
+    ]
+  }
+}

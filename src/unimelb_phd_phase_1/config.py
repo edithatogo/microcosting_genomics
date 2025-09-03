@@ -6,7 +6,22 @@ import yaml
 
 
 def load_config(config_path: str | Path | None = None) -> dict:
-    """Load the YAML configuration file."""
+    """Load the YAML configuration file.
+
+    This function loads the configuration from a YAML file, with support for
+    fallback paths for backward compatibility.
+
+    Args:
+        config_path (str | Path | None, optional): Path to the configuration file.
+            If None, tries default locations. Defaults to None.
+
+    Returns:
+        dict: The loaded configuration data.
+
+    Raises:
+        FileNotFoundError: If the configuration file cannot be found.
+        ValueError: If there is an error parsing the YAML file.
+    """
     if config_path is None:
         # By default load ``config.yaml`` from the repository root and
         # fall back to ``src/config.yaml`` for legacy setups. ``parents[2]``

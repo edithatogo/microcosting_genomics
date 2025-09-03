@@ -1,0 +1,97 @@
+{
+  "table_name": "Cons -  Costs and Util - VCGS",
+  "description": "Consumable costs and utilization for VCGS",
+  "created_date": "2025-09-03T14:12:05.972247",
+  "row_count": 119,
+  "column_count": 17,
+  "columns": [
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    }
+  ],
+  "sample_data": {
+    "unnamed": []
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "table_name": "Process",
+  "description": "Process information",
+  "created_date": "2025-09-03T14:12:04.488641",
+  "row_count": 38,
+  "column_count": 2,
+  "columns": [
+    {
+      "name": "Stage",
+      "dtype": "object",
+      "null_count": 29,
+      "unique_count": 9
+    },
+    {
+      "name": "Step",
+      "dtype": "object",
+      "null_count": 8,
+      "unique_count": 30
+    }
+  ],
+  "sample_data": {
+    "Stage": [
+      "Specimen Collection",
+      "Specimen Receipt",
+      "DNA Extraction"
+    ],
+    "Step": [
+      "Registration",
+      "Name Check",
+      "Collection (e.g. venepuncture)"
+    ]
+  }
+}

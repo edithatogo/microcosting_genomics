@@ -1,0 +1,16 @@
+table_name,column_name,data_type,description,sample_values
+detailed_table_values,Test,object,,"Panel, ES (P), ES (T)"
+detailed_table_values,Category,object,,"Labour, Labour, Labour"
+detailed_table_values,Sub-Category,object,,"Specimen Collection, Specimen Receipt, DNA Extraction"
+detailed_table_values,Step,object,,"Registration, Name Check, Venepuncture"
+detailed_table_values,Estimates_Quantity_of_Use_per_Test_LL,float64,,"1.0, 0.5, 3.0"
+detailed_table_values,Estimate,float64,,"2.0, 1.0, 6.0"
+detailed_table_values,UL,float64,,"3.0, 1.5, 9.0"
+detailed_table_values,Source,float64,,
+detailed_table_values,Price_AUD_$_unit_LL,float64,,"102.80943755839301, 102.80943755839301, 102.80943755839301"
+detailed_table_values,Estimate_1,float64,,"122.62269511055743, 122.62269511055743, 122.62269511055743"
+detailed_table_values,UL_1,float64,,"142.43595266272186, 142.43595266272186, 142.43595266272186"
+detailed_table_values,Source_1,float64,,
+detailed_table_values,Unit_Cost_AUD_$_unit_LL,float64,,"3.4269812519464335, 1.7134906259732168, 10.280943755839303"
+detailed_table_values,Estimate_2,float64,,"4.087423170351914, 2.043711585175957, 12.262269511055743"
+detailed_table_values,UL_2,float64,,"4.747865088757395, 2.3739325443786976, 14.243595266272187"

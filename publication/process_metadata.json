@@ -1,0 +1,18 @@
+{
+  "sheet_name": "Process",
+  "row_count": 38,
+  "column_count": 2,
+  "columns": [
+    "('Stage',)",
+    "('Step',)"
+  ],
+  "data_types": {
+    "('Stage',)": "float64",
+    "('Step',)": "float64"
+  },
+  "null_counts": {
+    "('Stage',)": 38,
+    "('Step',)": 38
+  },
+  "memory_usage_bytes": "740"
+}

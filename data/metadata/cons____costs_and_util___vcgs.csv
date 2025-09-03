@@ -1,0 +1,120 @@
+unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed,unnamed
+,,Cost items,,,,Weighting per sample,,,Cost (Total per item per sample),,,,Comments,Source,Reagent Discounts (30%),Reagent Discounts (70%)
+Stage,Step,Details,Consumables,Unit Cost,Units per,50x (WES),80x (WES),30x (WGS),Other,50x,80x,30x,,,Unit Cost,Unit Cost
+Remove Library prep step for WGS,DNA Extraction,TECAN,,,,,,,,,,,,,,
+,Manual Extraction,Pipette Tips - 200uL,Consumables GP-LTS-A-200-/F-960/10 Rainin (Pcs),0.11194166666666668,1.9999999999999998,-,-,,0.22388333333333332,-,-,,"1 per sample/std/mock, and 2 for each batch of 6 samples","WL Lead, VCGS, 2023",0.07835916666666667,0.0335825
+,,Pipette Tips - 10uL,Consumables GP-LTS-A-10-/F-960/10 Rainin (Pcs),0.11324625,5.5,-,-,,0.6228543750000001,-,-,,"3 per sample/std/mock, and 3 for each batch of 6 samples","WL Lead, VCGS, 2023",0.079272375,0.033973875
+,,Pipette Tips - 1000uL,Consumables GP-LTS-A-1000-/F-768/8 Rainin (Pcs),0.140019140625,0.16666666666666666,-,-,,0.0233365234375,-,-,,1 per batch of 6,"WL Lead, VCGS, 2023",0.0980133984375,0.0420057421875
+,,DNA Extraction Kit,Reagents and kits Qubit dsDNA HS Assay Kit ThermoFisher (Rxn),0.9678224,2.5,-,-,,2.419556,-,-,,"1 per sample/mock/2std/blank, plus excess -> 15 rxn made up for batch","WL Lead, VCGS, 2023",0.6774756799999999,0.29034672
+,,Tube - 0.5 mL,Consumables TUBE PCR 0.5ml Thin Wall Flat Cap Clear Axygen PKT1000 Pacific Laboratory Products  (Pcs),0.065,1.6666666666666665,-,-,,0.10833333333333332,-,-,,1 per sample/2std/mock/blank,"WL Lead, VCGS, 2023",0.0455,0.0195
+,,Tube - 5 mL,"Consumables Eppendorf Tubes 5.0 mL, PCR Clean, 200 Pcs., 2 Bags Of 100 Tubes Each Eppendorf (Pcs)",0.332,0.16666666666666666,-,-,,0.05533333333333333,-,-,,1 per batch of 6,"WL Lead, VCGS, 2023",0.2324,0.09960000000000001
+,,Tube-  1.5 mL,"Consumables Eppendorf Dna Lobind Tubes, 1.5 mL, PCR Clean, 250 Pcs. Eppendorf (Pcs)",0.12392,1,-,-,,0.12392,-,-,,one per DNA dilution if required,"WL Lead, VCGS, 2023",0.086744,0.037176
+,,TapeStation gDNA QC,,,,,,,,,,,,,,
+,gDNA QC,Strip Caps,QC consumable MX3000P STRIP CAPS PKT120  (),0.04,0.143,-,-,,0.005719999999999999,-,-,,,"WL Lead, VCGS, 2023",0.027999999999999997,0.012
+,,Strip Tubes,QC consumable MX3000P STRIP TUBES PKT120  (),0.09,0.143,-,-,,0.012869999999999998,-,-,,,"WL Lead, VCGS, 2023",0.063,0.027
+,,gDNA QC Needle Cartridge,QC consumable TapeStation Needle Cartridge Assembly Agilent Technologies (Rxn),0.31,1,-,-,,0.31,-,-,,,"WL Lead, VCGS, 2023",0.217,0.093
+,,gDNA QC Reagents,QC Genomic DNA Reagents Agilent Technologies (Rxn),2.29,1.143,-,-,,2.61747,-,-,,,"WL Lead, VCGS, 2023",1.603,0.6869999999999999
+,,gDNA QC Consumable,QC Genomic DNA ScreenTape Agilent Technologies (Rxn),3.45,1.143,-,-,,3.94335,-,-,,,"WL Lead, VCGS, 2023",2.415,1.035
+,,Loading Tips,QC consumable Loading Tips (1EA/PK) Agilent Technologies (Pcs),0.05,1.143,-,-,,0.057150000000000006,-,-,,,"WL Lead, VCGS, 2023",0.034999999999999996,0.015
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,1.143,-,-,,0.09144000000000001,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,,,,,,,,,,,,,,,
+,Library Preparation,,,,,,,,,,,,,,,
+,dsDNA BR Quantification,Qubit dsDNA BR Quantification - TECAN,,,,,,,,,,,,,,
+,,Disposable Tips - Large,Consumables LIHA - DITI SBS BOX REFILL - LARGE (10/box) TECAN (Pcs),11.812000000000001,0.0016,-,-,,0.0188992,-,-,,"4 per robot per quarter -> 2,500 samples per robot per quarter","WL Lead, VCGS, 2023",8.2684,3.5436
+,,Disposable Tips - Small,Consumables LIHA - DITI SBS BOX REFILL - SMALL (10/box) TECAN (Pcs),10.616,0.004,-,-,,0.042464,-,-,,"10 per robot per quarter -> 2,500 samples per robot per quarter","WL Lead, VCGS, 2023",7.4312,3.1847999999999996
+,,Trough Disposable - 25mL,Consumables TROUGH DISPOSABLE 25ML PP (120/box) TECAN (Pcs),5.747416666666667,0.005208333333333333,-,-,,0.029934461805555555,-,-,,"1 per robot per week -> 192 samples per week per robot (20,000 samples per year)","WL Lead, VCGS, 2023",4.0231916666666665,1.7242250000000001
+,,Hard-Shell Microseal 96-well PCR plates,"Consumables Hard-Shell Microseal 96-well PCR plates (“HSP” plate), 50 plates/case Bio-Rad Laboratories (Pcs)",5.87,0.06666666666666667,-,-,,0.3913333333333333,-,-,,1 per batch (2 for 96 batches) - replace with actual plates later,"WL Lead, VCGS, 2023",4.109,1.761
+,,Disposable Tips - 50μL,Consumables DITI LIHA 50μL CONDU.FIL. (24x96 = 2304) TECAN (Pcs),0.33223958333333337,1.2666666666666666,-,-,,0.4208368055555556,-,-,,"1 per sample, Blank, mock sample, plus 2 standards","WL Lead, VCGS, 2023",0.23256770833333335,0.09967187500000001
+,,Disposable Tips - 200μL,Consumables DITI LIHA 200μL CONDU.FIL. (24x96 = 2304) TECAN (Pcs),0.2474826388888889,0.5333333333333333,-,-,,0.13199074074074074,-,-,,8 per batch,"WL Lead, VCGS, 2023",0.17323784722222224,0.07424479166666667
+,,Pipette Tips - 1000uL,Consumables GP-LTS-A-1000-/F-768/8 Rainin (Pcs),0.140019140625,0.06666666666666667,-,-,,0.009334609375,-,-,,1 per batch,"WL Lead, VCGS, 2023",0.0980133984375,0.0420057421875
+,,Pipette Tips - 200uL,Consumables GP-LTS-A-200-/F-960/10 Rainin (Pcs),0.11194166666666668,0.06666666666666667,-,-,,0.007462777777777778,-,-,,1 per batch,"WL Lead, VCGS, 2023",0.07835916666666667,0.0335825
+,,Falcon tube - 50 mL,Consumables Falcon tube - 50 ml Falcon (Pcs),1.64,0.06666666666666667,-,-,,0.10933333333333332,-,-,,1 per batch,"WL Lead, VCGS, 2023",1.148,0.49199999999999994
+,,QC Device Service Contract,PM contracts TECAN Te-Care Complete TECAN (Pcs),1.1013833333333334,1,-,-,,1.1013833333333334,-,-,,1 per sample,"WL Lead, VCGS, 2023",0.7709683333333334,0.330415
+,,dsDNA BR QC - Assay Kit,Reagents and kits Qubit dsDNA BR Assay Kit ThermoFisher (Rxn),0.9695173999999999,1.6666666666666667,-,-,,1.615862333333333,-,-,,"1 per sample/mock/2std/blank, plus excess -> 25 rxn made up for batch of 15 samples","WL Lead, VCGS, 2023",0.6786621799999999,0.29085521999999997
+,,,,,,,,,,,,,,,,
+,Library template kit,Twist WES - single plex,,,,,,,,,,,,,,
+,WES Only,Pipette Tips - 1000uL,Consumables GP-L1000F 768 TIPS IN 8 RACKS FILTER 1000 UL Rainin (Pcs),0.11,0.266667,-,-,-,0.029333369999999998,-,-,,,"WL Lead, VCGS, 2023",0.077,0.033
+,,Pipette Tips - 200uL,Consumables RAININ Pipette Tips 200uL PKT960 Rainin (Pcs),0.07,59.2,-,-,-,4.144000000000001,-,-,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,19.333333,-,-,-,1.54666664,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Strip Tubes,Consumables TUBES PCR 8 STRIP ULTRAFLUX WITH SNAPSTRIP INDIVIDUALLY ATTACHED FLAT CAPS NATURAL SSI PKT120  (Pcs),1.04,1.333333,-,-,-,1.3866663200000002,-,-,,,"WL Lead, VCGS, 2023",0.728,0.312
+,,Falcon tube - 50 mL,Consumables Falcon tube - 50 ml Falcon (Pcs),0.08,0.066667,-,-,-,0.0053333600000000005,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Microtube - 5mL,Consumables Microtube Axygen 5 mL Snaplock BOX250 Axygen (),0.23,0.133333,-,-,-,0.030666590000000004,-,-,,,"WL Lead, VCGS, 2023",0.161,0.069
+,,Tube - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,0.266667,-,-,-,0.0266667,-,-,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,Library Prep Reagents - 5mL Bottle,Library Prep SPRIselect (5 ml bottle) price per ul Beckman COULTER AUSTRALIA PL (ul),0.09,40.533333,-,-,-,3.64799997,-,-,,,"WL Lead, VCGS, 2023",0.063,0.027
+,,Library Prep Fragment Preparation,Library Prep Twist reagents - singl plex Twist (rxn),107.8,1.066667,-,-,-,114.9867026,-,-,,,"WL Lead, VCGS, 2023",75.46,32.339999999999996
+,,High Fidelity DNA Polymerase,Library Prep HotStart ReadyMix 500 x 12.5 µL MM RXN KAPA Biosystems KAPA (Rxn),2.69,2.133333,-,-,-,5.73866577,-,-,,,"WL Lead, VCGS, 2023",1.8829999999999998,0.8069999999999999
+,,Ethanol,Library Prep ETHANOL 96% TECHNICAL GRADE-2.5LTRS PP MERCK P/L (ml),0.02,2.666667,-,-,-,0.05333334,-,-,,,"WL Lead, VCGS, 2023",0.013999999999999999,0.006
+,,Buffer,DNA extraction Low TE BUFFER 1x Tris-EDTA buffer 100ML LIFE TECHNOLOGIES AUSTRALIA PL (ul),0,26.666667,-,-,-,0,-,-,,,"WL Lead, VCGS, 2023",0,0
+,,Nuclease-free Water,Library Prep NUCLEASE-FREE WATER 100 ML EACH  LIFE TECHNOLOGIES AUSTRALIA P/L (ul),0,858,-,-,-,0,-,-,,,"WL Lead, VCGS, 2023",0,0
+,,,,,,,,,,,,,,,,
+,PCR-free library prep (WGS) - gDNA from blood and tissues,Illumina DNA PCR-free library prep - gDNA from blood and tissues,,,,,,,,,,,,,,
+,WGS Only,PCR-Free Library Prep Fragment Kit,"Library Prep Illumina DNA PCR-Free Prep, Tagmentation (96 Samples) - gDNA Illumina (rxn)",46.39,1.142857,-,-,1,53.01713623,,,,,"WL Lead, VCGS, 2023",32.473,13.917
+,,Pipette Tips - 200uL,Consumables RAININ Pipette Tips 200uL PKT960 Rainin (Pcs),0.07,34.285714,-,-,1,2.39999998,,,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,17.142857,-,-,1,1.37142856,,,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Strip Tibes,Consumables TUBES PCR 8 STRIP ULTRAFLUX WITH SNAPSTRIP INDIVIDUALLY ATTACHED FLAT CAPS NATURAL SSI PKT120  (Pcs),1.04,0.428571,-,-,1,0.44571384,,,,,"WL Lead, VCGS, 2023",0.728,0.312
+,,Ethanol,Library Prep ETHANOL 96% TECHNICAL GRADE-2.5LTRS PP MERCK P/L (ml),0.02,0.457143,-,-,1,0.009142860000000001,,,,,"WL Lead, VCGS, 2023",0.013999999999999999,0.006
+,,Tubes - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,0.142857,-,-,1,0.014285700000000002,,,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,Falcon tube - 50 ml,Consumables Falcon tube - 50 ml Falcon (Pcs),0.08,0.142857,-,-,1,0.01142856,,,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Library Prep - Index Set,"Library Prep IDT for Illumina DNA/RNA UD Indexes Set A, Tagmentation - CCIA year 1 Illumina (rxn)",7.45,1.142857,-,-,1,8.51428465,,,,,"WL Lead, VCGS, 2023",5.215,2.235
+,,Microtube - 5mL,Consumables Microtube Axygen 5 mL Snaplock BOX250 Axygen (),0.23,0.142857,-,-,1,0.03285711,,,,,"WL Lead, VCGS, 2023",0.161,0.069
+,,,,,,,,,,,,,,,,
+,High-sensitivity DNA QC,TapeStation HSD1000 QC,,,,,,,,,,,,,,
+,,Strip Caps,QC consumable MX3000P STRIP CAPS PKT120  (),0.04,0.125,1.074074074074074,1.0392156862745099,1.4,-,0.00537037037037037,0.0051960784313725495,0.006999999999999999,,"WL Lead, VCGS, 2023",0.027999999999999997,0.012
+,,Strip Tubes,QC consumable MX3000P STRIP TUBES PKT120  (),0.09,0.125,1.074074074074074,1.0392156862745099,1.4,-,0.012083333333333331,0.011691176470588236,0.01575,,"WL Lead, VCGS, 2023",0.063,0.027
+,,HS DNA QC - Needle Cartridge,QC consumable TapeStation Needle Cartridge Assembly Agilent Technologies (Rxn),0.31,1,1.074074074074074,1.0392156862745099,1.4,-,0.3329629629629629,0.3221568627450981,0.434,,"WL Lead, VCGS, 2023",0.217,0.093
+,,HS DNA QC - Reagents,QC High Sensitivity D1000 Reagents Agilent Technologies (Rxn),1.34,1,1.074074074074074,1.0392156862745099,1.4,-,1.4392592592592592,1.3925490196078434,1.876,,"WL Lead, VCGS, 2023",0.938,0.402
+,,HS DNA QC - Consumables,QC High Sensitivity D1000 ScreenTape Agilent Technologies (Rxn),3.92,1,1.074074074074074,1.0392156862745099,1.4,-,4.21037037037037,4.073725490196079,5.4879999999999995,,"WL Lead, VCGS, 2023",2.7439999999999998,1.176
+,,QC Consumable Loading Tips ,QC consumable Loading Tips (1EA/PK) Agilent Technologies (Pcs),0.05,1,1.074074074074074,1.0392156862745099,1.4,-,0.0537037037037037,0.0519607843137255,0.06999999999999999,,"WL Lead, VCGS, 2023",0.034999999999999996,0.015
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,1.0625,1.074074074074074,1.0392156862745099,1.4,-,0.09129629629629629,0.08833333333333335,0.119,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,,,,,,,,,,,,,,,
+,Fragment QC (WES),TapeStation D1000 QC,,,,,,,,,,,,,,
+,WES Only,Strip Caps,QC consumable MX3000P STRIP CAPS PKT120  (),0.04,0.125,-,-,,0.005,-,-,,,"WL Lead, VCGS, 2023",0.027999999999999997,0.012
+,,Strip Tubes,QC consumable MX3000P STRIP TUBES PKT120  (),0.09,0.125,-,-,,0.01125,-,-,,,"WL Lead, VCGS, 2023",0.063,0.027
+,,Fragment QC - Needle Cartridge,QC consumable TapeStation Needle Cartridge Assembly Agilent Technologies (Rxn),0.31,1,-,-,,0.31,-,-,,,"WL Lead, VCGS, 2023",0.217,0.093
+,,Fragment - Reagents,QC D1000 Reagents Agilent Technologies (Rxn),1.05,1,-,-,,1.05,-,-,,,"WL Lead, VCGS, 2023",0.735,0.315
+,,Fragment - Consumables,QC D1000 ScreenTape Agilent Technologies (Rxn),2.41,1,-,-,,2.41,-,-,,,"WL Lead, VCGS, 2023",1.687,0.723
+,,QC Consumable Loading Tips ,QC consumable Loading Tips (1EA/PK) Agilent Technologies (Pcs),0.05,1,-,-,,0.05,-,-,,,"WL Lead, VCGS, 2023",0.034999999999999996,0.015
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,1.0625,-,-,,0.085,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,,,,,,,,,,,,,,,
+,Fragement QC (QGS) - ssDNA HS Quantification,Qubit ssDNA HS Quantification,,,,,,,,,,,,,,
+,WGS Only,Pipette Tips - 200uL,Consumables RAININ Pipette Tips 200uL PKT960 Rainin (Pcs),0.07,0.35,-,-,,0.0245,-,-,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,4.55,-,-,,0.364,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Pipette Tips - 1000uL,Consumables GP-L1000F 768 TIPS IN 8 RACKS FILTER 1000 UL Rainin (Pcs),0.11,0.175,-,-,,0.01925,-,-,,,"WL Lead, VCGS, 2023",0.077,0.033
+,,ssDNA Assay Kit,QC QUBIT ssDNA ASSAY KIT Invitrogen (),1.9,2.8,-,-,,5.319999999999999,-,-,,,"WL Lead, VCGS, 2023",1.3299999999999998,0.57
+,,QC consumable Assay Tubes,QC consumable QUBIT ASSAY TUBES 1 SET Invitrogen (),0.15,1.9249999999999998,-,-,,0.28874999999999995,-,-,,,"WL Lead, VCGS, 2023",0.105,0.045
+,,Microtube 0 5mL,Consumables Microtube Axygen 5 mL Snaplock BOX250 Axygen (),0.23,0.175,-,-,,0.04025,-,-,,,"WL Lead, VCGS, 2023",0.161,0.069
+,,Tubes - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,1.4,-,-,,0.13999999999999999,-,-,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,,,,,,,,,,,,,,,
+,Sequencing,,,,Batch,,,,Batch,,,,,,,
+,Pooling per sample,,,,,,,,,,,,,,,
+,,Tubes - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,0.125,-,-,,0.0125,-,-,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,Pipette Tips - 1000uL,Consumables GP-L1000F 768 TIPS IN 8 RACKS FILTER 1000 UL Rainin (Pcs),0.11,0.125,-,-,,0.01375,-,-,,,"WL Lead, VCGS, 2023",0.077,0.033
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,1,-,-,,0.08,-,-,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,,,,,,,,,,,,,,,
+,NovaSeq S4 PE 300 cycles v1.5 Sequencing per FC - Xp 2 lane - 2021 pricing,,,,,,,,,,,,,,,
+,,Sequencing Reagent Kit,Sequencing NovaSeq 6000 S2 Reagent Kit v1.5 (300 cycles) Illumina (Pcs),9213.76,1,0.006666666666666667,0.009708737864077669,0.1,9213.76,61.42506666666667,89.45398058252427,,,"WL Lead, VCGS, 2023",6449.632,2764.128
+,,Sequencing Flow Cell Dock,Sequencing NovaSeq Xp Flow Cell Dock  Illumina (Pcs),2611.2,0.006667,0.006666666666666667,0.009708737864077669,0.1,17.408870399999998,0.116059136,0.16901815922330093,,,"WL Lead, VCGS, 2023",1827.8399999999997,783.3599999999999
+,,Sequencing 2-Lane Kit,Sequencing NovaSeq XP 2-Lane Kit  Illumina (Pcs),469,0,0.006666666666666667,0.009708737864077669,0.1,0,0,0,,,"WL Lead, VCGS, 2023",328.29999999999995,140.7
+,,Sequencing Control Kit,Sequencing PhiX Control Kit v3 Illumina (ul),19.87,0.5,0.006666666666666667,0.009708737864077669,0.1,9.935,0.06623333333333334,0.09645631067961165,,,"WL Lead, VCGS, 2023",13.909,5.961
+,,Pipette Tips - 1000uL,Consumables GP-L1000F 768 TIPS IN 8 RACKS FILTER 1000 UL Rainin (Pcs),0.11,4,0.006666666666666667,0.009708737864077669,0.1,0.44,0.0029333333333333334,0.004271844660194175,,,"WL Lead, VCGS, 2023",0.077,0.033
+,,Pipette Tips - 200uL,Consumables RAININ Pipette Tips 200uL PKT960 Rainin (Pcs),0.07,17,0.006666666666666667,0.009708737864077669,0.1,1.1900000000000002,0.007933333333333336,0.011553398058252428,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,8,0.006666666666666667,0.009708737864077669,0.1,0.64,0.004266666666666667,0.006213592233009708,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Viscous Liquid,Sequencing Tween 20 viscous liquid 1L Sigma (ml),0.09,25,0.006666666666666667,0.009708737864077669,0.1,2.25,0.015000000000000001,0.021844660194174755,,,"WL Lead, VCGS, 2023",0.063,0.027
+,,Tubes - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,4,0.006666666666666667,0.009708737864077669,0.1,0.4,0.002666666666666667,0.003883495145631068,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,Sequencing Lens Cleaning Tissue,Sequencing consumables Lens Cleaning Tissue 150X750mm PKT500 Coherent Scientific (),0.05,6,0.006666666666666667,0.009708737864077669,0.1,0.30000000000000004,0.0020000000000000005,0.002912621359223301,,,"WL Lead, VCGS, 2023",0.034999999999999996,0.015
+,,Sequencing Sodium hydroxide solution,Sequencing Sodium hydroxide solution 10M 100ML Sigma (ul),0,20,0.006666666666666667,0.009708737864077669,0.1,0,0,0,,,"WL Lead, VCGS, 2023",0,0
+,,Sequencing Trizma hydrochloride solution,"Sequencing Trizma hydrochloride solution (Tris-HCl) pH 8.0, 1 M, BioReagent, for molecular biology 1L Sigma (ml)",0.07,0.02,0.006666666666666667,0.009708737864077669,0.1,0.0014000000000000002,9.333333333333336e-06,1.359223300970874e-05,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,,,,,,,,,,,,,,,
+,NovaSeq S4 PE 300 cycles v1.5 Sequencing per FC - Xp 2 lane - 2021 pricing,,,,,,,,,,,,,,,
+,,Sequencing Reagent Kit,Sequencing NovaSeq 6000 S4 Reagent Kit v1.5 (300 cycles) Illumina (Pcs),22115.98,1,0.0027548209366391185,0.004,0.041666666666666664,22115.98,60.92556473829201,88.46392,,,"WL Lead, VCGS, 2023",15481.185999999998,6634.794
+,,Sequencing Flow Cell Dock,Sequencing NovaSeq Xp Flow Cell Dock  Illumina (Pcs),2611.2,0.006667,0.0027548209366391185,0.004,0.041666666666666664,17.408870399999998,0.047958320661157024,0.0696354816,,,"WL Lead, VCGS, 2023",1827.8399999999997,783.3599999999999
+,,Sequencing 4-Lane Kit,Sequencing NovaSeq Xp 4-Lane Kit  Illumina (Pcs),939,0,0.0027548209366391185,0.004,0.041666666666666664,0,0,0,,,"WL Lead, VCGS, 2023",657.3,281.7
+,,Sequencing Control Kit,Sequencing PhiX Control Kit v3 Illumina (ul),19.87,0.5,0.0027548209366391185,0.004,0.041666666666666664,9.935,0.027369146005509645,0.039740000000000004,,,"WL Lead, VCGS, 2023",13.909,5.961
+,,Pipette Tips - 1000uL,Consumables GP-L1000F 768 TIPS IN 8 RACKS FILTER 1000 UL Rainin (Pcs),0.11,4,0.0027548209366391185,0.004,0.041666666666666664,0.44,0.0012121212121212121,0.00176,,,"WL Lead, VCGS, 2023",0.077,0.033
+,,Pipette Tips - 200uL,Consumables RAININ Pipette Tips 200uL PKT960 Rainin (Pcs),0.07,17,0.0027548209366391185,0.004,0.041666666666666664,1.1900000000000002,0.0032782369146005515,0.00476,,,"WL Lead, VCGS, 2023",0.049,0.021
+,,Pipette Tips - 0.1-20uL,Consumables RAININ Pipette Tips 0.1-20uL PKT960 Rainin (Pcs),0.08,8,0.0027548209366391185,0.004,0.041666666666666664,0.64,0.0017630853994490359,0.00256,,,"WL Lead, VCGS, 2023",0.055999999999999994,0.024
+,,Viscous Liquid,Sequencing Tween 20 viscous liquid 1L Sigma (ml),0.09,25,0.0027548209366391185,0.004,0.041666666666666664,2.25,0.006198347107438017,0.009000000000000001,,,"WL Lead, VCGS, 2023",0.063,0.027
+,,Tubes - 1.5mL,Consumables Tubes Eppendorf 1.5ml LoBind PKT250  (Pcs),0.1,4,0.0027548209366391185,0.004,0.041666666666666664,0.4,0.0011019283746556475,0.0016,,,"WL Lead, VCGS, 2023",0.06999999999999999,0.03
+,,Sequencing Lens Cleaning Tissue,Sequencing consumables Lens Cleaning Tissue 150X750mm PKT500 Coherent Scientific (),0.05,6,0.0027548209366391185,0.004,0.041666666666666664,0.30000000000000004,0.0008264462809917357,0.0012000000000000001,,,"WL Lead, VCGS, 2023",0.034999999999999996,0.015
+,,Sequencing Sodium hydroxide solution,Sequencing Sodium hydroxide solution 10M 100ML Sigma (ul),0,20,0.0027548209366391185,0.004,0.041666666666666664,0,0,0,,,"WL Lead, VCGS, 2023",0,0
+,,Sequencing Trizma hydrochloride solution,"Sequencing Trizma hydrochloride solution (Tris-HCl) pH 8.0, 1 M, BioReagent, for molecular biology 1L Sigma (ml)",0.07,0.02,0.0027548209366391185,0.004,0.041666666666666664,0.0014000000000000002,3.856749311294766e-06,5.600000000000001e-06,,,"WL Lead, VCGS, 2023",0.049,0.021

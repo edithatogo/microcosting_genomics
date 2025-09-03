@@ -1,0 +1,202 @@
+{
+  "table_name": "detailed_table_formulas",
+  "description": "Translated table from Excel workbook: detailed_table_formulas",
+  "created_date": "2025-09-03T00:16:45.821940",
+  "row_count": 1336,
+  "column_count": 15,
+  "columns": [
+    {
+      "name": "Test",
+      "dtype": "object",
+      "null_count": 1331,
+      "unique_count": 5,
+      "sample_values": [
+        "Panel",
+        "ES (P)",
+        "ES (T)",
+        "GS (P)",
+        "GS (T)"
+      ]
+    },
+    {
+      "name": "Category",
+      "dtype": "object",
+      "null_count": 1242,
+      "unique_count": 3,
+      "sample_values": [
+        "Labour",
+        "Equipment",
+        "Consumables"
+      ]
+    },
+    {
+      "name": "Sub-Category",
+      "dtype": "object",
+      "null_count": 1240,
+      "unique_count": 13,
+      "sample_values": [
+        "Specimen Collection",
+        "Specimen Receipt",
+        "DNA Extraction",
+        "Library Preparation",
+        "Sequencing"
+      ]
+    },
+    {
+      "name": "Step",
+      "dtype": "object",
+      "null_count": 274,
+      "unique_count": 422,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!C5",
+        "='[1]Labour - Usage - VCGS'!C6",
+        "='[1]Labour - Usage - VCGS'!C7",
+        "='[1]Labour - Usage - VCGS'!C8",
+        "='[1]Labour - Usage - VCGS'!C9"
+      ]
+    },
+    {
+      "name": "Estimates_Quantity_of_Use_per_Test_LL",
+      "dtype": "object",
+      "null_count": 367,
+      "unique_count": 571,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!F5",
+        "='[1]Labour - Usage - VCGS'!F6",
+        "='[1]Labour - Usage - VCGS'!F7",
+        "='[1]Labour - Usage - VCGS'!F8",
+        "='[1]Labour - Usage - VCGS'!F9"
+      ]
+    },
+    {
+      "name": "Estimate",
+      "dtype": "object",
+      "null_count": 410,
+      "unique_count": 541,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!G5",
+        "='[1]Labour - Usage - VCGS'!G6",
+        "='[1]Labour - Usage - VCGS'!G7",
+        "='[1]Labour - Usage - VCGS'!G8",
+        "='[1]Labour - Usage - VCGS'!G9"
+      ]
+    },
+    {
+      "name": "UL",
+      "dtype": "object",
+      "null_count": 410,
+      "unique_count": 564,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!H5",
+        "='[1]Labour - Usage - VCGS'!H6",
+        "='[1]Labour - Usage - VCGS'!H7",
+        "='[1]Labour - Usage - VCGS'!H8",
+        "='[1]Labour - Usage - VCGS'!H9"
+      ]
+    },
+    {
+      "name": "Source",
+      "dtype": "object",
+      "null_count": 415,
+      "unique_count": 379,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!I5",
+        "='[1]Labour - Usage - VCGS'!I6",
+        "='[1]Labour - Usage - VCGS'!I7",
+        "='[1]Labour - Usage - VCGS'!I8",
+        "='[1]Labour - Usage - VCGS'!I12"
+      ]
+    },
+    {
+      "name": "Price_AUD_$_unit_LL",
+      "dtype": "object",
+      "null_count": 415,
+      "unique_count": 692,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!K5",
+        "='[1]Labour - Usage - VCGS'!K6",
+        "='[1]Labour - Usage - VCGS'!K7",
+        "='[1]Labour - Usage - VCGS'!K8",
+        "='[1]Labour - Usage - VCGS'!K12"
+      ]
+    },
+    {
+      "name": "Estimate_1",
+      "dtype": "object",
+      "null_count": 415,
+      "unique_count": 379,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!L5",
+        "='[1]Labour - Usage - VCGS'!L6",
+        "='[1]Labour - Usage - VCGS'!L7",
+        "='[1]Labour - Usage - VCGS'!L8",
+        "='[1]Labour - Usage - VCGS'!L12"
+      ]
+    },
+    {
+      "name": "UL_1",
+      "dtype": "object",
+      "null_count": 415,
+      "unique_count": 691,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!M5",
+        "='[1]Labour - Usage - VCGS'!M6",
+        "='[1]Labour - Usage - VCGS'!M7",
+        "='[1]Labour - Usage - VCGS'!M8",
+        "='[1]Labour - Usage - VCGS'!M12"
+      ]
+    },
+    {
+      "name": "Source_1",
+      "dtype": "object",
+      "null_count": 415,
+      "unique_count": 379,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!N5",
+        "='[1]Labour - Usage - VCGS'!N6",
+        "='[1]Labour - Usage - VCGS'!N7",
+        "='[1]Labour - Usage - VCGS'!N8",
+        "='[1]Labour - Usage - VCGS'!N12"
+      ]
+    },
+    {
+      "name": "Unit_Cost_AUD_$_unit_LL",
+      "dtype": "object",
+      "null_count": 308,
+      "unique_count": 798,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!AA5",
+        "='[1]Labour - Usage - VCGS'!AA6",
+        "='[1]Labour - Usage - VCGS'!AA7",
+        "='[1]Labour - Usage - VCGS'!AA8",
+        "='[1]Labour - Usage - VCGS'!AA9"
+      ]
+    },
+    {
+      "name": "Estimate_2",
+      "dtype": "object",
+      "null_count": 322,
+      "unique_count": 784,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!AB5",
+        "='[1]Labour - Usage - VCGS'!AB6",
+        "='[1]Labour - Usage - VCGS'!AB7",
+        "='[1]Labour - Usage - VCGS'!AB8",
+        "='[1]Labour - Usage - VCGS'!AB9"
+      ]
+    },
+    {
+      "name": "UL_2",
+      "dtype": "object",
+      "null_count": 324,
+      "unique_count": 784,
+      "sample_values": [
+        "='[1]Labour - Usage - VCGS'!AC5",
+        "='[1]Labour - Usage - VCGS'!AC6",
+        "='[1]Labour - Usage - VCGS'!AC7",
+        "='[1]Labour - Usage - VCGS'!AC8",
+        "='[1]Labour - Usage - VCGS'!AC9"
+      ]
+    }
+  ]
+}

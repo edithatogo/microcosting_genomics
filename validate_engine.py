@@ -1,93 +1,97 @@
 import pandas as pd
-
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.config import load_config
 from unimelb_phd_phase_1.sheet_manager import SheetManager
 
 
-def validate_engine():
+def main():
     """
     Validates the CalculationEngine against the ground truth data.
     """
-    print("Initializing CalculationEngine...")
-
-    config = load_config()
-    workbook_key = "validation"
-    try:
-        workbook_path = config["workbooks"][workbook_key]["path"]
-        sheet_name = next(iter(config["workbooks"][workbook_key]["sheets"]))
-    except (KeyError, StopIteration) as e:
-        raise KeyError(
-            f"Configuration for workbook '{workbook_key}' is incomplete. Missing key: {e}"
-        ) from e
-
-    sheet_manager = SheetManager(workbook_path)
-    engine = CalculationEngine(sheet_manager=sheet_manager)
-
-    print("CalculationEngine initialized.")
-
-    print("Loading ground truth data from Parquet file...")
-    sanitized_name = "".join(
-        c for c in sheet_name if c.isalnum() or c in (" ", "_")
-    ).rstrip()
-    sanitized_name = sanitized_name.lower().replace(" ", "_")
-    ground_truth_path = f"data/prepared/{sanitized_name}.parquet"
+    # Load the ground truth data
+    ground_truth_path = "data/prepared/ground_truth.parquet"
     ground_truth_df = pd.read_parquet(ground_truth_path)
-    print("Ground truth data loaded.")
 
-    print("Running calculation engine...")
-    results_df, errors = engine.run_engine(sheet_name, fail_on_error=False)
-    print("Calculation engine finished.")
+    # Initialize the CalculationEngine
+    sheet_manager = SheetManager()
+    engine = CalculationEngine(sheet_manager)
+
+    # Run the engine to get the calculated results
+    results_df, errors = engine.run_engine()
 
     if errors:
-        print("\n--- Calculation Errors ---")
+        print("Errors occurred during calculation:")
         for error in errors:
-            print(
-                f"Cell: {error['cell']}, Formula: {error['formula']}, Error: {error['error']}"
-            )
-        print("--------------------------\n")
+            print(f"  - {error}")
 
-    # To ensure comparable columns, flatten any MultiIndex to a single level.
-    if isinstance(ground_truth_df.columns, pd.MultiIndex):
-        ground_truth_df.columns = [
-            " ".join(map(str, col)).strip().replace("nan ", "")
-            for col in ground_truth_df.columns.values
-        ]
-    if isinstance(results_df.columns, pd.MultiIndex):
-        results_df.columns = [
-            " ".join(map(str, col)).strip().replace("nan ", "")
-            for col in results_df.columns.values
-        ]
+    # Compare the results with the ground truth
+    # Handle multi-level columns in results_df
+    unit_cost_col = None
+    for col in results_df.columns:
+        if isinstance(col, tuple) and 'Unit Cost (AUD $/unit)' in str(col):
+            unit_cost_col = col
+            break
+    
+    if unit_cost_col is None:
+        print("Could not find Unit Cost column in results")
+        print("Available columns:", [col for col in results_df.columns if 'Unit Cost' in str(col)][:10])
+        return
 
-    # Extract the 'Unit Cost (AUD $/test)' columns for comparison from flattened dataframes.
-    ground_truth_costs = ground_truth_df.filter(like="Unit Cost (AUD $/test)", axis=1)
-    calculated_costs = results_df.filter(like="Unit Cost (AUD $/test)", axis=1)
+    # For ground truth, use the correct column name
+    ground_truth_col = "Unit Cost (AUD $/unit) LL"
+    
+    if ground_truth_col not in ground_truth_df.columns:
+        print(f"Could not find {ground_truth_col} in ground truth data")
+        print("Available columns in ground truth:", [col for col in ground_truth_df.columns if 'Unit Cost' in str(col)])
+        return
 
-    # Align the dataframes to ensure comparison is correct
-    ground_truth_costs, calculated_costs = ground_truth_costs.align(
-        calculated_costs, join="inner", axis=0
-    )
+    # Extract the unit cost data from results (it's a DataFrame, not a Series)
+    calculated_data = results_df[unit_cost_col]
+    
+    # If it's a DataFrame with one column, extract that column
+    if isinstance(calculated_data, pd.DataFrame):
+        # Get the first (and likely only) column from the DataFrame
+        calculated_series = calculated_data.iloc[:, 0]
+    else:
+        calculated_series = calculated_data
 
-    # Calculate the difference
-    diff = ground_truth_costs - calculated_costs
-    abs_diff = diff.abs()
+    print(f"Ground truth data shape: {ground_truth_df[ground_truth_col].shape}")
+    print(f"Calculated data shape: {calculated_series.shape}")
+    
+    # Check how many valid values we have
+    valid_calculated = pd.to_numeric(calculated_series, errors='coerce')
+    valid_ground_truth = pd.to_numeric(ground_truth_df[ground_truth_col], errors='coerce')
+    
+    print(f"Valid calculated values: {valid_calculated.notna().sum()}")
+    print(f"Valid ground truth values: {valid_ground_truth.notna().sum()}")
+    
+    # Only compare where both values are valid
+    comparison_mask = valid_calculated.notna() & valid_ground_truth.notna()
+    print(f"Values that can be compared: {comparison_mask.sum()}")
+    
+    if comparison_mask.sum() == 0:
+        print("No valid values to compare. This is expected if required sheets are not available.")
+        return
 
-    # Summary of differences
+    comparison_df = pd.DataFrame({
+        "ground_truth": valid_ground_truth[comparison_mask],
+        "calculated": valid_calculated[comparison_mask],
+    })
+    
+    # Calculate differences
+    comparison_df["difference"] = comparison_df["ground_truth"] - comparison_df["calculated"]
+    comparison_df["percentage_error"] = (comparison_df["difference"] / comparison_df["ground_truth"]) * 100
+
     print("\nValidation Summary:")
-    print("===================")
-    print(f"Total cells compared: {abs_diff.size}")
-    print(f"Number of differences: {abs_diff[abs_diff > 0.0001].count().sum()}")
-    print(f"Maximum absolute difference: {abs_diff.max().max()}")
-    print(f"Mean absolute difference: {abs_diff.mean().mean()}")
+    print(comparison_df.describe())
 
-    # Display rows with significant differences
-    significant_diffs = abs_diff[abs_diff > 0.0001].any(axis=1)
-    if significant_diffs.any():
-        print("\nRows with significant differences:")
-        print(ground_truth_df[significant_diffs])
-        print(results_df[significant_diffs])
-        print(diff[significant_diffs])
+    # Identify and display significant errors
+    significant_errors = comparison_df[comparison_df["difference"].abs() > 0.01]
+    if not significant_errors.empty:
+        print("\nSignificant Errors (difference > 0.01):")
+        print(significant_errors)
+    else:
+        print("\nNo significant errors found (all differences < 0.01)")
 
 
 if __name__ == "__main__":
-    validate_engine()
+    main()

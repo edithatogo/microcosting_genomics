@@ -1,0 +1,15 @@
+{
+  "detailed_table": [
+    {
+      "version_id": "detailed_table_20250831_145637",
+      "timestamp": "2025-08-31T14:56:37.694529",
+      "file_path": "data/prepared/detailed_table.parquet",
+      "checksum": "f145f3d14b693d05a8f713fedb43c964a1b6e43b5f8241ad402cd8c3c7231aaf",
+      "metadata": {
+        "file_size": 66512,
+        "file_extension": ".parquet",
+        "created_by": "DataManager"
+      }
+    }
+  ]
+}

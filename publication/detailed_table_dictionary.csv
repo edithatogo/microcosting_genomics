@@ -1,0 +1,28 @@
+table_name,column_name,data_type,description,sample_values
+detailed_table,Test Test Test,float64,,
+detailed_table,Category Category Category,float64,,
+detailed_table,Sub-Category Sub-Category Sub-Category,float64,,
+detailed_table,Step Step Step,float64,,
+detailed_table,Estimates Quantity of Use per Test LL LL,float64,,"1.0, 0.5, 3.0"
+detailed_table,Estimate Estimate,float64,,"2.0, 1.0, 6.0"
+detailed_table,UL UL,float64,,"3.0, 1.5, 9.0"
+detailed_table,Source Source,float64,,
+detailed_table,Price (AUD $/unit) LL LL,float64,,"102.80943755839301, 102.80943755839301, 102.80943755839301"
+detailed_table,Estimate Estimate_2,float64,,"122.62269511055743, 122.62269511055743, 122.62269511055743"
+detailed_table,UL UL_2,float64,,"142.43595266272186, 142.43595266272186, 142.43595266272186"
+detailed_table,Source Source_2,float64,,
+detailed_table,Unit Cost (AUD $/unit) LL LL,float64,,"3.4269812519464335, 1.7134906259732168, 10.280943755839303"
+detailed_table,Estimate Estimate_3,float64,,"4.087423170351914, 2.043711585175957, 12.262269511055743"
+detailed_table,UL UL_3,float64,,"4.747865088757395, 2.3739325443786976, 14.243595266272187"
+detailed_table,DSA DSA LL SA,float64,,"2.1958623957922416, 1.0979311978961208, 6.587587187376726"
+detailed_table,Estimate Estimate_4,float64,,"3.137355968441814, 1.568677984220907, 9.412067905325442"
+detailed_table,UL UL_4,float64,,"4.078849541091387, 2.0394247705456934, 12.23654862327416"
+detailed_table,LL NSW,float64,,"2.272718488461538, 1.136359244230769, 6.818155465384615"
+detailed_table,Estimate Estimate_5,float64,,"2.9399292012820513, 1.4699646006410256, 8.819787603846155"
+detailed_table,UL UL_5,float64,,"3.6071399141025635, 1.8035699570512818, 10.821419742307691"
+detailed_table,LL QLD,float64,,"2.0803370686254503, 1.0401685343127252, 6.241011205876352"
+detailed_table,Estimate Estimate_6,float64,,"2.993336132762022, 1.496668066381011, 8.980008398286065"
+detailed_table,UL UL_6,float64,,"3.9063351968985924, 1.9531675984492962, 11.71900559069578"
+detailed_table,LL WA,float64,,"2.5043248754282152, 1.2521624377141076, 7.512974626284645"
+detailed_table,Estimate Estimate_7,float64,,"3.104059773694592, 1.552029886847296, 9.312179321083775"
+detailed_table,UL UL_7,float64,,"3.703794671960967, 1.8518973359804836, 11.111384015882903"

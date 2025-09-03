@@ -2,7 +2,18 @@ import re
 
 
 def coords_to_cell(row, col):
-    """Convert (row, col) tuple to cell string."""
+    """Convert (row, col) tuple to cell string.
+
+    Converts zero-based row and column indices to Excel-style cell references.
+    For example, (0, 0) becomes "A1", (1, 2) becomes "C2".
+
+    Args:
+        row (int): Zero-based row index.
+        col (int): Zero-based column index.
+
+    Returns:
+        str: Excel-style cell reference (e.g., "A1").
+    """
     col_str = ""
     while col >= 0:
         col_str = chr(ord("A") + col % 26) + col_str
@@ -11,7 +22,18 @@ def coords_to_cell(row, col):
 
 
 def cell_to_coords(cell_str):
-    """Convert cell string to (row, col) tuple."""
+    """Convert cell string to (row, col) tuple.
+
+    Converts Excel-style cell references to zero-based row and column indices.
+    For example, "A1" becomes (0, 0), "C2" becomes (1, 2).
+    Handles cell references with $ signs (e.g., "$A$1").
+
+    Args:
+        cell_str (str): Excel-style cell reference (e.g., "A1" or "$A$1").
+
+    Returns:
+        tuple: A tuple of (row, col) as zero-based indices, or (None, None) if invalid.
+    """
     if not isinstance(cell_str, str):
         return None, None
     # Remove $ signs

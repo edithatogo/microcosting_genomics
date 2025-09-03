@@ -1,0 +1,182 @@
+{
+  "table_name": "DSA - Test Throughput",
+  "description": "Test throughput factors for sensitivity analysis",
+  "created_date": "2025-09-03T14:12:02.982371",
+  "row_count": 80,
+  "column_count": 34,
+  "columns": [
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    }
+  ],
+  "sample_data": {
+    "unnamed": []
+  }
+}

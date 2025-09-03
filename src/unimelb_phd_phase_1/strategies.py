@@ -6,28 +6,42 @@ from .utils import cell_to_coords, coords_to_cell
 
 
 class CalculationStrategy:
-    """Base class for a formula calculation strategy."""
+    """Base class for a formula calculation strategy.
+
+    This abstract base class defines the interface for all formula calculation strategies.
+    Each strategy handles a specific type of Excel formula or operation.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         raise NotImplementedError
 
 
 class LiteralStrategy(CalculationStrategy):
-    """Strategy for handling numeric literals."""
+    """Strategy for handling numeric literals.
+
+    This strategy handles simple numeric values in formulas, such as =3 or =1.5.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         return parsed_formula["value"]
 
 
 class StringLiteralStrategy(CalculationStrategy):
-    """Strategy for handling string literals."""
+    """Strategy for handling string literals.
+
+    This strategy handles string values in formulas, such as ="text".
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         return parsed_formula["value"]
 
 
 class ReferenceStrategy(CalculationStrategy):
-    """Strategy for handling cell references."""
+    """Strategy for handling cell references.
+
+    This strategy handles references to other cells, such as =A1 or =Sheet1!A1.
+    It can handle both direct value references and formula references.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         referenced_sheet = parsed_formula["sheet"]
@@ -45,7 +59,20 @@ class ReferenceStrategy(CalculationStrategy):
 
 
 def _evaluate_operand(engine, operand, sheet_name, cell_ref):
-    """Helper function to evaluate an operand."""
+    """Helper function to evaluate an operand.
+
+    This function evaluates a single operand in a formula, which can be either
+    a literal value or a cell reference.
+
+    Args:
+        engine (CalculationEngine): The calculation engine instance.
+        operand (dict or str): The operand to evaluate.
+        sheet_name (str): The name of the current sheet.
+        cell_ref (str): The current cell reference.
+
+    Returns:
+        The evaluated value of the operand.
+    """
     if isinstance(operand, dict):
         if operand.get("type") == "literal":
             return operand["value"]
@@ -61,7 +88,11 @@ def _evaluate_operand(engine, operand, sheet_name, cell_ref):
 
 
 class AdditionStrategy(CalculationStrategy):
-    """Strategy for handling addition formulas."""
+    """Strategy for handling addition formulas.
+
+    This strategy handles addition operations, such as =A1+B1 or =1+2+3.
+    It can handle multiple operands and will return None if any operand cannot be evaluated.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         total = 0
@@ -77,7 +108,11 @@ class AdditionStrategy(CalculationStrategy):
 
 
 class MultiplicationStrategy(CalculationStrategy):
-    """Strategy for handling multiplication formulas."""
+    """Strategy for handling multiplication formulas.
+
+    This strategy handles multiplication operations, such as =A1*B1.
+    It can handle multiple operands and will return None if any operand cannot be evaluated.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         result = 1
@@ -91,7 +126,11 @@ class MultiplicationStrategy(CalculationStrategy):
 
 
 class MultiplicationByNumberStrategy(CalculationStrategy):
-    """Strategy for handling multiplication by a number."""
+    """Strategy for handling multiplication by a number.
+
+    This strategy handles multiplication of a cell reference by a number,
+    such as =A1*3 or =2*B1.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         cell_value = _evaluate_operand(
@@ -110,7 +149,11 @@ class MultiplicationByNumberStrategy(CalculationStrategy):
 
 
 class SumRangeStrategy(CalculationStrategy):
-    """Strategy for handling SUM formulas with a range."""
+    """Strategy for handling SUM formulas with a range.
+
+    This strategy handles SUM operations over a range of cells, such as =SUM(A1:A10).
+    It will sum all numeric values in the range and ignore non-numeric values.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         start_cell = parsed_formula["start_cell"]
@@ -140,7 +183,12 @@ class SumRangeStrategy(CalculationStrategy):
 
 
 class SumCellsStrategy(CalculationStrategy):
-    """Strategy for handling SUM formulas with individual cells."""
+    """Strategy for handling SUM formulas with individual cells.
+
+    This strategy handles SUM operations with individual cell references,
+    such as =SUM(A1,B1,C1).
+    It will sum all numeric values and ignore non-numeric values.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         total = 0
@@ -171,7 +219,11 @@ class SumCellsStrategy(CalculationStrategy):
 
 
 class DivisionStrategy(CalculationStrategy):
-    """Strategy for handling division formulas."""
+    """Strategy for handling division formulas.
+
+    This strategy handles division operations, such as =A1/B1.
+    It will return None if any operand cannot be evaluated or if division by zero occurs.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         result = _evaluate_operand(
@@ -189,7 +241,11 @@ class DivisionStrategy(CalculationStrategy):
 
 
 class IfStrategy(CalculationStrategy):
-    """Strategy for handling IF formulas."""
+    """Strategy for handling IF formulas.
+
+    This strategy handles IF conditional statements, such as =IF(A1>0, B1, C1).
+    It evaluates the condition and returns the appropriate result based on the condition.
+    """
 
     def execute(self, engine, parsed_formula, sheet_name, cell_ref):
         condition = parsed_formula["condition"]

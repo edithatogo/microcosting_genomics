@@ -1,0 +1,114 @@
+{
+  "table_name": "detailed_table_values",
+  "description": "Translated table from Excel workbook: detailed_table_values",
+  "created_date": "2025-09-03T00:16:45.811472",
+  "row_count": 1313,
+  "column_count": 15,
+  "columns": [
+    {
+      "name": "Test",
+      "dtype": "object",
+      "null_count": 1308,
+      "unique_count": 5,
+      "sample_values": [
+        "Panel",
+        "ES (P)",
+        "ES (T)",
+        "GS (P)",
+        "GS (T)"
+      ]
+    },
+    {
+      "name": "Category",
+      "dtype": "object",
+      "null_count": 1219,
+      "unique_count": 3,
+      "sample_values": [
+        "Labour",
+        "Equipment",
+        "Consumables"
+      ]
+    },
+    {
+      "name": "Sub-Category",
+      "dtype": "object",
+      "null_count": 1217,
+      "unique_count": 13,
+      "sample_values": [
+        "Specimen Collection",
+        "Specimen Receipt",
+        "DNA Extraction",
+        "Library Preparation",
+        "Sequencing"
+      ]
+    },
+    {
+      "name": "Step",
+      "dtype": "object",
+      "null_count": 251,
+      "unique_count": 239,
+      "sample_values": [
+        "Registration",
+        "Name Check",
+        "Venepuncture",
+        "Completion of forms",
+        "Total"
+      ]
+    },
+    {
+      "name": "Estimates_Quantity_of_Use_per_Test_LL",
+      "dtype": "float64",
+      "null_count": 650
+    },
+    {
+      "name": "Estimate",
+      "dtype": "float64",
+      "null_count": 387
+    },
+    {
+      "name": "UL",
+      "dtype": "float64",
+      "null_count": 650
+    },
+    {
+      "name": "Source",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Price_AUD_$_unit_LL",
+      "dtype": "float64",
+      "null_count": 482
+    },
+    {
+      "name": "Estimate_1",
+      "dtype": "float64",
+      "null_count": 392
+    },
+    {
+      "name": "UL_1",
+      "dtype": "float64",
+      "null_count": 482
+    },
+    {
+      "name": "Source_1",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Unit_Cost_AUD_$_unit_LL",
+      "dtype": "float64",
+      "null_count": 373
+    },
+    {
+      "name": "Estimate_2",
+      "dtype": "float64",
+      "null_count": 299
+    },
+    {
+      "name": "UL_2",
+      "dtype": "float64",
+      "null_count": 373
+    }
+  ]
+}

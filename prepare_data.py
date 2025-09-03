@@ -85,9 +85,15 @@ def main() -> None:
         ).rstrip()
         sanitized_name = sanitized_name.lower().replace(" ", "_")
 
+        # Save as Parquet
         output_path = prepared_dir / f"{sanitized_name}.parquet"
         df.to_parquet(output_path)
         print(f"Saved {output_path}")
+
+        # Save as CSV
+        csv_output_path = prepared_dir / f"{sanitized_name}.csv"
+        df.to_csv(csv_output_path, index=False)
+        print(f"Saved {csv_output_path}")
 
 
 if __name__ == "__main__":

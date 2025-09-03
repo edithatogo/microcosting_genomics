@@ -1,0 +1,3 @@
+column_name,data_type,sample_values,null_count,unique_count
+"('Stage',)",float64,[],38,
+"('Step',)",float64,[],38,

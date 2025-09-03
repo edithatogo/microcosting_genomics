@@ -1,0 +1,269 @@
+{
+  "table_name": "dsa__labour_prices",
+  "description": "Translated table from Excel workbook: dsa__labour_prices",
+  "created_date": "2025-09-03T00:16:45.848062",
+  "row_count": 80,
+  "column_count": 52,
+  "columns": [
+    {
+      "name": "unnamed_0",
+      "dtype": "float64",
+      "null_count": 80
+    },
+    {
+      "name": "unnamed_1",
+      "dtype": "float64",
+      "null_count": 43
+    },
+    {
+      "name": "unnamed_2",
+      "dtype": "float64",
+      "null_count": 45
+    },
+    {
+      "name": "unnamed_3",
+      "dtype": "float64",
+      "null_count": 45
+    },
+    {
+      "name": "unnamed_4",
+      "dtype": "float64",
+      "null_count": 60
+    },
+    {
+      "name": "unnamed_5",
+      "dtype": "float64",
+      "null_count": 60
+    },
+    {
+      "name": "unnamed_6",
+      "dtype": "float64",
+      "null_count": 60
+    },
+    {
+      "name": "unnamed_7",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_8",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_9",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_10",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_11",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_12",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_13",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_14",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_15",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_16",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_17",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_18",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_19",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_20",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_21",
+      "dtype": "float64",
+      "null_count": 31
+    },
+    {
+      "name": "unnamed_22",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_23",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_24",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_25",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_26",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_27",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_28",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_29",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_30",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_31",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_32",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_33",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_34",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_35",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_36",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_37",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_38",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_39",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_40",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_41",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_42",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_43",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_44",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_45",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_46",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_47",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_48",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_49",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_50",
+      "dtype": "float64",
+      "null_count": 25
+    },
+    {
+      "name": "unnamed_51",
+      "dtype": "float64",
+      "null_count": 25
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "table_name": "Eq - Costs and Usage - VCGS",
+  "description": "Equipment costs and usage for VCGS",
+  "created_date": "2025-09-03T14:12:06.491577",
+  "row_count": 62,
+  "column_count": 33,
+  "columns": [
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    }
+  ],
+  "sample_data": {
+    "unnamed": [],
+    "nan": []
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "table_name": "BI - Comp+Stor Costs - VCGS",
+  "description": "Bioinformatics computation and storage costs for VCGS",
+  "created_date": "2025-09-03T14:12:07.015989",
+  "row_count": 33,
+  "column_count": 29,
+  "columns": [
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "List Price (AUD)",
+      "dtype": "object",
+      "null_count": 25,
+      "unique_count": 8
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Annual Cost (straight-line)",
+      "dtype": "object",
+      "null_count": 27,
+      "unique_count": 5
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "nan",
+      "dtype": "float64",
+      "null_count": 30
+    },
+    {
+      "name": "Cost/component",
+      "dtype": "object",
+      "null_count": 27,
+      "unique_count": 5
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Total hours",
+      "dtype": "object",
+      "null_count": 30,
+      "unique_count": 2
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Cost/component/hr - 70%",
+      "dtype": "object",
+      "null_count": 30,
+      "unique_count": 3
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "Cost/component/hr - 100%",
+      "dtype": "object",
+      "null_count": 30,
+      "unique_count": 3
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    },
+    {
+      "name": "unnamed",
+      "dtype": "unknown",
+      "null_count": 0
+    }
+  ],
+  "sample_data": {
+    "unnamed": [],
+    "List Price (AUD)": [
+      "ex-GST",
+      54321.28,
+      49380
+    ],
+    "Annual Cost (straight-line)": [
+      "3-yr",
+      18107.093333333334,
+      16460
+    ],
+    "nan": [
+      0.7,
+      35000.0,
+      35000.0
+    ],
+    "Cost/component": [
+      "Cost/CPU",
+      27160.64,
+      24690
+    ],
+    "Total hours": [
+      "LL",
+      30659.999999999996,
+      30659.999999999996
+    ],
+    "Cost/component/hr - 70%": [
+      "Cost/CPU/hr",
+      0.8858656229615135,
+      0.805283757338552
+    ],
+    "Cost/component/hr - 100%": [
+      "Cost/CPU/hr",
+      0.6201059360730593,
+      0.5636986301369863
+    ]
+  }
+}

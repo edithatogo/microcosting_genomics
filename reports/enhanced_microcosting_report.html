@@ -1,0 +1,1045 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microcosting Analysis Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1, h2, h3 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; height: auto; margin: 20px 0; }
+        .summary-stats { background-color: #f8f9fa; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Microcosting Analysis Report</h1>
+    <p>Generated on: 2025-09-03 18:50:02</p>
+    
+    <h2>Executive Summary</h2>
+    <p>This comprehensive report provides an automated analysis of the microcosting data for rare disease genomics. 
+    The analysis includes data overview, visualizations, and detailed statistics.</p>
+    
+    <h2>Data Overview</h2>
+    <div class="summary-stats">
+        <p><strong>Total tables:</strong> 8</p>
+        <p><strong>Total rows across all tables:</strong> 5592</p>
+    </div>
+    
+    <ul>
+    
+        <li><strong>3._estimates</strong>: 77 rows, 34 columns</li>
+    
+        <li><strong>2._labor_prices</strong>: 79 rows, 52 columns</li>
+    
+        <li><strong>detailed_table_values</strong>: 1313 rows, 15 columns</li>
+    
+        <li><strong>detailed_table_formulas</strong>: 1336 rows, 15 columns</li>
+    
+        <li><strong>ground_truth</strong>: 1314 rows, 27 columns</li>
+    
+        <li><strong>dsa__labour_prices</strong>: 80 rows, 52 columns</li>
+    
+        <li><strong>detailed_table</strong>: 1313 rows, 27 columns</li>
+    
+        <li><strong>dsa__test_throughput</strong>: 80 rows, 34 columns</li>
+    
+    </ul>
+    
+    <h2>Visualizations</h2>
+    
+        <div>
+        
+            <img src="top_20_Price (AUD $_unit) LL LL.png" alt="top_20_Price (AUD $_unit) LL LL.png">
+        
+            <img src="cost_distribution_Price (AUD $_unit) LL LL.png" alt="cost_distribution_Price (AUD $_unit) LL LL.png">
+        
+            <img src="costs_by_Category Category Category.png" alt="costs_by_Category Category Category.png">
+        
+        </div>
+    
+    
+    <h2>Detailed Statistics</h2>
+    
+        <h3>3._estimates</h3>
+        <p><strong>Rows:</strong> 77 | <strong>Columns:</strong> 34</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 34 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Panel - Estimate Stage Stage</th>
+      <th>Equipment LL</th>
+      <th>MP</th>
+      <th>UL</th>
+      <th>LL</th>
+      <th>Equipment - 70% MP</th>
+      <th>UL_2</th>
+      <th>LL_2</th>
+      <th>Equipment - 50% MP</th>
+      <th>UL_3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>3.700000e+01</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>5.469677e+05</td>
+      <td>276.391674</td>
+      <td>324.108272</td>
+      <td>125.353468</td>
+      <td>164.282442</td>
+      <td>199.680367</td>
+      <td>168.523040</td>
+      <td>220.843433</td>
+      <td>271.042398</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>3.325859e+06</td>
+      <td>563.032150</td>
+      <td>695.959281</td>
+      <td>246.605294</td>
+      <td>320.537458</td>
+      <td>392.347939</td>
+      <td>346.072022</td>
+      <td>450.302124</td>
+      <td>556.953462</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>6.739950e-01</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>1.828900</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>1.828900</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>1.930790e+01</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+      <td>17.667635</td>
+      <td>21.845848</td>
+      <td>21.463366</td>
+      <td>19.307901</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>6.175669e+01</td>
+      <td>67.967325</td>
+      <td>64.390097</td>
+      <td>29.170503</td>
+      <td>34.426345</td>
+      <td>40.235433</td>
+      <td>32.054736</td>
+      <td>42.071841</td>
+      <td>44.622061</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>1.852701e+02</td>
+      <td>251.646595</td>
+      <td>267.316903</td>
+      <td>92.021042</td>
+      <td>107.100532</td>
+      <td>126.434753</td>
+      <td>110.690346</td>
+      <td>131.603993</td>
+      <td>158.408314</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>2.023061e+07</td>
+      <td>2924.583397</td>
+      <td>3598.292835</td>
+      <td>1282.800843</td>
+      <td>1645.007389</td>
+      <td>2000.075914</td>
+      <td>1779.391581</td>
+      <td>2295.482405</td>
+      <td>2820.633553</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+        <h3>2._labor_prices</h3>
+        <p><strong>Rows:</strong> 79 | <strong>Columns:</strong> 52</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 52 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Panel - Estimate</th>
+      <th>unnamed_1</th>
+      <th>unnamed_2</th>
+      <th>unnamed_3</th>
+      <th>unnamed_4</th>
+      <th>unnamed_5</th>
+      <th>unnamed_6</th>
+      <th>unnamed_7</th>
+      <th>unnamed_8</th>
+      <th>unnamed_9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>3.700000e+01</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>20.000000</td>
+      <td>20.000000</td>
+      <td>20.000000</td>
+      <td>49.000000</td>
+      <td>49.000000</td>
+      <td>49.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>5.469677e+05</td>
+      <td>276.391674</td>
+      <td>324.108272</td>
+      <td>498.031810</td>
+      <td>524.244542</td>
+      <td>629.117361</td>
+      <td>215.097833</td>
+      <td>465.814919</td>
+      <td>720.646415</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>3.325859e+06</td>
+      <td>563.032150</td>
+      <td>695.959281</td>
+      <td>826.533625</td>
+      <td>870.035166</td>
+      <td>1044.032673</td>
+      <td>367.375670</td>
+      <td>787.543153</td>
+      <td>1148.726608</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>6.739950e-01</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>10.084456</td>
+      <td>10.615217</td>
+      <td>12.738260</td>
+      <td>9.424198</td>
+      <td>12.405329</td>
+      <td>14.409771</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>1.930790e+01</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+      <td>67.343241</td>
+      <td>70.887622</td>
+      <td>85.065146</td>
+      <td>23.058759</td>
+      <td>46.032543</td>
+      <td>66.470111</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>6.175669e+01</td>
+      <td>67.967325</td>
+      <td>64.390097</td>
+      <td>166.643452</td>
+      <td>175.414160</td>
+      <td>210.613357</td>
+      <td>66.438056</td>
+      <td>110.590858</td>
+      <td>154.743660</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>1.852701e+02</td>
+      <td>251.646595</td>
+      <td>267.316903</td>
+      <td>470.969267</td>
+      <td>495.757124</td>
+      <td>594.908548</td>
+      <td>156.461702</td>
+      <td>476.646598</td>
+      <td>951.673507</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>2.023061e+07</td>
+      <td>2924.583397</td>
+      <td>3598.292835</td>
+      <td>2904.878478</td>
+      <td>3057.766819</td>
+      <td>3669.320183</td>
+      <td>1818.006929</td>
+      <td>3257.708980</td>
+      <td>5261.522015</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+        <h3>detailed_table_values</h3>
+        <p><strong>Rows:</strong> 1313 | <strong>Columns:</strong> 15</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 11 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Estimates_Quantity_of_Use_per_Test_LL</th>
+      <th>Estimate</th>
+      <th>UL</th>
+      <th>Source</th>
+      <th>Price_AUD_$_unit_LL</th>
+      <th>Estimate_1</th>
+      <th>UL_1</th>
+      <th>Source_1</th>
+      <th>Unit_Cost_AUD_$_unit_LL</th>
+      <th>Estimate_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>663.000000</td>
+      <td>926.000000</td>
+      <td>663.000000</td>
+      <td>0.0</td>
+      <td>831.000000</td>
+      <td>921.000000</td>
+      <td>831.000000</td>
+      <td>0.0</td>
+      <td>940.000000</td>
+      <td>1014.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>571.353658</td>
+      <td>435.294013</td>
+      <td>633.977885</td>
+      <td>NaN</td>
+      <td>4033.253580</td>
+      <td>4444.485491</td>
+      <td>5831.877827</td>
+      <td>NaN</td>
+      <td>29.208479</td>
+      <td>41.864862</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>2253.936784</td>
+      <td>2024.443151</td>
+      <td>2490.105166</td>
+      <td>NaN</td>
+      <td>25452.141283</td>
+      <td>30134.566257</td>
+      <td>37937.455952</td>
+      <td>NaN</td>
+      <td>152.166709</td>
+      <td>193.228242</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.112708</td>
+      <td>0.050000</td>
+      <td>0.115833</td>
+      <td>NaN</td>
+      <td>0.052598</td>
+      <td>0.055367</td>
+      <td>0.058135</td>
+      <td>NaN</td>
+      <td>0.018747</td>
+      <td>0.009335</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.062500</td>
+      <td>1.142929</td>
+      <td>1.143000</td>
+      <td>NaN</td>
+      <td>0.294500</td>
+      <td>0.111942</td>
+      <td>0.372000</td>
+      <td>NaN</td>
+      <td>1.021825</td>
+      <td>0.483722</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>5.637500</td>
+      <td>7.500000</td>
+      <td>13.575000</td>
+      <td>NaN</td>
+      <td>79.725668</td>
+      <td>132.709030</td>
+      <td>185.692392</td>
+      <td>NaN</td>
+      <td>9.331160</td>
+      <td>12.597573</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>13300.000000</td>
+      <td>14000.000000</td>
+      <td>14700.000000</td>
+      <td>NaN</td>
+      <td>274805.843056</td>
+      <td>343507.303820</td>
+      <td>412208.764584</td>
+      <td>NaN</td>
+      <td>2635.505515</td>
+      <td>2774.216331</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+            <h4>Categorical Columns</h4>
+            <p>Showing first 10 of 4 categorical columns:</p>
+            <ul>
+            
+                <li><strong>Test</strong>: 5 unique values</li>
+            
+                <li><strong>Category</strong>: 3 unique values</li>
+            
+                <li><strong>Sub-Category</strong>: 13 unique values</li>
+            
+                <li><strong>Step</strong>: 239 unique values</li>
+            
+            </ul>
+        
+    
+        <h3>detailed_table_formulas</h3>
+        <p><strong>Rows:</strong> 1336 | <strong>Columns:</strong> 15</p>
+        
+        
+        
+        
+            <h4>Categorical Columns</h4>
+            <p>Showing first 10 of 15 categorical columns:</p>
+            <ul>
+            
+                <li><strong>Test</strong>: 5 unique values</li>
+            
+                <li><strong>Category</strong>: 3 unique values</li>
+            
+                <li><strong>Sub-Category</strong>: 13 unique values</li>
+            
+                <li><strong>Step</strong>: 422 unique values</li>
+            
+                <li><strong>Estimates_Quantity_of_Use_per_Test_LL</strong>: 571 unique values</li>
+            
+                <li><strong>Estimate</strong>: 541 unique values</li>
+            
+                <li><strong>UL</strong>: 564 unique values</li>
+            
+                <li><strong>Source</strong>: 379 unique values</li>
+            
+                <li><strong>Price_AUD_$_unit_LL</strong>: 692 unique values</li>
+            
+                <li><strong>Estimate_1</strong>: 379 unique values</li>
+            
+            </ul>
+        
+    
+        <h3>ground_truth</h3>
+        <p><strong>Rows:</strong> 1314 | <strong>Columns:</strong> 27</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 27 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Test Test</th>
+      <th>Category Category</th>
+      <th>Sub-Category Sub-Category</th>
+      <th>Step Step</th>
+      <th>Estimates Quantity of Use per Test LL</th>
+      <th>Estimate</th>
+      <th>UL</th>
+      <th>Source</th>
+      <th>Price (AUD $/unit) LL</th>
+      <th>Estimate_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>663.000000</td>
+      <td>926.000000</td>
+      <td>663.000000</td>
+      <td>0.0</td>
+      <td>831.000000</td>
+      <td>921.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>571.353658</td>
+      <td>435.294013</td>
+      <td>633.977885</td>
+      <td>NaN</td>
+      <td>4033.253580</td>
+      <td>4444.485491</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2253.936784</td>
+      <td>2024.443151</td>
+      <td>2490.105166</td>
+      <td>NaN</td>
+      <td>25452.141283</td>
+      <td>30134.566257</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.112708</td>
+      <td>0.050000</td>
+      <td>0.115833</td>
+      <td>NaN</td>
+      <td>0.052598</td>
+      <td>0.055367</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.062500</td>
+      <td>1.142929</td>
+      <td>1.143000</td>
+      <td>NaN</td>
+      <td>0.294500</td>
+      <td>0.111942</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.637500</td>
+      <td>7.500000</td>
+      <td>13.575000</td>
+      <td>NaN</td>
+      <td>79.725668</td>
+      <td>132.709030</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>13300.000000</td>
+      <td>14000.000000</td>
+      <td>14700.000000</td>
+      <td>NaN</td>
+      <td>274805.843056</td>
+      <td>343507.303820</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+        <h3>dsa__labour_prices</h3>
+        <p><strong>Rows:</strong> 80 | <strong>Columns:</strong> 52</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 52 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unnamed_0</th>
+      <th>unnamed_1</th>
+      <th>unnamed_2</th>
+      <th>unnamed_3</th>
+      <th>unnamed_4</th>
+      <th>unnamed_5</th>
+      <th>unnamed_6</th>
+      <th>unnamed_7</th>
+      <th>unnamed_8</th>
+      <th>unnamed_9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>3.700000e+01</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>20.000000</td>
+      <td>20.000000</td>
+      <td>20.000000</td>
+      <td>49.000000</td>
+      <td>49.000000</td>
+      <td>49.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>5.469677e+05</td>
+      <td>276.391674</td>
+      <td>324.108272</td>
+      <td>498.031810</td>
+      <td>524.244542</td>
+      <td>629.117361</td>
+      <td>215.097833</td>
+      <td>465.814919</td>
+      <td>720.646415</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>3.325859e+06</td>
+      <td>563.032150</td>
+      <td>695.959281</td>
+      <td>826.533625</td>
+      <td>870.035166</td>
+      <td>1044.032673</td>
+      <td>367.375670</td>
+      <td>787.543153</td>
+      <td>1148.726608</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>6.739950e-01</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>10.084456</td>
+      <td>10.615217</td>
+      <td>12.738260</td>
+      <td>9.424198</td>
+      <td>12.405329</td>
+      <td>14.409771</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>1.930790e+01</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+      <td>67.343241</td>
+      <td>70.887622</td>
+      <td>85.065146</td>
+      <td>23.058759</td>
+      <td>46.032543</td>
+      <td>66.470111</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>6.175669e+01</td>
+      <td>67.967325</td>
+      <td>64.390097</td>
+      <td>166.643452</td>
+      <td>175.414160</td>
+      <td>210.613357</td>
+      <td>66.438056</td>
+      <td>110.590858</td>
+      <td>154.743660</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>1.852701e+02</td>
+      <td>251.646595</td>
+      <td>267.316903</td>
+      <td>470.969267</td>
+      <td>495.757124</td>
+      <td>594.908548</td>
+      <td>156.461702</td>
+      <td>476.646598</td>
+      <td>951.673507</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>2.023061e+07</td>
+      <td>2924.583397</td>
+      <td>3598.292835</td>
+      <td>2904.878478</td>
+      <td>3057.766819</td>
+      <td>3669.320183</td>
+      <td>1818.006929</td>
+      <td>3257.708980</td>
+      <td>5261.522015</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+        <h3>detailed_table</h3>
+        <p><strong>Rows:</strong> 1313 | <strong>Columns:</strong> 27</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 27 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Test Test Test</th>
+      <th>Category Category Category</th>
+      <th>Sub-Category Sub-Category Sub-Category</th>
+      <th>Step Step Step</th>
+      <th>Estimates Quantity of Use per Test LL LL</th>
+      <th>Estimate Estimate</th>
+      <th>UL UL</th>
+      <th>Source Source</th>
+      <th>Price (AUD $/unit) LL LL</th>
+      <th>Estimate Estimate_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>663.000000</td>
+      <td>926.000000</td>
+      <td>663.000000</td>
+      <td>0.0</td>
+      <td>831.000000</td>
+      <td>921.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>571.353658</td>
+      <td>435.294013</td>
+      <td>633.977885</td>
+      <td>NaN</td>
+      <td>4033.253580</td>
+      <td>4444.485491</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2253.936784</td>
+      <td>2024.443151</td>
+      <td>2490.105166</td>
+      <td>NaN</td>
+      <td>25452.141283</td>
+      <td>30134.566257</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.112708</td>
+      <td>0.050000</td>
+      <td>0.115833</td>
+      <td>NaN</td>
+      <td>0.052598</td>
+      <td>0.055367</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.062500</td>
+      <td>1.142929</td>
+      <td>1.143000</td>
+      <td>NaN</td>
+      <td>0.294500</td>
+      <td>0.111942</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.637500</td>
+      <td>7.500000</td>
+      <td>13.575000</td>
+      <td>NaN</td>
+      <td>79.725668</td>
+      <td>132.709030</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>13300.000000</td>
+      <td>14000.000000</td>
+      <td>14700.000000</td>
+      <td>NaN</td>
+      <td>274805.843056</td>
+      <td>343507.303820</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+        <h3>dsa__test_throughput</h3>
+        <p><strong>Rows:</strong> 80 | <strong>Columns:</strong> 34</p>
+        
+        
+            <h4>Numeric Columns Summary</h4>
+            <p>Showing first 10 of 34 numeric columns:</p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>unnamed_0</th>
+      <th>unnamed_1</th>
+      <th>unnamed_2</th>
+      <th>unnamed_3</th>
+      <th>unnamed_4</th>
+      <th>unnamed_5</th>
+      <th>unnamed_6</th>
+      <th>unnamed_7</th>
+      <th>unnamed_8</th>
+      <th>unnamed_9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>0.0</td>
+      <td>3.700000e+01</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+      <td>35.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>NaN</td>
+      <td>5.469677e+05</td>
+      <td>276.391674</td>
+      <td>324.108272</td>
+      <td>125.353468</td>
+      <td>164.282442</td>
+      <td>199.680367</td>
+      <td>168.523040</td>
+      <td>220.843433</td>
+      <td>271.042398</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>NaN</td>
+      <td>3.325859e+06</td>
+      <td>563.032150</td>
+      <td>695.959281</td>
+      <td>246.605294</td>
+      <td>320.537458</td>
+      <td>392.347939</td>
+      <td>346.072022</td>
+      <td>450.302124</td>
+      <td>556.953462</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>NaN</td>
+      <td>6.739950e-01</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>1.828900</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+      <td>1.828900</td>
+      <td>0.702756</td>
+      <td>2.021416</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>NaN</td>
+      <td>1.930790e+01</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+      <td>17.667635</td>
+      <td>21.845848</td>
+      <td>21.463366</td>
+      <td>19.307901</td>
+      <td>23.998698</td>
+      <td>21.463366</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>NaN</td>
+      <td>6.175669e+01</td>
+      <td>67.967325</td>
+      <td>64.390097</td>
+      <td>29.170503</td>
+      <td>34.426345</td>
+      <td>40.235433</td>
+      <td>32.054736</td>
+      <td>42.071841</td>
+      <td>44.622061</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>NaN</td>
+      <td>1.852701e+02</td>
+      <td>251.646595</td>
+      <td>267.316903</td>
+      <td>92.021042</td>
+      <td>107.100532</td>
+      <td>126.434753</td>
+      <td>110.690346</td>
+      <td>131.603993</td>
+      <td>158.408314</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>NaN</td>
+      <td>2.023061e+07</td>
+      <td>2924.583397</td>
+      <td>3598.292835</td>
+      <td>1282.800843</td>
+      <td>1645.007389</td>
+      <td>2000.075914</td>
+      <td>1779.391581</td>
+      <td>2295.482405</td>
+      <td>2820.633553</td>
+    </tr>
+  </tbody>
+</table>
+        
+        
+        
+    
+</body>
+</html>
+    

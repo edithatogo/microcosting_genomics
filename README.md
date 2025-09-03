@@ -59,6 +59,36 @@ This extracts all required sheets and creates `ground_truth.parquet`, `2._labor_
 ## Workbook Dependencies
 Most helper scripts read from the Excel workbook specified in `config.yaml`.  After copying the workbook to the `data/` directory, run `python prepare_data.py` to extract the needed sheets.  This script creates `ground_truth.parquet`, `2._labor_prices.parquet` and `3._estimates.parquet` under `data/prepared/`.  These Parquet files must exist before running the test suite or validation scripts.
 
+## Detailed Workbook Structure and Dependencies
+
+The Excel workbook contains several worksheets that work together to calculate the final unit costs:
+
+### 1. Detailed Table (Core Sheet)
+This is the primary sheet that contains all process steps and calculates the final unit costs. It references data from all supporting tables:
+- Pulls hourly salary rates from **Labor Prices**
+- Retrieves baseline quantities and prices from **Estimates**
+- Applies sensitivity adjustments from **DSA sheets** (4-7)
+
+### 2. Labor Prices
+Contains hourly salary rates for personnel categories across jurisdictions. Referenced by the Detailed Table for labor cost calculations.
+
+### 3. Estimates
+Stores default quantities and prices for consumables, equipment, and labor. Referenced by the Detailed Table for baseline cost calculations.
+
+### 4. DSA - Equipment Throughput
+Provides equipment utilization factors for sensitivity analysis. Used by the Detailed Table to adjust equipment costs.
+
+### 5. DSA - Overheads
+Specifies overhead percentages for sensitivity analysis. Used by the Detailed Table to calculate overhead-inclusive costs.
+
+### 6. DSA - Consumable Discounts
+Provides discount rates for consumables in sensitivity analysis. Used by the Detailed Table to adjust consumable costs.
+
+### 7. DSA - Labor Prices
+Supplies alternative labor rates for sensitivity testing. Used by the Detailed Table when DSA scenarios are active.
+
+All these sheets work together to provide a comprehensive microcosting model for genomic testing.
+
 ## Purpose
 This project re-implements the microcosting calculations from the original Excel
 workbook in Python.  A calculation engine parses the Excel formulas and
@@ -166,6 +196,23 @@ pytest
 ```
 
 You can also run `just test` if `just` is available.
+
+## Generating Reports
+
+The project includes enhanced reporting capabilities that can generate reports in multiple formats:
+
+1. **Markdown reports** - Basic text-based reports
+2. **HTML reports** - Interactive web-based reports with enhanced formatting
+3. **PDF reports** - Printable documents (requires weasyprint)
+4. **JSON reports** - Machine-readable data summaries
+
+To generate all report formats, run:
+
+```bash
+python scripts/enhanced_reporting.py
+```
+
+This will create enhanced reports in the `reports/` directory with visualizations and detailed statistics.
 
 ## Running the calculation engine
 The engine can be initialised and inspected via the helper script:

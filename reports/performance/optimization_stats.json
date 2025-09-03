@@ -1,0 +1,66 @@
+[
+  {
+    "table": "3._estimates",
+    "original_memory_mb": 0.020099639892578125,
+    "optimized_memory_mb": 0.010112762451171875,
+    "savings_mb": 0.00998687744140625,
+    "savings_percent": 49.68684759916493,
+    "processing_time_seconds": 0.0072100162506103516
+  },
+  {
+    "table": "2._labor_prices",
+    "original_memory_mb": 0.031467437744140625,
+    "optimized_memory_mb": 0.015796661376953125,
+    "savings_mb": 0.0156707763671875,
+    "savings_percent": 49.799975754636925,
+    "processing_time_seconds": 0.0059719085693359375
+  },
+  {
+    "table": "detailed_table_values",
+    "original_memory_mb": 0.28955554962158203,
+    "optimized_memory_mb": 0.24948596954345703,
+    "savings_mb": 0.040069580078125,
+    "savings_percent": 13.838304992078939,
+    "processing_time_seconds": 0.006039142608642578
+  },
+  {
+    "table": "detailed_table_formulas",
+    "original_memory_mb": 1.0073356628417969,
+    "optimized_memory_mb": 1.0073356628417969,
+    "savings_mb": 0.0,
+    "savings_percent": 0.0,
+    "processing_time_seconds": 0.016637086868286133
+  },
+  {
+    "table": "ground_truth",
+    "original_memory_mb": 0.2708015441894531,
+    "optimized_memory_mb": 0.15050125122070312,
+    "savings_mb": 0.12030029296875,
+    "savings_percent": 44.42378396653003,
+    "processing_time_seconds": 0.003875732421875
+  },
+  {
+    "table": "dsa__labour_prices",
+    "original_memory_mb": 0.031864166259765625,
+    "optimized_memory_mb": 0.015995025634765625,
+    "savings_mb": 0.015869140625,
+    "savings_percent": 49.80246617981564,
+    "processing_time_seconds": 0.005761861801147461
+  },
+  {
+    "table": "detailed_table",
+    "original_memory_mb": 0.2705955505371094,
+    "optimized_memory_mb": 0.15038681030273438,
+    "savings_mb": 0.120208740234375,
+    "savings_percent": 44.423768238528226,
+    "processing_time_seconds": 0.0039937496185302734
+  },
+  {
+    "table": "dsa__test_throughput",
+    "original_memory_mb": 0.020877838134765625,
+    "optimized_memory_mb": 0.010501861572265625,
+    "savings_mb": 0.0103759765625,
+    "savings_percent": 49.6985200073086,
+    "processing_time_seconds": 0.004202842712402344
+  }
+]

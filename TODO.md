@@ -30,7 +30,7 @@
 - [ ] Translate supporting tables into CSV files for use outside Excel.
 - [ ] Document workbook dependencies in `docs/table_overview.md`.
 - [ ] Provide CSV translations of supporting tables for publication.
-- [ ] Use translated tables to replicate the detailed table.
+- [x] Use translated tables to replicate the detailed table.
 - [ ] Follow the workflow in `agents.md` to implement and validate the calculation engine.
 - [ ] Document workbook dependencies in the README.
 - [ ] Translate supporting tables and descriptions for inclusion in the docs.

@@ -1,0 +1,179 @@
+{
+  "table_name": "3._estimates",
+  "description": "Translated table from Excel workbook: 3._estimates",
+  "created_date": "2025-09-03T00:16:45.788951",
+  "row_count": 77,
+  "column_count": 34,
+  "columns": [
+    {
+      "name": "Panel - Estimate Stage Stage",
+      "dtype": "float64",
+      "null_count": 77
+    },
+    {
+      "name": "Equipment LL",
+      "dtype": "float64",
+      "null_count": 40
+    },
+    {
+      "name": "MP",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "UL",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "LL",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "Equipment - 70% MP",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "UL_2",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "LL_2",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "Equipment - 50% MP",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "UL_3",
+      "dtype": "float64",
+      "null_count": 42
+    },
+    {
+      "name": "LL_3",
+      "dtype": "float64",
+      "null_count": 57
+    },
+    {
+      "name": "Consumables MP",
+      "dtype": "float64",
+      "null_count": 57
+    },
+    {
+      "name": "UL_4",
+      "dtype": "float64",
+      "null_count": 57
+    },
+    {
+      "name": "LL_4",
+      "dtype": "float64",
+      "null_count": 28
+    },
+    {
+      "name": "Labour MP",
+      "dtype": "float64",
+      "null_count": 28
+    },
+    {
+      "name": "UL_5",
+      "dtype": "float64",
+      "null_count": 28
+    },
+    {
+      "name": "LL_5",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Overheads (base case) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_6",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "LL_6",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Overheads (80% utilisation) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_7",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "LL_7",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Overheads (40% utilisation) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_8",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "LL_8",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Total (base case) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_9",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "LL_9",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Total (80% utilisation) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_10",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "LL_10",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "Total (40% utilisation) MP",
+      "dtype": "float64",
+      "null_count": 22
+    },
+    {
+      "name": "UL_11",
+      "dtype": "float64",
+      "null_count": 22
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "sheet_name": "Sheet1",
+  "row_count": 55,
+  "column_count": 5,
+  "columns": [
+    "('ds',)",
+    "('Stage',)",
+    "('MP',)",
+    "('LL',)",
+    "('UL',)"
+  ],
+  "data_types": {
+    "('ds',)": "float64",
+    "('Stage',)": "float64",
+    "('MP',)": "float64",
+    "('LL',)": "float64",
+    "('UL',)": "float64"
+  },
+  "null_counts": {
+    "('ds',)": 55,
+    "('Stage',)": 55,
+    "('MP',)": 17,
+    "('LL',)": 17,
+    "('UL',)": 17
+  },
+  "memory_usage_bytes": "2332"
+}

@@ -16,7 +16,19 @@ logger = logging.getLogger(__name__)
 
 
 class SheetManager:
-    """Manages loading and accessing data from Excel sheets and Parquet files."""
+    """Manages loading and accessing data from Excel sheets and Parquet files.
+
+    This class handles loading data from Excel workbooks and prepared Parquet files,
+    managing both data values and formula representations. It supports complex
+    Excel features like merged cells and multi-level headers.
+
+    Attributes:
+        excel_file_path (Path): Path to the Excel file being loaded.
+        prepared_data_path (Path): Path to the directory containing prepared Parquet files.
+        sheet_configs (dict): Configuration for each sheet including header information.
+        sheets (dict): Dictionary of loaded data sheets as DataFrames.
+        formula_sheets (dict): Dictionary of loaded formula sheets as DataFrames.
+    """
 
     def __init__(
         self,
@@ -25,7 +37,17 @@ class SheetManager:
         prepared_data_path: Path | str | None = None,
         sheet_configs: dict | None = None,
     ):
-        """Create a new SheetManager instance."""
+        """Initialize the SheetManager.
+
+        Args:
+            excel_file_path (Path | str | None, optional): Path to the Excel file.
+                If None, loads from configuration. Defaults to None.
+            verbose (bool, optional): Whether to enable verbose logging. Defaults to False.
+            prepared_data_path (Path | str | None, optional): Path to prepared data directory.
+                If None, uses default location. Defaults to None.
+            sheet_configs (dict | None, optional): Sheet configuration dictionary.
+                If None, uses default configuration. Defaults to None.
+        """
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)
@@ -93,7 +115,11 @@ class SheetManager:
         self._load_all_sheets()
 
     def _load_all_sheets(self):
-        """Load every configured sheet into ``self.sheets``."""
+        """Load every configured sheet into ``self.sheets``.
+
+        This method loads both data values and formulas for each configured sheet
+        from the Excel workbook. It also loads prepared Parquet files if available.
+        """
         self.logger.debug("Loading all sheets from %s", self.excel_file_path)
 
         workbook_values = openpyxl.load_workbook(self.excel_file_path, data_only=True)
@@ -125,7 +151,12 @@ class SheetManager:
         self._load_prepared_tables()
 
     def _load_prepared_tables(self):
-        """Load pre-parsed parquet tables if available."""
+        """Load pre-parsed parquet tables if available.
+
+        This method loads prepared Parquet files that were previously generated
+        from the Excel workbook. These files are used for faster loading and
+        validation purposes.
+        """
         if not self.prepared_data_path.exists():
             return
 
@@ -158,9 +189,17 @@ class SheetManager:
                 self.formula_sheets[name] = df
 
     def _load_raw_sheet_data(self, sheet_obj):
-        """
-        Loads the raw data from a sheet.
-        It handles merged cells by looking up the value from the top-left cell.
+        """Load the raw data from a sheet.
+
+        This method loads raw data from an Excel sheet, handling merged cells
+        by looking up the value from the top-left cell of each merged range.
+
+        Args:
+            sheet_obj: The openpyxl worksheet object to load data from.
+
+        Returns:
+            tuple: A tuple containing (data, formulas) where both are lists of lists
+            representing the sheet data.
         """
         sheet_name = sheet_obj.title
         self.logger.debug("  _load_raw_sheet_data called for sheet: %s", sheet_name)

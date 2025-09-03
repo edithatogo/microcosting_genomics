@@ -200,6 +200,110 @@ def test_parse_literal_float():
     assert parse_formula(1.5) == {"type": "literal", "value": 1.5}
 
 
+def test_parse_sum_cells_range():
+    """Test parsing SUM with multiple cell ranges."""
+    formula = "=SUM(A1:A5,B1:B5)"
+    expected = {"type": "sum_cells", "cells": ["A1:A5", "B1:B5"]}
+    assert parse_formula(formula) == expected
+
+
+def test_parse_reference_with_unquoted_sheet():
+    """Test parsing reference with unquoted sheet name."""
+    formula = "=Sheet1!A1"
+    expected = {"type": "reference", "sheet": "Sheet1", "cell": "A1"}
+    assert parse_formula(formula) == expected
+
+
+def test_parse_reference_with_dollar_signs():
+    """Test parsing reference with dollar signs."""
+    formula = "=$A$1"
+    expected = {"type": "reference", "sheet": None, "cell": "$A$1"}
+    assert parse_formula(formula) == expected
+
+
+def test_parse_reference_with_sheet_and_dollar_signs():
+    """Test parsing reference with sheet name and dollar signs."""
+    formula = "=Sheet1!$A$1"
+    expected = {"type": "reference", "sheet": "Sheet1", "cell": "$A$1"}
+    assert parse_formula(formula) == expected
+
+
+def test_parse_negative_number():
+    """Test parsing negative numeric literals."""
+    formula = "=-5"
+    expected = {"type": "literal", "value": -5}
+    assert parse_formula(formula) == expected
+
+
+def test_parse_float_with_leading_dot():
+    """Test parsing float with leading dot.
+
+    Currently not supported - returns unknown type.
+    This is an edge case that could be improved in future.
+    """
+    formula = "=.5"
+    result = parse_formula(formula)
+    assert result["type"] == "unknown"
+
+
+def test_parse_complex_if_condition():
+    """Test parsing complex IF with comparison operators."""
+    formula = "=IF(A1<=B1,1,0)"
+    result = parse_formula(formula)
+    assert result["type"] == "if"
+    assert result["condition"] == "A1<=B1"
+
+
+def test_parse_if_with_nested_operations():
+    """Test parsing IF with nested operations in branches."""
+    formula = "=IF(A1>0,SUM(B1:B5),A1*B1)"
+    result = parse_formula(formula)
+    assert result["type"] == "if"
+    assert result["condition"] == "A1>0"
+    assert result["true_val"]["type"] == "sum_range"
+    assert result["false_val"]["type"] == "multiplication"
+
+
+def test_parse_vlookup_with_true_range_lookup():
+    """Test parsing VLOOKUP with TRUE range lookup."""
+    formula = "=VLOOKUP(C12,E3:G13,2,TRUE)"
+    expected = {
+        "type": "vlookup",
+        "lookup_value": "C12",
+        "table_array": "E3:G13",
+        "col_index_num": "2",
+        "range_lookup": "TRUE",
+    }
+    assert parse_formula(formula) == expected
+
+
+def test_parse_division():
+    """Test parsing division operations.
+
+    Currently not supported - returns unknown type.
+    This is an edge case that could be improved in future.
+    """
+    formula = "=A1/B1"
+    result = parse_formula(formula)
+    assert result["type"] == "unknown"
+
+
+def test_parse_complex_formula():
+    """Test parsing a complex formula combining multiple operations."""
+    formula = "=SUM(A1:A5)*B1+IF(C1>0,1,0)"
+    result = parse_formula(formula)
+    # This would be parsed as addition with SUM and IF operations
+    assert result["type"] == "addition"
+    assert len(result["operands"]) == 2
+
+
+def test_parse_unsupported_formula():
+    """Test parsing an unsupported formula type."""
+    formula = "=AVERAGE(A1:A5)"
+    result = parse_formula(formula)
+    assert result["type"] == "unknown"
+
+
 def test_parse_unknown():
     formula = "=SOMEOTHERFUNCTION(A1)"
     expected = {"type": "unknown", "formula": formula}

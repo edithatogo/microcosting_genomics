@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Microcosting Analysis{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h1 class="display-4">
+                <i class="fas fa-dna me-3 text-primary"></i>Microcosting Analysis Tool
+            </h1>
+            <p class="lead text-muted">
+                Advanced cost analysis for rare disease genomics research
+            </p>
+        </div>
+        
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-table me-2"></i>Available Data Tables
+                </h2>
+            </div>
+            <div class="card-body">
+                {% if tables %}
+                    <div class="row">
+                        {% for table in tables %}
+                            <div class="col-lg-6 col-md-12 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-file-excel text-success me-2"></i>{{ table }}
+                                        </h5>
+                                        <p class="card-text text-muted">
+                                            Click to view detailed data and analysis
+                                        </p>
+                                        <div class="mt-auto">
+                                            <a href="{{ url_for('show_table', table_name=table) }}" 
+                                               class="btn btn-primary w-100">
+                                                <i class="fas fa-eye me-1"></i>View Data
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No data tables available. Please ensure data has been prepared.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-pie fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Data Visualization</h5>
+                        <p class="card-text text-muted">
+                            Explore interactive charts and graphs of your microcosting data
+                        </p>
+                        <a href="{{ url_for('visualize') }}" class="btn btn-info">
+                            <i class="fas fa-chart-bar me-1"></i>View Visualizations
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cogs fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Advanced Analysis</h5>
+                        <p class="card-text text-muted">
+                            Perform scenario modeling and cost optimization
+                        </p>
+                        <button class="btn btn-warning" disabled>
+                            <i class="fas fa-flask me-1"></i>Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,144 @@
+{
+  "table_name": "detailed_table",
+  "description": "Translated table from Excel workbook: detailed_table",
+  "created_date": "2025-09-03T00:16:45.865675",
+  "row_count": 1313,
+  "column_count": 27,
+  "columns": [
+    {
+      "name": "Test Test Test",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Category Category Category",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Sub-Category Sub-Category Sub-Category",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Step Step Step",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Estimates Quantity of Use per Test LL LL",
+      "dtype": "float64",
+      "null_count": 650
+    },
+    {
+      "name": "Estimate Estimate",
+      "dtype": "float64",
+      "null_count": 387
+    },
+    {
+      "name": "UL UL",
+      "dtype": "float64",
+      "null_count": 650
+    },
+    {
+      "name": "Source Source",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Price (AUD $/unit) LL LL",
+      "dtype": "float64",
+      "null_count": 482
+    },
+    {
+      "name": "Estimate Estimate_2",
+      "dtype": "float64",
+      "null_count": 392
+    },
+    {
+      "name": "UL UL_2",
+      "dtype": "float64",
+      "null_count": 482
+    },
+    {
+      "name": "Source Source_2",
+      "dtype": "float64",
+      "null_count": 1313
+    },
+    {
+      "name": "Unit Cost (AUD $/unit) LL LL",
+      "dtype": "float64",
+      "null_count": 373
+    },
+    {
+      "name": "Estimate Estimate_3",
+      "dtype": "float64",
+      "null_count": 299
+    },
+    {
+      "name": "UL UL_3",
+      "dtype": "float64",
+      "null_count": 373
+    },
+    {
+      "name": "DSA DSA LL SA",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "Estimate Estimate_4",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "UL UL_4",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "LL NSW",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "Estimate Estimate_5",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "UL UL_5",
+      "dtype": "float64",
+      "null_count": 631
+    },
+    {
+      "name": "LL QLD",
+      "dtype": "float64",
+      "null_count": 1049
+    },
+    {
+      "name": "Estimate Estimate_6",
+      "dtype": "float64",
+      "null_count": 1049
+    },
+    {
+      "name": "UL UL_6",
+      "dtype": "float64",
+      "null_count": 1049
+    },
+    {
+      "name": "LL WA",
+      "dtype": "float64",
+      "null_count": 1049
+    },
+    {
+      "name": "Estimate Estimate_7",
+      "dtype": "float64",
+      "null_count": 1049
+    },
+    {
+      "name": "UL UL_7",
+      "dtype": "float64",
+      "null_count": 1049
+    }
+  ]
+}
