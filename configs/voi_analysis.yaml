@@ -1,0 +1,48 @@
+analysis_type: voi_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743498'
+description: Configuration for value of information analysis
+last_updated: '2025-09-04T07:07:53.743498'
+parameters:
+  include_ceac:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include cost-effectiveness acceptability curve
+    max_value: null
+    min_value: null
+    name: include_ceac
+    required: true
+    value: true
+  wtp_range:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - 0
+    - 100000
+    description: Willingness-to-pay range for VOI analysis
+    max_value: null
+    min_value: null
+    name: wtp_range
+    required: true
+    value:
+    - 0
+    - 100000
+  wtp_steps:
+    category: general
+    choices: null
+    data_type: int
+    default_value: 100
+    description: Number of steps in WTP range
+    max_value: 1000
+    min_value: 10
+    name: wtp_steps
+    required: true
+    value: 100
+tags:
+- value_of_information
+- evpi
+- evppi
+version: 1.0.0

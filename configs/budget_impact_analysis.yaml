@@ -1,0 +1,50 @@
+analysis_type: budget_impact_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743503'
+description: Configuration for budget impact analysis
+last_updated: '2025-09-04T07:07:53.743504'
+parameters:
+  discount_rate:
+    category: general
+    choices: null
+    data_type: float
+    default_value: 0.03
+    description: Discount rate for future costs
+    max_value: 0.2
+    min_value: 0.0
+    name: discount_rate
+    required: true
+    value: 0.03
+  time_horizon:
+    category: general
+    choices: null
+    data_type: int
+    default_value: 5
+    description: Time horizon for budget impact analysis (years)
+    max_value: 20
+    min_value: 1
+    name: time_horizon
+    required: true
+    value: 5
+  volume_scenarios:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - low
+    - base
+    - high
+    description: Volume scenarios to analyze
+    max_value: null
+    min_value: null
+    name: volume_scenarios
+    required: true
+    value:
+    - low
+    - base
+    - high
+tags:
+- budget
+- impact
+- forecasting
+version: 1.0.0

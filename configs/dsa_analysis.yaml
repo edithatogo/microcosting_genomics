@@ -1,0 +1,53 @@
+analysis_type: dsa_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743487'
+description: Configuration for deterministic sensitivity analysis
+last_updated: '2025-09-04T07:07:53.743488'
+parameters:
+  include_tornado:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include tornado diagram in results
+    max_value: null
+    min_value: null
+    name: include_tornado
+    required: true
+    value: true
+  parameter_variations:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - 0.5
+    - 0.75
+    - 1.0
+    - 1.25
+    - 1.5
+    description: Variation factors for parameter sensitivity
+    max_value: null
+    min_value: null
+    name: parameter_variations
+    required: true
+    value:
+    - 0.5
+    - 0.75
+    - 1.0
+    - 1.25
+    - 1.5
+  top_sensitivity_parameters:
+    category: general
+    choices: null
+    data_type: int
+    default_value: 10
+    description: Number of top sensitivity parameters to display
+    max_value: 50
+    min_value: 1
+    name: top_sensitivity_parameters
+    required: true
+    value: 10
+tags:
+- sensitivity
+- deterministic
+version: 1.0.0

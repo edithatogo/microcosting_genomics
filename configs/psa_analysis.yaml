@@ -1,0 +1,54 @@
+analysis_type: psa_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743493'
+description: Configuration for probabilistic sensitivity analysis
+last_updated: '2025-09-04T07:07:53.743493'
+parameters:
+  confidence_intervals:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - 2.5
+    - 25
+    - 50
+    - 75
+    - 97.5
+    description: Percentiles for confidence intervals
+    max_value: null
+    min_value: null
+    name: confidence_intervals
+    required: true
+    value:
+    - 2.5
+    - 25
+    - 50
+    - 75
+    - 97.5
+  include_histogram:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include histogram visualization
+    max_value: null
+    min_value: null
+    name: include_histogram
+    required: true
+    value: true
+  monte_carlo_iterations:
+    category: general
+    choices: null
+    data_type: int
+    default_value: 1000
+    description: Number of Monte Carlo iterations
+    max_value: 100000
+    min_value: 100
+    name: monte_carlo_iterations
+    required: true
+    value: 1000
+tags:
+- sensitivity
+- probabilistic
+- monte_carlo
+version: 1.0.0

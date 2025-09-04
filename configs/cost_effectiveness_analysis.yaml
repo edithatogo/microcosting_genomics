@@ -1,0 +1,49 @@
+analysis_type: cost_effectiveness_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743512'
+description: Configuration for cost-effectiveness analysis
+last_updated: '2025-09-04T07:07:53.743513'
+parameters:
+  comparator_model:
+    category: general
+    choices:
+    - Panel
+    - WES
+    - WGS
+    data_type: str
+    default_value: WES
+    description: Comparator model for ICER calculation
+    max_value: null
+    min_value: null
+    name: comparator_model
+    required: true
+    value: WES
+  effectiveness_measure:
+    category: general
+    choices:
+    - diagnostic_yield
+    - turnaround_time
+    - accuracy
+    data_type: str
+    default_value: diagnostic_yield
+    description: Measure of effectiveness
+    max_value: null
+    min_value: null
+    name: effectiveness_measure
+    required: true
+    value: diagnostic_yield
+  include_technical_efficiency:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include technical efficiency metrics
+    max_value: null
+    min_value: null
+    name: include_technical_efficiency
+    required: true
+    value: true
+tags:
+- cost_effectiveness
+- icer
+version: 1.0.0

@@ -1,0 +1,53 @@
+analysis_type: benchmarking_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743517'
+description: Configuration for benchmarking analysis
+last_updated: '2025-09-04T07:07:53.743518'
+parameters:
+  benchmark_sources:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - published_literature
+    - internal_data
+    description: Sources of benchmark data
+    max_value: null
+    min_value: null
+    name: benchmark_sources
+    required: true
+    value:
+    - published_literature
+    - internal_data
+  include_efficiency_metrics:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include efficiency metrics in benchmarking
+    max_value: null
+    min_value: null
+    name: include_efficiency_metrics
+    required: true
+    value: true
+  performance_metrics:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - cost_per_test
+    - turnaround_time
+    - throughput
+    description: Performance metrics to benchmark
+    max_value: null
+    min_value: null
+    name: performance_metrics
+    required: true
+    value:
+    - cost_per_test
+    - turnaround_time
+    - throughput
+tags:
+- benchmarking
+- comparison
+version: 1.0.0

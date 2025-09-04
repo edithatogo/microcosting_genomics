@@ -1,0 +1,47 @@
+analysis_type: break_even_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743507'
+description: Configuration for break-even analysis
+last_updated: '2025-09-04T07:07:53.743508'
+parameters:
+  fixed_costs:
+    category: general
+    choices: null
+    data_type: float
+    default_value: 500000
+    description: Fixed costs for break-even calculation
+    max_value: null
+    min_value: 0
+    name: fixed_costs
+    required: true
+    value: 500000
+  include_sensitivity:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include sensitivity analysis in break-even results
+    max_value: null
+    min_value: null
+    name: include_sensitivity
+    required: true
+    value: true
+  price_range:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - 0
+    - 10000
+    description: Price range for break-even analysis
+    max_value: null
+    min_value: null
+    name: price_range
+    required: true
+    value:
+    - 0
+    - 10000
+tags:
+- break_even
+- cost_recovery
+version: 1.0.0

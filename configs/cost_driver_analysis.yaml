@@ -1,0 +1,49 @@
+analysis_type: cost_driver_analysis
+author: Microcosting Team
+created_date: '2025-09-04T07:07:53.743466'
+description: Configuration for cost driver analysis
+last_updated: '2025-09-04T07:07:53.743480'
+parameters:
+  include_percentage:
+    category: general
+    choices: null
+    data_type: bool
+    default_value: true
+    description: Include percentage contribution in results
+    max_value: null
+    min_value: null
+    name: include_percentage
+    required: true
+    value: true
+  model_types:
+    category: general
+    choices: null
+    data_type: list
+    default_value:
+    - Panel
+    - WES
+    - WGS
+    description: Types of models to analyze
+    max_value: null
+    min_value: null
+    name: model_types
+    required: true
+    value:
+    - Panel
+    - WES
+    - WGS
+  top_n_drivers:
+    category: general
+    choices: null
+    data_type: int
+    default_value: 10
+    description: Number of top cost drivers to display
+    max_value: 100
+    min_value: 1
+    name: top_n_drivers
+    required: true
+    value: 10
+tags:
+- cost_analysis
+- drivers
+version: 1.0.0
