@@ -19,7 +19,7 @@ workbooks:
       "Detailed Table":
         header_rows: 4
         data_starts_at: 5
-        string_columns": ["Test", "Category", "Sub-Category", "Step"]
+        string_columns: ["Test", "Category", "Sub-Category", "Step"]
       "DSA - Labour Prices":
         header_rows: 1
         data_starts_at: 2

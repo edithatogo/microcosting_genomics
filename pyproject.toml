@@ -39,6 +39,8 @@ dev = [
     "markdown",
     "plotly",
     "seaborn",
+    # Note: hypothesis is not compatible with Python 3.13
+    # "hypothesis",
 ]
 
 [project.scripts]
@@ -51,3 +53,7 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["unimelb_phd_phase_1*"]
+
+[tool.pytest.ini_options]
+addopts = "-p no:hypothesis"
+testpaths = ["tests"]
