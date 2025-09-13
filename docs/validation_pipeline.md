@@ -1,200 +1,193 @@
 # Ongoing Validation Pipeline Report
-Generated: 2025-09-13 19:40:44
+Generated: 2025-09-13 19:50:10
 
 ## Summary
 - **Models Validated**: 5
 - **Models Passing**: 0
 - **Validation Rate**: 0.0%
-- **Total Issues**: 160
-  - Errors: 35
-  - Warnings: 10
-  - Info: 115
+- **Total Issues**: 125
+  - Errors: 20
+  - Warnings: 0
+  - Info: 105
 
 ## Model Validation Results
 ### Panel - ❌ FAIL
 - **Rows**: 256
-- **Columns**: 27
-- **Total Issues**: 32
-- **Errors**: 7
-- **Warnings**: 2
-- **Info**: 23
-- **Checksum**: 389eb385...
+- **Columns**: 36
+- **Total Issues**: 25
+- **Errors**: 4
+- **Warnings**: 0
+- **Info**: 21
+- **Checksum**: 0e19b555...
 - **Issues**:
-  - ❌ **Structure**: Missing required column: Item
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Notes
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Total Cost (AUD)
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Units
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ⚠️ **Structure**: Column order does not match template
-    - *Suggestion*: Consider reordering columns to match template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 6
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 25
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 10
+  - ℹ️ **Structure**: Extra column present: Unnamed: 11
     - *Suggestion*: Review if this column should be included in the template
   - ℹ️ **Structure**: Extra column present: Quantity of Use per Test
     - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 16
+  - ℹ️ **Structure**: Extra column present: Unnamed: 9
     - *Suggestion*: Review if this column should be included in the template
-  - ... and 22 more issues
+  - ℹ️ **Structure**: Extra column present: Unnamed: 23
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 22
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 25
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 6
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 7
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 17
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 19
+    - *Suggestion*: Review if this column should be included in the template
+  - ... and 15 more issues
 
 ### WES (P) - ❌ FAIL
 - **Rows**: 264
-- **Columns**: 27
-- **Total Issues**: 32
-- **Errors**: 7
-- **Warnings**: 2
-- **Info**: 23
-- **Checksum**: b126d1c0...
+- **Columns**: 36
+- **Total Issues**: 25
+- **Errors**: 4
+- **Warnings**: 0
+- **Info**: 21
+- **Checksum**: 9b629106...
 - **Issues**:
-  - ❌ **Structure**: Missing required column: Item
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Notes
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Total Cost (AUD)
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Units
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ⚠️ **Structure**: Column order does not match template
-    - *Suggestion*: Consider reordering columns to match template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 6
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 25
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 10
+  - ℹ️ **Structure**: Extra column present: Unnamed: 11
     - *Suggestion*: Review if this column should be included in the template
   - ℹ️ **Structure**: Extra column present: Quantity of Use per Test
     - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 16
+  - ℹ️ **Structure**: Extra column present: Unnamed: 9
     - *Suggestion*: Review if this column should be included in the template
-  - ... and 22 more issues
+  - ℹ️ **Structure**: Extra column present: Unnamed: 23
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 22
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 25
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 6
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 7
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 17
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 19
+    - *Suggestion*: Review if this column should be included in the template
+  - ... and 15 more issues
 
 ### WES (T) - ❌ FAIL
 - **Rows**: 300
-- **Columns**: 27
-- **Total Issues**: 32
-- **Errors**: 7
-- **Warnings**: 2
-- **Info**: 23
-- **Checksum**: e3763ca0...
+- **Columns**: 36
+- **Total Issues**: 25
+- **Errors**: 4
+- **Warnings**: 0
+- **Info**: 21
+- **Checksum**: b372c492...
 - **Issues**:
-  - ❌ **Structure**: Missing required column: Item
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Notes
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Total Cost (AUD)
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Units
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ⚠️ **Structure**: Column order does not match template
-    - *Suggestion*: Consider reordering columns to match template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 6
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 25
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 10
+  - ℹ️ **Structure**: Extra column present: Unnamed: 11
     - *Suggestion*: Review if this column should be included in the template
   - ℹ️ **Structure**: Extra column present: Quantity of Use per Test
     - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 16
+  - ℹ️ **Structure**: Extra column present: Unnamed: 9
     - *Suggestion*: Review if this column should be included in the template
-  - ... and 22 more issues
+  - ℹ️ **Structure**: Extra column present: Unnamed: 23
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 22
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 25
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 6
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 7
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 17
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 19
+    - *Suggestion*: Review if this column should be included in the template
+  - ... and 15 more issues
 
 ### WGS (P) - ❌ FAIL
 - **Rows**: 245
-- **Columns**: 27
-- **Total Issues**: 32
-- **Errors**: 7
-- **Warnings**: 2
-- **Info**: 23
-- **Checksum**: 7825bd0d...
+- **Columns**: 36
+- **Total Issues**: 25
+- **Errors**: 4
+- **Warnings**: 0
+- **Info**: 21
+- **Checksum**: 73093085...
 - **Issues**:
-  - ❌ **Structure**: Missing required column: Item
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Notes
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Total Cost (AUD)
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Units
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ⚠️ **Structure**: Column order does not match template
-    - *Suggestion*: Consider reordering columns to match template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 6
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 25
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 10
+  - ℹ️ **Structure**: Extra column present: Unnamed: 11
     - *Suggestion*: Review if this column should be included in the template
   - ℹ️ **Structure**: Extra column present: Quantity of Use per Test
     - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 16
+  - ℹ️ **Structure**: Extra column present: Unnamed: 9
     - *Suggestion*: Review if this column should be included in the template
-  - ... and 22 more issues
+  - ℹ️ **Structure**: Extra column present: Unnamed: 23
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 22
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 25
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 6
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 7
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 17
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 19
+    - *Suggestion*: Review if this column should be included in the template
+  - ... and 15 more issues
 
 ### WGS (T) - ❌ FAIL
 - **Rows**: 271
-- **Columns**: 27
-- **Total Issues**: 32
-- **Errors**: 7
-- **Warnings**: 2
-- **Info**: 23
-- **Checksum**: bbe11a9a...
+- **Columns**: 36
+- **Total Issues**: 25
+- **Errors**: 4
+- **Warnings**: 0
+- **Info**: 21
+- **Checksum**: 922d4b95...
 - **Issues**:
-  - ❌ **Structure**: Missing required column: Item
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Notes
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Total Cost (AUD)
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ❌ **Structure**: Missing required column: Units
-    - *Suggestion*: Add the missing column with appropriate default values
-  - ⚠️ **Structure**: Column order does not match template
-    - *Suggestion*: Consider reordering columns to match template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 6
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 25
-    - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 10
+  - ℹ️ **Structure**: Extra column present: Unnamed: 11
     - *Suggestion*: Review if this column should be included in the template
   - ℹ️ **Structure**: Extra column present: Quantity of Use per Test
     - *Suggestion*: Review if this column should be included in the template
-  - ℹ️ **Structure**: Extra column present: Unnamed: 16
+  - ℹ️ **Structure**: Extra column present: Unnamed: 9
     - *Suggestion*: Review if this column should be included in the template
-  - ... and 22 more issues
+  - ℹ️ **Structure**: Extra column present: Unnamed: 23
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 22
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 25
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 6
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 7
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 17
+    - *Suggestion*: Review if this column should be included in the template
+  - ℹ️ **Structure**: Extra column present: Unnamed: 19
+    - *Suggestion*: Review if this column should be included in the template
+  - ... and 15 more issues
 
 ## Recommendations
 ### Failed Models
-- **Panel**: 7 critical errors
-  - Missing required column: Item
-  - Missing required column: Notes
-  - Missing required column: Total Cost (AUD)
-- **WES (P)**: 7 critical errors
-  - Missing required column: Item
-  - Missing required column: Notes
-  - Missing required column: Total Cost (AUD)
-- **WES (T)**: 7 critical errors
-  - Missing required column: Item
-  - Missing required column: Notes
-  - Missing required column: Total Cost (AUD)
-- **WGS (P)**: 7 critical errors
-  - Missing required column: Item
-  - Missing required column: Notes
-  - Missing required column: Total Cost (AUD)
-- **WGS (T)**: 7 critical errors
-  - Missing required column: Item
-  - Missing required column: Notes
-  - Missing required column: Total Cost (AUD)
-
-### Models with Warnings
-- **Panel**: 2 warnings
-- **WES (P)**: 2 warnings
-- **WES (T)**: 2 warnings
-- **WGS (P)**: 2 warnings
-- **WGS (T)**: 2 warnings
+- **Panel**: 4 critical errors
+  - Column 'Category' has 237 missing/empty values (92.6%)
+  - Column 'Sub-Category' has 237 missing/empty values (92.6%)
+  - Column 'Item' has 248 missing/empty values (96.9%)
+- **WES (P)**: 4 critical errors
+  - Column 'Category' has 245 missing/empty values (92.8%)
+  - Column 'Sub-Category' has 245 missing/empty values (92.8%)
+  - Column 'Item' has 257 missing/empty values (97.3%)
+- **WES (T)**: 4 critical errors
+  - Column 'Category' has 282 missing/empty values (94.0%)
+  - Column 'Sub-Category' has 281 missing/empty values (93.7%)
+  - Column 'Item' has 293 missing/empty values (97.7%)
+- **WGS (P)**: 4 critical errors
+  - Column 'Category' has 227 missing/empty values (92.7%)
+  - Column 'Sub-Category' has 226 missing/empty values (92.2%)
+  - Column 'Item' has 236 missing/empty values (96.3%)
+- **WGS (T)**: 4 critical errors
+  - Column 'Category' has 251 missing/empty values (92.6%)
+  - Column 'Sub-Category' has 251 missing/empty values (92.6%)
+  - Column 'Item' has 262 missing/empty values (96.7%)
 
 ### Overall Assessment
 ⚠️ **Multiple models failed validation**

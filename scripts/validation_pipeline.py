@@ -68,7 +68,7 @@ class OngoingValidationPipeline:
 
     def __init__(self, config_path: str = "config/standard_categories.yaml",
                  templates_dir: str = "config/templates",
-                 models_dir: str = "data/standardized"):
+                 models_dir: str = "data/enhanced"):
         self.config_path = Path(config_path)
         self.templates_dir = Path(templates_dir)
         self.models_dir = Path(models_dir)
@@ -146,8 +146,8 @@ class OngoingValidationPipeline:
         return None
 
     def load_standardized_model(self, model_name: str) -> Optional[pd.DataFrame]:
-        """Load a standardized model from file."""
-        filename = f"{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_standardized.csv"
+        """Load an enhanced model from file."""
+        filename = f"{model_name.replace(' ', '_').replace('(', '').replace(')', '')}_enhanced.csv"
         filepath = self.models_dir / filename
 
         if not filepath.exists():
@@ -368,8 +368,8 @@ class OngoingValidationPipeline:
         return issues
 
     def validate_model(self, model_name: str) -> ModelValidationResult:
-        """Validate a single standardized model."""
-        logger.info(f"Validating standardized model: {model_name}")
+        """Validate a single enhanced model."""
+        logger.info(f"Validating enhanced model: {model_name}")
 
         # Load model data
         df = self.load_standardized_model(model_name)
@@ -447,7 +447,7 @@ class OngoingValidationPipeline:
         return result
 
     def validate_all_models(self) -> ValidationPipelineResult:
-        """Validate all standardized models."""
+        """Validate all enhanced models."""
         results = {}
         models_to_check = ["Panel", "WES (P)", "WES (T)", "WGS (P)", "WGS (T)"]
 

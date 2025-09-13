@@ -190,5 +190,197 @@
         "column_count": 27
       }
     }
+  },
+  {
+    "timestamp": "2025-09-13T19:48:05.500688",
+    "summary": {
+      "models_processed": 5,
+      "models_valid": 0,
+      "validation_rate": 0.0,
+      "total_issues": 160,
+      "total_errors": 35,
+      "total_warnings": 10,
+      "total_info": 115
+    },
+    "models": {
+      "Panel": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "389eb385d95fc4ca0f30293ba0025c7c",
+        "row_count": 256,
+        "column_count": 27
+      },
+      "WES (P)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "b126d1c0fdf6b8ab5611a5114a89911a",
+        "row_count": 264,
+        "column_count": 27
+      },
+      "WES (T)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "e3763ca08f3e29d717da14d4a7991c26",
+        "row_count": 300,
+        "column_count": 27
+      },
+      "WGS (P)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "7825bd0d52632643822fba36057bd20b",
+        "row_count": 245,
+        "column_count": 27
+      },
+      "WGS (T)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "bbe11a9aef7d03d86a68a3d78cadd851",
+        "row_count": 271,
+        "column_count": 27
+      }
+    }
+  },
+  {
+    "timestamp": "2025-09-13T19:48:28.363103",
+    "summary": {
+      "models_processed": 5,
+      "models_valid": 0,
+      "validation_rate": 0.0,
+      "total_issues": 160,
+      "total_errors": 35,
+      "total_warnings": 10,
+      "total_info": 115
+    },
+    "models": {
+      "Panel": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "389eb385d95fc4ca0f30293ba0025c7c",
+        "row_count": 256,
+        "column_count": 27
+      },
+      "WES (P)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "b126d1c0fdf6b8ab5611a5114a89911a",
+        "row_count": 264,
+        "column_count": 27
+      },
+      "WES (T)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "e3763ca08f3e29d717da14d4a7991c26",
+        "row_count": 300,
+        "column_count": 27
+      },
+      "WGS (P)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "7825bd0d52632643822fba36057bd20b",
+        "row_count": 245,
+        "column_count": 27
+      },
+      "WGS (T)": {
+        "is_valid": false,
+        "total_issues": 32,
+        "errors": 7,
+        "warnings": 2,
+        "info": 23,
+        "checksum": "bbe11a9aef7d03d86a68a3d78cadd851",
+        "row_count": 271,
+        "column_count": 27
+      }
+    }
+  },
+  {
+    "timestamp": "2025-09-13T19:50:10.184402",
+    "summary": {
+      "models_processed": 5,
+      "models_valid": 0,
+      "validation_rate": 0.0,
+      "total_issues": 125,
+      "total_errors": 20,
+      "total_warnings": 0,
+      "total_info": 105
+    },
+    "models": {
+      "Panel": {
+        "is_valid": false,
+        "total_issues": 25,
+        "errors": 4,
+        "warnings": 0,
+        "info": 21,
+        "checksum": "0e19b55504f00a99b6df69412a09bec9",
+        "row_count": 256,
+        "column_count": 36
+      },
+      "WES (P)": {
+        "is_valid": false,
+        "total_issues": 25,
+        "errors": 4,
+        "warnings": 0,
+        "info": 21,
+        "checksum": "9b629106f0898479bd8f839cb8c3c5d7",
+        "row_count": 264,
+        "column_count": 36
+      },
+      "WES (T)": {
+        "is_valid": false,
+        "total_issues": 25,
+        "errors": 4,
+        "warnings": 0,
+        "info": 21,
+        "checksum": "b372c4921a3f345e80cd2607dbcdb3e5",
+        "row_count": 300,
+        "column_count": 36
+      },
+      "WGS (P)": {
+        "is_valid": false,
+        "total_issues": 25,
+        "errors": 4,
+        "warnings": 0,
+        "info": 21,
+        "checksum": "73093085f4d0ce24785e1f58b156b1c8",
+        "row_count": 245,
+        "column_count": 36
+      },
+      "WGS (T)": {
+        "is_valid": false,
+        "total_issues": 25,
+        "errors": 4,
+        "warnings": 0,
+        "info": 21,
+        "checksum": "922d4b95e12d349ca7be981fa4ff5862",
+        "row_count": 271,
+        "column_count": 36
+      }
+    }
   }
 ]
