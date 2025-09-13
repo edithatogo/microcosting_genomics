@@ -1,0 +1,139 @@
+{
+  "name": "WGS (T)_template",
+  "required_columns": [
+    "Test",
+    "Category",
+    "Sub-Category",
+    "Item",
+    "Unit Cost (AUD $/unit)",
+    "Units",
+    "Total Cost (AUD)",
+    "Notes"
+  ],
+  "optional_columns": [
+    "Supplier",
+    "Catalogue Number",
+    "Batch/Lot Number",
+    "Expiry Date",
+    "Storage Conditions",
+    "Quality Control",
+    "References"
+  ],
+  "column_order": [
+    "Test",
+    "Category",
+    "Sub-Category",
+    "Item",
+    "Unit Cost (AUD $/unit)",
+    "Units",
+    "Total Cost (AUD)",
+    "Notes",
+    "Supplier",
+    "Catalogue Number",
+    "Batch/Lot Number",
+    "Expiry Date",
+    "Storage Conditions",
+    "Quality Control",
+    "References"
+  ],
+  "data_types": {
+    "Test": "string",
+    "Category": "category",
+    "Sub-Category": "category",
+    "Item": "string",
+    "Unit Cost (AUD $/unit)": "float64",
+    "Units": "float64",
+    "Total Cost (AUD)": "float64",
+    "Notes": "string",
+    "Supplier": "string",
+    "Catalogue Number": "string",
+    "Batch/Lot Number": "string",
+    "Expiry Date": "datetime64[ns]",
+    "Storage Conditions": "string",
+    "Quality Control": "string",
+    "References": "string"
+  },
+  "validation_rules": {
+    "required_categories": [
+      "Labour",
+      "Equipment",
+      "Consumables"
+    ],
+    "minimum_subcategories": {
+      "Labour": 3,
+      "Equipment": 3,
+      "Consumables": 2
+    },
+    "standard_categories": [
+      "Labour",
+      "Equipment",
+      "Consumables"
+    ],
+    "standard_subcategories": {
+      "Labour": [
+        "Specimen Collection",
+        "Specimen Receipt",
+        "DNA Extraction",
+        "Library Preparation",
+        "Sequencing",
+        "Bioinformatics - Maintenance",
+        "Variant Filtering",
+        "Interpretation",
+        "Report Writing"
+      ],
+      "Equipment": [
+        "DNA Extraction",
+        "Library Preparation",
+        "Sequencing",
+        "Interpretation",
+        "Archival Storage",
+        "Network Storage",
+        "Compute",
+        "Processing"
+      ],
+      "Consumables": [
+        "DNA Extraction",
+        "Library Preparation",
+        "Sequencing"
+      ]
+    },
+    "model_specific_subcategories": {
+      "Equipment": [
+        "Processing"
+      ]
+    },
+    "cost_validation": {
+      "unit_cost_range": [
+        0,
+        10000
+      ],
+      "units_range": [
+        0,
+        10000
+      ],
+      "total_cost_calculation": "Unit Cost * Units"
+    },
+    "data_integrity": {
+      "no_empty_required_fields": true,
+      "consistent_test_name": true,
+      "valid_categories_only": true
+    }
+  },
+  "default_values": {
+    "Test": "WGS (T)",
+    "Category": "",
+    "Sub-Category": "",
+    "Item": "",
+    "Unit Cost (AUD $/unit)": 0.0,
+    "Units": 1.0,
+    "Total Cost (AUD)": 0.0,
+    "Notes": "",
+    "Supplier": "",
+    "Catalogue Number": "",
+    "Batch/Lot Number": "",
+    "Expiry Date": "NaT",
+    "Storage Conditions": "Room temperature",
+    "Quality Control": "",
+    "References": ""
+  }
+}

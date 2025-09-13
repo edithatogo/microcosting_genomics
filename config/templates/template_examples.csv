@@ -1,0 +1,21 @@
+Test,Category,Sub-Category,Item,Unit Cost (AUD $/unit),Units,Total Cost (AUD),Notes
+Example Model,Labour,Specimen Collection,Example Specimen Collection Item,100.0,1.0,100.0,Example entry for Labour - Specimen Collection
+Example Model,Labour,Specimen Receipt,Example Specimen Receipt Item,100.0,1.0,100.0,Example entry for Labour - Specimen Receipt
+Example Model,Labour,DNA Extraction,Example DNA Extraction Item,100.0,1.0,100.0,Example entry for Labour - DNA Extraction
+Example Model,Labour,Library Preparation,Example Library Preparation Item,100.0,1.0,100.0,Example entry for Labour - Library Preparation
+Example Model,Labour,Sequencing,Example Sequencing Item,100.0,1.0,100.0,Example entry for Labour - Sequencing
+Example Model,Labour,Bioinformatics - Maintenance,Example Bioinformatics - Maintenance Item,100.0,1.0,100.0,Example entry for Labour - Bioinformatics - Maintenance
+Example Model,Labour,Variant Filtering,Example Variant Filtering Item,100.0,1.0,100.0,Example entry for Labour - Variant Filtering
+Example Model,Labour,Interpretation,Example Interpretation Item,100.0,1.0,100.0,Example entry for Labour - Interpretation
+Example Model,Labour,Report Writing,Example Report Writing Item,100.0,1.0,100.0,Example entry for Labour - Report Writing
+Example Model,Equipment,DNA Extraction,Example DNA Extraction Item,100.0,1.0,100.0,Example entry for Equipment - DNA Extraction
+Example Model,Equipment,Library Preparation,Example Library Preparation Item,100.0,1.0,100.0,Example entry for Equipment - Library Preparation
+Example Model,Equipment,Sequencing,Example Sequencing Item,100.0,1.0,100.0,Example entry for Equipment - Sequencing
+Example Model,Equipment,Interpretation,Example Interpretation Item,100.0,1.0,100.0,Example entry for Equipment - Interpretation
+Example Model,Equipment,Archival Storage,Example Archival Storage Item,100.0,1.0,100.0,Example entry for Equipment - Archival Storage
+Example Model,Equipment,Network Storage,Example Network Storage Item,100.0,1.0,100.0,Example entry for Equipment - Network Storage
+Example Model,Equipment,Compute,Example Compute Item,100.0,1.0,100.0,Example entry for Equipment - Compute
+Example Model,Equipment,Processing,Example Processing Item,100.0,1.0,100.0,Example entry for Equipment - Processing
+Example Model,Consumables,DNA Extraction,Example DNA Extraction Item,100.0,1.0,100.0,Example entry for Consumables - DNA Extraction
+Example Model,Consumables,Library Preparation,Example Library Preparation Item,100.0,1.0,100.0,Example entry for Consumables - Library Preparation
+Example Model,Consumables,Sequencing,Example Sequencing Item,100.0,1.0,100.0,Example entry for Consumables - Sequencing

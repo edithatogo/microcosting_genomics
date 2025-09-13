@@ -1,0 +1,74 @@
+# Standard Categories and Subcategories for Genomic Testing Models
+# This file defines the standardized taxonomy for the five genomic models:
+# - Panel (Targeted gene panel testing)
+# - WES (P) (Whole Exome Sequencing - Proband)
+# - WES (T) (Whole Exome Sequencing - Trio)
+# - WGS (Whole Genome Sequencing - Singleton)
+# - WGS (T) (Whole Genome Sequencing - Trio)
+
+# Main categories (100% consistency across all models)
+standard_categories:
+  - "Labour"
+  - "Equipment"
+  - "Consumables"
+
+# Standard subcategories by category
+# These represent the common subcategories found across all models
+standard_subcategories:
+  Labour:
+    - "Specimen Collection"
+    - "Specimen Receipt"
+    - "DNA Extraction"
+    - "Library Preparation"
+    - "Sequencing"
+    - "Bioinformatics - Maintenance"
+    - "Variant Filtering"
+    - "Interpretation"
+    - "Report Writing"
+
+  Equipment:
+    # Core equipment (present in all models)
+    - "DNA Extraction"
+    - "Library Preparation"
+    - "Sequencing"
+    - "Interpretation"
+    # Storage equipment (present in most models)
+    - "Archival Storage"
+    - "Network Storage"
+    - "Compute"
+    # Model-specific equipment (may be optional)
+    - "Processing"  # WGS-specific
+
+  Consumables:
+    - "DNA Extraction"
+    - "Library Preparation"
+    - "Sequencing"
+
+# Model-specific variations
+# These subcategories are only present in specific models
+model_specific_subcategories:
+  "WGS (T)":
+    Equipment:
+      - "Processing"  # Additional processing equipment for trio analysis
+
+# Category validation rules
+validation_rules:
+  required_categories: ["Labour", "Equipment", "Consumables"]
+  minimum_subcategories:
+    Labour: 3
+    Equipment: 3
+    Consumables: 2
+
+# Mapping rules for standardization
+standardization_mappings:
+  # Map non-standard category names to standard ones
+  category_mappings:
+    "Labor": "Labour"  # Handle spelling variations
+
+  # Map non-standard subcategory names to standard ones
+  subcategory_mappings:
+    "Bioinformatics": "Bioinformatics - Maintenance"
+    "Maintenance": "Bioinformatics - Maintenance"
+    "Storage": "Archival Storage"
+    "Network": "Network Storage"
+    "Computation": "Compute"

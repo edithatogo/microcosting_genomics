@@ -269,8 +269,8 @@ def parse_formula(formula):
                 logger.debug(f"Parsed as sum_cells: {len(args)} cells")
                 return {"type": "sum_cells", "cells": args}
 
-        # Simple cell reference with quoted sheet name
-        match = re.fullmatch(r"'([^']*)'!(\$?\w+\$?\d+)", formula)
+        # Simple cell reference with quoted sheet name (including external workbook references)
+        match = re.fullmatch(r"'(?:\[\d+\])?([^']*)'!(\$?\w+\$?\d+)", formula)
         if match:
             sheet, cell = match.groups()
             logger.debug(
@@ -278,8 +278,8 @@ def parse_formula(formula):
             )
             return {"type": "reference", "sheet": sheet, "cell": cell}
 
-        # Simple cell reference with unquoted sheet name
-        match = re.fullmatch(r"([\w\s\.-]+)!(\$?\w+\$?\d+)", formula)
+        # Simple cell reference with unquoted sheet name (including external workbook references)
+        match = re.fullmatch(r"(?:\[[^\]]+\])?([\w\s\.-]+)!(\$?\w+\$?\d+)", formula)
         if match:
             sheet, cell = match.groups()
             logger.debug(
