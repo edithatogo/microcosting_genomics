@@ -4,18 +4,19 @@ This documentation provides comprehensive information about the `unimelb-phd-pha
 
 ## Table of Contents
 
-1. [Project Overview](../README.md) - Main project documentation
-2. [Repository Structure](REPOSITORY_STRUCTURE.md) - Detailed repository organization
-3. [Development Guide](DEVELOPMENT_GUIDE.md) - Guide for developers
-4. [API Reference](API_REFERENCE.md) - Detailed API documentation
-5. [Calculation Engine](CALCULATION_ENGINE.md) - Core calculation logic and formula parsing
-6. [Data Management](DATA_MANAGEMENT.md) - Unified data handling and preparation
-7. [Data Manager](DATA_MANAGER.md) - Data manager implementation details
-8. [Configuration](CONFIG.md) - Configuration management
-9. [Scenario Analysis](SCENARIO_ANALYSIS.md) - Deterministic and probabilistic sensitivity analysis
-10. [Plugin System](PLUGIN_SYSTEM.md) - Extensible plugin architecture
-11. [Models](MODELS.md) - Microcosting model descriptions
-12. [Table Overview](table_overview.md) - Detailed workbook table descriptions
+1. [Quick Start Guide](../QUICK_START.md) - Get up and running in under 10 minutes
+2. [Project Overview](../README.md) - Main project documentation
+3. [Repository Structure](REPOSITORY_STRUCTURE.md) - Detailed repository organization
+4. [Development Guide](DEVELOPMENT_GUIDE.md) - Guide for developers
+5. [API Reference](API_REFERENCE.md) - Detailed API documentation
+6. [Calculation Engine](CALCULATION_ENGINE.md) - Core calculation logic and formula parsing
+7. [Data Management](DATA_MANAGEMENT.md) - Unified data handling and preparation
+8. [Data Manager](DATA_MANAGER.md) - Data manager implementation details
+9. [Configuration](CONFIG.md) - Configuration management
+10. [Scenario Analysis](SCENARIO_ANALYSIS.md) - Deterministic and probabilistic sensitivity analysis
+11. [Plugin System](PLUGIN_SYSTEM.md) - Extensible plugin architecture
+12. [Models](MODELS.md) - Microcosting model descriptions
+13. [Table Overview](table_overview.md) - Detailed workbook table descriptions
 
 ## Core Modules
 
