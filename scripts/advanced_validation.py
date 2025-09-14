@@ -14,8 +14,8 @@ import logging
 from typing import Dict, Any
 
 # Import calculation engine components
-from src.unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from src.unimelb_phd_phase_1.sheet_manager import SheetManager
+from src.genomics_microcosting.calculation_engine import CalculationEngine
+from src.genomics_microcosting.sheet_manager import SheetManager
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

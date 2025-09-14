@@ -4,8 +4,8 @@ import unittest
 import numpy as np
 from unittest.mock import Mock, patch
 
-from src.unimelb_phd_phase_1.voi_analysis import VOIAnalyzer
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.voi_analysis import VOIAnalyzer
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestVOIAnalyzer(unittest.TestCase):
@@ -132,7 +132,7 @@ class TestVOIAnalyzer(unittest.TestCase):
         self.assertGreater(len(result["ceac_probabilities"]), 0)
         self.assertEqual(len(result["wtp_values"]), len(result["ceac_probabilities"]))
 
-    @patch('src.unimelb_phd_phase_1.voi_analysis.PSAAnalyzer')
+    @patch('src.genomics_microcosting.voi_analysis.PSAAnalyzer')
     def test_generate_voi_report(self, mock_psa_analyzer):
         """Test VOI report generation."""
         # Mock the PSA analyzer

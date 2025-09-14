@@ -7,7 +7,7 @@ This repository implements a Python-based calculation engine that reverse-engine
 **Key Facts:**
 - **Language:** Python 3.8+ (tested on 3.11+)
 - **Project Type:** Research analysis tool with Excel formula parsing
-- **Size:** ~100 files, primary focus on `src/unimelb_phd_phase_1/` package
+- **Size:** ~100 files, primary focus on `src/genomics_microcosting/` package
 - **Main Components:** Calculation engine, formula parser, strategy pattern implementations
 - **External Dependencies:** Excel workbook files (not in repo), pandas, openpyxl
 
@@ -83,7 +83,7 @@ The project includes a `justfile` for task automation, but `just` is not commonl
 ### Core Directory Structure
 
 ```
-src/unimelb_phd_phase_1/     # Main Python package
+src/genomics_microcosting/     # Main Python package
 ├── calculation_engine.py    # Main calculation engine class
 ├── formula_parser.py        # Excel formula parsing logic  
 ├── strategies.py           # Strategy pattern implementations for formula types
@@ -175,8 +175,8 @@ python analyze_formula_patterns.py
 ## File Dependencies and Relationships
 
 ### Critical Files for Code Changes
-- `src/unimelb_phd_phase_1/calculation_engine.py` - Main engine logic
-- `src/unimelb_phd_phase_1/strategies.py` - Formula implementations
+- `src/genomics_microcosting/calculation_engine.py` - Main engine logic
+- `src/genomics_microcosting/strategies.py` - Formula implementations
 - `tests/test_calculation_engine.py` - Core functionality tests
 - `config.yaml` - Data source configuration
 

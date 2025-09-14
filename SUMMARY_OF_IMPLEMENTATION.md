@@ -17,7 +17,7 @@ The genomics microcosting model contains five distinct models reflected in the o
 We have successfully implemented a comprehensive systematic framework for key outcome calculations:
 
 ### 1. Cost Driver Analysis (Completed)
-- **Module**: `src/unimelb_phd_phase_1/cost_driver_analysis.py`
+- **Module**: `src/genomics_microcosting/cost_driver_analysis.py`
 - **Script**: `scripts/analyze_cost_drivers.py`
 - **Functionality**:
   - Absolute value cost driver analysis
@@ -26,7 +26,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Comprehensive reporting
 
 ### 2. Deterministic Sensitivity Analysis (DSA) (Completed)
-- **Module**: `src/unimelb_phd_phase_1/dsa_analysis.py`
+- **Module**: `src/genomics_microcosting/dsa_analysis.py`
 - **Script**: `scripts/analyze_dsa.py`
 - **Functionality**:
   - Parameter loading from DSA sheets
@@ -35,7 +35,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Comprehensive reporting
 
 ### 3. Probabilistic Sensitivity Analysis (PSA) (Completed)
-- **Module**: `src/unimelb_phd_phase_1/psa_analysis.py`
+- **Module**: `src/genomics_microcosting/psa_analysis.py`
 - **Script**: `scripts/analyze_psa.py`
 - **Functionality**:
   - Monte Carlo simulation framework
@@ -46,7 +46,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Comprehensive reporting
 
 ### 4. Integrated Comprehensive Reporting (Completed)
-- **Module**: `src/unimelb_phd_phase_1/comprehensive_reporting.py`
+- **Module**: `src/genomics_microcosting/comprehensive_reporting.py`
 - **Script**: `scripts/generate_comprehensive_report.py`
 - **Functionality**:
   - Integration of all analytical components
@@ -55,7 +55,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Multi-format report output
 
 ### 5. Value of Information Analysis (Completed)
-- **Module**: `src/unimelb_phd_phase_1/voi_analysis.py`
+- **Module**: `src/genomics_microcosting/voi_analysis.py`
 - **Script**: `scripts/analyze_voi.py`
 - **Functionality**:
   - Expected Value of Perfect Information (EVPI) calculations
@@ -65,7 +65,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Comprehensive reporting
 
 ### 6. Budget Impact Analysis (Completed)
-- **Module**: `src/unimelb_phd_phase_1/budget_impact_analysis.py`
+- **Module**: `src/genomics_microcosting/budget_impact_analysis.py`
 - **Script**: `scripts/analyze_budget_impact.py`
 - **Functionality**:
   - Volume sensitivity analysis
@@ -75,7 +75,7 @@ We have successfully implemented a comprehensive systematic framework for key ou
   - Comprehensive reporting
 
 ### 7. Break-even Analysis (Completed)
-- **Module**: `src/unimelb_phd_phase_1/break_even_analysis.py`
+- **Module**: `src/genomics_microcosting/break_even_analysis.py`
 - **Script**: `scripts/analyze_break_even.py`
 - **Functionality**:
   - Volume threshold calculations for cost recovery

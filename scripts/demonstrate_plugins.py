@@ -183,7 +183,7 @@ class SampleCostAnalysisPlugin(AnalysisPlugin):
 '''
     
     # Save the sample plugin
-    plugins_dir = Path(__file__).resolve().parents[1] / "src" / "unimelb_phd_phase_1" / "plugins"
+    plugins_dir = Path(__file__).resolve().parents[1] / "src" / "genomics_microcosting" / "plugins"
     sample_plugin_file = plugins_dir / "sample_enhanced_plugin.py"
     
     with open(sample_plugin_file, 'w') as f:

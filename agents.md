@@ -21,7 +21,7 @@ The overall goal is to build a robust and validated Python-based calculation eng
     *   **Method:** Use Test-Driven Development (TDD).
     *   **Action:**
         1.  In `tests/test_calculation_engine.py`, write a new, specific test that asserts the correct parsing of the multi-level headers into a clean pandas DataFrame. This test should fail initially.
-        2.  Modify the `_load_sheet` method in `unimelb_phd_phase_1/calculation_engine.py` until the new test passes, ensuring the data loading is robust.
+        2.  Modify the `_load_sheet` method in `genomics_microcosting/calculation_engine.py` until the new test passes, ensuring the data loading is robust.
 
 4.  **Validate the Engine (Data Science Focus):**
     *   **Priority:** Last, once the engine is fully implemented.

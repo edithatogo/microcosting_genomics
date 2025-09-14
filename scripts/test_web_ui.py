@@ -24,7 +24,7 @@ def main():
     try:
         # Run the web server in the background
         process = subprocess.Popen([
-            sys.executable, "-m", "unimelb_phd_phase_1.web"
+            sys.executable, "-m", "genomics_microcosting.web"
         ], cwd=src_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         # Wait a moment for the server to start

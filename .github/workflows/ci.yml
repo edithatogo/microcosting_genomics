@@ -114,7 +114,7 @@ jobs:
                                   pass
               return missing_docstrings
           
-          missing = check_docstrings('src/unimelb_phd_phase_1')
+          missing = check_docstrings('src/genomics_microcosting')
           if missing:
               print('Files missing module docstrings:')
               for f in missing:

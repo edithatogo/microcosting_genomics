@@ -5,11 +5,11 @@ from unittest.mock import Mock
 from pathlib import Path
 import tempfile
 
-from src.unimelb_phd_phase_1.extensibility_framework import (
+from src.genomics_microcosting.extensibility_framework import (
     ExtensibilityFramework, Extension, AnalysisExtension, VisualizationExtension,
     ReportExtension, DataProcessorExtension, ExtensionMetadata
 )
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestExtensionMetadata(unittest.TestCase):

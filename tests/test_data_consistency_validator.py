@@ -4,8 +4,8 @@ import unittest
 import pandas as pd
 from unittest.mock import Mock
 
-from src.unimelb_phd_phase_1.data_consistency_validator import DataConsistencyValidator
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.data_consistency_validator import DataConsistencyValidator
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestDataConsistencyValidator(unittest.TestCase):

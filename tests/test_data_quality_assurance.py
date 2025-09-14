@@ -48,7 +48,7 @@ class TestDataQualityAssurance(unittest.TestCase):
         # Mock the data manager and consistency validator
         self.mock_data_manager.load_sheet.return_value = df
         
-        with patch('unimelb_phd_phase_1.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
+        with patch('genomics_microcosting.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
             mock_validate.return_value = {
                 "passed": True,
                 "errors": [],
@@ -84,7 +84,7 @@ class TestDataQualityAssurance(unittest.TestCase):
         # Mock the data manager and consistency validator
         self.mock_data_manager.load_sheet.return_value = df
         
-        with patch('unimelb_phd_phase_1.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
+        with patch('genomics_microcosting.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
             mock_validate.return_value = {
                 "passed": True,
                 "errors": [],
@@ -116,7 +116,7 @@ class TestDataQualityAssurance(unittest.TestCase):
         # Mock the data manager and consistency validator
         self.mock_data_manager.load_sheet.return_value = df
         
-        with patch('unimelb_phd_phase_1.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
+        with patch('genomics_microcosting.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
             mock_validate.return_value = {
                 "passed": True,
                 "errors": [],
@@ -151,7 +151,7 @@ class TestDataQualityAssurance(unittest.TestCase):
         # Mock the data manager and consistency validator
         self.mock_data_manager.load_sheet.return_value = df
         
-        with patch('unimelb_phd_phase_1.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
+        with patch('genomics_microcosting.data_consistency_validator.DataConsistencyValidator.validate_sheet_integrity') as mock_validate:
             mock_validate.return_value = {
                 "passed": True,
                 "errors": [],

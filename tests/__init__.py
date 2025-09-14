@@ -2,7 +2,7 @@
 
 # Ensure the repository root is on sys.path when the package is not installed
 try:
-    import unimelb_phd_phase_1  # noqa: F401
+    import genomics_microcosting  # noqa: F401
 except ModuleNotFoundError:  # pragma: no cover - only executed in CI without install
     import sys
     from pathlib import Path

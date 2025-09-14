@@ -4,8 +4,8 @@ import unittest
 import numpy as np
 from unittest.mock import Mock
 
-from src.unimelb_phd_phase_1.monte_carlo_optimizer import MonteCarloOptimizer
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.monte_carlo_optimizer import MonteCarloOptimizer
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestMonteCarloOptimizer(unittest.TestCase):

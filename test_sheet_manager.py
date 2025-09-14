@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from src.unimelb_phd_phase_1.sheet_manager import SheetManager
+from src.genomics_microcosting.sheet_manager import SheetManager
 from pathlib import Path
 
 # Test sheet manager formula access

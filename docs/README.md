@@ -60,8 +60,8 @@ The library is organized into the following core modules:
 To use the library, first create an instance of the `SheetManager` class, pointing it to the Excel workbook you want to analyze. Then, create an instance of the `CalculationEngine`, passing the `SheetManager` instance to it. You can then use the `run_engine` method of the `CalculationEngine` to execute the formulas on a specific sheet.
 
 ```python
-from unimelb_phd_phase_1.sheet_manager import SheetManager
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from src.genomics_microcosting.sheet_manager import SheetManager
+from src.genomics_microcosting.calculation_engine import CalculationEngine
 
 # Create a SheetManager to handle data loading
 sheet_manager = SheetManager("path/to/your/workbook.xlsx")
@@ -81,7 +81,7 @@ print(results_df)
 The unified data management system provides consistent handling of all sheets:
 
 ```python
-from unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.data_manager import DataManager
 
 # Initialize data manager
 dm = DataManager()
@@ -101,7 +101,7 @@ dm.save_for_publication("Detailed Table", df, metadata={"version": "1.0"})
 Perform sensitivity analyses using the advanced scenario modeling:
 
 ```python
-from unimelb_phd_phase_1.advanced_scenario_modeling import AdvancedScenarioAnalyzer
+from src.genomics_microcosting.advanced_scenario_modeling import AdvancedScenarioAnalyzer
 
 # Initialize analyzer
 analyzer = AdvancedScenarioAnalyzer()
@@ -125,7 +125,7 @@ psa_results = analyzer.perform_probabilistic_analysis(
 Extend functionality using the plugin system:
 
 ```python
-from unimelb_phd_phase_1.enhanced_plugin_system import EnhancedPluginSystem
+from src.genomics_microcosting.enhanced_plugin_system import EnhancedPluginSystem
 
 # Initialize plugin system
 plugin_system = EnhancedPluginSystem()

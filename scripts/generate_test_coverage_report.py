@@ -26,7 +26,7 @@ def run_coverage_analysis() -> Dict[str, Any]:
         # Run pytest with coverage
         result = subprocess.run([
             sys.executable, "-m", "pytest", 
-            "--cov=src/unimelb_phd_phase_1", 
+            "--cov=src/genomics_microcosting", 
             "--cov-report=xml:coverage.xml",
             "--cov-report=json:coverage.json",
             "--cov-report=html:htmlcov",

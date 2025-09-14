@@ -49,14 +49,14 @@ This document outlines a comprehensive refactoring plan to modernize the genomic
 ### Codebase Overview
 
 - **Language:** Python 3.8+
-- **Primary Package:** `unimelb_phd_phase_1` (needs renaming)
+- **Primary Package:** `genomics_microcosting` (needs renaming)
 - **Key Components:** Calculation engine, formula parser, strategy pattern implementations
 - **Data Sources:** Excel workbooks with complex multi-level headers
 - **Test Coverage:** 93 tests passing, comprehensive validation framework
 
 ### Naming Convention Issues Identified
 
-1. **PhD Context**: Package name `unimelb_phd_phase_1` is too specific
+1. **PhD Context**: Package name `genomics_microcosting` is too specific
 2. **Abbreviations**: DSA, VCGS not immediately clear to new developers
 3. **Inconsistent Terms**: Mix of full terms and abbreviations in column names
 4. **Model References**: Hardcoded model logic without clear taxonomy

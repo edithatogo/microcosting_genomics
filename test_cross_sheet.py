@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from src.unimelb_phd_phase_1.formula_parser import parse_formula
+from src.genomics_microcosting.formula_parser import parse_formula
 
 # Test cross-sheet reference parsing
 formula = "='BI - Comp Stor Costs - VCGS'!V$3"

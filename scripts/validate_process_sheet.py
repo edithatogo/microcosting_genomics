@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
 
-from src.unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from src.unimelb_phd_phase_1.sheet_manager import SheetManager
+from src.genomics_microcosting.calculation_engine import CalculationEngine
+from src.genomics_microcosting.sheet_manager import SheetManager
 
 # Add the project root to the Python path
 project_root = Path(__file__).resolve().parents[1]
