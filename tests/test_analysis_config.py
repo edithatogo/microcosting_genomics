@@ -3,9 +3,8 @@
 import unittest
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
 
-from src.unimelb_phd_phase_1.analysis_config import (
+from src.genomics_microcosting.analysis_config import (
     AnalysisParameter, AnalysisConfig, AnalysisConfigurationManager
 )
 

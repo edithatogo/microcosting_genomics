@@ -14,15 +14,10 @@ Models analyzed:
 """
 
 import pandas as pd
-import numpy as np
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
-import yaml
+from typing import Dict, Set
 from collections import defaultdict, Counter
-import matplotlib.pyplot as plt
-import seaborn as sns
 from dataclasses import dataclass
-from pathlib import Path
 
 @dataclass
 class ModelAnalysis:
@@ -217,20 +212,18 @@ class ModelConsistencyAnalyzer:
         report.append("## Consistency Analysis")
         report.append("### Category Overlap")
         for category, count in sorted(metrics.get('category_overlap', {}).items()):
-            percentage = (count / len(analyses)) * 100 if analyses else 0
-            report.append(".1f")
+            report.append(f"- {category}: {count} models ({(count / len(analyses)) * 100 if analyses else 0:.1f}%)")
         report.append("")
 
         # Subcategory consistency
         if metrics.get('subcategory_consistency'):
             report.append("### Subcategory Consistency")
             for category, data in sorted(metrics['subcategory_consistency'].items()):
-                consistency_pct = data['consistency_ratio'] * 100
                 report.append(f"**{category}**:")
                 report.append(f"  - Models with category: {data['models_with_category']}")
                 report.append(f"  - Total subcategories: {data['total_subcategories']}")
                 report.append(f"  - Common subcategories: {data['common_subcategories']}")
-                report.append(".1f")
+                report.append(f"  - Consistency: {data['consistency_ratio'] * 100:.1f}%")
                 report.append("")
 
         # Recommendations

@@ -41,7 +41,7 @@ def test_dsa___overheads_loading():
             print("Available prepared files:")
             for f in Path("data/prepared").glob("*.parquet"):
                 print(f"  - {f.name}")
-            pytest.skip(f"Prepared data for DSA - Overheads not found")
+            pytest.skip("Prepared data for DSA - Overheads not found")
 
 
 def test_dsa___overheads_data_integrity():
@@ -61,7 +61,7 @@ def test_dsa___overheads_data_integrity():
         # Allow up to 50% null values (this might need adjustment based on the table)
         assert null_percentage < 0.5, f"Too many null values: {null_percentage:.2%}"
         
-        print(f"Data integrity check passed for DSA - Overheads")
+        print("Data integrity check passed for DSA - Overheads")
         print(f"  - Null value percentage: {null_percentage:.2%}")
     else:
         # Try to find the file
@@ -80,12 +80,12 @@ def test_dsa___overheads_data_integrity():
                 # Allow up to 50% null values (this might need adjustment based on the table)
                 assert null_percentage < 0.5, f"Too many null values: {null_percentage:.2%}"
                 
-                print(f"Data integrity check passed for DSA - Overheads")
+                print("Data integrity check passed for DSA - Overheads")
                 print(f"  - Null value percentage: {null_percentage:.2%}")
                 found = True
                 break
         if not found:
-            pytest.skip(f"Prepared data for DSA - Overheads not found")
+            pytest.skip("Prepared data for DSA - Overheads not found")
 
 
 def test_dsa___overheads_schema_consistency():
@@ -101,7 +101,7 @@ def test_dsa___overheads_schema_consistency():
         columns_list = list(df.columns)
         assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
         
-        print(f"Schema consistency check passed for DSA - Overheads")
+        print("Schema consistency check passed for DSA - Overheads")
     else:
         # Try to find the file
         found = False
@@ -115,11 +115,11 @@ def test_dsa___overheads_schema_consistency():
                 columns_list = list(df.columns)
                 assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
                 
-                print(f"Schema consistency check passed for DSA - Overheads")
+                print("Schema consistency check passed for DSA - Overheads")
                 found = True
                 break
         if not found:
-            pytest.skip(f"Prepared data for DSA - Overheads not found")
+            pytest.skip("Prepared data for DSA - Overheads not found")
 
 
 if __name__ == "__main__":

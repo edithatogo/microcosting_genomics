@@ -14,9 +14,9 @@ import pandas as pd
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.sheet_manager import SheetManager
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.sheet_manager import SheetManager  # noqa: E402
+from genomics_microcosting.calculation_engine import CalculationEngine  # noqa: E402
 
 
 def validate_sheet_integrity(sheet_name: str, df: pd.DataFrame) -> dict:
@@ -70,7 +70,6 @@ def validate_sheet_integrity(sheet_name: str, df: pd.DataFrame) -> dict:
             
         # Check data types
         numeric_cols = df.select_dtypes(include=['number']).columns
-        non_numeric_cols = df.select_dtypes(exclude=['number']).columns
         
         if len(numeric_cols) == 0:
             results["warnings"].append("No numeric columns found")

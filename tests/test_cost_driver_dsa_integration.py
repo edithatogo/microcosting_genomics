@@ -7,7 +7,6 @@ and deterministic sensitivity analysis modules.
 import unittest
 import sys
 from pathlib import Path
-import numpy as np
 import pandas as pd
 from unittest.mock import Mock, patch
 
@@ -15,9 +14,9 @@ from unittest.mock import Mock, patch
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.cost_driver_analysis import CostDriverAnalyzer
-from unimelb_phd_phase_1.dsa_analysis import DSAAnalyzer
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
+from genomics_microcosting.dsa_analysis import DSAAnalyzer  # noqa: E402
 
 
 class TestCostDriverDSAIntegration(unittest.TestCase):
@@ -90,7 +89,6 @@ class TestCostDriverDSAIntegration(unittest.TestCase):
                     self.assertGreater(len(sensitivity_results), 0)
                     
                     # Check that the most impactful cost driver category is properly analyzed
-                    top_cost_driver = cost_drivers.iloc[0]['Category']  # Labour
                     # In a real implementation, we would check that DSA properly analyzes
                     # parameters related to the top cost drivers
                     
@@ -107,7 +105,6 @@ class TestCostDriverDSAIntegration(unittest.TestCase):
                         self.dsa_analyzer.data_manager)
         
         # Mock data that would be shared between modules
-        shared_sheet_names = ["Detailed Table", "DSA - Labour Prices"]
         
         # Mock the data manager to return consistent data
         def mock_load_sheet(sheet_name):
@@ -175,14 +172,13 @@ class TestCostDriverDSAIntegration(unittest.TestCase):
                                  return_value=mock_dsa_params):
                     
                     # Run both analyses
-                    df = self.cost_driver_analyzer.load_detailed_table()
-                    cost_drivers = self.cost_driver_analyzer.calculate_absolute_cost_drivers(df)
+                    self.cost_driver_analyzer.load_detailed_table()
                     dsa_parameters = self.dsa_analyzer.load_dsa_parameters()
                     sensitivity_results = self.dsa_analyzer.analyze_dsa_parameters(dsa_parameters)
                     
                     # Verify that labour-related parameters are included in DSA
-                    labour_param_found = any("Labour" in str(result) or "Hourly" in str(result) 
-                                           for result in sensitivity_results)
+                    any("Labour" in str(result) or "Hourly" in str(result) 
+                       for result in sensitivity_results)
                     
                     # In a full implementation, we would verify that labour-related parameters
                     # have higher sensitivity impact when labour is the top cost driver

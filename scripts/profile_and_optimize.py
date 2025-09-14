@@ -15,10 +15,10 @@ from typing import Dict, Any
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.performance import PerformanceProfiler, DataOptimizer, CachingOptimizer, ParallelProcessor
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
-from unimelb_phd_phase_1.visualization import load_prepared_data
+from genomics_microcosting.performance import PerformanceProfiler, DataOptimizer, CachingOptimizer, ParallelProcessor  # noqa: E402
+from genomics_microcosting.calculation_engine import CalculationEngine  # noqa: E402
+from genomics_microcosting.sheet_manager import SheetManager  # noqa: E402
+from genomics_microcosting.visualization import load_prepared_data  # noqa: E402
 
 
 def profile_data_loading(profiler: PerformanceProfiler, data_dir: Path) -> Dict[str, Any]:
@@ -390,13 +390,11 @@ def main():
         data_dict = data_results["data"]
         
         # Profile calculation engine
-        engine_results = profile_calculation_engine(profiler, data_dict)
+        profile_calculation_engine(profiler, data_dict)
         
         # Optimize DataFrames if requested
         if args.optimize_data:
-            optimized_data = optimize_dataframes(data_dict, output_dir)
-        else:
-            optimized_data = None
+            optimize_dataframes(data_dict, output_dir)
         
         # Benchmark parallel processing if requested
         parallel_results = None

@@ -8,9 +8,8 @@ maintains accuracy while improving consistency.
 """
 
 import pandas as pd
-import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional
 import yaml
 import sys
 from dataclasses import dataclass
@@ -116,7 +115,6 @@ class StandardizationValidator:
             )
 
         # Add model-specific subcategories if applicable
-        model_specific = self.config.get('model_specific_subcategories', {}).get(model_name, {})
         # Note: In a full implementation, this would add missing subcategories
 
         return standardized_df
@@ -335,7 +333,7 @@ def main():
 
         # Print summary
         valid_count = sum(1 for r in results if r.is_valid)
-        print(f"\nValidation Summary:")
+        print("\nValidation Summary:")
         print(f"- Models validated: {len(results)}")
         print(f"- Passed: {valid_count}")
         print(f"- Failed: {len(results) - valid_count}")

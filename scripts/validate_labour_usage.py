@@ -1,4 +1,5 @@
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.sheet_manager import SheetManager
 
 
 def validate_sheet(sheet_name):
@@ -7,19 +8,29 @@ def validate_sheet(sheet_name):
     """
     print(f"--- Validating Sheet: {sheet_name} ---")
 
-    # Initialize the engine
-    engine = CalculationEngine()
+    # Initialize the sheet manager and engine
+    sheet_manager = SheetManager()
+    engine = CalculationEngine(sheet_manager)
 
     # Get the ground truth values from the original Excel file
-    ground_truth_df = engine.get_ground_truth(sheet_name)
+    ground_truth_df = sheet_manager.get_ground_truth(sheet_name)
     if ground_truth_df is None:
         print(f"Could not load ground truth for sheet: {sheet_name}")
         return
 
     # Run the engine to calculate the values
-    calculated_df = engine.run_engine(sheet_name)
-    if calculated_df is None:
+    result = engine.run_engine(sheet_name)
+    if result is None or result[0] is None:
         print(f"Engine failed to run on sheet: {sheet_name}")
+        return
+    
+    calculated_df, errors = result
+    if errors:
+        print(f"Engine encountered {len(errors)} errors:")
+        for error in errors[:5]:  # Show first 5 errors
+            print(f"  {error}")
+        if len(errors) > 5:
+            print(f"  ... and {len(errors) - 5} more errors")
         return
 
     # Compare the results

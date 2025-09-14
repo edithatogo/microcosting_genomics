@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.calculation_engine import CalculationEngine
 
 PREPARED_DIR = Path(__file__).resolve().parents[0] / "data" / "prepared"
 TOLERANCE = 1e-4

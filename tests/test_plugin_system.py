@@ -4,7 +4,7 @@ import pytest
 from pathlib import Path
 import tempfile
 
-from unimelb_phd_phase_1.plugin_system import (
+from genomics_microcosting.plugin_system import (
     Plugin, AnalysisPlugin, VisualizationPlugin, PluginManager
 )
 

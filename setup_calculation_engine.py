@@ -1,4 +1,4 @@
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.calculation_engine import CalculationEngine
 
 
 def setup_engine():

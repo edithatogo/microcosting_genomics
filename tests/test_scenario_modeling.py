@@ -2,9 +2,8 @@
 
 import pandas as pd
 import pytest
-from pathlib import Path
 
-from unimelb_phd_phase_1.scenario_modeling import Scenario, ScenarioManager, create_common_scenarios
+from genomics_microcosting.scenario_modeling import Scenario, ScenarioManager, create_common_scenarios
 
 
 def test_scenario_creation():

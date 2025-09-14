@@ -10,8 +10,8 @@ from pathlib import Path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.comprehensive_reporting import ComprehensiveReporter
-from unimelb_phd_phase_1.data_manager import DataManager
+from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter  # noqa: E402
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
 
 
 def main():
@@ -31,7 +31,7 @@ def main():
         
         # Save report to file
         output_dir = Path(__file__).resolve().parents[1] / "reports" / "comprehensive_analysis"
-        report_output = reporter.generate_integrated_report(output_dir=str(output_dir))
+        reporter.generate_integrated_report(output_dir=str(output_dir))
         print(f"Comprehensive report saved to {output_dir}")
         
     except Exception as e:

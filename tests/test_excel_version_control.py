@@ -4,9 +4,8 @@ import pandas as pd
 import pytest
 from pathlib import Path
 import tempfile
-import shutil
 
-from unimelb_phd_phase_1.excel_version_control import WorkbookVersionControl, WorkbookVersion
+from genomics_microcosting.excel_version_control import WorkbookVersionControl, WorkbookVersion
 
 
 def test_workbook_version_creation():
@@ -129,7 +128,7 @@ def test_workbook_version_control_checkout_workbook():
         original_data.to_excel(workbook_file, index=False)
         
         # Commit the workbook
-        version_id = vc.commit_workbook(workbook_file)
+        vc.commit_workbook(workbook_file)
         
         # Checkout the workbook
         output_file = Path(temp_dir) / "checked_out.xlsx"
@@ -173,7 +172,7 @@ def test_workbook_version_control_multiple_versions():
         test_data_v1 = pd.DataFrame({"A": [1, 2], "B": [3, 4]})
         test_data_v1.to_excel(workbook_file, index=False)
         
-        version_id_1 = vc.commit_workbook(workbook_file, {"version": "v1"})
+        vc.commit_workbook(workbook_file, {"version": "v1"})
         
         # Modify data and commit again
         test_data_v2 = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})

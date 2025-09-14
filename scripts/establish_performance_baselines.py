@@ -7,7 +7,6 @@ for various operations in the genomics microcosting framework.
 import pandas as pd
 import numpy as np
 import json
-import time
 from pathlib import Path
 import sys
 from datetime import datetime
@@ -16,10 +15,10 @@ from datetime import datetime
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from tests.test_load_testing import LoadTestingFramework
-from tests.test_memory_monitoring import MemoryMonitor
-from tests.test_processing_time import ProcessingTimeMeasurer
-from tests.test_scalability import ScalabilityTester
+from tests.test_load_testing import LoadTestingFramework  # noqa: E402
+from tests.test_memory_monitoring import MemoryMonitor  # noqa: E402
+from tests.test_processing_time import ProcessingTimeMeasurer  # noqa: E402
+from tests.test_scalability import ScalabilityTester  # noqa: E402
 
 
 def establish_performance_baselines():
@@ -177,7 +176,7 @@ def print_baseline_summary(baselines: dict):
     # Memory Usage Summary
     memory_data = baselines.get('memory_usage', {})
     if memory_data:
-        print(f"\nMemory Usage:")
+        print("\nMemory Usage:")
         print(f"  Test Data Size: {memory_data.get('test_data_size', 0)} rows")
         print(f"  Total Memory: {memory_data.get('total_memory_mb', 0):.2f} MB")
         print("  Top Memory Consumers:")
@@ -189,7 +188,7 @@ def print_baseline_summary(baselines: dict):
     # Processing Time Summary
     time_data = baselines.get('processing_time', {})
     if time_data:
-        print(f"\nProcessing Time:")
+        print("\nProcessing Time:")
         print(f"  Iterations: {time_data.get('iterations', 0)}")
         print(f"  Success Rate: {time_data.get('successful_executions', 0)}/{time_data.get('iterations', 0)}")
         print(f"  Mean Wall Time: {time_data.get('wall_time_mean', 0):.4f}s "
@@ -200,7 +199,7 @@ def print_baseline_summary(baselines: dict):
     scalability_data = baselines.get('scalability', {})
     if scalability_data:
         analysis = scalability_data.get('analysis', {})
-        print(f"\nScalability:")
+        print("\nScalability:")
         print(f"  Test Sizes: {scalability_data.get('test_sizes', [])}")
         print(f"  Scaling Behavior: {analysis.get('scaling_behavior', 'unknown')}")
         print(f"  Average Scaling Factor: {analysis.get('average_scaling_factor', 0):.2f}")

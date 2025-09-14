@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from unimelb_phd_phase_1.excel_utils import load_sheet_with_headers
+from genomics_microcosting.excel_utils import load_sheet_with_headers
 
 
 def test_load_sheet_with_headers():

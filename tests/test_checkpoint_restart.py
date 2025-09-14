@@ -7,17 +7,14 @@ import unittest
 import sys
 import logging
 import tempfile
-import os
 import shutil
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.error_handling import (
-    ErrorHandler, 
+from genomics_microcosting.error_handling import (  # noqa: E402
     CheckpointManager,
     setup_standard_error_handling
 )
@@ -52,7 +49,7 @@ class TestCheckpointRestart(unittest.TestCase):
         # Remove temporary checkpoint directory
         try:
             shutil.rmtree(self.temp_checkpoint_dir)
-        except:
+        except (OSError, FileNotFoundError):
             pass
     
     def test_create_and_restore_checkpoint(self):

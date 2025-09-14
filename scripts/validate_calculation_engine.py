@@ -12,8 +12,8 @@ import numpy as np
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.calculation_engine import CalculationEngine  # noqa: E402
+from genomics_microcosting.sheet_manager import SheetManager  # noqa: E402
 
 
 def establish_ground_truth():
@@ -50,7 +50,7 @@ def validate_engine():
 
         # Run the engine to get the calculated results
         print("Running calculation engine...")
-        results_df, errors = engine.run_engine()
+        results_df, errors = engine.run_engine("Detailed Table")
 
         if errors:
             print("Errors occurred during calculation:")
@@ -135,7 +135,7 @@ def validate_engine():
         small_errors = len(comparison_df[comparison_df["difference"].abs() <= 0.01])
         large_errors = len(significant_errors)
         
-        print(f"\nAccuracy Metrics:")
+        print("\nAccuracy Metrics:")
         print(f"  Total values compared: {total_compared}")
         print(f"  Exact matches: {exact_matches} ({exact_matches/total_compared*100:.2f}%)")
         print(f"  Small errors (≤0.01): {small_errors} ({small_errors/total_compared*100:.2f}%)")

@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 from prepare_data import _parse_generic_sheet
-from unimelb_phd_phase_1.config import load_config
+from genomics_microcosting.config import load_config
 
 
 def _get_workbook_path() -> Path:

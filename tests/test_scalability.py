@@ -11,17 +11,27 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import sys
-from typing import Dict, List, Callable, Tuple
-import matplotlib.pyplot as plt
-from unittest.mock import Mock, patch
+from typing import Dict, List, Callable
+
+# Handle matplotlib import for Python 3.13 compatibility
+try:
+    import matplotlib
+    matplotlib.use('Agg')  # Use non-interactive backend
+    import matplotlib.pyplot as plt
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+    plt = None
+
+from unittest.mock import Mock
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.performance import PerformanceProfiler, DataOptimizer
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.cost_driver_analysis import CostDriverAnalyzer
+from genomics_microcosting.performance import PerformanceProfiler, DataOptimizer  # noqa: E402
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
 
 
 class ScalabilityTester:
@@ -146,13 +156,9 @@ class ScalabilityTester:
                 start_memory = self._get_memory_usage()
                 
                 try:
-                    result = test_function(test_data)
-                    success = True
-                    error = None
-                except Exception as e:
-                    result = None
-                    success = False
-                    error = str(e)
+                    test_function(test_data)
+                except Exception:
+                    pass
                 
                 end_time = time.time()
                 end_memory = self._get_memory_usage()

@@ -1,7 +1,6 @@
-import pandas as pd
 from pathlib import Path
 
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.sheet_manager import SheetManager
 
 def main():
     """
@@ -10,9 +9,13 @@ def main():
     # Initialize the SheetManager to get the data
     sheet_manager = SheetManager()
     detailed_table_df = sheet_manager.get_data("Detailed Table")
+    
+    if detailed_table_df is None:
+        print("Error: Could not load Detailed Table data")
+        return
 
     # Identify input and output columns
-    output_cols = [col for col in detailed_table_df.columns if "Unit Cost" in str(col)]
+    output_cols = [col for col in detailed_table_df.columns if "unit_cost" in str(col)]
     input_cols = [col for col in detailed_table_df.columns if col not in output_cols]
 
     # Create the ground truth DataFrame

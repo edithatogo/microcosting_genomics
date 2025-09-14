@@ -5,13 +5,12 @@ Script to generate automated reports with visualizations and summary statistics.
 
 import sys
 from pathlib import Path
-import pandas as pd
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.visualization import create_summary_dashboard, load_prepared_data
+from genomics_microcosting.visualization import create_summary_dashboard, load_prepared_data  # noqa: E402
 
 
 def generate_summary_statistics(data_dict, output_file):

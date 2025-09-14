@@ -36,7 +36,7 @@ def test_detailed_table_data_integrity():
         # For Detailed Table, allow up to 70% null values as it's expected to have sparse data
         assert null_percentage < 0.7, f"Too many null values: {null_percentage:.2%}"
         
-        print(f"Data integrity check passed for Detailed Table")
+        print("Data integrity check passed for Detailed Table")
         print(f"  - Null value percentage: {null_percentage:.2%}")
         
         # Check that we have the expected columns
@@ -71,7 +71,7 @@ def test_detailed_table_schema_consistency():
         columns_list = list(df.columns)
         assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
         
-        print(f"Schema consistency check passed for Detailed Table")
+        print("Schema consistency check passed for Detailed Table")
     else:
         pytest.skip("Prepared data for Detailed Table not found")
 

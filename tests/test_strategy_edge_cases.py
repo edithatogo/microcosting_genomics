@@ -2,13 +2,13 @@ from pathlib import Path
 
 import pytest
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.calculation_engine import CalculationEngine
 
 
 @pytest.fixture
 def test_engine():
     test_data_path = Path(__file__).resolve().parent / "test_data.xlsx"
-    from unimelb_phd_phase_1.sheet_manager import SheetManager
+    from genomics_microcosting.sheet_manager import SheetManager
 
     sheet_manager = SheetManager(test_data_path)
     engine = CalculationEngine(sheet_manager)

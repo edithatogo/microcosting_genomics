@@ -15,9 +15,9 @@ from unittest.mock import Mock, patch
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.psa_analysis import PSAAnalyzer
-from unimelb_phd_phase_1.voi_analysis import VOIAnalyzer
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.psa_analysis import PSAAnalyzer  # noqa: E402
+from genomics_microcosting.voi_analysis import VOIAnalyzer  # noqa: E402
 
 
 class TestPSAVOIIntegration(unittest.TestCase):
@@ -79,7 +79,7 @@ class TestPSAVOIIntegration(unittest.TestCase):
                                  return_value=mock_voi_params):
                     
                     # Run VOI analysis using PSA results
-                    voi_parameters = self.voi_analyzer.load_voi_parameters()
+                    self.voi_analyzer.load_voi_parameters()
                     evpi_results = self.voi_analyzer.calculate_evpi(cost_outcomes)
                     evppi_results = self.voi_analyzer.calculate_evppi(
                         cost_outcomes, 
@@ -106,7 +106,6 @@ class TestPSAVOIIntegration(unittest.TestCase):
                         self.voi_analyzer.data_manager)
         
         # Mock data that would be shared between modules
-        shared_sheet_names = ["PSA", "VOI"]
         
         # Mock the data manager to return consistent data
         def mock_load_sheet(sheet_name):
@@ -171,10 +170,6 @@ class TestPSAVOIIntegration(unittest.TestCase):
                 cost_outcomes = self.psa_analyzer.calculate_cost_outcomes(simulation_results)
                 
                 # Verify uncertainty levels
-                labour_variance = np.var(labour_costs)
-                equipment_variance = np.var(equipment_costs)
-                total_variance = np.var(cost_outcomes)
-                
                 # Mock VOI analysis
                 with patch.object(self.voi_analyzer, 'calculate_evppi', 
                                  return_value={'Labour': {'evppi': 1500}}):

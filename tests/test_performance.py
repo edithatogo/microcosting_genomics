@@ -2,10 +2,8 @@
 
 import pandas as pd
 import pytest
-from pathlib import Path
-import numpy as np
 
-from unimelb_phd_phase_1.performance import PerformanceProfiler, DataOptimizer, CachingOptimizer
+from genomics_microcosting.performance import PerformanceProfiler, DataOptimizer, CachingOptimizer
 
 
 def test_performance_profiler():

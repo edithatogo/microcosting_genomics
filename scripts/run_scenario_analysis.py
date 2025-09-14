@@ -5,15 +5,14 @@ Script to run scenario analysis for microcosting data.
 
 import sys
 from pathlib import Path
-import pandas as pd
 import argparse
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.scenario_modeling import ScenarioManager, create_common_scenarios
-from unimelb_phd_phase_1.visualization import load_prepared_data
+from genomics_microcosting.scenario_modeling import ScenarioManager, create_common_scenarios  # noqa: E402
+from genomics_microcosting.visualization import load_prepared_data  # noqa: E402
 
 
 def main():
@@ -95,7 +94,7 @@ def main():
         # Generate report
         report_file = output_dir / "scenario_analysis_report.md"
         print(f"Generating report in {report_file}")
-        report = scenario_manager.generate_scenario_report(scenarios_to_run, report_file)
+        scenario_manager.generate_scenario_report(scenarios_to_run, report_file)
         
         print("Scenario analysis complete!")
         print(f"Results saved to {output_dir}")

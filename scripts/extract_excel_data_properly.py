@@ -10,7 +10,7 @@ import openpyxl
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict
 import logging
 
 # Set up logging
@@ -65,7 +65,7 @@ class ExcelDataExtractor:
                 numeric_series = pd.to_numeric(df_clean[col], errors='coerce')
                 if numeric_series.notna().sum() > 0:  # If we have numeric data
                     df_clean[col] = numeric_series
-            except:
+            except (ValueError, TypeError):
                 pass  # Keep as object if conversion fails
 
         logger.info(f"Extracted Labour Usage data: {df_clean.shape}")
@@ -192,7 +192,7 @@ class ExcelDataExtractor:
                     non_zero_count = int((df[col].notna() & (df[col] != 0)).sum())
                     if non_zero_count > 0:
                         meaningful_data += 1
-                except:
+                except (TypeError, AttributeError):
                     # If there's any issue with the sum operation, assume no meaningful data
                     pass
 

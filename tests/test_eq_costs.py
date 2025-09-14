@@ -1,7 +1,7 @@
 import pytest
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.sheet_manager import SheetManager
 
 
 @pytest.fixture(scope="module")

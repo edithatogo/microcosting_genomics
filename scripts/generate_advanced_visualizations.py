@@ -10,8 +10,8 @@ from pathlib import Path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.visualization import load_prepared_data
-from unimelb_phd_phase_1.advanced_visualization import create_comprehensive_visualization_report
+from genomics_microcosting.visualization import load_prepared_data  # noqa: E402
+from genomics_microcosting.advanced_visualization import create_comprehensive_visualization_report  # noqa: E402
 
 
 def main():

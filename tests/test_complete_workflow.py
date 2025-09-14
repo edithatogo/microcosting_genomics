@@ -7,7 +7,6 @@ analysis pipeline from raw data preparation to final report generation.
 import unittest
 import sys
 import tempfile
-import os
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -17,14 +16,12 @@ from unittest.mock import Mock, patch
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.cost_driver_analysis import CostDriverAnalyzer
-from unimelb_phd_phase_1.dsa_analysis import DSAAnalyzer
-from unimelb_phd_phase_1.psa_analysis import PSAAnalyzer
-from unimelb_phd_phase_1.voi_analysis import VOIAnalyzer
-from unimelb_phd_phase_1.comprehensive_reporting import ComprehensiveReporter
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
+from genomics_microcosting.dsa_analysis import DSAAnalyzer  # noqa: E402
+from genomics_microcosting.psa_analysis import PSAAnalyzer  # noqa: E402
+from genomics_microcosting.voi_analysis import VOIAnalyzer  # noqa: E402
+from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter  # noqa: E402
 
 
 class TestCompleteWorkflow(unittest.TestCase):

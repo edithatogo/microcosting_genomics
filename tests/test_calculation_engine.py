@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 
 # Silence very verbose PerformanceWarnings emitted during data loading
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
-from unimelb_phd_phase_1.utils import cell_to_coords, coords_to_cell
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.sheet_manager import SheetManager
+from genomics_microcosting.utils import cell_to_coords, coords_to_cell
 
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
@@ -398,11 +398,11 @@ def test_error_handling_in_formulas(test_engine):
     Tests error handling in formula execution.
     """
     # Test division by zero
-    result = test_engine.execute_formula("=1/0", "Sheet1", "Z2")
+    test_engine.execute_formula("=1/0", "Sheet1", "Z2")
     # Should handle gracefully, possibly returning None or an error value
 
     # Test reference to non-existent cell
-    result = test_engine.execute_formula("=ZZ999", "Sheet1", "Z3")
+    test_engine.execute_formula("=ZZ999", "Sheet1", "Z3")
     # Should handle gracefully
 
 
@@ -411,5 +411,116 @@ def test_unsupported_formula_type(test_engine):
     Tests handling of unsupported formula types.
     """
     # Test with a formula that the parser marks as unknown
-    result = test_engine.execute_formula("=AVERAGE(A1:A5)", "Sheet1", "Z4")
+    test_engine.execute_formula("=AVERAGE(A1:A5)", "Sheet1", "Z4")
     # Should return an UNSUPPORTED marker or similar
+
+
+# Tests for Abstracted Cost Components
+
+def test_get_cost_components_by_type_arithmetic(test_engine):
+    """Test getting arithmetic cost components."""
+    arithmetic_components = test_engine.get_cost_components_by_type("arithmetic")
+    assert len(arithmetic_components) > 0
+    # Check that AdditionStrategy is included
+    component_names = [comp.name for comp in arithmetic_components]
+    assert "Addition Strategy" in component_names
+
+
+def test_get_cost_components_by_type_reference(test_engine):
+    """Test getting reference cost components."""
+    reference_components = test_engine.get_cost_components_by_type("reference")
+    assert len(reference_components) > 0
+    # Check that ReferenceStrategy is included
+    component_names = [comp.name for comp in reference_components]
+    assert "Reference Strategy" in component_names
+
+
+def test_get_cost_components_by_type_financial(test_engine):
+    """Test getting financial cost components."""
+    financial_components = test_engine.get_cost_components_by_type("financial")
+    assert len(financial_components) > 0
+    # Check that PMTStrategy is included
+    component_names = [comp.name for comp in financial_components]
+    assert "PMT Strategy" in component_names
+
+
+def test_validate_cost_component_addition(test_engine):
+    """Test validating addition cost component inputs."""
+    # Valid addition formula
+    valid_formula = {"type": "addition", "operands": [{"type": "literal", "value": 1}, {"type": "literal", "value": 2}]}
+    assert test_engine.validate_cost_component("addition", valid_formula)
+
+    # Invalid addition formula (missing operands)
+    invalid_formula = {"type": "addition"}
+    assert not test_engine.validate_cost_component("addition", invalid_formula)
+
+
+def test_validate_cost_component_reference(test_engine):
+    """Test validating reference cost component inputs."""
+    # Valid reference formula
+    valid_formula = {"type": "reference", "cell": "A1"}
+    assert test_engine.validate_cost_component("reference", valid_formula)
+
+    # Invalid reference formula (missing cell)
+    invalid_formula = {"type": "reference"}
+    assert not test_engine.validate_cost_component("reference", invalid_formula)
+
+
+def test_validate_cost_component_pmt(test_engine):
+    """Test validating PMT cost component inputs."""
+    # Valid PMT formula
+    valid_formula = {"type": "pmt", "rate": 0.05, "nper": 12, "pv": 1000}
+    assert test_engine.validate_cost_component("pmt", valid_formula)
+
+    # Invalid PMT formula (missing required parameters)
+    invalid_formula = {"type": "pmt", "rate": 0.05}
+    assert not test_engine.validate_cost_component("pmt", invalid_formula)
+
+
+def test_get_cost_component_info_addition(test_engine):
+    """Test getting information about addition cost component."""
+    info = test_engine.get_cost_component_info("addition")
+    assert info is not None
+    assert info["name"] == "Addition Strategy"
+    assert info["component_type"] == "arithmetic"
+    assert info["operation_type"] == "addition"
+
+
+def test_get_cost_component_info_reference(test_engine):
+    """Test getting information about reference cost component."""
+    info = test_engine.get_cost_component_info("reference")
+    assert info is not None
+    assert info["name"] == "Reference Strategy"
+    assert info["component_type"] == "reference"
+    assert info["reference_type"] == "cell"
+
+
+def test_get_cost_component_info_pmt(test_engine):
+    """Test getting information about PMT cost component."""
+    info = test_engine.get_cost_component_info("pmt")
+    assert info is not None
+    assert info["name"] == "PMT Strategy"
+    assert info["component_type"] == "financial"
+    assert info["financial_function"] == "pmt"
+    assert "rate" in info["required_parameters"]
+
+
+def test_get_cost_component_info_unknown_type(test_engine):
+    """Test getting information about unknown cost component type."""
+    info = test_engine.get_cost_component_info("unknown_type")
+    assert info is None
+
+
+def test_cost_component_abstraction_integration(test_engine):
+    """Test that abstracted cost components work with existing engine functionality."""
+    # Test that we can still execute formulas using the abstracted components
+    result = test_engine.execute_formula("=1+2", "Sheet1", "A1")
+    assert result == 3
+
+    # Test that the component is properly categorized
+    arithmetic_components = test_engine.get_cost_components_by_type("arithmetic")
+    assert len(arithmetic_components) > 0
+
+    # Test that we can get component info
+    info = test_engine.get_cost_component_info("addition")
+    assert info["component_type"] == "arithmetic"

@@ -10,7 +10,7 @@ from scripts.parse_additional_tables import (
     parse_psa_table,
     parse_summary_table,
 )
-from unimelb_phd_phase_1.config import load_config
+from genomics_microcosting.config import load_config
 
 
 def get_workbook_path() -> Path:

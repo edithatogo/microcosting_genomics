@@ -31,7 +31,7 @@ new_cell = {
         "df = pd.read_csv(data_dir / 'cleaned_detailed_table.csv')\n",
         "\n",
         "# Get the unit cost columns\n",
-        "unit_cost_cols = [col for col in df.columns if 'Unit Cost' in col]\n",
+        "unit_cost_cols = [col for col in df.columns if 'unit_cost' in col]\n",
         "\n",
         "# Extract the unit cost data\n",
         "unit_cost_data = df[unit_cost_cols].values.flatten()\n",

@@ -10,7 +10,7 @@ import openpyxl
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 import logging
 import re
 
@@ -139,7 +139,7 @@ class ComprehensiveExcelExtractor:
             if col not in ['Test', 'Category', 'Sub-Category', 'Step']:  # Keep text columns as text
                 try:
                     processed_df[col] = pd.to_numeric(processed_df[col], errors='coerce')
-                except:
+                except (ValueError, TypeError):
                     pass
 
         return processed_df

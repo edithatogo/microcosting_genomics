@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "unimelb-phd-phase_1"
+name = "genomics-microcosting"
 version = "0.1.0"
 description = "{{PROJECT_DESCRIPTION}}"
 
@@ -44,16 +44,23 @@ dev = [
 ]
 
 [project.scripts]
-validate-engine = "validate_engine:validate_engine"
-prepare-data = "prepare_data:main"
+validate-engine = "genomics_microcosting.validate_engine:validate_engine"
+prepare-data = "genomics_microcosting.prepare_data:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["unimelb_phd_phase_1*"]
+include = ["genomics_microcosting*"]
 
 [tool.pytest.ini_options]
 addopts = "-p no:hypothesis"
 testpaths = ["tests"]
+env = [
+    "MPLBACKEND=Agg",
+]
+
+[tool.ruff.lint]
+# Allow sys.path modifications before imports in scripts
+ignore = ["E402"]

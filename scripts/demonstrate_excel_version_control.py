@@ -12,7 +12,7 @@ import tempfile
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.excel_version_control import WorkbookVersionControl
+from genomics_microcosting.excel_version_control import WorkbookVersionControl  # noqa: E402
 
 
 def create_sample_workbook(file_path: Path, data: dict) -> None:
@@ -45,10 +45,10 @@ def main():
         
         # Initial version
         data_v1 = {
-            "Item": ["Reagent A", "Reagent B", "Reagent C"],
-            "Quantity": [10, 5, 8],
-            "Unit Cost": [25.50, 15.75, 30.00],
-            "Total Cost": [255.00, 78.75, 240.00]
+            "item": ["Reagent A", "Reagent B", "Reagent C"],
+            "quantity": [10, 5, 8],
+            "unit_cost_aud_per_unit": [25.50, 15.75, 30.00],
+            "total_cost_aud": [255.00, 78.75, 240.00]
         }
         create_sample_workbook(workbook_file, data_v1)
         
@@ -67,10 +67,10 @@ def main():
         # Modify the workbook
         print("\n3. Modifying the workbook")
         data_v2 = {
-            "Item": ["Reagent A", "Reagent B", "Reagent C", "Reagent D"],
-            "Quantity": [10, 5, 8, 12],
-            "Unit Cost": [25.50, 15.75, 30.00, 22.50],
-            "Total Cost": [255.00, 78.75, 240.00, 270.00]
+            "item": ["Reagent A", "Reagent B", "Reagent C", "Reagent D"],
+            "quantity": [10, 5, 8, 12],
+            "unit_cost_aud_per_unit": [25.50, 15.75, 30.00, 22.50],
+            "total_cost_aud": [255.00, 78.75, 240.00, 270.00]
         }
         create_sample_workbook(workbook_file, data_v2)
         

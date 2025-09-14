@@ -2,15 +2,13 @@
 
 import unittest
 import tempfile
-import os
 from pathlib import Path
-from unittest.mock import Mock, patch
 
-from unimelb_phd_phase_1.security import (
+from genomics_microcosting.security import (
     InputSanitizer, Role, User, AccessControlManager, 
     AuditTrail, SecureConfigStorage, SecurityError
 )
-from unimelb_phd_phase_1.input_validation import ValidationError
+from genomics_microcosting.input_validation import ValidationError
 
 
 class TestInputSanitizer(unittest.TestCase):

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
+from genomics_microcosting.calculation_engine import CalculationEngine
 
 
 def validate_simple_tables() -> None:

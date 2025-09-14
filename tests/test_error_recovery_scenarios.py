@@ -8,10 +8,8 @@ import unittest
 import sys
 import logging
 import tempfile
-import os
 import shutil
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 import pandas as pd
 import numpy as np
 
@@ -19,13 +17,12 @@ import numpy as np
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.error_handling import (
-    ErrorHandler, 
+from genomics_microcosting.error_handling import (  # noqa: E402
     ErrorContext, 
     ErrorSeverity,
     setup_standard_error_handling
 )
-from unimelb_phd_phase_1.input_validation import InputValidator, ValidationError
+from genomics_microcosting.input_validation import InputValidator  # noqa: E402
 
 
 class TestErrorRecoveryScenarios(unittest.TestCase):
@@ -54,7 +51,7 @@ class TestErrorRecoveryScenarios(unittest.TestCase):
         # Remove temporary checkpoint directory
         try:
             shutil.rmtree(self.temp_checkpoint_dir)
-        except:
+        except (OSError, FileNotFoundError):
             pass
     
     def test_missing_data_source_recovery(self):
@@ -178,7 +175,7 @@ class TestErrorRecoveryScenarios(unittest.TestCase):
                     data_source=step["step"],
                     parameters={"step_data": step}
                 )
-                error_info = self.error_handler.handle_error(e, context, ErrorSeverity.HIGH)
+                self.error_handler.handle_error(e, context, ErrorSeverity.HIGH)
                 
                 # Try to recover using last successful checkpoint
                 if completed_steps:

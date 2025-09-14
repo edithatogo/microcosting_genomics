@@ -12,13 +12,12 @@ import sys
 import time
 from typing import Dict, List, Tuple
 import tracemalloc
-from unittest.mock import Mock, patch
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.performance import DataOptimizer
+from genomics_microcosting.performance import DataOptimizer  # noqa: E402
 
 
 class MemoryMonitor:

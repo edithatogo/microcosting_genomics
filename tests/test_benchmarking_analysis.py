@@ -2,11 +2,10 @@
 
 import unittest
 import pandas as pd
-import numpy as np
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
-from src.unimelb_phd_phase_1.benchmarking_analysis import BenchmarkingAnalyzer
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.benchmarking_analysis import BenchmarkingAnalyzer
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestBenchmarkingAnalyzer(unittest.TestCase):

@@ -7,8 +7,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.sheet_manager import SheetManager
 
 warnings.simplefilter("ignore", pd.errors.PerformanceWarning)
 
@@ -136,11 +136,11 @@ def test_extreme_pmt_values(test_engine):
 def test_vlookup_edge_cases(test_engine):
     """Test VLOOKUP with edge cases."""
     # Test with empty lookup value
-    result = test_engine.execute_formula("=VLOOKUP('', A2:B4, 2, FALSE)", "Sheet1", "D1")
+    test_engine.execute_formula("=VLOOKUP('', A2:B4, 2, FALSE)", "Sheet1", "D1")
     # Should handle gracefully
     
     # Test with out of range column index
-    result = test_engine.execute_formula("=VLOOKUP(1, A2:B4, 10, FALSE)", "Sheet1", "D2")
+    test_engine.execute_formula("=VLOOKUP(1, A2:B4, 10, FALSE)", "Sheet1", "D2")
     # Should handle gracefully
 
 

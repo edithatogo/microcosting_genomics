@@ -15,14 +15,14 @@ from unittest.mock import Mock, patch
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.cost_driver_analysis import CostDriverAnalyzer
-from unimelb_phd_phase_1.dsa_analysis import DSAAnalyzer
-from unimelb_phd_phase_1.psa_analysis import PSAAnalyzer
-from unimelb_phd_phase_1.voi_analysis import VOIAnalyzer
-from unimelb_phd_phase_1.budget_impact_analysis import BudgetImpactAnalyzer
-from unimelb_phd_phase_1.break_even_analysis import BreakEvenAnalyzer
-from unimelb_phd_phase_1.comprehensive_reporting import ComprehensiveReporter
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
+from genomics_microcosting.dsa_analysis import DSAAnalyzer  # noqa: E402
+from genomics_microcosting.psa_analysis import PSAAnalyzer  # noqa: E402
+from genomics_microcosting.voi_analysis import VOIAnalyzer  # noqa: E402
+from genomics_microcosting.budget_impact_analysis import BudgetImpactAnalyzer  # noqa: E402
+from genomics_microcosting.break_even_analysis import BreakEvenAnalyzer  # noqa: E402
+from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter  # noqa: E402
 
 
 class TestEndToEndWorkflow(unittest.TestCase):
@@ -109,7 +109,7 @@ class TestEndToEndWorkflow(unittest.TestCase):
                         self.assertIsInstance(sensitivity_results, list)
                         
                         # Step 4: Perform PSA analysis
-                        psa_parameters = self.psa_analyzer.load_psa_parameters()
+                        self.psa_analyzer.load_psa_parameters()
                         simulation_results = self.psa_analyzer.perform_monte_carlo_simulation(
                             {'labour_cost': {'distribution': 'normal', 'parameters': {'mean': 50000, 'std': 5000}}},
                             100
@@ -118,7 +118,7 @@ class TestEndToEndWorkflow(unittest.TestCase):
                         self.assertIsInstance(cost_outcomes, np.ndarray)
                         
                         # Step 5: Perform VOI analysis
-                        voi_parameters = self.voi_analyzer.load_voi_parameters()
+                        self.voi_analyzer.load_voi_parameters()
                         evpi_results = self.voi_analyzer.calculate_evpi(cost_outcomes)
                         self.assertIsInstance(evpi_results, dict)
                         
@@ -271,13 +271,13 @@ class TestEndToEndWorkflow(unittest.TestCase):
         cost_driver_data = self.cost_driver_analyzer.load_detailed_table()
         
         # 2. DSA Analysis receives related data
-        dsa_data = self.dsa_analyzer.load_dsa_parameters()
+        self.dsa_analyzer.load_dsa_parameters()
         
         # 3. PSA Analysis receives probabilistic data
-        psa_data = self.psa_analyzer.load_psa_parameters()
+        self.psa_analyzer.load_psa_parameters()
         
         # 4. VOI Analysis receives uncertainty data
-        voi_data = self.voi_analyzer.load_voi_parameters()
+        self.voi_analyzer.load_voi_parameters()
         
         # Verify all modules received data
         self.assertIsNotNone(cost_driver_data)

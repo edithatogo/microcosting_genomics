@@ -9,16 +9,16 @@ import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.cost_driver_analysis import CostDriverAnalyzer
-from unimelb_phd_phase_1.dsa_analysis import DSAAnalyzer
-from unimelb_phd_phase_1.psa_analysis import PSAAnalyzer
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
+from genomics_microcosting.dsa_analysis import DSAAnalyzer  # noqa: E402
+from genomics_microcosting.psa_analysis import PSAAnalyzer  # noqa: E402
 
 
 class TestValidationCriteria(unittest.TestCase):

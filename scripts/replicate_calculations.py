@@ -1,8 +1,8 @@
 import openpyxl
 import pandas as pd
 
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.formula_parser import parse_formula
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.formula_parser import parse_formula
 
 
 def main():

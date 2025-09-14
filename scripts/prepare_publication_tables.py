@@ -13,7 +13,7 @@ from datetime import datetime
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.config import load_config
+from genomics_microcosting.config import load_config  # noqa: E402
 
 
 def create_table_metadata(df, table_name, description=""):
@@ -61,7 +61,7 @@ def prepare_publication_tables():
     
     try:
         # Load configuration
-        config = load_config()
+        load_config()
         print("Configuration loaded successfully")
         
         # Define paths

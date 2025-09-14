@@ -2,7 +2,7 @@ from collections import Counter
 
 import pandas as pd
 
-from unimelb_phd_phase_1.formula_parser import parse_formula
+from genomics_microcosting.formula_parser import parse_formula
 
 
 def normalize_formula(parsed_formula):

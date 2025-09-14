@@ -5,18 +5,15 @@ This module tests the comprehensive input validation capabilities.
 
 import unittest
 import sys
-import logging
 import tempfile
-import os
 from pathlib import Path
 import pandas as pd
-import numpy as np
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.input_validation import (
+from genomics_microcosting.input_validation import (  # noqa: E402
     InputValidator,
     ValidationError,
     validate_cost_value,

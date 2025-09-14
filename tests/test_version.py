@@ -1,4 +1,4 @@
-from unimelb_phd_phase_1 import __version__
+from genomics_microcosting import __version__
 
 
 def test_version():

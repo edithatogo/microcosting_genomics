@@ -3,14 +3,13 @@
 import unittest
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
-from unimelb_phd_phase_1.config_validation import (
+from genomics_microcosting.config_validation import (
     ConfigurationValidator, EnvironmentConfigurationManager, 
-    ConfigurationVersionManager, DynamicConfigurationUpdater,
-    ConfigValidationError
+    ConfigurationVersionManager, DynamicConfigurationUpdater
 )
-from unimelb_phd_phase_1.analysis_config import (
+from genomics_microcosting.analysis_config import (
     AnalysisParameter, AnalysisConfig, AnalysisConfigurationManager
 )
 
@@ -191,7 +190,7 @@ class TestEnvironmentConfigurationManager(unittest.TestCase):
         overrides = {"test": "value"}
         
         # This should not raise an exception but should return False
-        success = self.env_manager.add_environment("", overrides)
+        self.env_manager.add_environment("", overrides)
         # The actual behavior depends on the InputValidator implementation
 
     def test_get_environment_config(self):

@@ -34,7 +34,7 @@ def test_dsa___test_throughput_loading():
                 found = True
                 break
         if not found:
-            pytest.skip(f"Prepared data for DSA - Test Throughput not found")
+            pytest.skip("Prepared data for DSA - Test Throughput not found")
 
 
 def test_dsa___test_throughput_data_integrity():
@@ -54,10 +54,10 @@ def test_dsa___test_throughput_data_integrity():
         # Allow up to 50% null values (this might need adjustment based on the table)
         assert null_percentage < 0.5, f"Too many null values: {null_percentage:.2%}"
         
-        print(f"Data integrity check passed for DSA - Test Throughput")
+        print("Data integrity check passed for DSA - Test Throughput")
         print(f"  - Null value percentage: {null_percentage:.2%}")
     else:
-        pytest.skip(f"Prepared data for DSA - Test Throughput not found")
+        pytest.skip("Prepared data for DSA - Test Throughput not found")
 
 
 def test_dsa___test_throughput_schema_consistency():
@@ -73,9 +73,9 @@ def test_dsa___test_throughput_schema_consistency():
         columns_list = list(df.columns)
         assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
         
-        print(f"Schema consistency check passed for DSA - Test Throughput")
+        print("Schema consistency check passed for DSA - Test Throughput")
     else:
-        pytest.skip(f"Prepared data for DSA - Test Throughput not found")
+        pytest.skip("Prepared data for DSA - Test Throughput not found")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,8 @@
 """Test cases for the Monte Carlo Optimization module."""
 
 import unittest
-import pandas as pd
 import numpy as np
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from src.unimelb_phd_phase_1.monte_carlo_optimizer import MonteCarloOptimizer
 from src.unimelb_phd_phase_1.data_manager import DataManager

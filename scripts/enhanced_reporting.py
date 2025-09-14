@@ -5,18 +5,16 @@ Enhanced reporting script with support for multiple output formats including PDF
 
 import sys
 from pathlib import Path
-import pandas as pd
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
 try:
-    from weasyprint import HTML, CSS
+    from weasyprint import HTML
     WEASYPRINT_AVAILABLE = True
 except ImportError:
     WEASYPRINT_AVAILABLE = False
@@ -29,9 +27,8 @@ except ImportError:
     JINJA2_AVAILABLE = False
     print("Warning: jinja2 not available. HTML template generation will be limited.")
 
-from unimelb_phd_phase_1.visualization import (
+from genomics_microcosting.visualization import (  # noqa: E402
     load_prepared_data, 
-    create_summary_dashboard,
     plot_cost_distribution,
     plot_category_costs,
     plot_top_costs

@@ -3,11 +3,10 @@
 import unittest
 import tempfile
 import time
-import json
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from unimelb_phd_phase_1.monitoring import (
+from genomics_microcosting.monitoring import (
     SystemHealthChecker, PerformanceMetricsCollector, UsageAnalytics,
     AlertManager, MonitoringMiddleware, HealthCheckError
 )

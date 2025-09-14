@@ -4,9 +4,8 @@ import pandas as pd
 import pytest
 from pathlib import Path
 import tempfile
-import shutil
 
-from unimelb_phd_phase_1.data_management import DataManager, DataVersion
+from genomics_microcosting.data_management import DataManager, DataVersion
 
 
 def test_data_version_creation():
@@ -198,7 +197,7 @@ def test_data_manager_multiple_versions():
         test_data_v1.to_csv(test_file, index=False)
         
         dm = DataManager(data_dir, metadata_dir)
-        version_id_1 = dm.register_dataset(test_file, {"version": "v1"})
+        dm.register_dataset(test_file, {"version": "v1"})
         
         # Modify data and register again
         test_data_v2 = pd.DataFrame({"a": [1, 2, 3], "b": [4, 5, 6]})

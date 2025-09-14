@@ -10,8 +10,8 @@ from pathlib import Path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.voi_analysis import VOIAnalyzer
-from unimelb_phd_phase_1.data_manager import DataManager
+from genomics_microcosting.voi_analysis import VOIAnalyzer  # noqa: E402
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
 
 
 def main():

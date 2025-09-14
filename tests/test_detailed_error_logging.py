@@ -9,17 +9,15 @@ import logging
 import tempfile
 import os
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.error_handling import (
+from genomics_microcosting.error_handling import (  # noqa: E402
     ErrorHandler, 
     ErrorContext, 
     ErrorSeverity,
-    setup_standard_error_handling,
     DetailedErrorLogger
 )
 
@@ -52,7 +50,7 @@ class TestDetailedErrorLogging(unittest.TestCase):
         # Close and remove temporary log file
         try:
             os.unlink(self.temp_log_file.name)
-        except:
+        except (OSError, FileNotFoundError):
             pass
     
     def test_detailed_error_logging(self):
@@ -176,7 +174,7 @@ class TestDetailedErrorLogging(unittest.TestCase):
             try:
                 os.unlink(temp_simple_log.name)
                 os.unlink(temp_detailed_log.name)
-            except:
+            except (OSError, FileNotFoundError):
                 pass
         
         # Test clearing logs

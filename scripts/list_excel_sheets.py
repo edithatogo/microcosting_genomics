@@ -3,7 +3,6 @@
 Script to list all sheets in the Excel workbook and their basic information.
 """
 
-import pandas as pd
 from openpyxl import load_workbook
 from pathlib import Path
 import json

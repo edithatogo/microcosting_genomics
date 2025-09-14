@@ -9,15 +9,13 @@ ensuring that all sheets are treated uniformly regardless of their source or pur
 import sys
 from pathlib import Path
 import pandas as pd
-import json
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.config import load_config
-from unimelb_phd_phase_1.data_manager import DataManager
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
+from genomics_microcosting.sheet_manager import SheetManager  # noqa: E402
 
 
 def create_sheet_metadata(df: pd.DataFrame, sheet_name: str) -> dict:
@@ -128,7 +126,7 @@ def main():
         
         # Show available sheets
         available_sheets = data_manager.list_available_sheets()
-        print(f"\nAvailable sheets in prepared directory:")
+        print("\nAvailable sheets in prepared directory:")
         for sheet, formats in available_sheets.items():
             print(f"  - {sheet}: {', '.join(formats)}")
             

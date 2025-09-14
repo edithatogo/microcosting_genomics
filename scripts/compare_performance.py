@@ -14,7 +14,7 @@ from datetime import datetime
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from scripts.establish_performance_baselines import (
+from scripts.establish_performance_baselines import (  # noqa: E402
     establish_performance_baselines, 
     load_baselines, 
     compare_baselines,

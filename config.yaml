@@ -1,4 +1,243 @@
+# Genomics Microcosting Configuration
+# Standardized column naming taxonomy for consistent data handling
+
+# Column Naming Standards:
+# - Use snake_case for programmatic names
+# - Remove currency symbols and units (stored as metadata)
+# - Use descriptive abbreviations: dsa=deterministic_sensitivity_analysis,
+#   bi=budget_impact, comp=compute, stor=storage, vcgs=victorian_clinical_genetics_service
+# - Standardize uncertainty bounds: lower_bound, estimate, upper_bound
+# - Use consistent prefixes: unit_cost_, price_, quantity_, etc.
+
 default_workbook: validation
+
+# Type specifications for standardized column handling
+type_specifications:
+  # Identifier columns
+  test:
+    data_type: "string"
+    category: "identifier"
+    nullable: false
+    description: "Test or assay name"
+  category:
+    data_type: "categorical"
+    category: "identifier"
+    nullable: false
+    description: "Test category"
+  sub_category:
+    data_type: "categorical"
+    category: "identifier"
+    nullable: true
+    description: "Test sub-category"
+  step:
+    data_type: "string"
+    category: "identifier"
+    nullable: true
+    description: "Process step"
+
+  # Cost columns
+  unit_cost_aud_per_unit:
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+    unit: "AUD per unit"
+    description: "Final calculated cost per test unit"
+  price_aud_per_unit:
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+    unit: "AUD per unit"
+    description: "Base price per unit before calculations"
+  list_price_aud:
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+    unit: "AUD"
+    description: "Manufacturer's list price"
+  annualized_cost_aud:
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+    unit: "AUD per year"
+    description: "Annualized equipment cost"
+
+  # Quantity columns
+  quantity_per_test:
+    data_type: "float"
+    category: "quantity"
+    nullable: true
+    min_value: 0
+    unit: "units per test"
+    description: "Resource quantity required per test"
+  monthly_volume:
+    data_type: "integer"
+    category: "quantity"
+    nullable: true
+    min_value: 0
+    unit: "tests per month"
+    description: "Monthly test volume"
+  useful_life_years:
+    data_type: "integer"
+    category: "quantity"
+    nullable: true
+    min_value: 1
+    unit: "years"
+    description: "Equipment useful life in years"
+
+  # Rate columns
+  hourly_rate_aud:
+    data_type: "currency"
+    category: "rate"
+    nullable: true
+    min_value: 0
+    unit: "AUD per hour"
+    description: "Labor hourly rate"
+  annual_salary_aud:
+    data_type: "currency"
+    category: "rate"
+    nullable: true
+    min_value: 0
+    unit: "AUD per year"
+    description: "Annual labor salary"
+
+  # Metadata columns
+  labor_type:
+    data_type: "categorical"
+    category: "metadata"
+    nullable: false
+    description: "Type of labor"
+  equipment_name:
+    data_type: "string"
+    category: "metadata"
+    nullable: false
+    description: "Equipment name or description"
+  test_type:
+    data_type: "categorical"
+    category: "metadata"
+    nullable: false
+    description: "Type of test"
+
+# Legacy metadata for column types and units (for backward compatibility)
+column_metadata:
+  unit_cost_aud_per_unit:
+    display_name: "Unit Cost"
+    unit: "AUD per unit"
+    description: "Final calculated cost per test unit"
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+  price_aud_per_unit:
+    display_name: "Price"
+    unit: "AUD per unit"
+    description: "Base price per unit before calculations"
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+  quantity_per_test:
+    display_name: "Quantity of Use per Test"
+    unit: "units per test"
+    description: "Resource quantity required per test"
+    data_type: "float"
+    category: "quantity"
+    nullable: true
+    min_value: 0
+  list_price_aud:
+    display_name: "List Price"
+    unit: "AUD"
+    description: "Manufacturer's list price"
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+  hourly_rate_aud:
+    display_name: "Hourly Rate"
+    unit: "AUD per hour"
+    description: "Labor hourly rate"
+    data_type: "currency"
+    category: "rate"
+    nullable: true
+    min_value: 0
+  annual_salary_aud:
+    display_name: "Annual Salary"
+    unit: "AUD per year"
+    description: "Annual labor salary"
+    data_type: "currency"
+    category: "rate"
+    nullable: true
+    min_value: 0
+  monthly_volume:
+    display_name: "Monthly Volume"
+    unit: "tests per month"
+    description: "Monthly test volume"
+    data_type: "integer"
+    category: "quantity"
+    nullable: true
+    min_value: 0
+  useful_life_years:
+    display_name: "Useful Life"
+    unit: "years"
+    description: "Equipment useful life in years"
+    data_type: "integer"
+    category: "quantity"
+    nullable: true
+    min_value: 1
+  annualized_cost_aud:
+    display_name: "Annualized Cost"
+    unit: "AUD per year"
+    description: "Annualized equipment cost"
+    data_type: "currency"
+    category: "cost"
+    nullable: true
+    min_value: 0
+  test:
+    display_name: "Test"
+    description: "Test or assay name"
+    data_type: "string"
+    category: "identifier"
+    nullable: false
+  category:
+    display_name: "Category"
+    description: "Test category"
+    data_type: "categorical"
+    category: "identifier"
+    nullable: false
+  sub_category:
+    display_name: "Sub-Category"
+    description: "Test sub-category"
+    data_type: "categorical"
+    category: "identifier"
+    nullable: true
+  step:
+    display_name: "Step"
+    description: "Process step"
+    data_type: "string"
+    category: "identifier"
+    nullable: true
+  labor_type:
+    display_name: "Labor Type"
+    description: "Type of labor"
+    data_type: "categorical"
+    category: "metadata"
+    nullable: false
+  equipment_name:
+    display_name: "Equipment"
+    description: "Equipment name or description"
+    data_type: "string"
+    category: "metadata"
+    nullable: false
+  test_type:
+    display_name: "Test Type"
+    description: "Type of test"
+    data_type: "categorical"
+    category: "metadata"
+    nullable: false
+
 workbooks:
   main:
     path: "data/Microcosting Study - Supp Tables - R1 v1 (20231119).xlsx"
@@ -6,36 +245,211 @@ workbooks:
       "Detailed Table":
         header_rows: 4
         data_starts_at: 5
-        string_columns: ["Test", "Category", "Sub-Category", "Step"]
-      "2. Labor Prices":
+        string_columns: ["test", "category", "sub_category", "step"]
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Test": "test"
+          "Category": "category"
+          "Sub-Category": "sub_category"
+          "Step": "step"
+          "Quantity of Use per Test": "quantity_per_test"
+          "Price (AUD $/unit)": "price_aud_per_unit"
+          "Unit Cost (AUD $/unit)": "unit_cost_aud_per_unit"
+      "labor_prices":
         header_rows: 1
         data_starts_at: 2
-      "3. Estimates":
+        column_mapping:
+          "Labor Type": "labor_type"
+          "Hourly Rate (AUD)": "hourly_rate_aud"
+          "Annual Salary (AUD)": "annual_salary_aud"
+      "equipment_estimates":
         header_rows: 1
         data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Equipment": "equipment_name"
+          "Useful Life": "useful_life_years"
+          "List Price (AUD)": "list_price_aud"
+          "Annualised Cost": "annualized_cost_aud"
+
   validation:
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
       "Detailed Table":
         header_rows: 4
         data_starts_at: 5
-        string_columns: ["Test", "Category", "Sub-Category", "Step"]
+        string_columns: ["test", "category", "sub_category", "step"]
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Test": "test"
+          "Category": "category"
+          "Sub-Category": "sub_category"
+          "Step": "step"
+          "Quantity of Use per Test": "quantity_per_test"
+          "Price (AUD $/unit)": "price_aud_per_unit"
+          "Unit Cost (AUD $/unit)": "unit_cost_aud_per_unit"
       "DSA - Labour Prices":
-        header_rows: 1
-        data_starts_at: 2
+        header_rows: 4
+        data_starts_at: 5
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Labor Type": "labor_type"
+          "Hourly Rate (AUD)": "hourly_rate_aud"
+          "Annual Salary (AUD)": "annual_salary_aud"
       "DSA - Test Throughput":
+        header_rows: 4
+        data_starts_at: 5
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Test Type": "test_type"
+          "Monthly Volume": "monthly_volume"
+          "Annual Volume": "annual_volume"
+      "BI - Stor Use - VCGS":
         header_rows: 1
         data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Storage Type": "storage_type"
+          "Usage Rate": "usage_rate"
+          "Cost per Unit": "cost_per_unit_aud"
+      "Eq - Usage - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Equipment": "equipment_name"
+          "Usage Hours": "usage_hours_per_month"
+          "Maintenance Cost": "maintenance_cost_aud"
+      "BI - Comp Use - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Compute Type": "compute_type"
+          "Usage Rate": "usage_rate"
+          "Cost per Unit": "cost_per_unit_aud"
+      "Cons -  Costs and Util - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Consumable": "consumable_name"
+          "Usage per Test": "usage_per_test"
+          "Cost per Unit": "cost_per_unit_aud"
+      "Labour - Usage - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Labor Type": "labor_type"
+          "Hours per Test": "hours_per_test"
+          "Hourly Rate": "hourly_rate_aud"
+      "BI - Comp+Stor Costs - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Resource Type": "resource_type"
+          "Compute Cost": "compute_cost_aud"
+          "Storage Cost": "storage_cost_aud"
+          "Total Cost": "total_cost_aud"
+      "Eq - Costs and Usage - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Equipment": "equipment_name"
+          "Purchase Cost": "purchase_cost_aud"
+          "Useful Life": "useful_life_years"
+          "Annualized Cost": "annualized_cost_aud"
+      "Labour - Costs - VCGS":
+        header_rows: 1
+        data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Labor Type": "labor_type"
+          "Annual Salary": "annual_salary_aud"
+          "FTE": "full_time_equivalent"
+          "Total Cost": "total_cost_aud"
+
   original:
     path: "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
     sheets:
       "Detailed Table":
         header_rows: 4
         data_starts_at: 5
-        string_columns: ["Test", "Category", "Sub-Category", "Step"]
-      "2. Labor Prices":
+        string_columns: ["test", "category", "sub_category", "step"]
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Test": "test"
+          "Category": "category"
+          "Sub-Category": "sub_category"
+          "Step": "step"
+          "Quantity of Use per Test": "quantity_per_test"
+          "Price (AUD $/unit)": "price_aud_per_unit"
+          "Unit Cost (AUD $/unit)": "unit_cost_aud_per_unit"
+      "labor_prices":
         header_rows: 1
         data_starts_at: 2
-      "3. Estimates":
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Labor Type": "labor_type"
+          "Hourly Rate (AUD)": "hourly_rate_aud"
+          "Annual Salary (AUD)": "annual_salary_aud"
+      "equipment_estimates":
         header_rows: 1
         data_starts_at: 2
+        type_validation:
+          enabled: true
+          strict_mode: false
+          error_handling: "warn"
+        column_mapping:
+          "Equipment": "equipment_name"
+          "Useful Life": "useful_life_years"
+          "List Price (AUD)": "list_price_aud"
+          "Annualised Cost": "annualized_cost_aud"

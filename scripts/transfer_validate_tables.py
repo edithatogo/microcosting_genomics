@@ -6,7 +6,6 @@ Script to systematically transfer Excel tables to Python, validate them, and cre
 import sys
 from pathlib import Path
 import pandas as pd
-import numpy as np
 from openpyxl import load_workbook
 import json
 from datetime import datetime
@@ -15,8 +14,7 @@ from datetime import datetime
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.config import load_config
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.config import load_config  # noqa: E402
 
 
 # Define the tables we want to transfer and validate
@@ -213,7 +211,7 @@ def create_table_metadata(df, table_name, description=""):
             series = df.iloc[:, i] if isinstance(col, int) else df[col]
             col_dtype = str(series.dtype)
             null_count = int(series.isnull().sum())
-        except:
+        except (KeyError, IndexError, AttributeError):
             col_dtype = "unknown"
             null_count = 0
         
@@ -227,7 +225,7 @@ def create_table_metadata(df, table_name, description=""):
         if col_dtype == 'object':
             try:
                 col_info["unique_count"] = int(series.nunique())
-            except:
+            except (TypeError, AttributeError):
                 col_info["unique_count"] = "unknown"
         
         metadata["columns"].append(col_info)
@@ -236,7 +234,7 @@ def create_table_metadata(df, table_name, description=""):
         try:
             sample_values = series.dropna().head(3).tolist()
             metadata["sample_data"][col_name] = sample_values
-        except:
+        except (AttributeError, TypeError):
             metadata["sample_data"][col_name] = []
     
     return metadata
@@ -247,7 +245,7 @@ def validate_table_transfer(original_df, prepared_df, table_name):
     print(f"Validating transfer of '{table_name}'...")
     
     if original_df is None or prepared_df is None:
-        print(f"  ❌ Validation failed: One of the DataFrames is None")
+        print("  ❌ Validation failed: One of the DataFrames is None")
         return False
     
     # Check dimensions
@@ -291,7 +289,7 @@ def prepare_table(table_info):
     # Load the original Excel data
     original_df = None
     if not excel_sheet_missing:
-        print(f"Loading original data from Excel...")
+        print("Loading original data from Excel...")
         original_df = load_excel_sheet(table_name)
         
         if original_df is None:
@@ -368,7 +366,7 @@ def prepare_table(table_info):
         # If we have original data but no prepared data, use original data for metadata
         if original_df is not None:
             prepared_df = original_df
-            print(f"⚠️  Using original data for metadata creation (no prepared data available)")
+            print("⚠️  Using original data for metadata creation (no prepared data available)")
         else:
             return False
     

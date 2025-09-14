@@ -38,7 +38,7 @@ def test_2_labor_prices_data_integrity():
         # For labor prices, we expect some null values for categories that don't apply to certain jurisdictions
         assert null_percentage < 0.4, f"Too many null values: {null_percentage:.2%}"
         
-        print(f"Data integrity check passed for 2. Labor Prices")
+        print("Data integrity check passed for 2. Labor Prices")
         print(f"  - Null value percentage: {null_percentage:.2%}")
     else:
         pytest.skip("Prepared data for 2. Labor Prices not found")
@@ -57,7 +57,7 @@ def test_2_labor_prices_schema_consistency():
         columns_list = list(df.columns)
         assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
         
-        print(f"Schema consistency check passed for 2. Labor Prices")
+        print("Schema consistency check passed for 2. Labor Prices")
     else:
         pytest.skip("Prepared data for 2. Labor Prices not found")
 

@@ -1,12 +1,9 @@
 """Test cases for the Extensibility Framework module."""
 
 import unittest
-import pandas as pd
-import numpy as np
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 from pathlib import Path
 import tempfile
-import json
 
 from src.unimelb_phd_phase_1.extensibility_framework import (
     ExtensibilityFramework, Extension, AnalysisExtension, VisualizationExtension,

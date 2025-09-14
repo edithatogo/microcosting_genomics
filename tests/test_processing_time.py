@@ -12,15 +12,12 @@ from pathlib import Path
 import sys
 from typing import Dict, List, Callable, Any
 import statistics
-from unittest.mock import Mock, patch
 
 # Add the src directory to the path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.performance import PerformanceProfiler
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.performance import PerformanceProfiler  # noqa: E402
 
 
 class ProcessingTimeMeasurer:
@@ -614,11 +611,11 @@ if __name__ == "__main__":
     )
     
     # Print results
-    print(f"\nMatrix multiplication stats:")
+    print("\nMatrix multiplication stats:")
     print(f"  Mean wall time: {matrix_stats['wall_time_stats']['mean']:.4f}s")
     print(f"  Success rate: {matrix_stats['successful_executions']}/{matrix_stats['iterations']}")
     
-    print(f"\nData processing stats:")
+    print("\nData processing stats:")
     print(f"  Mean wall time: {data_stats['wall_time_stats']['mean']:.4f}s")
     print(f"  Success rate: {data_stats['successful_executions']}/{data_stats['iterations']}")
     
@@ -626,7 +623,7 @@ if __name__ == "__main__":
     comparison = time_measurer.compare_processing_times(matrix_stats, data_stats)
     if comparison['comparison_possible']:
         wall_comp = comparison['wall_time_comparison']
-        print(f"\nComparison:")
+        print("\nComparison:")
         print(f"  Matrix operation is {abs(wall_comp['improvement']):.4f}s "
               f"({'faster' if wall_comp['improvement'] > 0 else 'slower'}) "
               f"than data processing "

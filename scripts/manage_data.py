@@ -6,13 +6,12 @@ Script to manage data versions and metadata.
 import sys
 from pathlib import Path
 import argparse
-import pandas as pd
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_management import DataManager
+from genomics_microcosting.data_management import DataManager  # noqa: E402
 
 
 def main():

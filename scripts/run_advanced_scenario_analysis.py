@@ -5,16 +5,14 @@ Script to run advanced scenario analysis with sophisticated comparison features.
 
 import sys
 from pathlib import Path
-import pandas as pd
 import argparse
-import json
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.advanced_scenario_modeling import AdvancedScenarioManager, create_advanced_scenarios
-from unimelb_phd_phase_1.visualization import load_prepared_data
+from genomics_microcosting.advanced_scenario_modeling import AdvancedScenarioManager, create_advanced_scenarios  # noqa: E402
+from genomics_microcosting.visualization import load_prepared_data  # noqa: E402
 
 
 def main():
@@ -85,7 +83,7 @@ def main():
                         for param, (param_min, param_max) in scenario.sensitivity_parameters.items():
                             print(f"  Analyzing sensitivity for {param} in {scenario_name}")
                             try:
-                                sensitivity_results = scenario_manager.run_sensitivity_analysis(
+                                scenario_manager.run_sensitivity_analysis(
                                     scenario_name, param, param_min, param_max, 10
                                 )
                                 print(f"    Sensitivity analysis for {param} completed")
@@ -158,14 +156,14 @@ def main():
         report_file = output_dir / "advanced_scenario_analysis_report.md"
         print(f"Generating advanced report in {report_file}")
         try:
-            report = scenario_manager.generate_advanced_report(scenarios_to_run, report_file)
+            scenario_manager.generate_advanced_report(scenarios_to_run, str(report_file))
             print("Advanced report generated successfully")
         except Exception as e:
             print(f"Error generating advanced report: {e}")
             # Generate a simpler report as fallback
             fallback_report = output_dir / "scenario_analysis_report.md"
             print(f"Generating fallback report in {fallback_report}")
-            report = scenario_manager.generate_scenario_report(scenarios_to_run, fallback_report)
+            scenario_manager.generate_scenario_report(scenarios_to_run, str(fallback_report))
         
         print("Advanced scenario analysis complete!")
         print(f"Results saved to {output_dir}")

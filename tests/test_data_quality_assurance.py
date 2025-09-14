@@ -3,7 +3,6 @@
 import unittest
 import sys
 import pandas as pd
-import numpy as np
 from unittest.mock import Mock, patch
 from pathlib import Path
 
@@ -11,14 +10,14 @@ from pathlib import Path
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.data_quality_assurance import (
+from genomics_microcosting.data_quality_assurance import (  # noqa: E402
     DataQualityAssurance,
     DataAnomalyDetector,
     MissingDataHandler,
     DataIntegrityVerifier,
     DataQualityMetrics
 )
-from unimelb_phd_phase_1.data_manager import DataManager
+from genomics_microcosting.data_manager import DataManager  # noqa: E402
 
 
 class TestDataQualityAssurance(unittest.TestCase):
@@ -129,7 +128,7 @@ class TestDataQualityAssurance(unittest.TestCase):
             }
             
             # Assess data quality
-            metrics = self.quality_assurance.assess_data_quality("Test Sheet", cost_columns=['cost'])
+            self.quality_assurance.assess_data_quality("Test Sheet", cost_columns=['cost'])
             
             # Generate report
             report = self.quality_assurance.generate_quality_report()
@@ -164,7 +163,7 @@ class TestDataQualityAssurance(unittest.TestCase):
             }
             
             # Assess data quality
-            metrics = self.quality_assurance.assess_data_quality("Test Sheet", cost_columns=['cost'])
+            self.quality_assurance.assess_data_quality("Test Sheet", cost_columns=['cost'])
             
             # Get summary
             summary = self.quality_assurance.get_quality_metrics_summary()

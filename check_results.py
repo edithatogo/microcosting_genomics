@@ -1,5 +1,5 @@
-from unimelb_phd_phase_1.calculation_engine import CalculationEngine
-from unimelb_phd_phase_1.sheet_manager import SheetManager
+from genomics_microcosting.calculation_engine import CalculationEngine
+from genomics_microcosting.sheet_manager import SheetManager
 import pandas as pd
 
 def main():
@@ -15,7 +15,12 @@ def main():
     engine = CalculationEngine(sheet_manager)
 
     # Run the engine to get the calculated results
-    results_df, errors = engine.run_engine()
+    results_df, errors = engine.run_engine("Detailed Table")
+    
+    if results_df is None:
+        print("Error: Engine returned None results")
+        print("Errors:", errors)
+        return
     
     print("Results shape:", results_df.shape)
     print("Results columns (first 10):", results_df.columns.tolist()[:10])

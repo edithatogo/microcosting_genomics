@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from unimelb_phd_phase_1.config import load_config
+from genomics_microcosting.config import load_config
 
 
 def _parse_generic_sheet(

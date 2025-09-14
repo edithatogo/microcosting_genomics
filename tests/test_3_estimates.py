@@ -38,7 +38,7 @@ def test_3_estimates_data_integrity():
         # For estimates, we expect more null values as not all estimates apply to all categories
         assert null_percentage < 0.5, f"Too many null values: {null_percentage:.2%}"
         
-        print(f"Data integrity check passed for 3. Estimates")
+        print("Data integrity check passed for 3. Estimates")
         print(f"  - Null value percentage: {null_percentage:.2%}")
     else:
         pytest.skip("Prepared data for 3. Estimates not found")
@@ -57,7 +57,7 @@ def test_3_estimates_schema_consistency():
         columns_list = list(df.columns)
         assert len(columns_list) == len(set(columns_list)), "Duplicate column names found"
         
-        print(f"Schema consistency check passed for 3. Estimates")
+        print("Schema consistency check passed for 3. Estimates")
     else:
         pytest.skip("Prepared data for 3. Estimates not found")
 

@@ -12,8 +12,8 @@ import argparse
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
-from unimelb_phd_phase_1.plugin_system import PluginManager
-from unimelb_phd_phase_1.enhanced_plugin_system import EnhancedPluginManager
+from genomics_microcosting.plugin_system import PluginManager  # noqa: E402
+from genomics_microcosting.enhanced_plugin_system import EnhancedPluginManager  # noqa: E402
 
 
 def demonstrate_basic_plugin_system():
@@ -109,7 +109,7 @@ def demonstrate_enhanced_plugin_system():
     
     # Get plugin statistics
     stats = plugin_manager.get_plugin_statistics()
-    print(f"\nPlugin statistics:")
+    print("\nPlugin statistics:")
     print(json.dumps(stats, indent=2))
     
     # Export plugin metadata
@@ -130,7 +130,7 @@ def create_sample_enhanced_plugin():
 
 import pandas as pd
 from typing import Any, Dict
-from unimelb_phd_phase_1.enhanced_plugin_system import AnalysisPlugin
+from genomics_microcosting.enhanced_plugin_system import AnalysisPlugin  # noqa: E402
 
 
 class SampleCostAnalysisPlugin(AnalysisPlugin):

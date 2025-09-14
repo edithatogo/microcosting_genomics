@@ -118,6 +118,9 @@ def main():
 
         # Validate the replicated table
         is_valid = validate_replicated_table(replicated_df)
+        if not is_valid:
+            print("Warning: Replicated table validation failed!")
+            return 1
 
         # Save the replicated table
         output_dir = Path(__file__).resolve().parents[1] / "reports"
