@@ -4,8 +4,8 @@ import unittest
 import pandas as pd
 from unittest.mock import Mock
 
-from src.unimelb_phd_phase_1.cost_effectiveness_analysis import CostEffectivenessAnalyzer
-from src.unimelb_phd_phase_1.data_manager import DataManager
+from src.genomics_microcosting.cost_effectiveness_analysis import CostEffectivenessAnalyzer
+from src.genomics_microcosting.data_manager import DataManager
 
 
 class TestCostEffectivenessAnalyzer(unittest.TestCase):

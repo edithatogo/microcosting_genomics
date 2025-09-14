@@ -224,34 +224,90 @@ class DataManager:
             pd.DataFrame: DataFrame with unique column names
         """
         if isinstance(df.columns, pd.MultiIndex):
-            # Handle MultiIndex columns
-            try:
-                # Convert MultiIndex to regular index by joining levels
-                new_columns = []
-                for col in df.columns:
-                    if isinstance(col, tuple):
-                        # Join non-null parts of the tuple
-                        parts = [str(part) for part in col if pd.notna(part)]
-                        new_col = "_".join(parts) if parts else "unnamed"
-                    else:
-                        new_col = str(col) if pd.notna(col) else "unnamed"
-                    new_columns.append(new_col)
-                df_copy = df.copy()
-                df_copy.columns = new_columns
-            except Exception as e:
-                self.logger.warning("Error handling MultiIndex columns: %s", e)
-                # Fallback to generic column names
-                df_copy = df.copy()
-                df_copy.columns = [f"col_{i}" for i in range(len(df.columns))]
+            return self._fix_multiindex_columns(df)
         else:
-            # Handle regular index columns
+            return self._fix_regular_columns(df)
+
+    def _fix_multiindex_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Fix duplicate column names in a MultiIndex DataFrame.
+
+        Args:
+            df (pd.DataFrame): DataFrame with MultiIndex columns
+
+        Returns:
+            pd.DataFrame: DataFrame with unique column names
+        """
+        try:
+            new_columns = []
+            for col in df.columns:
+                new_col = self._convert_multiindex_tuple_to_string(col)
+                new_columns.append(new_col)
+
             df_copy = df.copy()
-            
-        # Ensure all column names are unique
+            df_copy.columns = new_columns
+            return self._ensure_unique_columns(df_copy)
+        except Exception as e:
+            self.logger.warning("Error handling MultiIndex columns: %s", e)
+            # Fallback to generic column names
+            df_copy = df.copy()
+            df_copy.columns = [f"col_{i}" for i in range(len(df.columns))]
+            return df_copy
+
+    def _convert_multiindex_tuple_to_string(self, col: Any) -> str:
+        """Convert a MultiIndex tuple to a string column name.
+
+        Args:
+            col (Any): MultiIndex column (tuple or other type)
+
+        Returns:
+            str: String representation of the column name
+        """
+        if not isinstance(col, tuple):
+            return str(col) if pd.notna(col) else "unnamed"
+
+        parts = []
+        for part in col:
+            if pd.notna(part) and str(part).strip():
+                parts.append(self._convert_part_to_string(part))
+
+        return "_".join(parts) if parts else "unnamed"
+
+    def _convert_part_to_string(self, part: Any) -> str:
+        """Convert a MultiIndex part to string with proper type handling.
+
+        Args:
+            part (Any): Part to convert
+
+        Returns:
+            str: String representation
+        """
+        import numpy as np
+
+        if isinstance(part, (np.bool_, bool)):
+            return str(part)
+        elif isinstance(part, (int, float, np.integer, np.floating)):
+            if isinstance(part, (int, np.integer)) or (hasattr(part, 'is_integer') and part.is_integer()):
+                return str(int(part))
+            else:
+                return str(part)
+        else:
+            return str(part)
+
+    def _fix_regular_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Fix duplicate column names in a regular index DataFrame.
+
+        Args:
+            df (pd.DataFrame): DataFrame with regular index columns
+
+        Returns:
+            pd.DataFrame: DataFrame with unique column names
+        """
+        df_copy = df.copy()
         columns = list(df_copy.columns)
+
+        # Check for duplicates and handle them
         seen = {}
         new_columns = []
-        
         for col in columns:
             col_str = str(col) if pd.notna(col) else "unnamed"
             if col_str in seen:
@@ -261,8 +317,38 @@ class DataManager:
                 seen[col_str] = 1
                 new_col = col_str
             new_columns.append(new_col)
-            
-        df_copy.columns = new_columns
+
+        # Only rename if there are actual duplicates
+        if len(set(new_columns)) != len(new_columns):
+            df_copy.columns = new_columns
+
+        return self._ensure_unique_columns(df_copy)
+
+    def _ensure_unique_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Ensure all column names are unique by adding suffixes if needed.
+
+        Args:
+            df (pd.DataFrame): DataFrame that may have duplicate columns
+
+        Returns:
+            pd.DataFrame: DataFrame with guaranteed unique column names
+        """
+        columns = list(df.columns)
+        seen = {}
+        final_columns = []
+
+        for col in columns:
+            col_str = str(col) if pd.notna(col) else "unnamed"
+            if col_str in seen:
+                seen[col_str] += 1
+                new_col = f"{col_str}_{seen[col_str]}"
+            else:
+                seen[col_str] = 1
+                new_col = col_str
+            final_columns.append(new_col)
+
+        df_copy = df.copy()
+        df_copy.columns = final_columns
         return df_copy
 
     def _create_data_dictionary(self, df: pd.DataFrame, output_path: Path) -> None:
@@ -345,7 +431,7 @@ class DataManager:
 
         # Build type specifications for mapped columns
         type_specs = {}
-        for excel_col, standard_col in column_mapping.items():
+        for _, standard_col in column_mapping.items():
             type_spec = get_type_spec(standard_col)
             if type_spec:
                 type_specs[standard_col] = type_spec
@@ -381,7 +467,7 @@ class DataManager:
 
         # Build type specifications for mapped columns
         type_specs = {}
-        for excel_col, standard_col in column_mapping.items():
+        for _, standard_col in column_mapping.items():
             type_spec = get_type_spec(standard_col)
             if type_spec:
                 type_specs[standard_col] = type_spec

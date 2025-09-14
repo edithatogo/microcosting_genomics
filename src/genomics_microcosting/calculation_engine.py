@@ -18,6 +18,8 @@ from .strategies import (
     DivisionParenthesesMultiplicationStrategy,
     DivisionThreeValuesStrategy,
     DivisionStrategy,
+    IfErrorStrategy,
+    IfStrategy,
     LiteralStrategy,
     MultiplicationByNumberStrategy,
     MultiplicationStrategy,
@@ -35,6 +37,7 @@ from .strategies import (
     StringLiteralStrategy,
     SumCellsStrategy,
     SumRangeStrategy,
+    VLookupStrategy,
 )
 from .utils import cell_to_coords, coords_to_cell
 from .logging_config import get_logger
@@ -116,6 +119,9 @@ class CalculationEngine:
             "multiplication_with_nested_division": CellMultiplicationWithDivisionStrategy(),
             "complex_nested_expression": NestedArithmeticExpressionStrategy(),
             "division_multiplication_sequence": DivisionMultiplicationSequenceStrategy(),
+            "if": IfStrategy(),
+            "iferror": IfErrorStrategy(),
+            "vlookup": VLookupStrategy(),
         }
         self.sheet_configs = sheet_manager.sheet_configs
         

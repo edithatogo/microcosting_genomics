@@ -1,39 +1,39 @@
 Stage,Step
+,Registration
+,Name Check
+,Collection (e.g. venepuncture)
+,Completion of forms
 ,
+,Unpacking/Triaging 
+,Rapid Registration of the sample 
+,Data Entry / Data Review 
+,Gatekeeper review
 ,
+,gDNA Extraction
+,gDNA QC
 ,
+,dsDNA HS Quantification
+,ES Capture Kit
+,HS DNA QC
+,Fragment Analysis QC
 ,
+,Pooling
+,Sequencing
 ,
+,Processing
+,Storage - Network
+,Demultiplexing
+,QC Troubleshooting
+,Manual handling
 ,
+,Filtration of primary variants - first check
+,Filtration of primary variants - second check
 ,
+,Variant priorisation and curation meeting
+,Discussion meeting
+,Complex meeting
 ,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
-,
+,Report writing
+,Initial report checking
+,Management in LIS
+,Final report checking

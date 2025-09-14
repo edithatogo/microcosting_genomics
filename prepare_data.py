@@ -111,6 +111,8 @@ def main() -> None:
     prepared_dir = data_dir / "prepared"
     prepared_dir.mkdir(exist_ok=True)
 
+    # Process configured sheets
+    processed_sheets = set()
     for sheet_name, sheet_config in sheet_configs.items():
         # Skip sheets that don't exist in the workbook
         if sheet_name not in wb.sheetnames:
@@ -140,7 +142,70 @@ def main() -> None:
         df.to_csv(csv_output_path, index=False)
         print(f"Saved {csv_output_path}")
 
+        processed_sheets.add(sheet_name)
+
+    # Process additional supporting tables not in config
+    supporting_tables = [
+        "Summary Table",
+        "DSA - Summary",
+        "DSA - Tornado (index 0)",
+        "DSA - Tornado (index actual)",
+        "DSA - Tornado Actual",
+        "DSA - Differences",
+        "DSA - Summary (2)",
+        "DSA - Summary - Stats",
+        "Process",
+        "DSA - Overheads",
+        "DSA - Overheads (USD)",
+        "DSA - Consumable Discounts",
+        "DSA - Cons Discounts (USD)",
+        "Process - WES+Panel - VCGS",
+        "Process - WGS - VCGS",
+        "At a Glance",
+        "Summary 20230812",
+        "Summ Tab by Cat",
+        "Summ Tab by Stage",
+        "Summ Table for Graph",
+        "Summary Table 2",
+        "Summary Table Ordered",
+        "Sheet1",
+        "Sheet2"
+    ]
+
+    print(f"\nProcessing {len(supporting_tables)} additional supporting tables...")
+
+    for sheet_name in supporting_tables:
+        if sheet_name in wb.sheetnames and sheet_name not in processed_sheets:
+            try:
+                # Try to auto-detect header structure
+                df = _parse_generic_sheet(
+                    source_file,
+                    sheet_name,
+                    header_rows=1,  # Default to 1 header row for supporting tables
+                    skip_rows=0,
+                )
+
+                # Use a sanitized version of the sheet name for the file name
+                sanitized_name = "".join(
+                    c for c in sheet_name if c.isalnum() or c in (" ", "_", "-", "(", ")")
+                ).rstrip()
+                sanitized_name = sanitized_name.lower().replace(" ", "_").replace("-", "_").replace("(", "").replace(")", "")
+
+                # Save as Parquet
+                output_path = prepared_dir / f"{sanitized_name}.parquet"
+                df.to_parquet(output_path)
+                print(f"Saved supporting table: {output_path}")
+
+                # Save as CSV
+                csv_output_path = prepared_dir / f"{sanitized_name}.csv"
+                df.to_csv(csv_output_path, index=False)
+                print(f"Saved supporting table: {csv_output_path}")
+
+            except Exception as e:
+                print(f"Warning: Could not process supporting table '{sheet_name}': {e}")
+
     wb.close()
+    print(f"\nData preparation complete. Processed {len(processed_sheets)} configured sheets and additional supporting tables.")
 
 
 if __name__ == "__main__":

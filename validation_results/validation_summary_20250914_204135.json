@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-09-14T20:41:10.511884",
+  "success": false,
+  "ground_truth_loaded": true,
+  "engine_initialized": true,
+  "engine_run": true,
+  "validation_performed": true,
+  "metrics": {
+    "total_comparisons": "1624",
+    "significant_errors": "626",
+    "total_columns_validated": 2,
+    "error_rate_percent": 38.54679802955665,
+    "weighted_mean_abs_error": 49.4102123613346
+  },
+  "errors": [],
+  "column_matches": {
+    "Price (AUD $/unit) LL": "Price (AUD $/unit) LL",
+    "Unit Cost (AUD $/unit) LL": "Unit Cost (AUD $/unit) LL"
+  },
+  "validation_details": [
+    {
+      "gt_column": "Price (AUD $/unit) LL",
+      "res_column": "Price (AUD $/unit) LL",
+      "comparisons": "758",
+      "mean_abs_error": 70.49485997106422,
+      "mean_percentage_error": 599.548659636878,
+      "max_abs_error": 6272.432000000001,
+      "max_percentage_error": 66171.42857142857,
+      "significant_abs_errors": "263",
+      "significant_pct_errors": "292",
+      "abs_error_percentiles": {
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "0.75": 0.0665,
+        "0.95": 5.260872395833333
+      },
+      "pct_error_percentiles": {
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "0.75": 48.90365146860765,
+        "0.95": 1755.8290417735525
+      },
+      "data_quality": {
+        "gt_nulls": "505",
+        "res_nulls": "542",
+        "gt_zeros": "12",
+        "res_zeros": "9",
+        "valid_comparisons": "758",
+        "gt_zeros_in_valid": "12",
+        "res_zeros_in_valid": "9"
+      }
+    },
+    {
+      "gt_column": "Unit Cost (AUD $/unit) LL",
+      "res_column": "Unit Cost (AUD $/unit) LL",
+      "comparisons": "866",
+      "mean_abs_error": 30.955058910786057,
+      "mean_percentage_error": 2555.5223038067966,
+      "max_abs_error": 7877.4829635000015,
+      "max_percentage_error": 426263.6363636363,
+      "significant_abs_errors": "363",
+      "significant_pct_errors": "446",
+      "abs_error_percentiles": {
+        "0.25": 0.0,
+        "0.5": 0.00038572065666449273,
+        "0.75": 0.6881197474814815,
+        "0.95": 72.81528777746499
+      },
+      "pct_error_percentiles": {
+        "0.25": 0.0,
+        "0.5": 7.203441768386899,
+        "0.75": 99.16017552585582,
+        "0.95": 4511.764705882353
+      },
+      "data_quality": {
+        "gt_nulls": "396",
+        "res_nulls": "454",
+        "gt_zeros": "59",
+        "res_zeros": "69",
+        "valid_comparisons": "866",
+        "gt_zeros_in_valid": "59",
+        "res_zeros_in_valid": "69"
+      }
+    }
+  ],
+  "ground_truth_shape": [
+    1336,
+    27
+  ],
+  "engine_execution_time": 17.684791803359985,
+  "results_shape": [
+    1336,
+    1301
+  ]
+}

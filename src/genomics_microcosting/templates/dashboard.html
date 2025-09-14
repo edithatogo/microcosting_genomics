@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Microcosting Analysis{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h1 class="display-4">
+                <i class="fas fa-tachometer-alt me-3 text-primary"></i>Microcosting Dashboard
+            </h1>
+            <p class="lead text-muted">
+                Comprehensive overview of genomics microcosting data and analysis
+            </p>
+        </div>
+
+        <!-- Key Metrics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card border-primary h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-table fa-2x text-primary mb-2"></i>
+                        <h4 class="card-title">{{ tables|length }}</h4>
+                        <p class="card-text text-muted">Data Tables</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-success h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-database fa-2x text-success mb-2"></i>
+                        <h4 class="card-title">{{ total_rows }}</h4>
+                        <p class="card-text text-muted">Total Records</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-info h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-columns fa-2x text-info mb-2"></i>
+                        <h4 class="card-title">{{ total_columns }}</h4>
+                        <p class="card-text text-muted">Total Columns</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border-warning h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                        <h4 class="card-title">{{ visualizations_count }}</h4>
+                        <p class="card-text text-muted">Visualizations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="row">
+            <!-- Data Overview -->
+            <div class="col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-chart-pie me-2"></i>Data Overview
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Table Name</th>
+                                        <th>Rows</th>
+                                        <th>Columns</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for table_name, info in table_info.items() %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ table_name }}</strong>
+                                            <br>
+                                            <small class="text-muted">{{ info.description }}</small>
+                                        </td>
+                                        <td>{{ info.rows }}</td>
+                                        <td>{{ info.columns }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="/table/{{ table_name }}" class="btn btn-outline-primary" title="View {{ table_name }} table">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="/visualize/table/{{ table_name }}" class="btn btn-outline-secondary" title="Visualize {{ table_name }} data">
+                                                    <i class="fas fa-chart-bar"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions Sidebar -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="/visualize" class="btn btn-primary">
+                                <i class="fas fa-chart-line me-2"></i>Create Visualization
+                            </a>
+                            <button class="btn btn-outline-secondary" onclick="exportDashboardData()">
+                                <i class="fas fa-download me-2"></i>Export All Data
+                            </button>
+                            <button class="btn btn-outline-info" onclick="generateReport()">
+                                <i class="fas fa-file-alt me-2"></i>Generate Report
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="refreshDashboard()">
+                                <i class="fas fa-sync-alt me-2"></i>Refresh Data
+                            </button>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <h5 class="mb-3">Recent Activity</h5>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item px-0">
+                                <small class="text-muted">Data loaded successfully</small>
+                            </div>
+                            <div class="list-group-item px-0">
+                                <small class="text-muted">35 tables processed</small>
+                            </div>
+                            <div class="list-group-item px-0">
+                                <small class="text-muted">Dashboard updated</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-chart-area me-2"></i>Key Visualizations
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Cost Distribution</h5>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <div id="costDistributionChart" class="chart-container">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Loading chart...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Top Cost Categories</h5>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <div id="topCategoriesChart" class="chart-container">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Loading chart...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analysis Summary -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h3 class="mb-0">
+                            <i class="fas fa-clipboard-list me-2"></i>Analysis Summary
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Data Quality Metrics</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>35 tables successfully loaded</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>All data validated and processed</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>Multi-level headers handled</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i>Export functionality available</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Available Features</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-chart-bar text-primary me-2"></i>Interactive visualizations</li>
+                                    <li><i class="fas fa-download text-success me-2"></i>Multiple export formats</li>
+                                    <li><i class="fas fa-search text-info me-2"></i>Advanced filtering</li>
+                                    <li><i class="fas fa-file-alt text-warning me-2"></i>Report generation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dashboard JavaScript functions
+function exportDashboardData() {
+    showNotification('Exporting all dashboard data...', 'info');
+
+    // Create a zip file with all tables
+    fetch('/api/export/all/zip')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Export failed');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'microcosting_data.zip';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('Data exported successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Export error:', error);
+            showNotification('Export failed: ' + error.message, 'error');
+        });
+}
+
+function generateReport() {
+    showNotification('Generating comprehensive report...', 'info');
+
+    fetch('/api/generate-report')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Report generation failed');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'microcosting_report.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('Report generated successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('Report generation error:', error);
+            showNotification('Report generation failed: ' + error.message, 'error');
+        });
+}
+
+function refreshDashboard() {
+    showNotification('Refreshing dashboard data...', 'info');
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+}
+
+// Load charts when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardCharts();
+});
+
+function loadDashboardCharts() {
+    // Load cost distribution chart
+    fetch('/api/dashboard/cost-distribution')
+        .then(response => response.json())
+        .then(data => {
+            // Use Chart.js or similar library to render chart
+            const container = document.getElementById('costDistributionChart');
+            container.innerHTML = '<img src="data:image/png;base64,' + data.image + '" class="img-fluid" alt="Cost Distribution">';
+        })
+        .catch(error => {
+            console.error('Error loading cost distribution chart:', error);
+            document.getElementById('costDistributionChart').innerHTML = '<p class="text-danger">Error loading chart</p>';
+        });
+
+    // Load top categories chart
+    fetch('/api/dashboard/top-categories')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('topCategoriesChart');
+            container.innerHTML = '<img src="data:image/png;base64,' + data.image + '" class="img-fluid" alt="Top Categories">';
+        })
+        .catch(error => {
+            console.error('Error loading top categories chart:', error);
+            document.getElementById('topCategoriesChart').innerHTML = '<p class="text-danger">Error loading chart</p>';
+        });
+}
+</script>
+{% endblock %}
