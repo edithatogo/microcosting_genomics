@@ -42,6 +42,7 @@ access_control = AccessControlManager()
 access_control.authenticate_user("researcher")
 access_control.add_user_to_role("researcher", "analyst")
 
+
 # Using decorator for function protection
 @access_control.require_permission("run_analysis")
 def perform_analysis():
@@ -64,7 +65,9 @@ from unimelb_phd_phase_1.security import AuditTrail
 
 audit_trail = AuditTrail("logs/audit.log")
 audit_trail.log_event("login", "user123", "system", "User logged in", True)
-audit_trail.log_event("data_access", "user123", "cost_data.xlsx", "Accessed sensitive data", True)
+audit_trail.log_event(
+    "data_access", "user123", "cost_data.xlsx", "Accessed sensitive data", True
+)
 ```
 
 ### 4. Secure Configuration Storage
@@ -85,8 +88,12 @@ storage = SecureConfigStorage("configs/config.json")
 storage.save_config({"api_key": "secret_key", "database_url": "postgresql://..."})
 
 # With encryption
-encrypted_storage = SecureConfigStorage("configs/secure_config.json", encryption_key="my_secret_key")
-encrypted_storage.save_config({"api_key": "secret_key", "database_url": "postgresql://..."})
+encrypted_storage = SecureConfigStorage(
+    "configs/secure_config.json", encryption_key="my_secret_key"
+)
+encrypted_storage.save_config(
+    {"api_key": "secret_key", "database_url": "postgresql://..."}
+)
 ```
 
 ## Security Best Practices
@@ -115,7 +122,9 @@ encrypted_storage.save_config({"api_key": "secret_key", "database_url": "postgre
 
 ### Complete Security Setup
 ```python
-from unimelb_phd_phase_1.security import setup_standard_security
+import os
+
+from genomics_microcosting.security import setup_standard_security
 
 # Set up all security components
 sanitizer, access_control, audit_trail, secure_storage = setup_standard_security()
@@ -129,12 +138,14 @@ user_input = "<script>alert('xss')</script>../etc/passwd"
 safe_input = sanitizer.sanitize_string_input(user_input)
 
 # Log event
-audit_trail.log_event("data_processing", "researcher", "analysis.py", "Processing user input", True)
+audit_trail.log_event(
+    "data_processing", "researcher", "analysis.py", "Processing user input", True
+)
 
 # Save configuration securely
 config_data = {
     "database_url": "postgresql://user:password@localhost/db",
-    "api_key": "secret_api_key_12345"
+    "api_key": os.environ["MICROCOSTING_API_KEY"],
 }
 secure_storage.save_config(config_data)
 ```
@@ -146,6 +157,7 @@ from unimelb_phd_phase_1.security import AccessControlManager
 access_control = AccessControlManager()
 access_control.authenticate_user("admin_user")
 access_control.add_user_to_role("admin_user", "admin")
+
 
 @access_control.require_permission("configure_system")
 def update_system_configuration(new_config):
