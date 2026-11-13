@@ -32,4 +32,5 @@ repos:
         language: system
         pass_filenames: true
         always_run: false
+        require_serial: true
         files: '(^.*\.py$|^pyproject\.toml$|^uv\.lock$|^data/)'
