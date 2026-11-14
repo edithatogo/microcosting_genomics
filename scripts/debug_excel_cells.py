@@ -1,17 +1,22 @@
-import openpyxl
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Inspect selected workbook cells and their merged ranges."""
 
-excel_file_path = (
+import sys
+
+import openpyxl
+lazy from openpyxl.worksheet.worksheet import Worksheet
+
+EXCEL_FILE_PATH = (
     "data/Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm"
 )
-workbook = openpyxl.load_workbook(excel_file_path, data_only=False)
-sheet = workbook["Detailed Table"]
 
 
-def inspect_cell(cell_ref):
+def inspect_cell(sheet: Worksheet, cell_ref: str) -> None:
+    """Display the cell value, data type and merged range if present."""
     cell = sheet[cell_ref]
-    print(f"--- Cell {cell_ref} ---")
-    print(f"Value: {cell.value}")
-    print(f"Data Type: {cell.data_type}")
+    sys.stdout.write(f"--- Cell {cell_ref} ---\n")
+    sys.stdout.write(f"Value: {cell.value}\n")
+    sys.stdout.write(f"Data Type: {cell.data_type}\n")
 
     is_merged = False
     merged_range_info = None
@@ -21,14 +26,23 @@ def inspect_cell(cell_ref):
             merged_range_info = merged_range
             break
 
-    print(f"Is Merged: {is_merged}")
-    if is_merged:
-        print(f"  Part of merged range: {merged_range_info}")
+    sys.stdout.write(f"Is Merged: {is_merged}\n")
+    if merged_range_info is not None:
+        sys.stdout.write(f"  Part of merged range: {merged_range_info}\n")
         top_left_cell_value = sheet.cell(
-            row=merged_range_info.min_row, column=merged_range_info.min_col
+            row=merged_range_info.min_row,
+            column=merged_range_info.min_col,
         ).value
-        print(f"  Top-left cell of merged range value: {top_left_cell_value}")
+        sys.stdout.write(
+            f"  Top-left cell of merged range value: {top_left_cell_value}\n",
+        )
 
 
-inspect_cell("A4")
-inspect_cell("M4")
+if __name__ == "__main__":
+    workbook = openpyxl.load_workbook(EXCEL_FILE_PATH, data_only=False)
+    try:
+        worksheet = workbook["Detailed Table"]
+        inspect_cell(worksheet, "A4")
+        inspect_cell(worksheet, "M4")
+    finally:
+        workbook.close()

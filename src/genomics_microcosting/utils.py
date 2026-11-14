@@ -1,7 +1,10 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Translate worksheet coordinates and Excel cell references."""
+
 import re
 
 
-def coords_to_cell(row, col):
+def coords_to_cell(row: int, col: int) -> str:
     """Convert (row, col) tuple to cell string.
 
     Converts zero-based row and column indices to Excel-style cell references.
@@ -13,6 +16,7 @@ def coords_to_cell(row, col):
 
     Returns:
         str: Excel-style cell reference (e.g., "A1").
+
     """
     col_str = ""
     while col >= 0:
@@ -21,7 +25,7 @@ def coords_to_cell(row, col):
     return f"{col_str}{row + 1}"
 
 
-def cell_to_coords(cell_str):
+def cell_to_coords(cell_str: object) -> tuple[int, int] | tuple[None, None]:
     """Convert cell string to (row, col) tuple.
 
     Converts Excel-style cell references to zero-based row and column indices.
@@ -33,13 +37,17 @@ def cell_to_coords(cell_str):
 
     Returns:
         tuple: A tuple of (row, col) as zero-based indices, or (None, None) if invalid.
+
     """
     if not isinstance(cell_str, str):
         return None, None
     # Remove $ signs
     cell_str = cell_str.replace("$", "")
+    match = re.match(r"([A-Z]+)([0-9]+)", cell_str)
+    if match is None:
+        return None, None
     try:
-        col_str, row_str = re.match(r"([A-Z]+)([0-9]+)", cell_str).groups()
+        col_str, row_str = match.groups()
         col = 0
         for char in col_str:
             col = col * 26 + (ord(char) - ord("A") + 1)

@@ -36,22 +36,20 @@ The checkpoint system consists of two main components:
 from unimelb_phd_phase_1.error_handling import setup_standard_error_handling
 
 # Initialize error handler with checkpoint directory
-error_handler = setup_standard_error_handling(
-    checkpoint_dir="./analysis_checkpoints"
-)
+error_handler = setup_standard_error_handling(checkpoint_dir="./analysis_checkpoints")
 
 # Create checkpoint data
 analysis_data = {
     "results": [1, 2, 3, 4, 5],
     "parameters": {"threshold": 0.05, "iterations": 1000},
-    "metadata": {"analysis_type": "cost_driver", "version": "1.0"}
+    "metadata": {"analysis_type": "cost_driver", "version": "1.0"},
 }
 
 # Create checkpoint with metadata
 checkpoint_id = error_handler.create_checkpoint(
     "cost_driver_analysis_step1",
     analysis_data,
-    {"step": "initial_processing", "status": "completed"}
+    {"step": "initial_processing", "status": "completed"},
 )
 
 # Later, restore checkpoint
@@ -68,8 +66,8 @@ new_error_handler = setup_standard_error_handling(
 
 # Restore checkpoint from disk
 restored_data = new_error_handler.restore_checkpoint(
-    "cost_driver_analysis_step1", 
-    from_disk=True  # Load from persistent storage
+    "cost_driver_analysis_step1",
+    from_disk=True,  # Load from persistent storage
 )
 ```
 
@@ -79,15 +77,11 @@ restored_data = new_error_handler.restore_checkpoint(
 from unimelb_phd_phase_1.error_handling import CheckpointManager
 
 # Create standalone checkpoint manager
-checkpoint_manager = CheckpointManager(
-    checkpoint_dir="./my_checkpoints"
-)
+checkpoint_manager = CheckpointManager(checkpoint_dir="./my_checkpoints")
 
 # Create checkpoint
 checkpoint_id = checkpoint_manager.create_checkpoint(
-    "my_analysis_checkpoint",
-    {"key": "value"},
-    {"purpose": "example"}
+    "my_analysis_checkpoint", {"key": "value"}, {"purpose": "example"}
 )
 
 # List all checkpoints
@@ -146,15 +140,15 @@ except Exception as e:
     error_context = {
         "error_type": type(e).__name__,
         "error_message": str(e),
-        "partial_results": partial_analysis_data
+        "partial_results": partial_analysis_data,
     }
-    
+
     checkpoint_id = error_handler.create_checkpoint(
         "analysis_error_recovery",
         error_context,
-        {"error_handling": True, "recovery_point": True}
+        {"error_handling": True, "recovery_point": True},
     )
-    
+
     # Attempt recovery using checkpoint
     # ... recovery logic ...
 ```

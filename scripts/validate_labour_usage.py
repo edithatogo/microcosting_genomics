@@ -1,38 +1,22 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Compare labour usage with the prepared ground truth."""
+
+import sys
+
+lazy import pandas as pd
+
 from genomics_microcosting.calculation_engine import CalculationEngine
 from genomics_microcosting.sheet_manager import SheetManager
 
+ERROR_PREVIEW_LIMIT = 5
 
-def validate_sheet(sheet_name):
-    """
-    Validates the calculation engine's output for a specific sheet against the ground truth.
-    """
-    print(f"--- Validating Sheet: {sheet_name} ---")
 
-    # Initialize the sheet manager and engine
-    sheet_manager = SheetManager()
-    engine = CalculationEngine(sheet_manager)
-
-    # Get the ground truth values from the original Excel file
-    ground_truth_df = sheet_manager.get_ground_truth(sheet_name)
-    if ground_truth_df is None:
-        print(f"Could not load ground truth for sheet: {sheet_name}")
-        return
-
-    # Run the engine to calculate the values
-    result = engine.run_engine(sheet_name)
-    if result is None or result[0] is None:
-        print(f"Engine failed to run on sheet: {sheet_name}")
-        return
-    
-    calculated_df, errors = result
-    if errors:
-        print(f"Engine encountered {len(errors)} errors:")
-        for error in errors[:5]:  # Show first 5 errors
-            print(f"  {error}")
-        if len(errors) > 5:
-            print(f"  ... and {len(errors) - 5} more errors")
-        return
-
+def _sheet_discrepancies(
+    ground_truth_df: pd.DataFrame,
+    calculated_df: pd.DataFrame,
+    engine: CalculationEngine,
+    sheet_name: str,
+) -> list[dict]:
     # Compare the results
     discrepancies = []
     for r_idx in range(ground_truth_df.shape[0]):
@@ -43,7 +27,8 @@ def validate_sheet(sheet_name):
             # Simple comparison, can be improved for float tolerance
             if str(excel_value) != str(calculated_value):
                 formula = engine.get_cell_formula(
-                    sheet_name, f"{chr(ord('A') + c_idx)}{r_idx + 1}"
+                    sheet_name,
+                    f"{chr(ord('A') + c_idx)}{r_idx + 1}",
                 )
                 discrepancies.append(
                     {
@@ -51,15 +36,56 @@ def validate_sheet(sheet_name):
                         "formula": formula,
                         "excel_value": excel_value,
                         "calculated_value": calculated_value,
-                    }
+                    },
                 )
 
+    return discrepancies
+
+
+def validate_sheet(sheet_name: str) -> None:
+    """Compare calculated labour usage with the prepared workbook values."""
+    sys.stdout.write(f"--- Validating Sheet: {sheet_name} ---" + "\n")
+
+    # Initialize the sheet manager and engine
+    sheet_manager = SheetManager()
+    engine = CalculationEngine(sheet_manager)
+
+    # Get the ground truth values from the original Excel file
+    ground_truth_df = sheet_manager.get_ground_truth(sheet_name)
+    if ground_truth_df is None:
+        sys.stdout.write(f"Could not load ground truth for sheet: {sheet_name}" + "\n")
+        return
+
+    # Run the engine to calculate the values
+    result = engine.run_engine(sheet_name)
+    if result is None or result[0] is None:
+        sys.stdout.write(f"Engine failed to run on sheet: {sheet_name}" + "\n")
+        return
+
+    calculated_df, errors = result
+    if errors:
+        sys.stdout.write(f"Engine encountered {len(errors)} errors:" + "\n")
+        for error in errors[:5]:  # Show first 5 errors
+            sys.stdout.write(f"  {error}" + "\n")
+        if len(errors) > ERROR_PREVIEW_LIMIT:
+            sys.stdout.write(f"  ... and {len(errors) - 5} more errors" + "\n")
+        return
+
+    discrepancies = _sheet_discrepancies(
+        ground_truth_df,
+        calculated_df,
+        engine,
+        sheet_name,
+    )
+
     if discrepancies:
-        print("Discrepancies found:")
+        sys.stdout.write("Discrepancies found:" + "\n")
         for d in discrepancies:
-            print(d)
+            sys.stdout.write(str(d) + "\n")
     else:
-        print(f"Success! No discrepancies found for sheet: {sheet_name}")
+        sys.stdout.write(
+            f"Success! No discrepancies found for sheet: {sheet_name}" + "\n",
+        )
 
 
 if __name__ == "__main__":

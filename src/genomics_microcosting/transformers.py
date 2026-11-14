@@ -1,74 +1,115 @@
-"""
-Transformer Components for Genomics Microcosting Data Pipeline
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Transformer components for the genomics microcosting data pipeline.
 
 This module contains concrete implementations of transformer components
 for data processing, validation, and calculation operations.
 """
 
-from typing import Any, Dict, List, Optional, Union
-import logging
 import re
+from typing import Literal, TypedDict
+lazy from collections.abc import Mapping
 
-import pandas as pd
-import numpy as np
+import polars as pl
+import polars.selectors as cs
+from pydantic import ConfigDict, TypeAdapter, with_config
 
-from .data_pipeline import Transformer
 from .config import load_config
+from .data_pipeline import Transformer
+
+
+@with_config(ConfigDict(strict=True, extra="forbid"))
+class CleaningConfig(TypedDict, total=False):
+    """Make row deletion, filling and normalisation explicit configured choices."""
+
+    remove_duplicates: bool
+    handle_missing: Literal["preserve", "drop", "fill", "interpolate"]
+    fill_value: str | int | float | bool | None
+    normalize_text: bool
+
+
+CLEANING_CONFIG_ADAPTER = TypeAdapter(CleaningConfig)
+_HIGH_MISSING_FRACTION = 0.5
+
+
+class ValidationIssues(TypedDict):
+    """Keep validation findings outside the immutable source dataframe."""
+
+    total_rows: int
+    total_columns: int
+    issues: list[str]
+
+
+class _CostColumn(TypedDict):
+    name: str
+    type: Literal["unit_cost", "total_cost", "percentage", "cost"]
 
 
 class HeaderNormalizer(Transformer):
     """Transformer to normalize and standardize column headers."""
 
-    def __init__(self, name: str, column_mappings: Optional[Dict[str, str]] = None):
+    def __init__(
+        self,
+        name: str,
+        column_mappings: dict[str, str] | None = None,
+    ) -> None:
+        """Initialise the transformer with optional column mappings."""
         super().__init__(name)
+        self.column_mappings: dict[str, str]
         if column_mappings is None:
             config = load_config()
             # Extract column mappings from config
             self.column_mappings = {}
-            for workbook_key, workbook_config in config.get("workbooks", {}).items():
-                for sheet_name, sheet_config in workbook_config.get("sheets", {}).items():
+            for workbook_config in config.get("workbooks", {}).values():
+                for sheet_config in workbook_config.get(
+                    "sheets",
+                    {},
+                ).values():
                     mappings = sheet_config.get("column_mapping", {})
                     self.column_mappings.update(mappings)
         else:
             self.column_mappings = column_mappings
 
-    def transform(self, data: Union[pd.DataFrame, Dict[str, pd.DataFrame]]) -> Union[pd.DataFrame, Dict[str, pd.DataFrame]]:
+    def transform(
+        self,
+        data: pl.DataFrame | dict[str, pl.DataFrame],
+    ) -> pl.DataFrame | dict[str, pl.DataFrame]:
         """Normalize column headers in the data."""
         if isinstance(data, dict):
-            # Handle multiple sheets
-            transformed_data = {}
-            for sheet_name, df in data.items():
-                transformed_data[sheet_name] = self._normalize_dataframe(df)
-            return transformed_data
-        else:
-            # Handle single DataFrame
-            return self._normalize_dataframe(data)
+            return {
+                sheet_name: self._normalize_dataframe(df)
+                for sheet_name, df in data.items()
+            }
+        # Handle single DataFrame
+        return self._normalize_dataframe(data)
 
-    def _normalize_dataframe(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _normalize_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
         """Normalize headers for a single DataFrame."""
-        df_normalized = df.copy()
+        df_normalized = df.clone()
 
         # Apply column mappings
-        rename_dict = {}
-        for old_name, new_name in self.column_mappings.items():
-            if old_name in df_normalized.columns:
-                rename_dict[old_name] = new_name
+        rename_dict = {
+            old_name: new_name
+            for old_name, new_name in self.column_mappings.items()
+            if old_name in df_normalized.columns
+        }
 
         if rename_dict:
-            df_normalized = df_normalized.rename(columns=rename_dict)
-            self.logger.info(f"Renamed {len(rename_dict)} columns")
+            df_normalized = df_normalized.rename(rename_dict)
+            self.logger.info("Renamed %s columns", len(rename_dict))
 
         # Standardize column names (snake_case, lowercase)
-        standardized_columns = {}
+        standardized_columns: dict[str, str] = {}
         for col in df_normalized.columns:
-            if col not in rename_dict.values():  # Don't standardize already mapped columns
+            if (
+                col not in rename_dict.values()
+            ):  # Don't standardize already mapped columns
                 standardized = self._standardize_column_name(col)
                 if standardized != col:
                     standardized_columns[col] = standardized
 
         if standardized_columns:
-            df_normalized = df_normalized.rename(columns=standardized_columns)
-            self.logger.info(f"Standardized {len(standardized_columns)} column names")
+            df_normalized = df_normalized.rename(standardized_columns)
+            self.logger.info("Standardized %s column names", len(standardized_columns))
 
         return df_normalized
 
@@ -78,21 +119,24 @@ class HeaderNormalizer(Transformer):
         name = name.lower()
 
         # Replace spaces and special characters with underscores
-        name = re.sub(r'[^a-z0-9]+', '_', name)
+        name = re.sub(r"[^a-z0-9]+", "_", name)
 
         # Remove multiple consecutive underscores
-        name = re.sub(r'_+', '_', name)
+        name = re.sub(r"_+", "_", name)
 
         # Remove leading/trailing underscores
-        name = name.strip('_')
-
-        return name
+        return name.strip("_")
 
 
 class CostCalculator(Transformer):
     """Transformer to calculate costs and perform cost-related computations."""
 
-    def __init__(self, name: str, cost_config: Optional[Dict] = None):
+    def __init__(
+        self,
+        name: str,
+        cost_config: Mapping[str, object] | None = None,
+    ) -> None:
+        """Initialise the transformer with optional cost configuration."""
         super().__init__(name)
         if cost_config is None:
             config = load_config()
@@ -100,227 +144,219 @@ class CostCalculator(Transformer):
         else:
             self.cost_config = cost_config
 
-    def transform(self, data: Union[pd.DataFrame, Dict[str, pd.DataFrame]]) -> Union[pd.DataFrame, Dict[str, pd.DataFrame]]:
+    def transform(
+        self,
+        data: pl.DataFrame | dict[str, pl.DataFrame],
+    ) -> pl.DataFrame | dict[str, pl.DataFrame]:
         """Calculate costs in the data."""
         if isinstance(data, dict):
             # Handle multiple sheets
-            transformed_data = {}
+            transformed_data: dict[str, pl.DataFrame] = {}
             for sheet_name, df in data.items():
                 transformed_data[sheet_name] = self._calculate_costs(df, sheet_name)
             return transformed_data
-        else:
-            # Handle single DataFrame
-            return self._calculate_costs(data, "default")
+        # Handle single DataFrame
+        return self._calculate_costs(data, "default")
 
-    def _calculate_costs(self, df: pd.DataFrame, sheet_name: str) -> pd.DataFrame:
+    def _calculate_costs(self, df: pl.DataFrame, sheet_name: str) -> pl.DataFrame:
         """Calculate costs for a single DataFrame."""
-        df_calculated = df.copy()
+        df_calculated = df.clone()
 
         # Look for cost-related columns and perform calculations
         cost_columns = self._identify_cost_columns(df_calculated)
 
         if not cost_columns:
-            self.logger.info(f"No cost columns found in {sheet_name}")
+            self.logger.info("No cost columns found in %s", sheet_name)
             return df_calculated
 
-        self.logger.info(f"Found {len(cost_columns)} cost columns in {sheet_name}")
+        self.logger.info("Found %s cost columns in %s", len(cost_columns), sheet_name)
 
         # Perform cost calculations
         for col_info in cost_columns:
-            col_name = col_info['name']
-            calculation_type = col_info['type']
+            col_name = col_info["name"]
+            calculation_type = col_info["type"]
 
-            if calculation_type == 'unit_cost':
+            if calculation_type == "unit_cost":
                 df_calculated = self._calculate_unit_costs(df_calculated, col_name)
-            elif calculation_type == 'total_cost':
+            elif calculation_type == "total_cost":
                 df_calculated = self._calculate_total_costs(df_calculated, col_name)
-            elif calculation_type == 'percentage':
+            elif calculation_type == "percentage":
                 df_calculated = self._calculate_percentages(df_calculated, col_name)
 
         return df_calculated
 
-    def _identify_cost_columns(self, df: pd.DataFrame) -> List[Dict]:
+    def _identify_cost_columns(self, df: pl.DataFrame) -> list[_CostColumn]:
         """Identify columns that contain cost data."""
-        cost_columns = []
+        cost_columns: list[_CostColumn] = []
 
         for col in df.columns:
             col_str = str(col).lower()
 
             # Check for cost-related keywords
-            if any(keyword in col_str for keyword in ['cost', 'price', 'amount', 'fee']):
-                if 'unit' in col_str:
-                    cost_columns.append({'name': col, 'type': 'unit_cost'})
-                elif 'total' in col_str:
-                    cost_columns.append({'name': col, 'type': 'total_cost'})
-                elif 'percentage' in col_str or '%' in col_str:
-                    cost_columns.append({'name': col, 'type': 'percentage'})
+            if any(
+                keyword in col_str for keyword in ["cost", "price", "amount", "fee"]
+            ):
+                if "unit" in col_str:
+                    cost_columns.append({"name": col, "type": "unit_cost"})
+                elif "total" in col_str:
+                    cost_columns.append({"name": col, "type": "total_cost"})
+                elif "percentage" in col_str or "%" in col_str:
+                    cost_columns.append({"name": col, "type": "percentage"})
                 else:
-                    cost_columns.append({'name': col, 'type': 'cost'})
+                    cost_columns.append({"name": col, "type": "cost"})
 
         return cost_columns
 
-    def _calculate_unit_costs(self, df: pd.DataFrame, col_name: str) -> pd.DataFrame:
+    def _calculate_unit_costs(self, df: pl.DataFrame, col_name: str) -> pl.DataFrame:
         """Calculate unit costs if needed."""
         # For now, just ensure numeric type
-        if df[col_name].dtype == 'object':
-            df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+        if df[col_name].dtype == pl.String:
+            df = df.with_columns(pl.col(col_name).cast(pl.Float64, strict=False))
         return df
 
-    def _calculate_total_costs(self, df: pd.DataFrame, col_name: str) -> pd.DataFrame:
+    def _calculate_total_costs(self, df: pl.DataFrame, col_name: str) -> pl.DataFrame:
         """Calculate total costs if needed."""
         # For now, just ensure numeric type
-        if df[col_name].dtype == 'object':
-            df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+        if df[col_name].dtype == pl.String:
+            df = df.with_columns(pl.col(col_name).cast(pl.Float64, strict=False))
         return df
 
-    def _calculate_percentages(self, df: pd.DataFrame, col_name: str) -> pd.DataFrame:
+    def _calculate_percentages(self, df: pl.DataFrame, col_name: str) -> pl.DataFrame:
         """Calculate percentages if needed."""
         # For now, just ensure numeric type
-        if df[col_name].dtype == 'object':
-            df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+        if df[col_name].dtype == pl.String:
+            df = df.with_columns(pl.col(col_name).cast(pl.Float64, strict=False))
         return df
 
 
 class ValidationChecker(Transformer):
     """Transformer to validate data quality and integrity."""
 
-    def __init__(self, name: str, validation_rules: Optional[Dict] = None):
+    def __init__(
+        self,
+        name: str,
+        validation_rules: Mapping[str, object] | None = None,
+    ) -> None:
+        """Initialise the transformer with optional validation rules."""
         super().__init__(name)
+        self.results: dict[str, ValidationIssues] = {}
         if validation_rules is None:
             config = load_config()
             self.validation_rules = config.get("validation_rules", {})
         else:
             self.validation_rules = validation_rules
 
-    def transform(self, data: Union[pd.DataFrame, Dict[str, pd.DataFrame]]) -> Union[pd.DataFrame, Dict[str, pd.DataFrame]]:
+    def transform(
+        self,
+        data: pl.DataFrame | dict[str, pl.DataFrame],
+    ) -> pl.DataFrame | dict[str, pl.DataFrame]:
         """Validate data quality."""
         if isinstance(data, dict):
             # Handle multiple sheets
             for sheet_name, df in data.items():
                 self._validate_dataframe(df, sheet_name)
             return data
-        else:
-            # Handle single DataFrame
-            self._validate_dataframe(data, "default")
-            return data
+        # Handle single DataFrame
+        self._validate_dataframe(data, "default")
+        return data
 
-    def _validate_dataframe(self, df: pd.DataFrame, sheet_name: str) -> None:
+    def _validate_dataframe(self, df: pl.DataFrame, sheet_name: str) -> None:
         """Validate a single DataFrame."""
-        self.logger.info(f"Validating data for {sheet_name}")
+        self.logger.info("Validating data for %s", sheet_name)
 
-        validation_results = {
-            'total_rows': len(df),
-            'total_columns': len(df.columns),
-            'issues': []
+        validation_results: ValidationIssues = {
+            "total_rows": len(df),
+            "total_columns": len(df.columns),
+            "issues": [],
         }
 
-        # Check for missing values
-        missing_data = df.isnull().sum()
-        if missing_data.any():
-            for col, count in missing_data[missing_data > 0].items():
-                percentage = (count / len(df)) * 100
-                if percentage > 50:  # More than 50% missing
-                    validation_results['issues'].append(
-                        f"High missing data in {col}: {percentage:.1f}% ({count}/{len(df)})"
-                    )
-
-        # Check for duplicate rows
-        duplicate_count = df.duplicated().sum()
-        if duplicate_count > 0:
-            validation_results['issues'].append(
-                f"Found {duplicate_count} duplicate rows"
+        view = df.with_columns(cs.float().fill_nan(None))
+        for col, count in view.null_count().row(0, named=True).items():
+            if len(df) and count / len(df) > _HIGH_MISSING_FRACTION:
+                validation_results["issues"].append(
+                    (
+                        f"High missing data in {col}: "
+                        f"{100 * count / len(df):.1f}% ({count}/{len(df)})"
+                    ),
+                )
+        duplicate_count = view.height - view.unique(maintain_order=True).height
+        if duplicate_count:
+            validation_results["issues"].append(
+                f"Found {duplicate_count} duplicate rows",
             )
-
-        # Check data types
-        for col in df.columns:
-            if df[col].dtype == 'object':
-                # Check if numeric columns are stored as strings
-                try:
-                    numeric_sample = pd.to_numeric(df[col].dropna().head(10), errors='coerce')
-                    if not numeric_sample.isna().all():
-                        validation_results['issues'].append(
-                            f"Column {col} appears to contain numeric data but is stored as text"
-                        )
-                except:
-                    pass
-
-        # Check for negative values in cost columns
-        cost_cols = [col for col in df.columns if 'cost' in str(col).lower() or 'price' in str(col).lower()]
-        for col in cost_cols:
-            if df[col].dtype in ['int64', 'float64']:
-                negative_count = (df[col] < 0).sum()
-                if negative_count > 0:
-                    validation_results['issues'].append(
-                        f"Found {negative_count} negative values in cost column {col}"
+        for col in view.select(cs.string()).columns:
+            sample = view[col].drop_nulls().head(10).cast(pl.Float64, strict=False)
+            if sample.is_not_null().any():
+                validation_results["issues"].append(
+                    (
+                        f"Column {col} appears to contain "
+                        f"numeric data but is stored as text"
+                    ),
+                )
+        for col in view.select(cs.numeric()).columns:
+            if "cost" in col.lower() or "price" in col.lower():
+                count = (view[col] < 0).sum()
+                if count:
+                    validation_results["issues"].append(
+                        f"Found {count} negative values in cost column {col}",
                     )
-
-        # Log validation results
-        if validation_results['issues']:
-            self.logger.warning(f"Validation issues found in {sheet_name}:")
-            for issue in validation_results['issues']:
-                self.logger.warning(f"  - {issue}")
-        else:
-            self.logger.info(f"No validation issues found in {sheet_name}")
-
-        # Store validation results for potential use by other components
-        df.attrs['validation_results'] = validation_results
+        self.results[sheet_name] = validation_results
+        for issue in validation_results["issues"]:
+            self.logger.warning("%s", issue)
 
 
 class DataCleaner(Transformer):
     """Transformer to clean and preprocess data."""
 
-    def __init__(self, name: str, cleaning_config: Optional[Dict] = None):
+    def __init__(
+        self,
+        name: str,
+        cleaning_config: CleaningConfig | None = None,
+    ) -> None:
+        """Initialise the transformer with optional cleaning settings."""
         super().__init__(name)
+        self.cleaning_config: CleaningConfig
         if cleaning_config is None:
             self.cleaning_config = {
-                'remove_duplicates': True,
-                'handle_missing': 'interpolate',  # 'drop', 'fill', 'interpolate'
-                'fill_value': 0,
-                'normalize_text': True
+                "remove_duplicates": False,
+                "handle_missing": "preserve",  # 'drop', 'fill', 'interpolate'
+                "fill_value": 0,
+                "normalize_text": False,
             }
         else:
-            self.cleaning_config = cleaning_config
+            self.cleaning_config = CLEANING_CONFIG_ADAPTER.validate_python(
+                cleaning_config,
+            )
 
-    def transform(self, data: Union[pd.DataFrame, Dict[str, pd.DataFrame]]) -> Union[pd.DataFrame, Dict[str, pd.DataFrame]]:
+    def transform(
+        self,
+        data: pl.DataFrame | dict[str, pl.DataFrame],
+    ) -> pl.DataFrame | dict[str, pl.DataFrame]:
         """Clean and preprocess data."""
         if isinstance(data, dict):
-            # Handle multiple sheets
-            transformed_data = {}
-            for sheet_name, df in data.items():
-                transformed_data[sheet_name] = self._clean_dataframe(df, sheet_name)
-            return transformed_data
-        else:
-            # Handle single DataFrame
-            return self._clean_dataframe(data, "default")
+            return {
+                sheet_name: self._clean_dataframe(df) for sheet_name, df in data.items()
+            }
+        return self._clean_dataframe(data)
 
-    def _clean_dataframe(self, df: pd.DataFrame, sheet_name: str) -> pd.DataFrame:
+    def _clean_dataframe(self, df: pl.DataFrame) -> pl.DataFrame:
         """Clean a single DataFrame."""
-        df_clean = df.copy()
-
-        # Remove duplicates
-        if self.cleaning_config.get('remove_duplicates', True):
-            original_count = len(df_clean)
-            df_clean = df_clean.drop_duplicates()
-            removed_count = original_count - len(df_clean)
-            if removed_count > 0:
-                self.logger.info(f"Removed {removed_count} duplicate rows from {sheet_name}")
-
-        # Handle missing values
-        missing_strategy = self.cleaning_config.get('handle_missing', 'interpolate')
-        if missing_strategy == 'drop':
-            df_clean = df_clean.dropna()
-        elif missing_strategy == 'fill':
-            fill_value = self.cleaning_config.get('fill_value', 0)
-            df_clean = df_clean.fillna(fill_value)
-        elif missing_strategy == 'interpolate':
-            # Interpolate numeric columns
-            numeric_cols = df_clean.select_dtypes(include=[np.number]).columns
-            df_clean[numeric_cols] = df_clean[numeric_cols].interpolate(method='linear')
-
-        # Normalize text columns
-        if self.cleaning_config.get('normalize_text', True):
-            text_cols = df_clean.select_dtypes(include=['object']).columns
-            for col in text_cols:
-                df_clean[col] = df_clean[col].astype(str).str.strip().str.lower()
-
+        df_clean = df.clone()
+        if self.cleaning_config.get("remove_duplicates", False):
+            df_clean = df_clean.with_columns(cs.float().fill_nan(None)).unique(
+                maintain_order=True,
+            )
+        strategy = self.cleaning_config.get("handle_missing", "preserve")
+        if strategy in {"drop", "fill", "interpolate"}:
+            df_clean = df_clean.with_columns(cs.float().fill_nan(None))
+        if strategy == "drop":
+            df_clean = df_clean.drop_nulls()
+        elif strategy == "fill":
+            df_clean = df_clean.fill_null(self.cleaning_config.get("fill_value", 0))
+        elif strategy == "interpolate":
+            df_clean = df_clean.with_columns(cs.numeric().interpolate().forward_fill())
+        if self.cleaning_config.get("normalize_text", False):
+            df_clean = df_clean.with_columns(
+                cs.string().str.strip_chars().str.to_lowercase(),
+            )
         return df_clean

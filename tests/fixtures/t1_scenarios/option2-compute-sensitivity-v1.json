@@ -1,0 +1,8 @@
+{
+  "version": "option2-compute-sensitivity-v1",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "synthetic test fixture",
+  "low": 2.0,
+  "mid": 3.0,
+  "high": 5.0
+}

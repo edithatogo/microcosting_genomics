@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""
-Standardized script for preparing all sheets consistently.
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Standardized script for preparing all sheets consistently.
 
-This script provides a consistent approach for handling all sheets in the microcosting analysis,
+Prepare the worksheets consistently across the microcosting analysis,
 ensuring that all sheets are treated uniformly regardless of their source or purpose.
 """
 
+import logging
 import sys
-from pathlib import Path
-import pandas as pd
+import traceback
 
-# Add the src directory to the path so we can import our modules
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
+lazy import pandas as pd
 
-from genomics_microcosting.data_manager import DataManager  # noqa: E402
-from genomics_microcosting.sheet_manager import SheetManager  # noqa: E402
+from genomics_microcosting.data_manager import DataManager
+from genomics_microcosting.sheet_manager import SheetManager
+
+logger = logging.getLogger(__name__)
 
 
 def create_sheet_metadata(df: pd.DataFrame, sheet_name: str) -> dict:
@@ -27,6 +27,7 @@ def create_sheet_metadata(df: pd.DataFrame, sheet_name: str) -> dict:
 
     Returns:
         dict: Metadata about the sheet
+
     """
     metadata = {
         "sheet_name": sheet_name,
@@ -35,19 +36,22 @@ def create_sheet_metadata(df: pd.DataFrame, sheet_name: str) -> dict:
         "columns": [],
         "data_types": {},
         "null_counts": {},
-        "memory_usage_bytes": df.memory_usage(deep=True).sum()
+        "memory_usage_bytes": df.memory_usage(deep=True).sum(),
     }
-    
+
     for col in df.columns:
         metadata["columns"].append(str(col))
         metadata["data_types"][str(col)] = str(df[col].dtype)
-        metadata["null_counts"][str(col)] = int(df[col].isnull().sum())
-        
+        metadata["null_counts"][str(col)] = int(df[col].isna().sum())
+
     return metadata
 
 
-def prepare_sheet(sheet_name: str, sheet_manager: SheetManager, 
-                 data_manager: DataManager) -> bool:
+def prepare_sheet(
+    sheet_name: str,
+    sheet_manager: SheetManager,
+    data_manager: DataManager,
+) -> bool:
     """Prepare a single sheet with consistent handling.
 
     Args:
@@ -57,84 +61,99 @@ def prepare_sheet(sheet_name: str, sheet_manager: SheetManager,
 
     Returns:
         bool: True if successfully prepared, False otherwise
+
     """
-    print(f"Preparing sheet: {sheet_name}")
-    
+    sys.stdout.write(f"Preparing sheet: {sheet_name}" + "\n")
+
     try:
         # Load data from Excel
         df = sheet_manager.get_data(sheet_name)
         if df is None:
-            print(f"  Failed to load data for sheet '{sheet_name}'")
+            sys.stdout.write(f"  Failed to load data for sheet '{sheet_name}'" + "\n")
             return False
-            
-        print(f"  Loaded data with shape {df.shape}")
-        
+
+        sys.stdout.write(f"  Loaded data with shape {df.shape}" + "\n")
+
         # Save in consistent formats
         success = data_manager.save_sheet(sheet_name, df, formats=["parquet", "csv"])
-        
+
         if success:
             # Create and save metadata
             metadata = create_sheet_metadata(df, sheet_name)
-            publication_success = data_manager.save_for_publication(sheet_name, df, metadata)
-            
+            publication_success = data_manager.save_for_publication(
+                sheet_name,
+                df,
+                metadata,
+            )
+
             if publication_success:
-                print(f"  Successfully prepared sheet '{sheet_name}'")
+                sys.stdout.write(f"  Successfully prepared sheet '{sheet_name}'" + "\n")
                 return True
-            else:
-                print(f"  Prepared sheet '{sheet_name}' but failed to save for publication")
-                return False
-        else:
-            print(f"  Failed to save sheet '{sheet_name}'")
+            sys.stdout.write(
+                f"  Prepared sheet '{sheet_name}' but failed to save for publication\n",
+            )
             return False
-            
+        sys.stdout.write(f"  Failed to save sheet '{sheet_name}'" + "\n")
+
     except Exception as e:
-        print(f"  Error preparing sheet '{sheet_name}': {e}")
+        logger.exception("Could not complete prepare sheet")
+        sys.stdout.write(f"  Error preparing sheet '{sheet_name}': {e}" + "\n")
+        return False
+    else:
         return False
 
 
-def main():
-    """Main function to prepare all sheets consistently."""
-    print("Preparing all sheets with consistent approach...")
-    print("=" * 50)
-    
+def main() -> int | None:
+    """Prepare all sheets consistently."""
+    sys.stdout.write("Preparing all sheets with consistent approach..." + "\n")
+    sys.stdout.write(str("=" * 50) + "\n")
+
     try:
         # Initialize managers
         sheet_manager = SheetManager()
         data_manager = DataManager()
-        
+
         # Get list of sheets to process
         sheet_names = sheet_manager.get_sheet_names()
-        
+
         if not sheet_names:
-            print("No sheets found to process!")
+            sys.stdout.write("No sheets found to process!" + "\n")
             return 1
-            
-        print(f"Found {len(sheet_names)} sheets to process:")
+
+        sys.stdout.write(f"Found {len(sheet_names)} sheets to process:" + "\n")
         for name in sheet_names:
-            print(f"  - {name}")
-        print()
-        
+            sys.stdout.write(f"  - {name}" + "\n")
+        sys.stdout.write("\n")
+
         # Process each sheet
         success_count = 0
         for sheet_name in sheet_names:
             if prepare_sheet(sheet_name, sheet_manager, data_manager):
                 success_count += 1
-            print()
-            
-        print("=" * 50)
-        print(f"Preparation complete: {success_count}/{len(sheet_names)} sheets processed successfully")
-        
+            sys.stdout.write("\n")
+
+        sys.stdout.write(str("=" * 50) + "\n")
+        sys.stdout.write(
+            "Preparation complete: "
+            f"{success_count}"
+            "/"
+            f"{len(sheet_names)}"
+            " sheets processed successfully"
+            "\n",
+        )
+
         # Show available sheets
         available_sheets = data_manager.list_available_sheets()
-        print("\nAvailable sheets in prepared directory:")
+        sys.stdout.write("\nAvailable sheets in prepared directory:" + "\n")
         for sheet, formats in available_sheets.items():
-            print(f"  - {sheet}: {', '.join(formats)}")
-            
+            sys.stdout.write(f"  - {sheet}: {', '.join(formats)}" + "\n")
+
         return 0 if success_count == len(sheet_names) else 1
-        
+
     except Exception as e:
-        print(f"Error in main preparation process: {e}")
-        import traceback
+        logger.exception("Could not complete prepare all sheets")
+        sys.stdout.write(f"Error in main preparation process: {e}" + "\n")
+
         traceback.print_exc()
         return 1
 

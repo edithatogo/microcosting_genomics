@@ -1,3 +1,4 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Abstract Cost Components for Genomics Microcosting.
 
 This module defines abstract base classes for different types of cost components
@@ -6,8 +7,10 @@ for cost calculations while maintaining the flexibility of the strategy pattern.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
-from numbers import Number
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .calculation_engine import CalculationEngine
 
 
 class CostComponent(ABC):
@@ -17,16 +20,23 @@ class CostComponent(ABC):
     Cost components represent different types of calculations used in microcosting.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         """Initialize the cost component.
 
         Args:
             name: A descriptive name for this cost component
+
         """
         self.name = name
 
     @abstractmethod
-    def calculate(self, engine, parsed_formula: Dict[str, Any], sheet_name: str, cell_ref: str) -> Optional[Number]:
+    def calculate(
+        self,
+        engine: CalculationEngine,
+        parsed_formula: dict[str, object],
+        sheet_name: str,
+        cell_ref: str,
+    ) -> object:
         """Calculate the cost using this component.
 
         Args:
@@ -37,8 +47,8 @@ class CostComponent(ABC):
 
         Returns:
             The calculated cost value, or None if calculation fails
+
         """
-        pass
 
     @abstractmethod
     def get_component_type(self) -> str:
@@ -46,11 +56,11 @@ class CostComponent(ABC):
 
         Returns:
             String identifier for the component type
+
         """
-        pass
 
     @abstractmethod
-    def validate_inputs(self, parsed_formula: Dict[str, Any]) -> bool:
+    def validate_inputs(self, parsed_formula: dict[str, object]) -> bool:
         """Validate that the parsed formula has required inputs for this component.
 
         Args:
@@ -58,8 +68,8 @@ class CostComponent(ABC):
 
         Returns:
             True if inputs are valid, False otherwise
+
         """
-        pass
 
 
 class ArithmeticCostComponent(CostComponent):
@@ -74,9 +84,9 @@ class ArithmeticCostComponent(CostComponent):
         """Get the specific arithmetic operation type.
 
         Returns:
-            String identifier for the arithmetic operation (e.g., 'addition', 'multiplication')
+            Arithmetic operation identifier, such as 'addition'.
+
         """
-        pass
 
     @abstractmethod
     def get_operand_count(self) -> int:
@@ -84,8 +94,8 @@ class ArithmeticCostComponent(CostComponent):
 
         Returns:
             Number of operands (0 for variable count)
+
         """
-        pass
 
 
 class ReferenceCostComponent(CostComponent):
@@ -101,11 +111,16 @@ class ReferenceCostComponent(CostComponent):
 
         Returns:
             String identifier for the reference type (e.g., 'cell', 'range', 'lookup')
+
         """
-        pass
 
     @abstractmethod
-    def resolve_reference(self, engine, reference: Dict[str, Any], sheet_name: str) -> Any:
+    def resolve_reference(
+        self,
+        engine: CalculationEngine,
+        reference: object,
+        sheet_name: str,
+    ) -> object:
         """Resolve a reference to its actual value.
 
         Args:
@@ -115,8 +130,8 @@ class ReferenceCostComponent(CostComponent):
 
         Returns:
             The resolved value
+
         """
-        pass
 
 
 class AggregateCostComponent(CostComponent):
@@ -132,17 +147,17 @@ class AggregateCostComponent(CostComponent):
 
         Returns:
             String identifier for the aggregation type (e.g., 'sum', 'average', 'count')
+
         """
-        pass
 
     @abstractmethod
-    def get_range_specification(self) -> Dict[str, Any]:
+    def get_range_specification(self) -> dict[str, object]:
         """Get the range specification for this aggregation.
 
         Returns:
             Dictionary describing the range (e.g., {'type': 'cells', 'count': 2})
+
         """
-        pass
 
 
 class FinancialCostComponent(CostComponent):
@@ -158,8 +173,8 @@ class FinancialCostComponent(CostComponent):
 
         Returns:
             String identifier for the financial function (e.g., 'pmt', 'pv', 'fv')
+
         """
-        pass
 
     @abstractmethod
     def get_required_parameters(self) -> list[str]:
@@ -167,8 +182,8 @@ class FinancialCostComponent(CostComponent):
 
         Returns:
             List of parameter names required for the calculation
+
         """
-        pass
 
 
 class ConditionalCostComponent(CostComponent):
@@ -184,11 +199,11 @@ class ConditionalCostComponent(CostComponent):
 
         Returns:
             String identifier for the condition type (e.g., 'if', 'iferror', 'switch')
+
         """
-        pass
 
     @abstractmethod
-    def evaluate_condition(self, condition: Any) -> bool:
+    def evaluate_condition(self, condition: object) -> bool:
         """Evaluate a condition to determine the execution path.
 
         Args:
@@ -196,8 +211,8 @@ class ConditionalCostComponent(CostComponent):
 
         Returns:
             True if condition is met, False otherwise
+
         """
-        pass
 
 
 class ComplexCostComponent(CostComponent):
@@ -212,12 +227,15 @@ class ComplexCostComponent(CostComponent):
         """Get the complexity level of this component.
 
         Returns:
-            String identifier for complexity level (e.g., 'simple', 'intermediate', 'advanced')
+            Complexity identifier, such as 'simple' or 'advanced'.
+
         """
-        pass
 
     @abstractmethod
-    def decompose_expression(self, parsed_formula: Dict[str, Any]) -> list[Dict[str, Any]]:
+    def decompose_expression(
+        self,
+        parsed_formula: dict[str, object],
+    ) -> list[dict[str, object]]:
         """Decompose a complex expression into simpler components.
 
         Args:
@@ -225,5 +243,5 @@ class ComplexCostComponent(CostComponent):
 
         Returns:
             List of decomposed simpler expressions
+
         """
-        pass

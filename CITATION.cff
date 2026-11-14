@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "Please cite this software when using its code; cite research publications separately."
+type: software
+title: "Microcosting Genomics Analysis Toolkit"
+authors:
+  - name: "Microcosting Genomics contributors"
+repository-code: "https://github.com/edithatogo/microcosting_genomics"
+license: Apache-2.0

@@ -1,31 +1,29 @@
 #!/usr/bin/env python3
-"""
-Script to run the web interface for microcosting analysis.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Script to run the web interface for microcosting analysis."""
 
+import logging
 import sys
-from pathlib import Path
 
-# Add the src directory to the path so we can import our modules
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
+from genomics_microcosting.web import create_app
 
-from genomics_microcosting.web import create_app  # noqa: E402
+logger = logging.getLogger(__name__)
 
 
-def main():
-    """Main function to run the web application."""
-    print("Starting Microcosting Analysis Web Interface...")
-    print("Access the application at: http://127.0.0.1:5000")
-    print("Press CTRL+C to stop the server.")
-    
+def main() -> int:
+    """Run the web application."""
+    sys.stdout.write("Starting Microcosting Analysis Web Interface..." + "\n")
+    sys.stdout.write("Access the application at: http://127.0.0.1:5000" + "\n")
+    sys.stdout.write("Press CTRL+C to stop the server." + "\n")
+
     try:
         app = create_app()
-        app.run(debug=True, host='127.0.0.1', port=5000)
+        app.run(debug=True, host="127.0.0.1", port=5000)
     except Exception as e:
-        print(f"Error starting web application: {e}")
+        logger.exception("Could not complete run web")
+        sys.stdout.write(f"Error starting web application: {e}" + "\n")
         return 1
-        
+
     return 0
 
 

@@ -1,3 +1,4 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Extract formula and value CSVs from the detailed Excel sheet.
 
 Data files are stored in the repository ``data`` directory located at
@@ -5,7 +6,7 @@ Data files are stored in the repository ``data`` directory located at
 """
 
 import csv
-import os
+import sys
 from pathlib import Path
 
 import openpyxl
@@ -14,7 +15,7 @@ from openpyxl.cell import MergedCell
 # Define the output directory
 DATA_DIR = Path(__file__).resolve().parents[0] / "data"
 output_dir = DATA_DIR / "extracted"
-os.makedirs(output_dir, exist_ok=True)
+Path(output_dir).mkdir(parents=True, exist_ok=True)
 
 # Load the workbook to get formulas
 workbook = openpyxl.load_workbook(
@@ -28,11 +29,11 @@ sheet_name = "Detailed Table"
 sheet = workbook[sheet_name]
 
 # Define file paths
-values_file_path = os.path.join(output_dir, f"{sheet_name}_values.csv")
-formulas_file_path = os.path.join(output_dir, f"{sheet_name}_formulas.csv")
+values_file_path = str(Path(output_dir).joinpath(f"{sheet_name}_values.csv"))
+formulas_file_path = str(Path(output_dir).joinpath(f"{sheet_name}_formulas.csv"))
 
 # Extract formulas
-with open(formulas_file_path, "w", newline="") as f:
+with Path(formulas_file_path).open("w", newline="") as f:
     c = csv.writer(f)
     for row in sheet.rows:
         row_data = []
@@ -52,7 +53,7 @@ workbook_values = openpyxl.load_workbook(
 sheet_values = workbook_values[sheet_name]
 
 # Extract values
-with open(values_file_path, "w", newline="") as f:
+with Path(values_file_path).open("w", newline="") as f:
     c = csv.writer(f)
     for row in sheet_values.rows:
         row_data = []
@@ -63,5 +64,5 @@ with open(values_file_path, "w", newline="") as f:
                 row_data.append(cell.value)
         c.writerow(row_data)
 
-print(f"Extracted values to {values_file_path}")
-print(f"Extracted formulas to {formulas_file_path}")
+sys.stdout.writelines((f"Extracted values to {values_file_path}", "\n"))
+sys.stdout.writelines((f"Extracted formulas to {formulas_file_path}", "\n"))

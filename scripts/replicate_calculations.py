@@ -1,3 +1,8 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Replicate detailed worksheet costs from prepared tables."""
+
+import sys
+
 import openpyxl
 import pandas as pd
 
@@ -5,12 +10,9 @@ from genomics_microcosting.calculation_engine import CalculationEngine
 from genomics_microcosting.formula_parser import parse_formula
 
 
-def main():
-    """
-    This script replicates the calculations from the 'Detailed Table' sheet of the microcosting
-    Excel file and saves the results to a parquet file.
-    """
-    print("Starting calculation replication...")
+def main() -> None:
+    """Replicate detailed-table costs and save the calculated values to Parquet."""
+    sys.stdout.write("Starting calculation replication..." + "\n")
 
     # Initialize the calculation engine
     engine = CalculationEngine()
@@ -24,8 +26,11 @@ def main():
     try:
         unit_cost_col_idx = ground_truth_df.columns.get_loc(unit_cost_col_name)
     except KeyError:
-        print(
-            f"Error: The ground truth data does not have the expected column: {unit_cost_col_name}"
+        sys.stdout.write(
+            "Error: The ground truth data does not have the expected "
+            "column: "
+            f"{unit_cost_col_name}"
+            "\n",
         )
         return
 
@@ -48,11 +53,13 @@ def main():
             # If we have a formula, execute it
             parsed_formula = parse_formula(formula)
             if parsed_formula["type"] == "unknown":
-                print(f"Unknown formula: {formula}")
+                sys.stdout.write(f"Unknown formula: {formula}" + "\n")
                 calculated_value = "UNSUPPORTED"
             else:
                 calculated_value = engine.execute_formula(
-                    parsed_formula, sheet_name, cell_ref
+                    parsed_formula,
+                    sheet_name,
+                    cell_ref,
                 )
         else:
             # If there's no formula, the value is just the value
@@ -85,8 +92,9 @@ def main():
     # Save the calculated costs to a parquet file
     calculated_df.to_parquet("data/calculated_costs_tidy.parquet", index=False)
 
-    print(
+    sys.stdout.write(
         "\nCalculations replicated and saved to 'data/calculated_costs_tidy.parquet'."
+        "\n",
     )
 
 

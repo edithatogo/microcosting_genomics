@@ -1,9 +1,11 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Calculate costs using prepared input tables.
 
 Data files are expected in the repository ``data`` directory located at
 ``Path(__file__).resolve().parents[0] / 'data'``.
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -16,16 +18,20 @@ supp_wb = (
 )
 labor_prices = pd.read_excel(supp_wb, sheet_name="2. Labor Prices")
 equipment_throughput = pd.read_excel(
-    supp_wb, sheet_name="4. DSA - Equipment Throughput"
+    supp_wb,
+    sheet_name="4. DSA - Equipment Throughput",
 )
 overheads = pd.read_excel(supp_wb, sheet_name="5. DSA - Overheads")
 consumable_discounts = pd.read_excel(
-    supp_wb, sheet_name="6. DSA - Consumable Discounts"
+    supp_wb,
+    sheet_name="6. DSA - Consumable Discounts",
 )
 
 # Clean the column names
 detailed_table.columns = detailed_table.columns.str.replace(
-    r"Unnamed: \d+_level_\d", "", regex=True
+    r"Unnamed: \d+_level_\d",
+    "",
+    regex=True,
 )
 detailed_table.columns = detailed_table.columns.str.strip()
 
@@ -36,4 +42,6 @@ detailed_table.columns = detailed_table.columns.str.strip()
 # For now, I will just print a message indicating that the next step is to
 # implement the formula parsing logic.
 
-print("Next step: Implement formula parsing and calculation logic.")
+sys.stdout.writelines(
+    ("Next step: Implement formula parsing and calculation logic.", "\n"),
+)

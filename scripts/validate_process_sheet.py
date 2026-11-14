@@ -1,3 +1,6 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Compare the process worksheet with the calculated results."""
+
 import sys
 from pathlib import Path
 
@@ -9,10 +12,8 @@ project_root = Path(__file__).resolve().parents[1]
 sys.path.append(str(project_root))
 
 
-def validate_process_sheet():
-    """
-    Validates the 'Process' sheet by comparing the calculated results with the original Excel file.
-    """
+def validate_process_sheet() -> None:
+    """Compare calculated process data with the reference worksheet."""
     sheet_manager = SheetManager()
     engine = CalculationEngine(sheet_manager)
 
@@ -20,16 +21,16 @@ def validate_process_sheet():
 
     # Ensure the sheet is loaded
     if sheet_name not in sheet_manager.get_sheet_names():
-        print(f"Sheet '{sheet_name}' not found in the workbook.")
+        sys.stdout.write(f"Sheet '{sheet_name}' not found in the workbook." + "\n")
         return
 
     # Run the calculation engine on the "Process" sheet
     results_df, errors = engine.run_engine(sheet_name)
 
     if errors:
-        print(f"Errors found while calculating '{sheet_name}':")
+        sys.stdout.write(f"Errors found while calculating '{sheet_name}':" + "\n")
         for error in errors:
-            print(error)
+            sys.stdout.write(str(error) + "\n")
         return
 
     # Get the original data from the Excel file
@@ -39,10 +40,14 @@ def validate_process_sheet():
     comparison = results_df.compare(original_df)
 
     if comparison.empty:
-        print(f"Validation successful for '{sheet_name}'. No differences found.")
+        sys.stdout.write(
+            f"Validation successful for '{sheet_name}'. No differences found." + "\n",
+        )
     else:
-        print(f"Validation failed for '{sheet_name}'. Differences found:")
-        print(comparison)
+        sys.stdout.write(
+            f"Validation failed for '{sheet_name}'. Differences found:" + "\n",
+        )
+        sys.stdout.write(str(comparison) + "\n")
 
 
 if __name__ == "__main__":

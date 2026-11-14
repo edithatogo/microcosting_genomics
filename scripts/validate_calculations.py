@@ -1,25 +1,27 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Validate calculated costs against the original Excel data."""
 
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 
-def validate_calculations():
-    """
-    Validates the calculated costs against the original Excel sheet.
-    """
+def validate_calculations() -> None:
+    """Validate the calculated costs against the original Excel sheet."""
     # Load the calculated data
     try:
         calculated_df = pd.read_parquet(
             Path(__file__).resolve().parents[0]
             / "data"
-            / "calculated_costs_tidy.parquet"
+            / "calculated_costs_tidy.parquet",
         )
     except FileNotFoundError:
-        print("Error: calculated_costs_tidy.parquet not found.")
-        print("Please run replicate_calculations.py to generate the file.")
+        sys.stdout.write("Error: calculated_costs_tidy.parquet not found." + "\n")
+        sys.stdout.write(
+            "Please run replicate_calculations.py to generate the file." + "\n",
+        )
         return
 
     # Load the original data from the Excel sheet
@@ -30,10 +32,12 @@ def validate_calculations():
     )
     try:
         original_df_raw = pd.read_excel(
-            file_path, sheet_name="1. Detailed Table", header=None
+            file_path,
+            sheet_name="1. Detailed Table",
+            header=None,
         )
     except FileNotFoundError:
-        print(f"Error: {file_path} not found.")
+        sys.stdout.write(f"Error: {file_path} not found." + "\n")
         return
 
     # Data cleaning and preparation for the original data
@@ -41,11 +45,11 @@ def validate_calculations():
     sub_header = original_df_raw.iloc[1].astype(str).str.replace("nan", "")
     new_header = [
         f"{h}_{sh}".strip("_") if h or sh else f"Unnamed_{i}"
-        for i, (h, sh) in enumerate(zip(header, sub_header))
+        for i, (h, sh) in enumerate(zip(header, sub_header, strict=False))
     ]
     original_df = original_df_raw[2:].copy()
     original_df.columns = new_header
-    original_df.rename(
+    original_df = original_df.rename(
         columns={
             "Test": "Test_Type",
             "Category": "Cost_Category",
@@ -53,7 +57,6 @@ def validate_calculations():
             "Step": "Cost_Step",
             "Unit Cost (AUD $/unit)": "original_cost",
         },
-        inplace=True,
     )
 
     # Sum the calculated costs
@@ -62,8 +65,7 @@ def validate_calculations():
     ].sum(axis=1)
 
     # Merge the two dataframes for comparison
-    comparison_df = pd.merge(
-        original_df,
+    comparison_df = original_df.merge(
         calculated_df,
         on=["Test_Type", "Cost_Category", "Cost_Sub_Category", "Cost_Step"],
         how="left",
@@ -71,14 +73,16 @@ def validate_calculations():
 
     # Convert cost columns to numeric, coercing errors
     comparison_df["original_cost"] = pd.to_numeric(
-        comparison_df["Unit Cost (AUD $/unit)"], errors="coerce"
+        comparison_df["Unit Cost (AUD $/unit)"],
+        errors="coerce",
     )
     comparison_df["calculated_total_cost"] = pd.to_numeric(
-        comparison_df["calculated_total_cost"], errors="coerce"
+        comparison_df["calculated_total_cost"],
+        errors="coerce",
     )
 
     # Fill NaN values for comparison
-    comparison_df.fillna(0, inplace=True)
+    comparison_df = comparison_df.fillna(0)
 
     # --- Validation ---
     discrepancies = []
@@ -102,20 +106,21 @@ def validate_calculations():
             discrepancies.append(discrepancy)
 
     # --- Reporting ---
-    print("--- Validation Report ---")
+    sys.stdout.write("--- Validation Report ---" + "\n")
     if discrepancies:
-        print(f"Found {len(discrepancies)} discrepancies:")
+        sys.stdout.write(f"Found {len(discrepancies)} discrepancies:" + "\n")
         discrepancies_df = pd.DataFrame(discrepancies)
-        print(discrepancies_df.to_string())
+        sys.stdout.write(str(discrepancies_df.to_string()) + "\n")
     else:
-        print(
+        sys.stdout.write(
             "No discrepancies found. All calculations match the original Excel sheet."
+            "\n",
         )
 
-    print("\n--- Summary ---")
-    print(f"Total rows validated: {len(comparison_df)}")
-    print(f"Total discrepancies found: {len(discrepancies)}")
-    print("---------------------")
+    sys.stdout.write("\n--- Summary ---" + "\n")
+    sys.stdout.write(f"Total rows validated: {len(comparison_df)}" + "\n")
+    sys.stdout.write(f"Total discrepancies found: {len(discrepancies)}" + "\n")
+    sys.stdout.write("---------------------" + "\n")
 
 
 if __name__ == "__main__":

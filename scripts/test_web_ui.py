@@ -1,70 +1,80 @@
 #!/usr/bin/env python3
-"""
-Script to test the web interface improvements.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Script to test the web interface improvements."""
 
-import sys
-from pathlib import Path
-import webbrowser
-import time
+import logging
 import subprocess
+import sys
+import time
+import webbrowser
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Add the src directory to the path so we can import our modules
 src_path = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(src_path))
 
 
-def main():
-    """Main function to test the web UI improvements."""
-    print("Testing Web Interface Improvements")
-    print("=" * 40)
-    
+def main() -> int:
+    """Test the web UI improvements."""
+    sys.stdout.write("Testing Web Interface Improvements" + "\n")
+    sys.stdout.write(str("=" * 40) + "\n")
+
     # Start the web server in the background
-    print("Starting web server...")
+    sys.stdout.write("Starting web server..." + "\n")
     try:
         # Run the web server in the background
-        process = subprocess.Popen([
-            sys.executable, "-m", "genomics_microcosting.web"
-        ], cwd=src_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        
+        process = subprocess.Popen(
+            [
+                sys.executable,
+                "-m",
+                "genomics_microcosting.web",
+            ],
+            cwd=src_path,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
         # Wait a moment for the server to start
         time.sleep(3)
-        
+
         # Check if the process is still running
         if process.poll() is None:
-            print("Web server started successfully")
-            print("Opening web browser to http://127.0.0.1:5000")
-            
+            sys.stdout.write("Web server started successfully" + "\n")
+            sys.stdout.write("Opening web browser to http://127.0.0.1:5000" + "\n")
+
             # Open the web browser
             webbrowser.open("http://127.0.0.1:5000")
-            
-            print("\nWeb interface is now running!")
-            print("Features to test:")
-            print("1. Improved navigation with icons")
-            print("2. Enhanced card-based layout")
-            print("3. Better form styling")
-            print("4. Improved visualization interface")
-            print("5. Custom CSS styling")
-            print("6. Responsive design")
-            print("\nPress CTRL+C to stop the server")
-            
+
+            sys.stdout.write("\nWeb interface is now running!" + "\n")
+            sys.stdout.write("Features to test:" + "\n")
+            sys.stdout.write("1. Improved navigation with icons" + "\n")
+            sys.stdout.write("2. Enhanced card-based layout" + "\n")
+            sys.stdout.write("3. Better form styling" + "\n")
+            sys.stdout.write("4. Improved visualization interface" + "\n")
+            sys.stdout.write("5. Custom CSS styling" + "\n")
+            sys.stdout.write("6. Responsive design" + "\n")
+            sys.stdout.write("\nPress CTRL+C to stop the server" + "\n")
+
             # Wait for the process to complete (or be interrupted)
             try:
                 process.wait()
             except KeyboardInterrupt:
-                print("\nStopping web server...")
+                sys.stdout.write("\nStopping web server..." + "\n")
                 process.terminate()
                 process.wait()
-                print("Web server stopped")
+                sys.stdout.write("Web server stopped" + "\n")
         else:
-            stdout, stderr = process.communicate()
-            print(f"Error starting web server: {stderr.decode()}")
+            _stdout, stderr = process.communicate()
+            sys.stdout.write(f"Error starting web server: {stderr.decode()}" + "\n")
             return 1
-            
+
     except Exception as e:
-        print(f"Error: {e}")
+        logger.exception("Could not complete test web ui")
+        sys.stdout.write(f"Error: {e}" + "\n")
         return 1
-        
+
     return 0
 
 

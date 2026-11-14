@@ -1,0 +1,117 @@
+{
+  "version": "t1-wes80-quantity-v6",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "base_scenario": "t1-reception-per-sample-v3",
+  "base_manifest_sha256": "684b67c3dc9531aed6f19416b27553e72089757b89b98561a325bf60b083655d",
+  "status": "superseded diagnostic: applies recorded quantities but retains 50x allocation to an 80x labelled block",
+  "rationale": "Superseded diagnostic: applies recorded source quantities to the existing G allocation, which is labelled 50x despite the detail block being labelled 80x. It reconciles to 50x source costs K, not 80x costs L. Version v7 uses the labelled 80x H allocation.",
+  "change": [
+    {
+      "sheet": "Detailed Table",
+      "cell": "F724",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G96",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F96*'Cons -  Costs and Util - VCGS'!G96",
+      "source_quantity": "WB30:F96",
+      "source_80x_fraction": "WB30:G96",
+      "source_precomputed_cost": "WB30:K96"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F725",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G97",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F97*'Cons -  Costs and Util - VCGS'!G97",
+      "source_quantity": "WB30:F97",
+      "source_80x_fraction": "WB30:G97",
+      "source_precomputed_cost": "WB30:K97"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F726",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G98",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F98*'Cons -  Costs and Util - VCGS'!G98",
+      "source_quantity": "WB30:F98",
+      "source_80x_fraction": "WB30:G98",
+      "source_precomputed_cost": "WB30:K98"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F727",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G99",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F99*'Cons -  Costs and Util - VCGS'!G99",
+      "source_quantity": "WB30:F99",
+      "source_80x_fraction": "WB30:G99",
+      "source_precomputed_cost": "WB30:K99"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F728",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G100",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F100*'Cons -  Costs and Util - VCGS'!G100",
+      "source_quantity": "WB30:F100",
+      "source_80x_fraction": "WB30:G100",
+      "source_precomputed_cost": "WB30:K100"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F729",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G101",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F101*'Cons -  Costs and Util - VCGS'!G101",
+      "source_quantity": "WB30:F101",
+      "source_80x_fraction": "WB30:G101",
+      "source_precomputed_cost": "WB30:K101"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F730",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G102",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F102*'Cons -  Costs and Util - VCGS'!G102",
+      "source_quantity": "WB30:F102",
+      "source_80x_fraction": "WB30:G102",
+      "source_precomputed_cost": "WB30:K102"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F731",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G103",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F103*'Cons -  Costs and Util - VCGS'!G103",
+      "source_quantity": "WB30:F103",
+      "source_80x_fraction": "WB30:G103",
+      "source_precomputed_cost": "WB30:K103"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F732",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G104",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F104*'Cons -  Costs and Util - VCGS'!G104",
+      "source_quantity": "WB30:F104",
+      "source_80x_fraction": "WB30:G104",
+      "source_precomputed_cost": "WB30:K104"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F733",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G105",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F105*'Cons -  Costs and Util - VCGS'!G105",
+      "source_quantity": "WB30:F105",
+      "source_80x_fraction": "WB30:G105",
+      "source_precomputed_cost": "WB30:K105"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F734",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G106",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F106*'Cons -  Costs and Util - VCGS'!G106",
+      "source_quantity": "WB30:F106",
+      "source_80x_fraction": "WB30:G106",
+      "source_precomputed_cost": "WB30:K106"
+    }
+  ],
+  "limitations": [
+    "The detailed 80x block actually points to source G (50x), not source H (80x). This version reproduces source K (50x), not source L (80x); use v7 for the labelled 80x source allocation.",
+    "The source-recorded 2-lane kit quantity is zero; it is carried as recorded, not inferred to be absent in practice.",
+    "Flow-cell dock recorded quantity may itself already be allocated; source-table consistency alone does not prove its economic allocation.",
+    "Three material unit costs remain unresolved, and the NaOH correction remains masked by its recorded zero.",
+    "Clinical scope, host allocation and native Excel verification remain unresolved.",
+    "The published workbook is unchanged; 2023 historical source values are not current costing."
+  ]
+}

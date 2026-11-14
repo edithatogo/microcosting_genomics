@@ -1,17 +1,20 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Extract prepared validation values from the detailed worksheet."""
+
+import sys
 from pathlib import Path
 
 from genomics_microcosting.sheet_manager import SheetManager
 
-def main():
-    """
-    Creates the ground_truth.parquet file from the "Detailed Table" sheet.
-    """
+
+def main() -> None:
+    """Create the ground_truth.parquet file from the "Detailed Table" sheet."""
     # Initialize the SheetManager to get the data
     sheet_manager = SheetManager()
     detailed_table_df = sheet_manager.get_data("Detailed Table")
-    
+
     if detailed_table_df is None:
-        print("Error: Could not load Detailed Table data")
+        sys.stdout.writelines(("Error: Could not load Detailed Table data", "\n"))
         return
 
     # Identify input and output columns
@@ -26,7 +29,8 @@ def main():
     prepared_dir.mkdir(exist_ok=True)
     ground_truth_path = prepared_dir / "ground_truth.parquet"
     ground_truth_df.to_parquet(ground_truth_path)
-    print(f"Saved ground truth data to {ground_truth_path}")
+    sys.stdout.writelines((f"Saved ground truth data to {ground_truth_path}", "\n"))
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,194 @@
+{
+  "version": "t1-reception-per-sample-v3",
+  "status": "source-supported reconstruction of earlier model allocation; not a published result or observed actual workflow",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "base_scenario": "t1-reception-2023-v2",
+  "rationale": "Trio detail rows multiply unpacking, registration and data entry by three, but existing subtotals include one of each. Sum the displayed tasks, retaining each liaison once, as an explicit per-sample sensitivity. The paired case-level v2 subtotal remains available.",
+  "change": [
+    {
+      "sheet": "Detailed Table",
+      "cell": "M537",
+      "source_formula": "='Labour - Usage - VCGS'!AA17",
+      "proposed_formula": "=SUM(M532:M536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "N537",
+      "source_formula": "='Labour - Usage - VCGS'!AB17",
+      "proposed_formula": "=SUM(N532:N536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "O537",
+      "source_formula": "='Labour - Usage - VCGS'!AC17",
+      "proposed_formula": "=SUM(O532:O536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "P537",
+      "source_formula": "='Labour - Usage - VCGS'!AD17",
+      "proposed_formula": "=SUM(P532:P536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Q537",
+      "source_formula": "='Labour - Usage - VCGS'!AE17",
+      "proposed_formula": "=SUM(Q532:Q536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "R537",
+      "source_formula": "='Labour - Usage - VCGS'!AF17",
+      "proposed_formula": "=SUM(R532:R536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "S537",
+      "source_formula": "='Labour - Usage - VCGS'!AG17",
+      "proposed_formula": "=SUM(S532:S536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "T537",
+      "source_formula": "='Labour - Usage - VCGS'!AH17",
+      "proposed_formula": "=SUM(T532:T536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "U537",
+      "source_formula": "='Labour - Usage - VCGS'!AI17",
+      "proposed_formula": "=SUM(U532:U536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "V537",
+      "source_formula": "='Labour - Usage - VCGS'!AJ17",
+      "proposed_formula": "=SUM(V532:V536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "W537",
+      "source_formula": "='Labour - Usage - VCGS'!AK17",
+      "proposed_formula": "=SUM(W532:W536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "X537",
+      "source_formula": "='Labour - Usage - VCGS'!AL17",
+      "proposed_formula": "=SUM(X532:X536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Y537",
+      "source_formula": "='Labour - Usage - VCGS'!AM17",
+      "proposed_formula": "=SUM(Y532:Y536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Z537",
+      "source_formula": "='Labour - Usage - VCGS'!AN17",
+      "proposed_formula": "=SUM(Z532:Z536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "AA537",
+      "source_formula": "='Labour - Usage - VCGS'!AO17",
+      "proposed_formula": "=SUM(AA532:AA536)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "M1083",
+      "source_formula": "='Labour - Usage - VCGS'!AA18",
+      "proposed_formula": "=SUM(M1078:M1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "N1083",
+      "source_formula": "='Labour - Usage - VCGS'!AB18",
+      "proposed_formula": "=SUM(N1078:N1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "O1083",
+      "source_formula": "='Labour - Usage - VCGS'!AC18",
+      "proposed_formula": "=SUM(O1078:O1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "P1083",
+      "source_formula": "='Labour - Usage - VCGS'!AD18",
+      "proposed_formula": "=SUM(P1078:P1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Q1083",
+      "source_formula": "='Labour - Usage - VCGS'!AE18",
+      "proposed_formula": "=SUM(Q1078:Q1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "R1083",
+      "source_formula": "='Labour - Usage - VCGS'!AF18",
+      "proposed_formula": "=SUM(R1078:R1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "S1083",
+      "source_formula": "='Labour - Usage - VCGS'!AG18",
+      "proposed_formula": "=SUM(S1078:S1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "T1083",
+      "source_formula": "='Labour - Usage - VCGS'!AH18",
+      "proposed_formula": "=SUM(T1078:T1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "U1083",
+      "source_formula": "='Labour - Usage - VCGS'!AI18",
+      "proposed_formula": "=SUM(U1078:U1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "V1083",
+      "source_formula": "='Labour - Usage - VCGS'!AJ18",
+      "proposed_formula": "=SUM(V1078:V1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "W1083",
+      "source_formula": "='Labour - Usage - VCGS'!AK18",
+      "proposed_formula": "=SUM(W1078:W1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "X1083",
+      "source_formula": "='Labour - Usage - VCGS'!AL18",
+      "proposed_formula": "=SUM(X1078:X1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Y1083",
+      "source_formula": "='Labour - Usage - VCGS'!AM18",
+      "proposed_formula": "=SUM(Y1078:Y1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "Z1083",
+      "source_formula": "='Labour - Usage - VCGS'!AN18",
+      "proposed_formula": "=SUM(Z1078:Z1082)"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "AA1083",
+      "source_formula": "='Labour - Usage - VCGS'!AO18",
+      "proposed_formula": "=SUM(AA1078:AA1082)"
+    }
+  ],
+  "limits": [
+    "Three samples per case and one liaison per case are scenario assumptions, not independently observed historical allocation.",
+    "Includes all lower, midpoint, upper and P:AA sensitivity subtotal columns.",
+    "Not a published result; no current cost refresh."
+  ]
+}
