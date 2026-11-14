@@ -14,6 +14,43 @@ from .utils import cell_to_coords
 logger = logging.getLogger(__name__)
 
 
+_SHEET_OPTIONS = ("verbose", "prepared_data_path", "sheet_configs")
+
+
+def _sheet_options(
+    positional: tuple[bool | Path | str | dict[str, SheetConfig] | None, ...],
+    *,
+    verbose: bool | None,
+    prepared_data_path: Path | str | None,
+    sheet_configs: dict[str, SheetConfig] | None,
+) -> tuple[bool, Path | str | None, dict[str, SheetConfig] | None]:
+    if len(positional) > len(_SHEET_OPTIONS):
+        message = "Too many positional options for SheetManager"
+        raise TypeError(message)
+    for name, value, keyword in zip(
+        _SHEET_OPTIONS,
+        positional,
+        (verbose, prepared_data_path, sheet_configs),
+        strict=False,
+    ):
+        if keyword is not None:
+            message = f"SheetManager received multiple values for {name}"
+            raise TypeError(message)
+        match name, value:
+            case "verbose", bool() as flag:
+                verbose = flag
+            case "prepared_data_path", (Path() | str() | None) as path:
+                prepared_data_path = path
+            case "sheet_configs", dict() as configs:
+                sheet_configs = configs
+            case "sheet_configs", None:
+                sheet_configs = None
+            case _:
+                message = f"Invalid positional value for {name}"
+                raise TypeError(message)
+    return bool(verbose), prepared_data_path, sheet_configs
+
+
 class SheetManager:
     """Manages loading and accessing data from Excel sheets and Parquet files.
 
@@ -33,8 +70,8 @@ class SheetManager:
     def __init__(
         self,
         excel_file_path: Path | str | None = None,
-        *,
-        verbose: bool = False,
+        *positional_options: bool | Path | str | dict[str, SheetConfig] | None,
+        verbose: bool | None = None,
         prepared_data_path: Path | str | None = None,
         sheet_configs: dict[str, SheetConfig] | None = None,
     ) -> None:
@@ -43,13 +80,20 @@ class SheetManager:
         Args:
             excel_file_path (Path | str | None, optional): Path to the Excel file.
                 If None, load from configuration.
-            verbose (bool, optional): Enable verbose logging; defaults to False.
+            *positional_options: Optional verbose, prepared path and sheet configs.
+            verbose: Enable verbose logging. Defaults to false.
             prepared_data_path (Path | str | None, optional): Prepared data directory.
                 If None, uses default location. Defaults to None.
             sheet_configs (dict | None, optional): Sheet configuration dictionary.
                 If None, uses default configuration. Defaults to None.
 
         """
+        verbose, prepared_data_path, sheet_configs = _sheet_options(
+            positional_options,
+            verbose=verbose,
+            prepared_data_path=prepared_data_path,
+            sheet_configs=sheet_configs,
+        )
         self.logger = logger.getChild(self.__class__.__name__)
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)

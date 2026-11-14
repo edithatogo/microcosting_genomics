@@ -16,6 +16,7 @@ import numpy as np
 import polars as pl
 import polars.selectors as cs
 
+from .execution_contracts import legacy_bool_option
 from .logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -23,10 +24,35 @@ MAX_SHEET_NAME_LENGTH = 255
 MAX_WORKSHEET_COLUMN = 16_384
 MAX_WORKSHEET_ROW = 1_048_576
 MAX_NULL_PERCENTAGE = 90
+MAX_FILE_PATH_POSITIONAL_OPTIONS = 2
 
 
 class ValidationError(Exception):
     """Custom exception for input validation errors."""
+
+
+def _file_path_options(
+    positional: tuple[bool | list[str] | None, ...],
+    *,
+    must_exist: bool | None,
+    allowed_extensions: list[str] | None,
+) -> tuple[bool, list[str] | None]:
+    if len(positional) > MAX_FILE_PATH_POSITIONAL_OPTIONS:
+        message = "Too many positional options for validate_file_path"
+        raise TypeError(message)
+    if not positional:
+        return bool(must_exist), allowed_extensions
+    existence = positional[0]
+    if must_exist is not None or not isinstance(existence, bool):
+        message = "Invalid arguments for must_exist"
+        raise TypeError(message)
+    if len(positional) == MAX_FILE_PATH_POSITIONAL_OPTIONS:
+        extensions = positional[1]
+        if allowed_extensions is not None or isinstance(extensions, bool):
+            message = "Invalid arguments for allowed_extensions"
+            raise TypeError(message)
+        allowed_extensions = extensions
+    return existence, allowed_extensions
 
 
 class InputValidator:
@@ -275,8 +301,8 @@ class InputValidator:
         value: object,
         min_value: float | None = None,
         max_value: float | None = None,
-        *,
-        allow_none: bool = False,
+        *positional_allow_none: bool,
+        allow_none: bool | None = None,
     ) -> bool:
         """Validate numeric value with range checking.
 
@@ -284,6 +310,7 @@ class InputValidator:
             value: Value to validate
             min_value: Minimum allowed value (optional)
             max_value: Maximum allowed value (optional)
+            *positional_allow_none: Optional positional flag for existing callers.
             allow_none: Whether None values are allowed
 
         Returns:
@@ -293,6 +320,12 @@ class InputValidator:
             ValidationError: If value is invalid
 
         """
+        allow_none = legacy_bool_option(
+            "allow_none",
+            positional_allow_none,
+            keyword=allow_none,
+            default=False,
+        )
         if value is None:
             if allow_none:
                 return True
@@ -338,8 +371,8 @@ class InputValidator:
         value: object,
         max_length: int | None = None,
         pattern: str | None = None,
-        *,
-        allow_empty: bool = False,
+        *positional_allow_empty: bool,
+        allow_empty: bool | None = None,
     ) -> bool:
         """Validate string value with length and pattern checking.
 
@@ -347,6 +380,7 @@ class InputValidator:
             value: Value to validate
             max_length: Maximum allowed length (optional)
             pattern: Regex pattern to match (optional)
+            *positional_allow_empty: Optional positional flag for existing callers.
             allow_empty: Whether empty strings are allowed
 
         Returns:
@@ -356,6 +390,12 @@ class InputValidator:
             ValidationError: If value is invalid
 
         """
+        allow_empty = legacy_bool_option(
+            "allow_empty",
+            positional_allow_empty,
+            keyword=allow_empty,
+            default=False,
+        )
         if value is None:
             message = "Value cannot be None"
             raise ValidationError(message)
@@ -393,14 +433,15 @@ class InputValidator:
     def validate_file_path(
         self,
         file_path: object,
-        *,
-        must_exist: bool = False,
+        *positional_options: bool | list[str] | None,
+        must_exist: bool | None = None,
         allowed_extensions: list[str] | None = None,
     ) -> bool:
         """Validate file path.
 
         Args:
             file_path: File path to validate
+            *positional_options: Optional existence and extension arguments.
             must_exist: Whether file must exist
             allowed_extensions: List of allowed file extensions (optional)
 
@@ -411,6 +452,11 @@ class InputValidator:
             ValidationError: If file path is invalid
 
         """
+        must_exist, allowed_extensions = _file_path_options(
+            positional_options,
+            must_exist=must_exist,
+            allowed_extensions=allowed_extensions,
+        )
         if not isinstance(file_path, (str, Path)):
             message = f"File path must be string or Path, got {type(file_path)}"
             raise ValidationError(

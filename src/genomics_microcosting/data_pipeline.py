@@ -37,12 +37,14 @@ class PipelineComponent[Input, Output](ABC):
     def process(self, data: Input) -> Output:
         """Process the input data and return the result."""
 
-    def validate_input(self, _data: Input) -> bool:
+    def validate_input(self, data: Input) -> bool:
         """Validate input data. Override in subclasses as needed."""
+        del data
         return True
 
-    def validate_output(self, _data: Output) -> bool:
+    def validate_output(self, data: Output) -> bool:
         """Validate output data. Override in subclasses as needed."""
+        del data
         return True
 
 

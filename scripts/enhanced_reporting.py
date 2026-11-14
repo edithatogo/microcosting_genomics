@@ -7,6 +7,7 @@ import logging
 import sys
 import traceback
 from datetime import UTC, datetime
+from html import escape
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -168,7 +169,7 @@ def generate_html_report(
             f.write("<h2>Data Overview</h2>\n<ul>\n")
             f.writelines(
                 "<li><strong>"
-                f"{table_name}"
+                f"{escape(table_name)}"
                 "</strong>: "
                 f"{len(df)}"
                 " rows, "
@@ -182,9 +183,10 @@ def generate_html_report(
                 f.write("<div>\n")
                 f.writelines(
                     '<img src="'
-                    f"{fig_file.name}"
+                    f"{escape(fig_file.name)}"
                     '" alt="'
-                    f'{fig_file.stem}" style="max-width: 100%; height: auto;">\n'
+                    f'{escape(fig_file.stem)}"'
+                    ' style="max-width: 100%; height: auto;">\n'
                     for fig_file in Path(figures_dir).glob("*.png")
                 )
                 f.write("</div>\n")
@@ -277,7 +279,7 @@ def generate_html_report(
     if template_file and Path(template_file).exists():
         template = env.get_template(Path(template_file).name)
     else:
-        template = jinja2.Template(template_str)
+        template = env.from_string(template_str)
 
     # Prepare data for template
     numeric_cols = {}

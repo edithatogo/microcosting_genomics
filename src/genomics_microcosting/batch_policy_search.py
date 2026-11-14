@@ -74,6 +74,9 @@ def enumerate_batch_policies(
     not inferred validated limits. Dominance minimizes total modeled cost and
     worst TAT only among completely served, temporally feasible policies.
     """
+    if grid.keys() != PolicyGrid.__required_keys__:
+        message = "Expected exactly payload_limits and max_wait_seconds"
+        raise TypeError(message)
     payload_limits = grid["payload_limits"]
     max_wait_seconds = grid["max_wait_seconds"]
     workload = Workload.model_validate(workload.model_dump())

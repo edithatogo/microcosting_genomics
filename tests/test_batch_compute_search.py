@@ -3,13 +3,14 @@
 
 from dataclasses import replace
 from decimal import Decimal
-from typing import Literal, TypedDict
+from typing import Literal, TypedDict, cast
 lazy from pathlib import Path
 
 import pytest
 
 from genomics_microcosting.batch_compute_search import (
     ComponentAssignment,
+    ComputePolicyGrid,
     ComputePolicyInput,
     CostBoundary,
     enumerate_compute_batch_policies,
@@ -312,4 +313,22 @@ def test_integration_rechecks_sources_and_compute_boundary(
             compute_inputs=bindings,
             payload_limits=(1,),
             max_wait_seconds=(Decimal(0),),
+        )
+
+
+def test_compute_grid_rejects_invalid_runtime_keyword_names(tmp_path: Path) -> None:
+    """Reject untyped callers with an unknown compute evidence argument."""
+    pricing, context = batch_inputs(tmp_path, "requested_tests")
+    options = cast(
+        "ComputePolicyGrid",
+        {"payload_limits": (1,), "max_wait_seconds": (), "compute_inputs_typo": {}},
+    )
+    with pytest.raises(TypeError, match="Expected payload_limits"):
+        enumerate_compute_batch_policies(
+            timed(1),
+            dynamic(),
+            pricing,
+            context,
+            boundary(),
+            **options,
         )
