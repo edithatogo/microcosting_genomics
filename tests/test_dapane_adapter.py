@@ -216,7 +216,10 @@ def test_ambiguous_json_transport_is_rejected(raw: str) -> None:
 def test_old_entry_point_is_an_explicit_passthrough() -> None:
     """The rollback adapter retains old values, source coordinates and errors."""
     class Legacy:
+        """Retain a deliberate missing legacy cell value."""
+
         def get_cell_value(self, sheet: str, cell: str) -> object:
+            """Return the original fixture value without transformation."""
             checks.require_equal(sheet, "Labour - Usage - VCGS")
             return {"AB22": "lab", "AB23": None, "AB24": "subtotal"}[cell]
     checks.require_equal(
@@ -231,3 +234,35 @@ def test_unrecognized_workbook_bytes_cannot_claim_the_source(tmp_path: Path) -> 
     source.write_bytes(b"synthetic non-workbook")
     with pytest.raises(ValueError, match="hash"):
         inspect_manual_extraction_workbook(source)
+
+
+@pytest.mark.parametrize(("source", "projected"), [("1E+2", "100"), ("1E-7", "0.0000001")])
+def test_exact_exponent_projection_is_transport_not_revaluation(
+    source: str, projected: str,
+) -> None:
+    """A valid Decimal serialization keeps the same exactly represented amount."""
+    declaration = artifact()
+    declaration["release_snapshot"]["quotes"][0]["amount"] = source
+    declaration["quotes"][0]["amount"] = projected
+    checks.require_equal(
+        request(declaration=declaration)["quotes"][0]["amount"],
+        projected,
+    )
+
+
+@pytest.mark.parametrize("field", ["employers", "classifications"])
+def test_scope_strings_cannot_pass_substring_membership(field: str) -> None:
+    """The consumer preserves the provider's array semantics after a rehash."""
+    declaration = artifact()
+    declaration["release_snapshot"]["sources"]["records"][0][field] = "not-synthetic-authorized"
+    with pytest.raises(ValueError, match="array"):
+        request(declaration=declaration)
+
+
+@pytest.mark.parametrize("amount", ["1E+97", "1E-37", "-0", "NaN", "Infinity"])
+def test_unbounded_or_nonfinite_source_amounts_fail_closed(amount: str) -> None:
+    """A signed artifact cannot waive the shared exact numeric contract."""
+    declaration = artifact()
+    declaration["release_snapshot"]["quotes"][0]["amount"] = amount
+    with pytest.raises(ValueError, match="amount"):
+        request(declaration=declaration)

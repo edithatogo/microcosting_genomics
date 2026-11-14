@@ -8,6 +8,7 @@ eligibility decision, clinical workflow approval or empirical validation.
 from dataclasses import dataclass
 from importlib import import_module
 from typing import Any, Literal, Protocol, cast
+from unicodedata import category
 lazy from collections.abc import Sequence
 
 from genomics_microcosting.dapane_release import selected_workforce_quote
@@ -56,7 +57,7 @@ def _identifier(value: object, *, field: str, limit: int = MAX_ID_BYTES) -> str:
     _require(isinstance(value, str), f"{field} must be a string")
     text = cast("str", value)
     _require(
-        bool(text) and text.strip() == text and not any(ord(c) < 32 for c in text),
+        bool(text) and text.strip() == text and not any(category(c) == "Cc" for c in text),
         f"{field} must be a nonblank, trimmed identifier",
     )
     try:
@@ -87,7 +88,10 @@ def _checked_batches(batches: Sequence[ExtractionBatch]) -> tuple[ExtractionBatc
         for member in members:
             _identifier(member, field="specimen_id")
         _require(len(set(members)) == len(members), "Duplicate specimen in batch")
-        _require(batch.outcome in {"completed", "failed"}, "Unknown batch outcome")
+        _require(
+            isinstance(batch.outcome, str) and batch.outcome in {"completed", "failed"},
+            "Unknown batch outcome",
+        )
         if batch.repeat_of is None:
             _require(not consumed.intersection(members), "Repeated specimen requires repeat_of")
         else:

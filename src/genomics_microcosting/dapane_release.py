@@ -4,6 +4,7 @@
 import json
 import re
 from datetime import date, datetime
+from decimal import Decimal
 from hashlib import sha256
 from typing import Any, cast
 from urllib.parse import urlsplit
@@ -125,22 +126,54 @@ def load_workforce_artifact(raw: str | bytes, expected_digest: str) -> dict[str,
     return envelope
 
 
+def _string_array(value: object) -> list[str]:
+    _require(
+        isinstance(value, list)
+        and bool(value)
+        and all(isinstance(item, str) and item.strip() for item in value),
+        "Source scope must be a nonempty array of nonblank strings",
+    )
+    return cast("list[str]", value)
+
+
+def _decimal_projection(value: object) -> str:
+    _require(isinstance(value, str), "Source amount must be an exact decimal string")
+    number = Decimal(cast("str", value))
+    _require(
+        number.is_finite() and not number.is_signed(),
+        "Source amount must be finite and nonnegative",
+    )
+    parts = number.as_tuple()
+    exponent = cast("int", parts.exponent)
+    _require(
+        len(parts.digits) + max(exponent, 0) <= 96 and -exponent <= 36,
+        "Source amount exceeds the Dapane exact transport bounds",
+    )
+    return format(number, "f")
+
+
 def _check_scope(
     snapshot: dict[str, Any], original: dict[str, Any], source: dict[str, Any],
 ) -> None:
     _require(original.get("status") == "accepted", "Quote must be accepted")
+    employers = _string_array(source.get("employers"))
+    classifications = _string_array(source.get("classifications"))
     _require(
         source.get("kind") in {"synthetic", "published_wage_reference"}
         and source.get("holding") == "held"
         and source.get("authority") == "primary"
         and source.get("applicability") == "verified"
+        and isinstance(source.get("sha256"), str)
+        and bool(DIGEST.fullmatch(source["sha256"]))
         and source.get("sha256") == original.get("source_sha256"),
         "Quote source evidence or hash differs",
     )
     _require(
         source.get("jurisdiction") == snapshot.get("jurisdiction")
-        and snapshot.get("employer") in source.get("employers", [])
-        and snapshot.get("classification") in source.get("classifications", []),
+        and isinstance(snapshot.get("employer"), str)
+        and snapshot.get("employer") in employers
+        and isinstance(snapshot.get("classification"), str)
+        and snapshot.get("classification") in classifications,
         "Quote source employer or classification differs",
     )
     start, stop = _date(original.get("starts_on")), _date(original.get("ends_on"))
@@ -183,11 +216,12 @@ def _check_projection(
         quote.get("target") == binding.get("target")
         and isinstance(quote.get("target"), str) and bool(quote["target"].strip())
         and type(quote.get("price_year")) is int
+        and type(binding.get("price_year")) is int
         and quote.get("price_year") == binding.get("price_year")
         and quote.get("currency") == snapshot.get("currency")
         and quote.get("basis") == "financial_cost"
         and quote.get("kind") == "resource_use"
-        and quote.get("amount") == original.get("amount")
+        and quote.get("amount") == _decimal_projection(original.get("amount"))
         and quote.get("valid_from") == original.get("starts_on")
         and quote.get("valid_to") == original.get("ends_on")
         and quote.get("known_from") == original.get("known_from"),

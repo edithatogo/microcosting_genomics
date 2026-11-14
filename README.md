@@ -16,6 +16,13 @@ Keep original workbooks, datasets, generated research outputs, AI artefacts and 
 
 The T1 scenario builder accepts historical manifests through `--manifest-dir`. The repository's test fixtures use synthetic timing inputs to exercise the same formula selection and source checks.
 
+## Optional Dapane integration
+
+The [manual DNA extraction adapter](docs/dapane_manual_extraction.md) maps a bounded
+source stage to the installed Dapane Rust kernel using a pinned workforce quotation
+artifact. It preserves the existing engine and requires an explicit classification
+mapping. See the adapter document and coordinating Dapane track for qualification.
+
 ## Overview
 
 This project re-implements complex microcosting calculations from Excel workbooks into Python for rare disease genomics research. It enables programmatic validation, testing, and extension of economic models with enhanced transparency, reproducibility, and analytical capabilities.
