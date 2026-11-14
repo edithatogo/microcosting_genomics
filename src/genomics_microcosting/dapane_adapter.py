@@ -7,7 +7,7 @@ eligibility decision, clinical workflow approval or empirical validation.
 
 from dataclasses import dataclass
 from importlib import import_module
-from typing import Any, Literal, Protocol, cast
+from typing import Any, Literal, Protocol, TypedDict, Unpack, cast
 from unicodedata import category
 lazy from collections.abc import Sequence
 
@@ -32,6 +32,18 @@ class ExtractionBatch:
     repeat_of: str | None = None
 
 
+class ExtractionOptions(TypedDict):
+    """Required named inputs for the versioned consumer boundary."""
+
+    release_digest: str
+    quote_id: str
+    batches: Sequence[ExtractionBatch]
+    service_date: str
+    knowledge_cutoff: str
+    role_mapping_basis: str
+    run_id: str
+
+
 class HistoricalEngine(Protocol):
     """The preserved cell-read entry point, without importing the legacy engine."""
 
@@ -48,20 +60,20 @@ class DapaneRuntime(Protocol):
         ...
 
 
-def _require(condition: bool, message: str) -> None:
+def _require(*, condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
 
 
 def _identifier(value: object, *, field: str, limit: int = MAX_ID_BYTES) -> str:
-    _require(isinstance(value, str), f"{field} must be a string")
+    _require(condition=isinstance(value, str), message=f"{field} must be a string")
     text = cast("str", value)
     _require(
-        bool(text) and text.strip() == text and not any(category(c) == "Cc" for c in text),
-        f"{field} must be a nonblank, trimmed identifier",
+        condition=bool(text) and text.strip() == text and not any(category(c) == "Cc" for c in text),
+        message=f"{field} must be a nonblank, trimmed identifier",
     )
     try:
-        _require(len(text.encode()) <= limit, f"{field} exceeds its UTF-8 byte bound")
+        _require(condition=len(text.encode()) <= limit, message=f"{field} exceeds its UTF-8 byte bound")
     except UnicodeError as error:
         message = f"{field} must contain valid Unicode"
         raise ValueError(message) from error
@@ -70,38 +82,38 @@ def _identifier(value: object, *, field: str, limit: int = MAX_ID_BYTES) -> str:
 
 def _checked_batches(batches: Sequence[ExtractionBatch]) -> tuple[ExtractionBatch, ...]:
     _require(
-        isinstance(batches, (list, tuple)) and 0 < len(batches) <= MAX_BATCHES,
-        "Supply an explicit bounded nonempty batch sequence",
+        condition=isinstance(batches, (list, tuple)) and 0 < len(batches) <= MAX_BATCHES,
+        message="Supply an explicit bounded nonempty batch sequence",
     )
     known: dict[str, ExtractionBatch] = {}
     consumed: set[str] = set()
     repeated: set[str] = set()
     for batch in batches:
-        _require(isinstance(batch, ExtractionBatch), "Invalid batch record")
+        _require(condition=isinstance(batch, ExtractionBatch), message="Invalid batch record")
         _identifier(batch.batch_id, field="batch_id")
-        _require(batch.batch_id not in known, "Duplicate batch identity")
+        _require(condition=batch.batch_id not in known, message="Duplicate batch identity")
         members = batch.specimen_ids
         _require(
-            isinstance(members, tuple) and 0 < len(members) <= MAX_SPECIMENS,
-            "Supply one to six explicit specimen identities per batch",
+            condition=isinstance(members, tuple) and 0 < len(members) <= MAX_SPECIMENS,
+            message="Supply one to six explicit specimen identities per batch",
         )
         for member in members:
             _identifier(member, field="specimen_id")
-        _require(len(set(members)) == len(members), "Duplicate specimen in batch")
+        _require(condition=len(set(members)) == len(members), message="Duplicate specimen in batch")
         _require(
-            isinstance(batch.outcome, str) and batch.outcome in {"completed", "failed"},
-            "Unknown batch outcome",
+            condition=batch.outcome in ("completed", "failed"),
+            message="Unknown batch outcome",
         )
         if batch.repeat_of is None:
-            _require(not consumed.intersection(members), "Repeated specimen requires repeat_of")
+            _require(condition=not consumed.intersection(members), message="Repeated specimen requires repeat_of")
         else:
             _identifier(batch.repeat_of, field="repeat_of")
             parent = known.get(batch.repeat_of)
             _require(
-                parent is not None and parent.outcome == "failed"
+                condition=parent is not None and parent.outcome == "failed"
                 and set(parent.specimen_ids) == set(members)
                 and batch.repeat_of not in repeated,
-                "A repeat requires one preceding failed batch with identical specimens",
+                message="A repeat requires one preceding failed batch with identical specimens",
             )
             repeated.add(batch.repeat_of)
         consumed.update(members)
@@ -121,9 +133,9 @@ def manual_dna_extraction_descriptor() -> dict[str, Any]:
         ],
         "nominal_batch_samples": MAX_SPECIMENS,
         "sample_count_cells": ["E22", "E23"],
-        "role_mapping": "Historical LT to selected quote target is an explicit analyst assumption",
-        "repeat_policy": "Each explicitly incurred failed or repeated batch is charged once",
-        "allocation": "Equal shares of each rounded batch pool over actual named specimens",
+        "role_mapping": "Historical LT to quote target requires an explicit analyst mapping",
+        "repeat_policy": "Every declared failed or repeated batch incurs both uses",
+        "allocation": "Equal shares of each rounded pool over actual named specimens",
         "scope": "manual DNA extraction labour only",
         "scientific_validation": False,
         "excluded": [
@@ -176,9 +188,7 @@ def _batch_records(
 
 
 def manual_dna_extraction_request(
-    release_json: str | bytes, *, release_digest: str, quote_id: str,
-    batches: Sequence[ExtractionBatch], service_date: str, knowledge_cutoff: str,
-    role_mapping_basis: str, run_id: str,
+    release_json: str | bytes, **options: Unpack[ExtractionOptions],
 ) -> dict[str, Any]:
     """Construct exact usage; Dapane alone values and allocates each batch.
 
@@ -187,11 +197,20 @@ def manual_dna_extraction_request(
     the historical LT label. A partial batch consumes the same declared labour;
     no throughput, waiting-time or staff-utilization inference is made.
     """
+    _require(
+        condition=set(options) == ExtractionOptions.__required_keys__,
+        message="Missing or unknown manual extraction option",
+    )
+    run_id = options["run_id"]
+    role_mapping_basis = options["role_mapping_basis"]
+    service_date = options["service_date"]
+    knowledge_cutoff = options["knowledge_cutoff"]
     _identifier(run_id, field="run_id")
     _identifier(role_mapping_basis, field="role_mapping_basis", limit=MAX_MAPPING_BYTES)
-    checked = _checked_batches(batches)
+    checked = _checked_batches(options["batches"])
     quote = selected_workforce_quote(
-        release_json, expected_digest=release_digest, quote_id=quote_id,
+        release_json, expected_digest=options["release_digest"],
+        quote_id=options["quote_id"],
         service_date=service_date, knowledge_cutoff=knowledge_cutoff,
     )
     usage: list[dict[str, Any]] = []
@@ -229,16 +248,12 @@ def evaluate_native_request(request: dict[str, Any]) -> dict[str, Any]:
 
 
 def evaluate_manual_dna_extraction(
-    release_json: str | bytes, *, release_digest: str, quote_id: str,
-    batches: Sequence[ExtractionBatch], service_date: str, knowledge_cutoff: str,
-    role_mapping_basis: str, run_id: str,
+    release_json: str | bytes, **options: Unpack[ExtractionOptions],
 ) -> dict[str, Any]:
     """Evaluate the source-mapped request through the same Rust public boundary."""
-    return evaluate_native_request(manual_dna_extraction_request(
-        release_json, release_digest=release_digest, quote_id=quote_id,
-        batches=batches, service_date=service_date, knowledge_cutoff=knowledge_cutoff,
-        role_mapping_basis=role_mapping_basis, run_id=run_id,
-    ))
+    return evaluate_native_request(
+        manual_dna_extraction_request(release_json, **options),
+    )
 
 
 def historical_manual_extraction(engine: HistoricalEngine) -> dict[str, object]:

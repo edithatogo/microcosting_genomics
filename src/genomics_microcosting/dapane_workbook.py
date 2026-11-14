@@ -189,8 +189,8 @@ def compare_manual_extraction_workbook(
             "interpretation": [
                 "Raw Excel caches retain their original floating-point representation",
                 "Rust replay uses exact 5 and 5/6 minute exposures with line rounding",
-                "The scenario selects a different dated quotation and declared components",
-                "Whole-batch pools retain spent labour for partial, failed and repeated runs",
+                "Current scenario selects a dated quote and explicit components",
+                "All declared batch attempts retain their incurred labour",
                 "No formula repair or whole-workbook qualification is implied",
             ],
         },

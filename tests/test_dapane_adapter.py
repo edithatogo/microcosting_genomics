@@ -176,7 +176,7 @@ def test_invalid_attempt_histories_fail_closed(batches: tuple[ExtractionBatch, .
 )
 def test_missing_date_scope_or_pinned_identity_fails(changes: dict[str, str]) -> None:
     """An accepted release does not imply arbitrary date or role applicability."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r".+"):
         request(**changes)
 
 
@@ -197,14 +197,14 @@ def test_signed_but_inconsistent_projection_is_rejected(mutation: str) -> None:
         declaration["release_snapshot"]["quotes"][0]["status"] = "candidate"
     else:
         declaration["release_snapshot"]["release_id"] = "different"
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r".+"):
         request(declaration=declaration)
 
 
 @pytest.mark.parametrize("raw", ['{"x":1,"x":2}', '{"x":1.2}', '{"x":NaN}', '{"x":Infinity}'])
 def test_ambiguous_json_transport_is_rejected(raw: str) -> None:
     """Duplicate keys and binary/nonfinite tokens never become accepted artifacts."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r".+"):
         manual_dna_extraction_request(
             raw, release_digest="0" * 64, quote_id="minute",
             batches=(ExtractionBatch("batch", ("a",)),),
@@ -218,10 +218,10 @@ def test_old_entry_point_is_an_explicit_passthrough() -> None:
     class Legacy:
         """Retain a deliberate missing legacy cell value."""
 
-        def get_cell_value(self, sheet: str, cell: str) -> object:
+        def get_cell_value(self, sheet_name: str, cell_ref: str) -> object:
             """Return the original fixture value without transformation."""
-            checks.require_equal(sheet, "Labour - Usage - VCGS")
-            return {"AB22": "lab", "AB23": None, "AB24": "subtotal"}[cell]
+            checks.require_equal(sheet_name, "Labour - Usage - VCGS")
+            return {"AB22": "lab", "AB23": None, "AB24": "subtotal"}[cell_ref]
     checks.require_equal(
         historical_manual_extraction(Legacy()),
         {"AB22": "lab", "AB23": None, "AB24": "subtotal"},
@@ -265,4 +265,13 @@ def test_unbounded_or_nonfinite_source_amounts_fail_closed(amount: str) -> None:
     declaration = artifact()
     declaration["release_snapshot"]["quotes"][0]["amount"] = amount
     with pytest.raises(ValueError, match="amount"):
+        request(declaration=declaration)
+
+
+@pytest.mark.parametrize("version", [None, True, "1", 2])
+def test_unknown_source_registry_versions_are_not_interpreted(version: object) -> None:
+    """A rehashed artifact cannot silently opt into a different registry schema."""
+    declaration = artifact()
+    declaration["release_snapshot"]["sources"]["schema_version"] = version
+    with pytest.raises(ValueError, match="registry version"):
         request(declaration=declaration)
