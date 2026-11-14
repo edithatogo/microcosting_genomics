@@ -259,7 +259,7 @@ def test_scope_strings_cannot_pass_substring_membership(field: str) -> None:
         request(declaration=declaration)
 
 
-@pytest.mark.parametrize("amount", ["1E+97", "1E-37", "-0", "NaN", "Infinity"])
+@pytest.mark.parametrize("amount", ["1E+97", "1E-37", "-0", "NaN", "Infinity", "not-a-number"])
 def test_unbounded_or_nonfinite_source_amounts_fail_closed(amount: str) -> None:
     """A signed artifact cannot waive the shared exact numeric contract."""
     declaration = artifact()

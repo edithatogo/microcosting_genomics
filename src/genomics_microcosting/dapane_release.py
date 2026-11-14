@@ -4,7 +4,7 @@
 import json
 import re
 from datetime import date, datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from hashlib import sha256
 from typing import Any, cast
 from urllib.parse import urlsplit
@@ -138,7 +138,11 @@ def _string_array(value: object) -> list[str]:
 
 def _decimal_projection(value: object) -> str:
     _require(isinstance(value, str), "Source amount must be an exact decimal string")
-    number = Decimal(cast("str", value))
+    try:
+        number = Decimal(cast("str", value))
+    except InvalidOperation as error:
+        message = "Source amount must be a valid exact decimal string"
+        raise ValueError(message) from error
     _require(
         number.is_finite() and not number.is_signed(),
         "Source amount must be finite and nonnegative",
