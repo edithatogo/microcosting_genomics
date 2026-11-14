@@ -117,7 +117,7 @@ def test_shared_batch_retains_two_physical_resource_uses() -> None:
     checks.require_equal(len(result["allocations"]), 1)
     checks.require_equal(
         result["allocations"][0]["weights"],
-        [{"object_id": "specimen:" + name, "weight": "1"} for name in ("a", "b", "c")],
+        [{"object_id": name, "weight": "1"} for name in ("a", "b", "c")],
     )
     checks.require_equal(result["quotes"][0]["components"], ["base_salary"])
     checks.require_equal(result["quotes"][0]["per_quantity"], "60")
