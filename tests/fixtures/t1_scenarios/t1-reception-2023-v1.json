@@ -1,0 +1,29 @@
+{
+  "version": "t1-reception-2023-v1",
+  "status": "test fixture using published workbook cells",
+  "base_scenario": "t1-integrated-2023-v1",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "change": [
+    {
+      "sheet": "Detailed Table",
+      "cell": "M537",
+      "source_formula": "='Labour - Usage - VCGS'!AA17",
+      "proposed_formula": "='Labour - Usage - VCGS'!AA18"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "N537",
+      "source_formula": "='Labour - Usage - VCGS'!AB17",
+      "proposed_formula": "='Labour - Usage - VCGS'!AB18"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "O537",
+      "source_formula": "='Labour - Usage - VCGS'!AC17",
+      "proposed_formula": "='Labour - Usage - VCGS'!AC18"
+    }
+  ],
+  "limits": [
+    "Verify selection of the alternative reception allocation and preservation of other source formulas."
+  ]
+}

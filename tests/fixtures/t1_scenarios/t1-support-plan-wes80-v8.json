@@ -1,0 +1,15 @@
+{
+  "version": "t1-support-plan-wes80-v8",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "conditional diagnostic, not an established historical correction",
+  "constituent_sha256": {
+    "t1-wes80-coverage-v7.json": "1b9bbbde25d379b48f73606358417c9178c3674d3ba5083e7662f59bd9e5c3e1",
+    "t1-support-plan-af26-v1.json": "7457b3d099142bb82f7509b32d409b0d242c3d218511ff789480a5e7122dcc6b"
+  },
+  "limitations": [
+    "AF26 denominator is an explicitly selected WES 80x throughput basis, not an observed original denominator.",
+    "AF26 retains the K26 straight-line numerator; active support-plan costs use a distinct L26 PMT basis.",
+    "Inherited v7 assumptions, missing denominators, uncertain input costs and native Excel parity remain unresolved.",
+    "Preserves the original and published results; no current costing."
+  ]
+}

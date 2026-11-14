@@ -1,0 +1,8 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>edithatogo/renovate-config"],
+  "dependencyDashboard": true,
+  "pre-commit": {
+    "enabled": true
+  }
+}

@@ -1,3 +1,4 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Append a code cell to the Microcosting analysis notebook.
 
 The notebook is expected to reside in the ``notebooks`` directory at
@@ -12,7 +13,7 @@ NOTEBOOK_DIR = Path(__file__).resolve().parents[0] / "notebooks"
 DATA_DIR = Path(__file__).resolve().parents[0] / "data"
 notebook_path = NOTEBOOK_DIR / "Microcosting_Analysis.ipynb"
 
-with open(notebook_path, "r") as f:
+with Path(notebook_path).open() as f:
     notebook = json.load(f)
 
 new_cell = {
@@ -51,11 +52,14 @@ new_cell = {
         "\n",
         "# Print the results\n",
         "print(f'Gamma Distribution Parameters: shape={shape}, scale={scale}')\n",
-        "print(f'Centiles: 2.5th={centiles[0]}, 50th={centiles[1]}, 97.5th={centiles[2]}')\n",
+        (
+            "print(f'Centiles: 2.5th={centiles[0]}, 50th={centiles[1]}, "
+            "97.5th={centiles[2]}')\n"
+        ),
     ],
 }
 
 notebook["cells"].append(new_cell)
 
-with open(notebook_path, "w") as f:
+with Path(notebook_path).open("w") as f:
     json.dump(notebook, f, indent=1)

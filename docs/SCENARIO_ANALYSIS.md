@@ -37,8 +37,7 @@ analyzer = AdvancedScenarioAnalyzer()
 
 # Perform DSA
 dsa_results = analyzer.perform_deterministic_analysis(
-    baseline_data=baseline_df,
-    parameters=dsa_parameters
+    baseline_data=baseline_df, parameters=dsa_parameters
 )
 ```
 
@@ -55,9 +54,7 @@ Support for Monte Carlo simulation and probabilistic modeling:
 ```python
 # Perform PSA
 psa_results = analyzer.perform_probabilistic_analysis(
-    baseline_data=baseline_df,
-    parameters=psa_parameters,
-    simulation_count=1000
+    baseline_data=baseline_df, parameters=psa_parameters, simulation_count=1000
 )
 ```
 
@@ -76,15 +73,12 @@ Support for user-defined scenarios:
 custom_scenario = {
     "name": "High_volume_scenario",
     "description": "Analysis with 2x test volume",
-    "parameters": {
-        "test_volume_multiplier": 2.0
-    }
+    "parameters": {"test_volume_multiplier": 2.0},
 }
 
 # Perform custom analysis
 custom_results = analyzer.perform_custom_scenario(
-    baseline_data=baseline_df,
-    scenario=custom_scenario
+    baseline_data=baseline_df, scenario=custom_scenario
 )
 ```
 
@@ -115,13 +109,12 @@ dsa_parameters = {
     "labor_rates": dm.load_sheet("DSA - Labor Prices"),
     "equipment_throughput": dm.load_sheet("DSA - Equipment Throughput"),
     "overheads": dm.load_sheet("DSA - Overheads"),
-    "consumable_discounts": dm.load_sheet("DSA - Consumable Discounts")
+    "consumable_discounts": dm.load_sheet("DSA - Consumable Discounts"),
 }
 
 # Perform DSA
 dsa_results = analyzer.perform_deterministic_analysis(
-    baseline_data=baseline_df,
-    parameters=dsa_parameters
+    baseline_data=baseline_df, parameters=dsa_parameters
 )
 
 # Save results
@@ -139,7 +132,7 @@ psa_results = analyzer.perform_probabilistic_analysis(
     baseline_data=baseline_df,
     parameters=psa_parameters,
     simulation_count=5000,
-    random_seed=42
+    random_seed=42,
 )
 
 # Generate summary statistics
@@ -159,8 +152,8 @@ scenarios = [
         "parameters": {
             "labor_cost_multiplier": 0.8,
             "equipment_cost_multiplier": 0.9,
-            "consumable_cost_multiplier": 0.85
-        }
+            "consumable_cost_multiplier": 0.85,
+        },
     },
     {
         "name": "Pessimistic",
@@ -168,18 +161,17 @@ scenarios = [
         "parameters": {
             "labor_cost_multiplier": 1.2,
             "equipment_cost_multiplier": 1.1,
-            "consumable_cost_multiplier": 1.15
-        }
-    }
+            "consumable_cost_multiplier": 1.15,
+        },
+    },
 ]
 
 # Perform all custom scenarios
 for scenario in scenarios:
     results = analyzer.perform_custom_scenario(
-        baseline_data=baseline_df,
-        scenario=scenario
+        baseline_data=baseline_df, scenario=scenario
     )
-    
+
     # Save individual results
     dm.save_sheet(f"Scenario_{scenario['name']}", results)
 ```
@@ -206,7 +198,7 @@ Examination of the effect of varying one parameter at a time:
 one_way_results = analyzer.perform_one_way_sensitivity(
     baseline_data=baseline_df,
     parameter_name="labor_rate",
-    parameter_values=[0.8, 0.9, 1.0, 1.1, 1.2]
+    parameter_values=[0.8, 0.9, 1.0, 1.1, 1.2],
 )
 ```
 
@@ -219,8 +211,8 @@ multi_way_results = analyzer.perform_multi_way_sensitivity(
     baseline_data=baseline_df,
     parameters={
         "labor_rate": [0.9, 1.0, 1.1],
-        "equipment_utilization": [0.8, 1.0, 1.2]
-    }
+        "equipment_utilization": [0.8, 1.0, 1.2],
+    },
 )
 ```
 
@@ -232,7 +224,7 @@ Determination of parameter values at which decisions change:
 threshold_results = analyzer.perform_threshold_analysis(
     baseline_data=baseline_df,
     parameter_name="labor_rate",
-    decision_function=custom_decision_function
+    decision_function=custom_decision_function,
 )
 ```
 
@@ -262,8 +254,7 @@ Calculation of sensitivity measures:
 ```python
 # Calculate sensitivity indices
 sensitivity_indices = analyzer.calculate_sensitivity_indices(
-    psa_results,
-    parameters=psa_parameters
+    psa_results, parameters=psa_parameters
 )
 ```
 

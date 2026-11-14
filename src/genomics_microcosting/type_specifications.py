@@ -1,16 +1,24 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Type Specifications for Genomics Microcosting.
 
 This module defines standardized type specifications for different column categories
 in the microcosting system, ensuring consistent data handling and validation.
 """
 
-from typing import Dict, Any, List, Optional, Union
+import math
+from dataclasses import dataclass
 from enum import Enum
-import pandas as pd
+from typing import SupportsFloat, SupportsIndex
+
+import polars as pl
+
+_PERCENTAGE_MAXIMUM = 100
+_MAXIMUM_INVALID_SAMPLES = 3
 
 
 class DataType(Enum):
     """Enumeration of supported data types."""
+
     STRING = "string"
     INTEGER = "integer"
     FLOAT = "float"
@@ -23,6 +31,7 @@ class DataType(Enum):
 
 class ColumnCategory(Enum):
     """Enumeration of column categories for microcosting data."""
+
     IDENTIFIER = "identifier"  # Test names, categories, etc.
     COST = "cost"  # Monetary values
     QUANTITY = "quantity"  # Counts, volumes, etc.
@@ -31,42 +40,24 @@ class ColumnCategory(Enum):
     CALCULATION = "calculation"  # Computed values
 
 
+@dataclass(eq=False, repr=False, match_args=False)
 class TypeSpecification:
     """Specification for a column's data type and validation rules."""
 
-    def __init__(
-        self,
-        data_type: DataType,
-        category: ColumnCategory,
-        nullable: bool = True,
-        min_value: Optional[Union[int, float]] = None,
-        max_value: Optional[Union[int, float]] = None,
-        unit: Optional[str] = None,
-        description: Optional[str] = None,
-        validation_rules: Optional[List[str]] = None
-    ):
-        """Initialize type specification.
+    data_type: DataType
+    category: ColumnCategory
+    nullable: bool = True
+    min_value: float | None = None
+    max_value: float | None = None
+    unit: str | None = None
+    description: str | None = None
+    validation_rules: list[str] | None = None
 
-        Args:
-            data_type: The expected data type
-            category: The column category
-            nullable: Whether null values are allowed
-            min_value: Minimum allowed value (for numeric types)
-            max_value: Maximum allowed value (for numeric types)
-            unit: Unit of measurement (e.g., "AUD", "hours", "%")
-            description: Human-readable description
-            validation_rules: List of additional validation rule names
-        """
-        self.data_type = data_type
-        self.category = category
-        self.nullable = nullable
-        self.min_value = min_value
-        self.max_value = max_value
-        self.unit = unit
-        self.description = description
-        self.validation_rules = validation_rules or []
+    def __post_init__(self) -> None:
+        """Give specifications with omitted or empty rules an independent list."""
+        self.validation_rules = self.validation_rules or []
 
-    def validate_value(self, value: Any) -> bool:
+    def validate_value(self, value: object) -> bool:
         """Validate a single value against this specification.
 
         Args:
@@ -74,58 +65,75 @@ class TypeSpecification:
 
         Returns:
             True if valid, False otherwise
+
         """
         # Check for null values
-        if pd.isna(value):
+        if value is None or (isinstance(value, float) and math.isnan(value)):
             return self.nullable
 
-        # Type-specific validation
-        if self.data_type == DataType.INTEGER:
-            if not isinstance(value, int) and not (isinstance(value, float) and value.is_integer()):
-                return False
-            if self.min_value is not None and value < self.min_value:
-                return False
-            if self.max_value is not None and value > self.max_value:
-                return False
+        match self.data_type:
+            case DataType.INTEGER:
+                return self._valid_integer(value)
+            case DataType.FLOAT | DataType.CURRENCY | DataType.PERCENTAGE:
+                return self._valid_number(value)
+            case DataType.STRING:
+                return isinstance(value, str)
+            case DataType.BOOLEAN:
+                return isinstance(value, bool) or value in [
+                    0,
+                    1,
+                    "0",
+                    "1",
+                    "True",
+                    "False",
+                ]
+            case _:
+                return True
 
-        elif self.data_type in [DataType.FLOAT, DataType.CURRENCY]:
-            try:
-                float_value = float(value)
-                if self.min_value is not None and float_value < self.min_value:
-                    return False
-                if self.max_value is not None and float_value > self.max_value:
-                    return False
-            except (ValueError, TypeError):
-                return False
+    def _valid_integer(self, value: object) -> bool:
+        if isinstance(value, int) or (isinstance(value, float) and value.is_integer()):
+            return self._within_declared_bounds(value)
+        return False
 
-        elif self.data_type == DataType.PERCENTAGE:
-            try:
-                float_value = float(value)
-                if self.min_value is not None and float_value < self.min_value:
-                    return False
-                if self.max_value is not None and float_value > self.max_value:
-                    return False
-                # Percentages should typically be between 0 and 100
-                if float_value < 0 or float_value > 100:
-                    return False
-            except (ValueError, TypeError):
-                return False
+    def _valid_number(self, value: object) -> bool:
+        if not isinstance(value, (str, bytes, bytearray, SupportsFloat, SupportsIndex)):
+            return False
+        try:
+            number = float(value)
+        except ValueError, TypeError:
+            return False
+        if self.data_type == DataType.PERCENTAGE and (
+            number < 0 or number > _PERCENTAGE_MAXIMUM
+        ):
+            return False
+        return self._within_declared_bounds(number)
 
-        elif self.data_type == DataType.STRING:
-            if not isinstance(value, str):
-                return False
+    def _within_declared_bounds(self, value: float) -> bool:
+        return not (
+            (self.min_value is not None and value < self.min_value)
+            or (self.max_value is not None and value > self.max_value)
+        )
 
-        elif self.data_type == DataType.BOOLEAN:
-            if not isinstance(value, bool) and value not in [0, 1, "0", "1", "True", "False"]:
-                return False
-
-        return True
+    def get_polars_dtype(self) -> pl.DataType | type[pl.DataType]:
+        """Return the native dtype for the declared field without converting data."""
+        mapping: dict[DataType, pl.DataType | type[pl.DataType]] = {
+            DataType.STRING: pl.String,
+            DataType.INTEGER: pl.Int64,
+            DataType.FLOAT: pl.Float64,
+            DataType.CURRENCY: pl.Float64,
+            DataType.PERCENTAGE: pl.Float64,
+            DataType.BOOLEAN: pl.Boolean,
+            DataType.DATE: pl.Date,
+            DataType.CATEGORICAL: pl.Categorical,
+        }
+        return mapping[self.data_type]
 
     def get_pandas_dtype(self) -> str:
-        """Get the corresponding pandas dtype for this specification.
+        """Return the historical dtype label for metadata compatibility only.
 
         Returns:
             Pandas dtype string
+
         """
         type_mapping = {
             DataType.STRING: "string",
@@ -135,7 +143,7 @@ class TypeSpecification:
             DataType.PERCENTAGE: "Float64",
             DataType.BOOLEAN: "boolean",
             DataType.DATE: "datetime64[ns]",
-            DataType.CATEGORICAL: "category"
+            DataType.CATEGORICAL: "category",
         }
         return type_mapping.get(self.data_type, "string")
 
@@ -147,27 +155,26 @@ STANDARD_TYPE_SPECS = {
         data_type=DataType.STRING,
         category=ColumnCategory.IDENTIFIER,
         nullable=False,
-        description="Test or assay name"
+        description="Test or assay name",
     ),
     "category": TypeSpecification(
         data_type=DataType.CATEGORICAL,
         category=ColumnCategory.IDENTIFIER,
         nullable=False,
-        description="Test category"
+        description="Test category",
     ),
     "sub_category": TypeSpecification(
         data_type=DataType.CATEGORICAL,
         category=ColumnCategory.IDENTIFIER,
         nullable=True,
-        description="Test sub-category"
+        description="Test sub-category",
     ),
     "step": TypeSpecification(
         data_type=DataType.STRING,
         category=ColumnCategory.IDENTIFIER,
         nullable=True,
-        description="Process step"
+        description="Process step",
     ),
-
     # Cost columns
     "unit_cost_aud_per_unit": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -175,7 +182,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD per unit",
-        description="Final calculated cost per test unit"
+        description="Final calculated cost per test unit",
     ),
     "price_aud_per_unit": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -183,7 +190,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD per unit",
-        description="Base price per unit"
+        description="Base price per unit",
     ),
     "list_price_aud": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -191,7 +198,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD",
-        description="Manufacturer's list price"
+        description="Manufacturer's list price",
     ),
     "annualized_cost_aud": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -199,9 +206,8 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD per year",
-        description="Annualized equipment cost"
+        description="Annualized equipment cost",
     ),
-
     # Quantity columns
     "quantity_per_test": TypeSpecification(
         data_type=DataType.FLOAT,
@@ -209,7 +215,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="units per test",
-        description="Resource quantity required per test"
+        description="Resource quantity required per test",
     ),
     "monthly_volume": TypeSpecification(
         data_type=DataType.INTEGER,
@@ -217,7 +223,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="tests per month",
-        description="Monthly test volume"
+        description="Monthly test volume",
     ),
     "useful_life_years": TypeSpecification(
         data_type=DataType.INTEGER,
@@ -225,9 +231,8 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=1,
         unit="years",
-        description="Equipment useful life in years"
+        description="Equipment useful life in years",
     ),
-
     # Rate columns
     "hourly_rate_aud": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -235,7 +240,7 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD per hour",
-        description="Labor hourly rate"
+        description="Labor hourly rate",
     ),
     "annual_salary_aud": TypeSpecification(
         data_type=DataType.CURRENCY,
@@ -243,32 +248,31 @@ STANDARD_TYPE_SPECS = {
         nullable=True,
         min_value=0,
         unit="AUD per year",
-        description="Annual labor salary"
+        description="Annual labor salary",
     ),
-
     # Metadata columns
     "labor_type": TypeSpecification(
         data_type=DataType.CATEGORICAL,
         category=ColumnCategory.METADATA,
         nullable=False,
-        description="Type of labor"
+        description="Type of labor",
     ),
     "equipment_name": TypeSpecification(
         data_type=DataType.STRING,
         category=ColumnCategory.METADATA,
         nullable=False,
-        description="Equipment name or description"
+        description="Equipment name or description",
     ),
     "test_type": TypeSpecification(
         data_type=DataType.CATEGORICAL,
         category=ColumnCategory.METADATA,
         nullable=False,
-        description="Type of test"
-    )
+        description="Type of test",
+    ),
 }
 
 
-def get_type_spec(column_name: str) -> Optional[TypeSpecification]:
+def get_type_spec(column_name: str) -> TypeSpecification | None:
     """Get the type specification for a column name.
 
     Args:
@@ -276,6 +280,7 @@ def get_type_spec(column_name: str) -> Optional[TypeSpecification]:
 
     Returns:
         TypeSpecification if found, None otherwise
+
     """
     # Case insensitive lookup
     column_name_lower = column_name.lower()
@@ -285,7 +290,10 @@ def get_type_spec(column_name: str) -> Optional[TypeSpecification]:
     return None
 
 
-def validate_dataframe_types(df: pd.DataFrame, type_specs: Dict[str, TypeSpecification]) -> List[str]:
+def validate_dataframe_types(
+    df: pl.DataFrame,
+    type_specs: dict[str, TypeSpecification],
+) -> list[str]:
     """Validate all columns in a DataFrame against their type specifications.
 
     Args:
@@ -294,8 +302,9 @@ def validate_dataframe_types(df: pd.DataFrame, type_specs: Dict[str, TypeSpecifi
 
     Returns:
         List of validation error messages
+
     """
-    errors = []
+    errors: list[str] = []
 
     for col_name, spec in type_specs.items():
         if col_name not in df.columns:
@@ -305,13 +314,15 @@ def validate_dataframe_types(df: pd.DataFrame, type_specs: Dict[str, TypeSpecifi
 
         series = df[col_name]
         invalid_count = 0
-        invalid_samples = []
+        invalid_samples: list[str] = []
 
-        for idx, value in series.items():
+        for idx, value in enumerate(series.to_list()):
             if not spec.validate_value(value):
                 invalid_count += 1
-                if len(invalid_samples) < 3:  # Collect up to 3 examples
-                    invalid_samples.append(f"row {idx}: {value} ({type(value).__name__})")
+                if len(invalid_samples) < _MAXIMUM_INVALID_SAMPLES:
+                    invalid_samples.append(
+                        f"row {idx}: {value} ({type(value).__name__})",
+                    )
 
         if invalid_count > 0:
             error_msg = f"Column '{col_name}' has {invalid_count} invalid values"
@@ -322,7 +333,10 @@ def validate_dataframe_types(df: pd.DataFrame, type_specs: Dict[str, TypeSpecifi
     return errors
 
 
-def apply_type_conversions(df: pd.DataFrame, type_specs: Dict[str, TypeSpecification]) -> pd.DataFrame:
+def apply_type_conversions(
+    df: pl.DataFrame,
+    type_specs: dict[str, TypeSpecification],
+) -> pl.DataFrame:
     """Apply type conversions to DataFrame columns based on specifications.
 
     Args:
@@ -331,42 +345,63 @@ def apply_type_conversions(df: pd.DataFrame, type_specs: Dict[str, TypeSpecifica
 
     Returns:
         DataFrame with converted types
+
     """
-    df_converted = df.copy()
-
-    for col_name, spec in type_specs.items():
-        if col_name not in df_converted.columns:
+    df_converted = df.clone()
+    for name, spec in type_specs.items():
+        if name not in df.columns:
             continue
-
+        expression = _column_conversion(df, name, spec.data_type)
+        if expression is None:
+            continue
         try:
-            if spec.data_type == DataType.CURRENCY:
-                # Remove currency symbols and convert to float
-                df_converted[col_name] = (
-                    df_converted[col_name]
-                    .astype(str)
-                    .str.replace(r'[\$,]', '', regex=True)
-                    .astype('Float64')
-                )
-            elif spec.data_type == DataType.PERCENTAGE:
-                # Remove percentage symbols and convert to float
-                df_converted[col_name] = (
-                    df_converted[col_name]
-                    .astype(str)
-                    .str.replace(r'[%]', '', regex=True)
-                    .astype('Float64')
-                )
-            elif spec.data_type == DataType.INTEGER:
-                df_converted[col_name] = pd.to_numeric(df_converted[col_name], errors='coerce').astype('Int64')
-            elif spec.data_type == DataType.FLOAT:
-                df_converted[col_name] = pd.to_numeric(df_converted[col_name], errors='coerce').astype('Float64')
-            elif spec.data_type == DataType.STRING:
-                df_converted[col_name] = df_converted[col_name].astype('string')
-            elif spec.data_type == DataType.BOOLEAN:
-                df_converted[col_name] = df_converted[col_name].astype('boolean')
-            elif spec.data_type == DataType.CATEGORICAL:
-                df_converted[col_name] = df_converted[col_name].astype('category')
-        except (ValueError, TypeError) as e:
-            # Log warning but don't fail - keep original data
-            print(f"Warning: Could not convert column '{col_name}' to {spec.data_type.value}: {e}")
-
+            df_converted = df_converted.with_columns(expression.alias(name))
+        except pl.exceptions.PolarsError, ValueError, TypeError:
+            # Retain the complete original column, matching legacy failure semantics.
+            continue
     return df_converted
+
+
+def _column_conversion(
+    df: pl.DataFrame,
+    name: str,
+    kind: DataType,
+) -> pl.Expr | None:
+    expression = pl.col(name)
+    if kind == DataType.CURRENCY:
+        expression = (
+            expression.cast(pl.String).str.replace_all(r"[\$,]", "").cast(pl.Float64)
+        )
+    elif kind == DataType.PERCENTAGE:
+        expression = (
+            expression.cast(pl.String).str.replace_all("%", "").cast(pl.Float64)
+        )
+    elif kind == DataType.INTEGER:
+        return _integer_conversion(df, name)
+    elif kind == DataType.FLOAT:
+        expression = expression.cast(pl.Float64, strict=False)
+    elif kind == DataType.STRING:
+        expression = expression.cast(pl.String)
+    elif kind == DataType.BOOLEAN:
+        values = df[name].drop_nulls()
+        if (df[name].dtype != pl.Boolean) and (
+            not df[name].dtype.is_numeric() or not values.is_in([0, 1]).all()
+        ):
+            return None
+        expression = expression.cast(pl.Boolean)
+    elif kind == DataType.CATEGORICAL:
+        expression = expression.cast(pl.String).cast(pl.Categorical)
+    else:
+        return None
+    return expression
+
+
+def _integer_conversion(df: pl.DataFrame, name: str) -> pl.Expr | None:
+    expression = pl.col(name).cast(pl.Float64, strict=False)
+    try:
+        values = df.select(expression.alias(name))[name].drop_nulls()
+    except pl.exceptions.PolarsError:
+        return None
+    if ((values % 1) != 0).any():
+        return None
+    return expression.cast(pl.Int64)

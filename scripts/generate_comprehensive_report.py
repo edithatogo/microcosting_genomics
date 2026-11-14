@@ -1,41 +1,42 @@
 #!/usr/bin/env python3
-"""
-Script to generate a comprehensive report integrating all microcosting analyses.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Script to generate a comprehensive report integrating all microcosting analyses."""
 
+import logging
 import sys
 from pathlib import Path
 
-# Add the src directory to the path so we can import our modules
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
+from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter
+from genomics_microcosting.data_manager import DataManager
 
-from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter  # noqa: E402
-from genomics_microcosting.data_manager import DataManager  # noqa: E402
+logger = logging.getLogger(__name__)
 
 
-def main():
-    """Main function to generate comprehensive report."""
-    print("Generating comprehensive microcosting analysis report...")
-    
+def main() -> None:
+    """Generate comprehensive report."""
+    sys.stdout.write("Generating comprehensive microcosting analysis report..." + "\n")
+
     try:
         # Initialize data manager
         data_manager = DataManager()
-        
+
         # Initialize reporter
         reporter = ComprehensiveReporter(data_manager)
-        
+
         # Generate integrated report
         report = reporter.generate_integrated_report()
-        print(report)
-        
+        sys.stdout.write(str(report) + "\n")
+
         # Save report to file
-        output_dir = Path(__file__).resolve().parents[1] / "reports" / "comprehensive_analysis"
+        output_dir = (
+            Path(__file__).resolve().parents[1] / "reports" / "comprehensive_analysis"
+        )
         reporter.generate_integrated_report(output_dir=str(output_dir))
-        print(f"Comprehensive report saved to {output_dir}")
-        
+        sys.stdout.write(f"Comprehensive report saved to {output_dir}" + "\n")
+
     except Exception as e:
-        print(f"Error in comprehensive reporting: {e}")
+        logger.exception("Could not complete generate comprehensive report")
+        sys.stdout.write(f"Error in comprehensive reporting: {e}" + "\n")
         sys.exit(1)
 
 

@@ -1,42 +1,54 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Log prepared and calculated table structure for local diagnostics."""
+
+import logging
+
+import polars as pl
+
 from genomics_microcosting.calculation_engine import CalculationEngine
 from genomics_microcosting.sheet_manager import SheetManager
-import pandas as pd
 
-def main():
+logger = logging.getLogger(__name__)
+
+
+def main() -> None:
+    """Inspect native table schemas and the detailed unit-cost output."""
     # Load the ground truth data
     ground_truth_path = "data/prepared/ground_truth.parquet"
-    ground_truth_df = pd.read_parquet(ground_truth_path)
-    
-    print("Ground truth shape:", ground_truth_df.shape)
-    print("Ground truth columns:", ground_truth_df.columns.tolist())
-    
+    ground_truth_df = pl.read_parquet(ground_truth_path)
+
+    logger.info("Ground truth shape: %s", ground_truth_df.shape)
+    logger.info("Ground truth columns: %s", ground_truth_df.columns)
+
     # Initialize the CalculationEngine
     sheet_manager = SheetManager()
     engine = CalculationEngine(sheet_manager)
 
     # Run the engine to get the calculated results
     results_df, errors = engine.run_engine("Detailed Table")
-    
+
     if results_df is None:
-        print("Error: Engine returned None results")
-        print("Errors:", errors)
+        logger.error("Error: Engine returned None results")
+        logger.info("Errors: %s", errors)
         return
-    
-    print("Results shape:", results_df.shape)
-    print("Results columns (first 10):", results_df.columns.tolist()[:10])
-    
+
+    logger.info("Results shape: %s", results_df.shape)
+    logger.info("Results columns (first 10): %s", results_df.columns[:10])
+
     # Find the unit cost column
     unit_cost_col = None
     for col in results_df.columns:
-        if isinstance(col, tuple) and 'Unit Cost (AUD $/unit)' in str(col):
+        if "Unit Cost (AUD $/unit)" in col:
             unit_cost_col = col
             break
-    
-    print("Unit cost column:", unit_cost_col)
+
+    logger.info("Unit cost column: %s", unit_cost_col)
     if unit_cost_col:
-        print("Unit cost data type:", type(results_df[unit_cost_col]))
-        print("Unit cost shape:", results_df[unit_cost_col].shape)
-        print("First 5 values:", results_df[unit_cost_col].head())
+        logger.info("Unit cost data type: %s", type(results_df[unit_cost_col]))
+        logger.info("Unit cost shape: %s", results_df[unit_cost_col].shape)
+        logger.info("First 5 values: %s", results_df[unit_cost_col].head())
+
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main()

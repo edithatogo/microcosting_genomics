@@ -1,12 +1,30 @@
-import pandas as pd
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Create the synthetic formula workbook through openpyxl when explicitly run."""
 
-# Create a new Excel file with some test data
-df1 = pd.DataFrame(
-    {"col1": [1, 2, 3], "col2": [4, 5, 6], "col3": ["=A2*B2", "=A3*B3", "=A4*B4"]}
-)
+from pathlib import Path
 
-df2 = pd.DataFrame({"colA": [10, 20, 30], "colB": [40, 50, 60]})
+from openpyxl import Workbook
 
-with pd.ExcelWriter("tests/test_data.xlsx") as writer:
-    df1.to_excel(writer, sheet_name="Sheet1", index=False)
-    df2.to_excel(writer, sheet_name="Sheet2", index=False)
+
+def create_test_workbook(path: Path) -> None:
+    """Write the same two worksheets without importing pandas or running on import."""
+    workbook = Workbook()
+    first = workbook.active
+    if first is None:
+        message = "New workbook has no active worksheet"
+        raise RuntimeError(message)
+    first.title = "Sheet1"
+    first.append(["col1", "col2", "col3"])
+    for row in ((1, 4, "=A2*B2"), (2, 5, "=A3*B3"), (3, 6, "=A4*B4")):
+        first.append(row)
+    second = workbook.create_sheet("Sheet2")
+    for row in (("colA", "colB"), (10, 40), (20, 50), (30, 60)):
+        second.append(row)
+    try:
+        workbook.save(path)
+    finally:
+        workbook.close()
+
+
+if __name__ == "__main__":
+    create_test_workbook(Path("tests/test_data.xlsx"))

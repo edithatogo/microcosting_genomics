@@ -1,4 +1,8 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Export workbook sheets for inspection."""
+
 import csv
+import sys
 from pathlib import Path
 
 import openpyxl
@@ -37,18 +41,24 @@ for sheet_name in workbook_formulas.sheetnames:
 
     # Extract formulas
     formula_file_path = EXTRACTED_DIR / f"{safe_sheet_name}_formulas.csv"
-    with open(formula_file_path, "w", newline="", encoding="utf-8") as f:
+    with Path(formula_file_path).open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         for row in sheet_formulas.rows:
             writer.writerow([cell.value for cell in row])
 
     # Extract values
     value_file_path = EXTRACTED_DIR / f"{safe_sheet_name}_values.csv"
-    with open(value_file_path, "w", newline="", encoding="utf-8") as f:
+    with Path(value_file_path).open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         for row in sheet_values.rows:
             writer.writerow([cell.value for cell in row])
 
-print(
-    f"Extracted formulas and values for all {len(workbook_formulas.sheetnames)} sheets to {EXTRACTED_DIR}"
+sys.stdout.writelines(
+    (
+        (
+            "Extracted formulas and values for all "
+            f"{len(workbook_formulas.sheetnames)} sheets to {EXTRACTED_DIR}"
+        ),
+        "\n",
+    ),
 )

@@ -15,10 +15,11 @@ Welcome to the Genomics Microcosting Project! We're excited that you're interest
 ## Getting Started
 
 ### Prerequisites
-- Python 3.8 or higher
-- pip package manager
-- Git version control system
-- Virtual environment tool (venv or conda)
+
+- Python 3.15.1
+- uv
+- Git
+- Gitleaks 8.30.1
 
 ### Setting Up Development Environment
 
@@ -29,25 +30,20 @@ Welcome to the Genomics Microcosting Project! We're excited that you're interest
    cd microcosting_genomics
    ```
 
-3. Create a virtual environment:
+3. Create the repository environment and install locked dependencies.
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   uv sync --locked --python 3.15.1
+   .venv/bin/python --version
    ```
 
-4. Install development dependencies:
+4. Install pre-commit hooks.
    ```bash
-   pip install -e ".[dev]"
+   .venv/bin/pre-commit install
    ```
 
-5. Install pre-commit hooks:
+5. Verify the installation with the test suite.
    ```bash
-   pre-commit install
-   ```
-
-6. Verify installation by running tests:
-   ```bash
-   python -m pytest
+   .venv/bin/python -m pytest
    ```
 
 ## Development Workflow
@@ -129,23 +125,24 @@ Example:
 ```python
 from typing import Dict, List, Optional
 
+
 def calculate_total_cost(
-    unit_costs: List[float], 
-    quantities: List[int], 
-    discount_rate: Optional[float] = None
+    unit_costs: List[float],
+    quantities: List[int],
+    discount_rate: Optional[float] = None,
 ) -> float:
     """Calculate total cost with optional discount.
-    
+
     Args:
         unit_costs: List of unit costs
         quantities: List of quantities
         discount_rate: Optional discount rate (0.0 to 1.0)
-        
+
     Returns:
         Total cost after discount
     """
     subtotal = sum(cost * qty for cost, qty in zip(unit_costs, quantities))
-    
+
     if discount_rate is not None:
         return subtotal * (1 - discount_rate)
     return subtotal
@@ -202,18 +199,19 @@ import pytest
 import pandas as pd
 from unimelb_phd_phase_1.calculation_engine import CalculationEngine
 
+
 class TestCalculationEngine:
     """Test cases for CalculationEngine."""
-    
+
     def test_execute_simple_multiplication(self):
         """Test executing a simple multiplication formula."""
         # Arrange
         engine = CalculationEngine(MockSheetManager())
         formula = {"type": "multiplication", "operands": [2, 3]}
-        
+
         # Act
         result = engine.execute_formula(formula, "TestSheet", "A1")
-        
+
         # Assert
         assert result == 6
 ```

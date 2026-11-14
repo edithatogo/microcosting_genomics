@@ -24,16 +24,16 @@ from tests.test_load_testing import LoadTestingFramework
 # Create load tester
 load_tester = LoadTestingFramework()
 
+
 # Define test function
 def sample_analysis(df):
-    return df['Total_Cost'].sum()
+    return df["Total_Cost"].sum()
+
 
 # Run scalability test
 sizes = [1000, 5000, 10000]
 results = load_tester.run_scalability_test(
-    sizes=sizes,
-    operation_name="cost_analysis",
-    test_function=sample_analysis
+    sizes=sizes, operation_name="cost_analysis", test_function=sample_analysis
 )
 
 # View results
@@ -88,18 +88,12 @@ time_measurer = ProcessingTimeMeasurer()
 
 # Measure single execution
 measurement = time_measurer.measure_execution_time(
-    "matrix_operation",
-    np.dot,
-    matrix_a,
-    matrix_b
+    "matrix_operation", np.dot, matrix_a, matrix_b
 )
 
 # Measure multiple executions
 stats = time_measurer.measure_multiple_executions(
-    "data_processing",
-    process_data,
-    iterations=10,
-    data=test_data
+    "data_processing", process_data, iterations=10, data=test_data
 )
 
 print(f"Mean execution time: {stats['wall_time_stats']['mean']:.4f}s")
@@ -126,11 +120,7 @@ scalability_tester = ScalabilityTester()
 # Run scalability test
 sizes = [1000, 5000, 10000, 50000]
 results = scalability_tester.run_scalability_test(
-    "data_analysis",
-    analyze_data,
-    sizes,
-    "complex",
-    iterations=3
+    "data_analysis", analyze_data, sizes, "complex", iterations=3
 )
 
 # Analyze scaling behavior
@@ -313,25 +303,12 @@ Performance alerts are triggered for:
 
 ## Continuous Integration
 
-Performance tests are integrated into the CI pipeline:
+The CI test job runs the performance tests as part of the full suite. Run the
+same performance test modules locally in the locked environment.
 
-```yaml
-# .github/workflows/performance.yml
-name: Performance Testing
-on: [push, pull_request]
-jobs:
-  performance-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install dependencies
-        run: pip install -e .[dev]
-      - name: Run performance tests
-        run: python scripts/compare_performance.py
+```bash
+uv sync --locked --python 3.15.1
+.venv/bin/python -m pytest tests/test_performance.py tests/test_memory_monitoring.py tests/test_scalability.py
 ```
 
 ## Troubleshooting

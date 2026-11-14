@@ -1,0 +1,35 @@
+{
+  "version": "t1-host-overlap-v4",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "synthetic test fixture",
+  "removed": {
+    "low": 0.5,
+    "mid": 1.0,
+    "high": 2.0
+  },
+  "remaining": {
+    "low": 1.5,
+    "mid": 2.0,
+    "high": 3.0
+  },
+  "rate_per_core_hour": 3.0,
+  "genome_batch_size": 2,
+  "jobs": [
+    {
+      "cell": "A76",
+      "count": 1,
+      "cores": 1,
+      "min": 600,
+      "mean": 1200,
+      "max": 2400
+    },
+    {
+      "cell": "A100",
+      "count": 1,
+      "cores": 1,
+      "min": 600,
+      "mean": 1200,
+      "max": 2400
+    }
+  ]
+}

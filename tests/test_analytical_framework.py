@@ -1,27 +1,23 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Test suite for the analytical framework modules."""
 
 import unittest
-import sys
-from pathlib import Path
 
-# Add the src directory to the path
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
-
-from genomics_microcosting.data_manager import DataManager  # noqa: E402
-from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer  # noqa: E402
-from genomics_microcosting.dsa_analysis import DSAAnalyzer  # noqa: E402
-from genomics_microcosting.psa_analysis import PSAAnalyzer  # noqa: E402
-from genomics_microcosting.voi_analysis import VOIAnalyzer  # noqa: E402
-from genomics_microcosting.budget_impact_analysis import BudgetImpactAnalyzer  # noqa: E402
-from genomics_microcosting.break_even_analysis import BreakEvenAnalyzer  # noqa: E402
-from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter  # noqa: E402
+from genomics_microcosting.break_even_analysis import BreakEvenAnalyzer
+from genomics_microcosting.budget_impact_analysis import BudgetImpactAnalyzer
+from genomics_microcosting.comprehensive_reporting import ComprehensiveReporter
+from genomics_microcosting.cost_driver_analysis import CostDriverAnalyzer
+from genomics_microcosting.data_manager import DataManager
+from genomics_microcosting.dsa_analysis import DSAAnalyzer
+from genomics_microcosting.psa_analysis import PSAAnalyzer
+from genomics_microcosting.voi_analysis import VOIAnalyzer
+from tests.checks import require_runtime_instance
 
 
 class TestAnalyticalFramework(unittest.TestCase):
     """Test cases for the analytical framework modules."""
-    
-    def setUp(self):
+
+    def setUp(self) -> None:
         """Set up test fixtures."""
         self.data_manager = DataManager()
         self.cost_driver_analyzer = CostDriverAnalyzer(self.data_manager)
@@ -31,118 +27,106 @@ class TestAnalyticalFramework(unittest.TestCase):
         self.budget_impact_analyzer = BudgetImpactAnalyzer(self.data_manager)
         self.break_even_analyzer = BreakEvenAnalyzer(self.data_manager)
         self.comprehensive_reporter = ComprehensiveReporter(self.data_manager)
-    
-    def test_data_manager_initialization(self):
+
+    def test_data_manager_initialization(self) -> None:
         """Test that DataManager initializes correctly."""
-        self.assertIsNotNone(self.data_manager)
-        self.assertTrue(hasattr(self.data_manager, 'load_sheet'))
-        self.assertTrue(hasattr(self.data_manager, 'save_sheet'))
-    
-    def test_cost_driver_analyzer_initialization(self):
+        require_runtime_instance(self.data_manager, DataManager)
+        if not (hasattr(self.data_manager, "load_sheet")):
+            raise AssertionError
+        if not (hasattr(self.data_manager, "save_sheet")):
+            raise AssertionError
+
+    def test_cost_driver_analyzer_initialization(self) -> None:
         """Test that CostDriverAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.cost_driver_analyzer)
-        self.assertTrue(hasattr(self.cost_driver_analyzer, 'generate_cost_driver_report'))
-    
-    def test_dsa_analyzer_initialization(self):
+        require_runtime_instance(self.cost_driver_analyzer, CostDriverAnalyzer)
+        if not (hasattr(self.cost_driver_analyzer, "generate_cost_driver_report")):
+            raise AssertionError
+
+    def test_dsa_analyzer_initialization(self) -> None:
         """Test that DSAAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.dsa_analyzer)
-        self.assertTrue(hasattr(self.dsa_analyzer, 'generate_dsa_report'))
-    
-    def test_psa_analyzer_initialization(self):
+        require_runtime_instance(self.dsa_analyzer, DSAAnalyzer)
+        if not (hasattr(self.dsa_analyzer, "generate_dsa_report")):
+            raise AssertionError
+
+    def test_psa_analyzer_initialization(self) -> None:
         """Test that PSAAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.psa_analyzer)
-        self.assertTrue(hasattr(self.psa_analyzer, 'generate_psa_report'))
-    
-    def test_voi_analyzer_initialization(self):
+        require_runtime_instance(self.psa_analyzer, PSAAnalyzer)
+        if not (hasattr(self.psa_analyzer, "generate_psa_report")):
+            raise AssertionError
+
+    def test_voi_analyzer_initialization(self) -> None:
         """Test that VOIAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.voi_analyzer)
-        self.assertTrue(hasattr(self.voi_analyzer, 'generate_voi_report'))
-    
-    def test_budget_impact_analyzer_initialization(self):
+        require_runtime_instance(self.voi_analyzer, VOIAnalyzer)
+        if not (hasattr(self.voi_analyzer, "generate_voi_report")):
+            raise AssertionError
+
+    def test_budget_impact_analyzer_initialization(self) -> None:
         """Test that BudgetImpactAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.budget_impact_analyzer)
-        self.assertTrue(hasattr(self.budget_impact_analyzer, 'generate_budget_impact_report'))
-    
-    def test_break_even_analyzer_initialization(self):
+        require_runtime_instance(self.budget_impact_analyzer, BudgetImpactAnalyzer)
+        if not (hasattr(self.budget_impact_analyzer, "generate_budget_impact_report")):
+            raise AssertionError
+
+    def test_break_even_analyzer_initialization(self) -> None:
         """Test that BreakEvenAnalyzer initializes correctly."""
-        self.assertIsNotNone(self.break_even_analyzer)
-        self.assertTrue(hasattr(self.break_even_analyzer, 'generate_break_even_report'))
-    
-    def test_comprehensive_reporter_initialization(self):
+        require_runtime_instance(self.break_even_analyzer, BreakEvenAnalyzer)
+        if not (hasattr(self.break_even_analyzer, "generate_break_even_report")):
+            raise AssertionError
+
+    def test_comprehensive_reporter_initialization(self) -> None:
         """Test that ComprehensiveReporter initializes correctly."""
-        self.assertIsNotNone(self.comprehensive_reporter)
-        self.assertTrue(hasattr(self.comprehensive_reporter, 'generate_integrated_report'))
-    
-    def test_cost_driver_report_generation(self):
+        require_runtime_instance(self.comprehensive_reporter, ComprehensiveReporter)
+        if not (hasattr(self.comprehensive_reporter, "generate_integrated_report")):
+            raise AssertionError
+
+    def test_cost_driver_report_generation(self) -> None:
         """Test that cost driver report can be generated."""
-        try:
-            report = self.cost_driver_analyzer.generate_cost_driver_report()
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_dsa_report_generation(self):
+        report = self.cost_driver_analyzer.generate_cost_driver_report()
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_dsa_report_generation(self) -> None:
         """Test that DSA report can be generated."""
-        try:
-            report = self.dsa_analyzer.generate_dsa_report()
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_psa_report_generation(self):
+        report = self.dsa_analyzer.generate_dsa_report()
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_psa_report_generation(self) -> None:
         """Test that PSA report can be generated."""
-        try:
-            report = self.psa_analyzer.generate_psa_report(iterations=100)
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_voi_report_generation(self):
+        report = self.psa_analyzer.generate_psa_report(iterations=100)
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_voi_report_generation(self) -> None:
         """Test that VOI report can be generated."""
-        try:
-            report = self.voi_analyzer.generate_voi_report(iterations=100)
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_budget_impact_report_generation(self):
+        report = self.voi_analyzer.generate_voi_report(iterations=100)
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_budget_impact_report_generation(self) -> None:
         """Test that budget impact report can be generated."""
-        try:
-            report = self.budget_impact_analyzer.generate_budget_impact_report()
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_break_even_report_generation(self):
+        report = self.budget_impact_analyzer.generate_budget_impact_report()
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_break_even_report_generation(self) -> None:
         """Test that break-even report can be generated."""
-        try:
-            report = self.break_even_analyzer.generate_break_even_report()
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
-    
-    def test_comprehensive_report_generation(self):
+        report = self.break_even_analyzer.generate_break_even_report()
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
+
+    def test_comprehensive_report_generation(self) -> None:
         """Test that comprehensive report can be generated."""
-        try:
-            report = self.comprehensive_reporter.generate_integrated_report()
-            self.assertIsInstance(report, str)
-            self.assertGreater(len(report), 0)
-        except Exception as e:
-            # This might fail if data files are not available, which is expected in some environments
-            self.skipTest(f"Skipping due to data availability: {e}")
+        report = self.comprehensive_reporter.generate_integrated_report()
+        require_runtime_instance(report, str)
+        if not ((len(report)) > (0)):
+            raise AssertionError
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

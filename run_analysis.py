@@ -1,15 +1,18 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Run basic analysis on the microcosting detailed table."""
 
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import scipy.stats as stats
+from scipy import stats
 
 
 # Function to extract the last number from a string, returning NaN if not found
-def extract_last_number(s):
+def extract_last_number(s: object) -> object:
+    """Extract the final numeric token when present."""
     if isinstance(s, str):
         # This regex finds numbers, including decimals
         numbers = re.findall(r"[-+]?\d*\.?\d+", s)
@@ -33,14 +36,15 @@ unit_cost_df = df[unit_cost_cols]
 cleaned_unit_cost_df = unit_cost_df.applymap(extract_last_number)
 
 # Flatten the DataFrame to a single series and drop NaN values
-unit_cost_data = cleaned_unit_cost_df.values.flatten()
+unit_cost_data = cleaned_unit_cost_df.to_numpy().flatten()
 unit_cost_data = unit_cost_data[~np.isnan(unit_cost_data)]
 
 # Ensure we have data to fit
 if unit_cost_data.size > 0:
     # Fit a gamma distribution to the data
     shape, loc, scale = stats.gamma.fit(
-        unit_cost_data, floc=0
+        unit_cost_data,
+        floc=0,
     )  # floc=0 to fix location at 0
 
     # Perform Monte Carlo simulation
@@ -50,10 +54,18 @@ if unit_cost_data.size > 0:
     # Calculate the 2.5th, 50th, and 97.5th centiles
     centiles = np.percentile(simulations, [2.5, 50, 97.5])
 
-    print("Successfully fitted Gamma Distribution.")
-    print(f"Parameters: shape={shape:.4f}, loc={loc:.4f}, scale={scale:.4f}")
-    print(
-        f"Centiles: 2.5th={centiles[0]:.4f}, 50th={centiles[1]:.4f}, 97.5th={centiles[2]:.4f}"
+    sys.stdout.writelines(("Successfully fitted Gamma Distribution.", "\n"))
+    sys.stdout.writelines(
+        (f"Parameters: shape={shape:.4f}, loc={loc:.4f}, scale={scale:.4f}", "\n"),
+    )
+    sys.stdout.writelines(
+        (
+            (
+                "Centiles: 2.5th="
+                f"{centiles[0]:.4f}, 50th={centiles[1]:.4f}, 97.5th={centiles[2]:.4f}"
+            ),
+            "\n",
+        ),
     )
 else:
-    print("No valid unit cost data found to perform analysis.")
+    sys.stdout.writelines(("No valid unit cost data found to perform analysis.", "\n"))

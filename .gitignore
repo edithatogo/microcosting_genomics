@@ -123,3 +123,10 @@ debug_*.txt
 debug_*.csv
 session.txt
 validation_output.txt
+
+# Private workbook runs, local validation evidence and release scanning output
+.private-runs/
+
+# Local mutation results and incremental state
+.gremlins_cache/
+coverage/gremlins/

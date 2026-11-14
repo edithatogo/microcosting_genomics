@@ -95,8 +95,11 @@ class GenomicModelConfig:
 
     def __init__(self, model_type):
         self.base_categories = [
-            "Labor", "Equipment", "Consumables",
-            "Overheads", "Data Analysis"
+            "Labor",
+            "Equipment",
+            "Consumables",
+            "Overheads",
+            "Data Analysis",
         ]
         self.model_specific = self._get_model_specific(model_type)
 
@@ -121,6 +124,7 @@ class GenomicModelConfig:
 import pandas as pd
 from pathlib import Path
 from typing import Dict, List
+
 
 class ModelStandardizer:
     """Standardize categories and subcategories across models."""
@@ -152,18 +156,24 @@ class ModelStandardizer:
 
         return df
 
-    def _apply_category_mappings(self, df: pd.DataFrame, model_name: str) -> pd.DataFrame:
+    def _apply_category_mappings(
+        self, df: pd.DataFrame, model_name: str
+    ) -> pd.DataFrame:
         """Map model-specific categories to standard ones."""
         if model_name in self.category_mappings:
             mapping = self.category_mappings[model_name]
-            df['Category'] = df['Category'].map(mapping).fillna(df['Category'])
+            df["Category"] = df["Category"].map(mapping).fillna(df["Category"])
         return df
 
-    def _apply_subcategory_mappings(self, df: pd.DataFrame, model_name: str) -> pd.DataFrame:
+    def _apply_subcategory_mappings(
+        self, df: pd.DataFrame, model_name: str
+    ) -> pd.DataFrame:
         """Map model-specific subcategories to standard ones."""
         if model_name in self.subcategory_mappings:
             mapping = self.subcategory_mappings[model_name]
-            df['Sub-Category'] = df['Sub-Category'].map(mapping).fillna(df['Sub-Category'])
+            df["Sub-Category"] = (
+                df["Sub-Category"].map(mapping).fillna(df["Sub-Category"])
+            )
         return df
 
     def _validate_against_standards(self, df: pd.DataFrame, model_name: str):
@@ -176,11 +186,9 @@ class ModelStandardizer:
         return {
             "genome-sequencing-trio": {
                 "Compute Costs": "Equipment",
-                "Storage": "Equipment"
+                "Storage": "Equipment",
             },
-            "panel": {
-                "Enrichment": "Consumables"
-            }
+            "panel": {"Enrichment": "Consumables"},
         }
 
     def _load_subcategory_mappings(self) -> Dict[str, Dict[str, str]]:
@@ -188,7 +196,7 @@ class ModelStandardizer:
         return {
             "genome-sequencing-trio": {
                 "AWS Compute": "Cloud Compute",
-                "Local Storage": "Storage"
+                "Local Storage": "Storage",
             }
         }
 ```
@@ -241,6 +249,7 @@ from typing import Dict, Any
 import pandas as pd
 from pathlib import Path
 
+
 class GenomicLabTemplate:
     """Template generator for genomic lab inputs."""
 
@@ -260,27 +269,23 @@ class GenomicLabTemplate:
 
     def validate_user_input(self, user_data: pd.DataFrame) -> Dict[str, Any]:
         """Validate user-provided data against standards."""
-        validation_results = {
-            'valid': True,
-            'warnings': [],
-            'errors': []
-        }
+        validation_results = {"valid": True, "warnings": [], "errors": []}
 
         # Check for required categories
-        required_cats = self.required_fields['categories']
-        user_cats = set(user_data['Category'].unique())
+        required_cats = self.required_fields["categories"]
+        user_cats = set(user_data["Category"].unique())
 
         missing_cats = required_cats - user_cats
         if missing_cats:
-            validation_results['errors'].append(
+            validation_results["errors"].append(
                 f"Missing required categories: {missing_cats}"
             )
-            validation_results['valid'] = False
+            validation_results["valid"] = False
 
         # Check for non-standard entries
         extra_cats = user_cats - set(required_cats)
         if extra_cats:
-            validation_results['warnings'].append(
+            validation_results["warnings"].append(
                 f"Non-standard categories found: {extra_cats}"
             )
 
@@ -289,13 +294,13 @@ class GenomicLabTemplate:
     def _get_required_fields(self) -> Dict[str, Any]:
         """Get required fields for validation."""
         return {
-            'categories': ['Labor', 'Equipment', 'Consumables', 'Overheads'],
-            'subcategories': {
-                'Labor': ['Technician', 'Bioinformatician', 'Scientist'],
-                'Equipment': ['Sequencer', 'Storage'],
-                'Consumables': ['Reagents', 'Libraries'],
-                'Overheads': ['Facility', 'Administration']
-            }
+            "categories": ["Labor", "Equipment", "Consumables", "Overheads"],
+            "subcategories": {
+                "Labor": ["Technician", "Bioinformatician", "Scientist"],
+                "Equipment": ["Sequencer", "Storage"],
+                "Consumables": ["Reagents", "Libraries"],
+                "Overheads": ["Facility", "Administration"],
+            },
         }
 ```
 

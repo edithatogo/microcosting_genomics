@@ -279,9 +279,15 @@ Sheet loading and management.
 #### SheetManager
 ```python
 class SheetManager:
-    def __init__(self, excel_file_path=None, verbose=False, prepared_data_path=None, sheet_configs=None):
+    def __init__(
+        self,
+        excel_file_path=None,
+        verbose=False,
+        prepared_data_path=None,
+        sheet_configs=None,
+    ):
         """Initialize the sheet manager.
-        
+
         Args:
             excel_file_path (Path | str | None, optional): Path to the Excel file.
                 If None, loads from configuration. Defaults to None.
@@ -292,43 +298,43 @@ class SheetManager:
                 If None, uses default configuration. Defaults to None.
         """
         pass
-    
+
     def get_sheet_names(self):
         """Get list of available sheet names.
-        
+
         Returns:
             list: List of sheet names
         """
         pass
-    
+
     def get_data(self, sheet_name):
         """Get data DataFrame for a given sheet.
-        
+
         Args:
             sheet_name (str): Name of the sheet
-            
+
         Returns:
             pandas.DataFrame: Sheet data
         """
         pass
-    
+
     def get_formulas(self, sheet_name):
         """Get formulas DataFrame for a given sheet.
-        
+
         Args:
             sheet_name (str): Name of the sheet
-            
+
         Returns:
             pandas.DataFrame: Sheet formulas
         """
         pass
-    
+
     def get_ground_truth(self, sheet_name=None):
         """Get ground truth values from the original Excel file.
-        
+
         Args:
             sheet_name (str | None, optional): Name of the sheet. If None, uses default.
-            
+
         Returns:
             pandas.DataFrame: Ground truth data
         """
@@ -344,54 +350,54 @@ Unified data management with consistent handling across all sheet types.
 class DataManager:
     def __init__(self, data_dir=None):
         """Initialize the data manager.
-        
+
         Args:
             data_dir (Path, optional): Base data directory. If None, uses default location.
         """
         pass
-    
+
     def get_sheet_names(self):
         """Get list of all available sheet names from configuration.
-        
+
         Returns:
             List[str]: List of sheet names configured for processing
         """
         pass
-    
+
     def load_sheet(self, sheet_name, format="parquet"):
         """Load a specific sheet in the specified format.
-        
+
         Args:
             sheet_name (str): Name of the sheet to load
             format (str, optional): Format to load ('parquet' or 'csv'). Defaults to 'parquet'.
-            
+
         Returns:
             Optional[pandas.DataFrame]: DataFrame containing the sheet data, or None if not found
         """
         pass
-    
+
     def save_sheet(self, sheet_name, df, formats=None):
         """Save a sheet in specified formats with consistent naming.
-        
+
         Args:
             sheet_name (str): Name of the sheet to save
             df (pandas.DataFrame): DataFrame containing the sheet data
-            formats (List[str], optional): Formats to save ('parquet', 'csv'). 
+            formats (List[str], optional): Formats to save ('parquet', 'csv').
                                          If None, saves in all supported formats.
-            
+
         Returns:
             bool: True if successfully saved, False otherwise
         """
         pass
-    
+
     def save_for_publication(self, sheet_name, df, metadata=None):
         """Save a sheet and its metadata for publication with consistent formatting.
-        
+
         Args:
             sheet_name (str): Name of the sheet to save
             df (pandas.DataFrame): DataFrame containing the sheet data
             metadata (Dict[str, Any], optional): Metadata about the sheet
-            
+
         Returns:
             bool: True if successfully saved, False otherwise
         """
@@ -538,6 +544,7 @@ Scenario modeling tools for what-if analysis.
 @dataclass
 class Scenario:
     """Represents a scenario with specific parameter adjustments."""
+
     name: str
     description: str
     parameters: Dict[str, Any]
@@ -549,24 +556,29 @@ class Scenario:
 class ScenarioManager:
     def __init__(self, base_data: Dict[str, pd.DataFrame]):
         """Initialize the scenario manager with base data.
-        
+
         Args:
             base_data: Dictionary of DataFrames representing the base case data
         """
         pass
-    
+
     def add_scenario(self, scenario: Scenario) -> None:
         """Add a scenario to the manager.
-        
+
         Args:
             scenario: Scenario object to add
         """
         pass
-    
-    def add_scenario_from_dict(self, name: str, description: str, parameters: Dict[str, Any], 
-                              adjustments: Dict[str, float]) -> None:
+
+    def add_scenario_from_dict(
+        self,
+        name: str,
+        description: str,
+        parameters: Dict[str, Any],
+        adjustments: Dict[str, float],
+    ) -> None:
         """Add a scenario from dictionary parameters.
-        
+
         Args:
             name: Name of the scenario
             description: Description of the scenario
@@ -574,52 +586,57 @@ class ScenarioManager:
             adjustments: Column adjustments for the scenario
         """
         pass
-    
+
     def apply_scenario(self, scenario_name: str, table_name: str) -> pd.DataFrame:
         """Apply a scenario to a specific table.
-        
+
         Args:
             scenario_name: Name of the scenario to apply
             table_name: Name of the table to apply the scenario to
-            
+
         Returns:
             DataFrame with scenario adjustments applied
         """
         pass
-    
+
     def run_scenario_analysis(self, scenario_name: str) -> Dict[str, pd.DataFrame]:
         """Run analysis for a specific scenario across all tables.
-        
+
         Args:
             scenario_name: Name of the scenario to run
-            
+
         Returns:
             Dictionary of DataFrames with scenario applied to each table
         """
         pass
-    
-    def compare_scenarios(self, scenario_names: List[str], table_name: str, 
-                         columns: Optional[List[str]] = None) -> pd.DataFrame:
+
+    def compare_scenarios(
+        self,
+        scenario_names: List[str],
+        table_name: str,
+        columns: Optional[List[str]] = None,
+    ) -> pd.DataFrame:
         """Compare multiple scenarios for a specific table.
-        
+
         Args:
             scenario_names: List of scenario names to compare
             table_name: Name of the table to compare
             columns: Specific columns to compare (if None, compare all numeric columns)
-            
+
         Returns:
             DataFrame with scenario comparisons
         """
         pass
-    
-    def generate_scenario_report(self, scenario_names: List[str], 
-                               output_file: Optional[str] = None) -> str:
+
+    def generate_scenario_report(
+        self, scenario_names: List[str], output_file: Optional[str] = None
+    ) -> str:
         """Generate a report comparing multiple scenarios.
-        
+
         Args:
             scenario_names: List of scenario names to compare
             output_file: Optional file path to save the report
-            
+
         Returns:
             Report as a string
         """
@@ -635,9 +652,16 @@ Advanced deterministic and probabilistic sensitivity analysis capabilities.
 @dataclass
 class AdvancedScenario(Scenario):
     """Enhanced scenario with more sophisticated parameter adjustments."""
-    sensitivity_parameters: Dict[str, Tuple[float, float]] = None  # parameter -> (min, max) for sensitivity analysis
-    probability_distributions: Dict[str, Dict[str, Any]] = None  # parameter -> distribution info
-    dependencies: Dict[str, List[str]] = None  # parameter -> list of dependent parameters
+
+    sensitivity_parameters: Dict[str, Tuple[float, float]] = (
+        None  # parameter -> (min, max) for sensitivity analysis
+    )
+    probability_distributions: Dict[str, Dict[str, Any]] = (
+        None  # parameter -> distribution info
+    )
+    dependencies: Dict[str, List[str]] = (
+        None  # parameter -> list of dependent parameters
+    )
 ```
 
 #### AdvancedScenarioManager
@@ -645,58 +669,69 @@ class AdvancedScenario(Scenario):
 class AdvancedScenarioManager(ScenarioManager):
     def __init__(self, base_data: Dict[str, pd.DataFrame]):
         """Initialize the advanced scenario manager with base data.
-        
+
         Args:
             base_data: Dictionary of DataFrames representing the base case data
         """
         pass
-    
+
     def add_advanced_scenario(self, scenario: AdvancedScenario) -> None:
         """Add an advanced scenario to the manager.
-        
+
         Args:
             scenario: AdvancedScenario object to add
         """
         pass
-    
-    def run_sensitivity_analysis(self, scenario_name: str, parameter: str, 
-                               range_min: float, range_max: float, 
-                               steps: int = 10) -> Dict[str, List[float]]:
+
+    def run_sensitivity_analysis(
+        self,
+        scenario_name: str,
+        parameter: str,
+        range_min: float,
+        range_max: float,
+        steps: int = 10,
+    ) -> Dict[str, List[float]]:
         """Run sensitivity analysis for a specific parameter.
-        
+
         Args:
             scenario_name: Name of the scenario to analyze
             parameter: Parameter to vary
             range_min: Minimum value for the parameter
             range_max: Maximum value for the parameter
             steps: Number of steps to test
-            
+
         Returns:
             Dictionary with parameter values and corresponding results
         """
         pass
-    
-    def run_probabilistic_analysis(self, scenario_name: str, iterations: int = 1000) -> Dict[str, List[Dict[str, pd.DataFrame]]]:
+
+    def run_probabilistic_analysis(
+        self, scenario_name: str, iterations: int = 1000
+    ) -> Dict[str, List[Dict[str, pd.DataFrame]]]:
         """Run probabilistic analysis using Monte Carlo simulation.
-        
+
         Args:
             scenario_name: Name of the scenario to analyze
             iterations: Number of Monte Carlo iterations
-            
+
         Returns:
             Dictionary with probabilistic results
         """
         pass
-    
-    def compare_scenarios_detailed(self, scenario_names: List[str], table_name: str,
-                                 metrics: Optional[List[str]] = None) -> Dict[str, pd.DataFrame]:
+
+    def compare_scenarios_detailed(
+        self,
+        scenario_names: List[str],
+        table_name: str,
+        metrics: Optional[List[str]] = None,
+    ) -> Dict[str, pd.DataFrame]:
         """Perform detailed comparison of scenarios with multiple metrics.
-        
+
         Args:
             scenario_names: List of scenario names to compare
             table_name: Name of the table to compare
             metrics: List of metrics to calculate (mean, std, min, max, etc.)
-            
+
         Returns:
             Dictionary with detailed comparison results
         """
@@ -713,11 +748,11 @@ Basic data visualization tools.
 ```python
 def load_prepared_data(data_dir=None):
     """Load prepared data from the data directory.
-    
+
     Args:
-        data_dir (str or Path, optional): Path to the data directory. 
+        data_dir (str or Path, optional): Path to the data directory.
             If None, uses the default data/prepared directory.
-            
+
     Returns:
         dict: Dictionary of loaded DataFrames with keys as table names.
     """
@@ -726,15 +761,17 @@ def load_prepared_data(data_dir=None):
 
 #### plot_cost_distribution
 ```python
-def plot_cost_distribution(data, column_name, title="Cost Distribution", figsize=(10, 6)):
+def plot_cost_distribution(
+    data, column_name, title="Cost Distribution", figsize=(10, 6)
+):
     """Plot the distribution of costs from a specified column.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         column_name (str): Name of the column to plot.
         title (str): Title for the plot.
         figsize (tuple): Figure size (width, height).
-        
+
     Returns:
         matplotlib.figure.Figure: The generated figure.
     """
@@ -743,16 +780,18 @@ def plot_cost_distribution(data, column_name, title="Cost Distribution", figsize
 
 #### plot_category_costs
 ```python
-def plot_category_costs(data, category_column, cost_column, title="Costs by Category", figsize=(12, 8)):
+def plot_category_costs(
+    data, category_column, cost_column, title="Costs by Category", figsize=(12, 8)
+):
     """Plot total costs by category.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         category_column (str): Name of the category column.
         cost_column (str): Name of the cost column to sum.
         title (str): Title for the plot.
         figsize (tuple): Figure size (width, height).
-        
+
     Returns:
         matplotlib.figure.Figure: The generated figure.
     """
@@ -761,16 +800,22 @@ def plot_category_costs(data, category_column, cost_column, title="Costs by Cate
 
 #### plot_cost_breakdown
 ```python
-def plot_cost_breakdown(data, category_column, cost_columns, title="Cost Breakdown by Category", figsize=(12, 8)):
+def plot_cost_breakdown(
+    data,
+    category_column,
+    cost_columns,
+    title="Cost Breakdown by Category",
+    figsize=(12, 8),
+):
     """Plot cost breakdown by category for multiple cost columns.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         category_column (str): Name of the category column.
         cost_columns (list): List of cost column names to include.
         title (str): Title for the plot.
         figsize (tuple): Figure size (width, height).
-        
+
     Returns:
         matplotlib.figure.Figure: The generated figure.
     """
@@ -817,15 +862,17 @@ def plot_interactive_cost_distribution(data, column_name, title="Cost Distributi
 
 #### plot_interactive_category_costs
 ```python
-def plot_interactive_category_costs(data, category_column, cost_column, title="Costs by Category"):
+def plot_interactive_category_costs(
+    data, category_column, cost_column, title="Costs by Category"
+):
     """Create an interactive bar chart of costs by category.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         category_column (str): Name of the category column.
         cost_column (str): Name of the cost column to sum.
         title (str): Title for the plot.
-        
+
     Returns:
         plotly.graph_objects.Figure: The generated interactive figure.
     """
@@ -834,15 +881,17 @@ def plot_interactive_category_costs(data, category_column, cost_column, title="C
 
 #### plot_cost_trend_analysis
 ```python
-def plot_cost_trend_analysis(data, category_column, cost_column, title="Cost Trend Analysis"):
+def plot_cost_trend_analysis(
+    data, category_column, cost_column, title="Cost Trend Analysis"
+):
     """Create a trend analysis plot showing cost distribution across categories.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         category_column (str): Name of the category column.
         cost_column (str): Name of the cost column to analyze.
         title (str): Title for the plot.
-        
+
     Returns:
         matplotlib.figure.Figure: The generated figure.
     """
@@ -867,16 +916,18 @@ def plot_cost_correlation_matrix(data, cost_columns, title="Cost Correlation Mat
 
 #### plot_interactive_cost_scatter
 ```python
-def plot_interactive_cost_scatter(data, x_column, y_column, category_column=None, title="Cost Scatter Plot"):
+def plot_interactive_cost_scatter(
+    data, x_column, y_column, category_column=None, title="Cost Scatter Plot"
+):
     """Create an interactive scatter plot of costs.
-    
+
     Args:
         data (pd.DataFrame): DataFrame containing the data.
         x_column (str): Name of the column for x-axis.
         y_column (str): Name of the column for y-axis.
         category_column (str, optional): Name of the column for coloring points.
         title (str): Title for the plot.
-        
+
     Returns:
         plotly.graph_objects.Figure: The generated interactive figure.
     """
@@ -1098,6 +1149,7 @@ Enhanced plugin system with metadata and configuration support.
 @dataclass
 class PluginMetadata:
     """Metadata for a plugin."""
+
     name: str
     version: str
     description: str
@@ -1113,12 +1165,19 @@ class PluginMetadata:
 ```python
 class EnhancedPlugin(Plugin):
     """Enhanced plugin with metadata and lifecycle management."""
-    
-    def __init__(self, name: str, version: str, description: str, 
-                 author: str = "", license: str = "", dependencies: List[str] = None,
-                 tags: List[str] = None):
+
+    def __init__(
+        self,
+        name: str,
+        version: str,
+        description: str,
+        author: str = "",
+        license: str = "",
+        dependencies: List[str] = None,
+        tags: List[str] = None,
+    ):
         """Initialize an enhanced plugin.
-        
+
         Args:
             name (str): Plugin name
             version (str): Plugin version
@@ -1129,37 +1188,37 @@ class EnhancedPlugin(Plugin):
             tags (List[str]): Plugin tags for categorization
         """
         pass
-    
+
     def set_config(self, config: Dict[str, Any]) -> None:
         """Set plugin configuration.
-        
+
         Args:
             config (Dict[str, Any]): Configuration dictionary
         """
         pass
-    
+
     def get_config(self) -> Dict[str, Any]:
         """Get plugin configuration.
-        
+
         Returns:
             Dict[str, Any]: Configuration dictionary
         """
         pass
-    
+
     def export_metadata(self) -> Dict[str, Any]:
         """Export plugin metadata.
-        
+
         Returns:
             Dict[str, Any]: Plugin metadata as dictionary
         """
         pass
-    
+
     def validate_dependencies(self, available_plugins: List[str]) -> List[str]:
         """Validate plugin dependencies.
-        
+
         Args:
             available_plugins (List[str]): List of available plugin names
-            
+
         Returns:
             List[str]: List of missing dependencies
         """
@@ -1188,15 +1247,17 @@ class DataProcessingPlugin(EnhancedPlugin):
 ```python
 class ReportPlugin(EnhancedPlugin):
     """Plugin for report generation functionality."""
-    
-    def generate_report(self, data: Any, output_format: str = "markdown", **kwargs) -> str:
+
+    def generate_report(
+        self, data: Any, output_format: str = "markdown", **kwargs
+    ) -> str:
         """Generate report.
-        
+
         Args:
             data (Any): Input data
             output_format (str): Output format (markdown, html, pdf, etc.)
             **kwargs: Additional report parameters
-            
+
         Returns:
             str: Generated report
         """
@@ -1206,110 +1267,113 @@ class ReportPlugin(EnhancedPlugin):
 #### EnhancedPluginManager
 ```python
 class EnhancedPluginManager:
-    def __init__(self, plugin_directory: Optional[Path] = None, 
-                 config_file: Optional[Path] = None):
+    def __init__(
+        self,
+        plugin_directory: Optional[Path] = None,
+        config_file: Optional[Path] = None,
+    ):
         """Initialize the enhanced plugin manager.
-        
+
         Args:
             plugin_directory (Path, optional): Directory to search for plugins
             config_file (Path, optional): Configuration file for plugin settings
         """
         pass
-    
+
     def load_config(self) -> None:
         """Load plugin manager configuration."""
         pass
-    
+
     def save_config(self) -> None:
         """Save plugin manager configuration."""
         pass
-    
+
     def load_plugin(self, plugin_path: Path) -> EnhancedPlugin:
         """Load an enhanced plugin from a file.
-        
+
         Args:
             plugin_path (Path): Path to the plugin file
-            
+
         Returns:
             EnhancedPlugin: Loaded plugin instance
-            
+
         Raises:
             ImportError: If plugin cannot be loaded
         """
         pass
-    
+
     def discover_plugins(self) -> List[Path]:
         """Discover plugin files in the plugin directory.
-        
+
         Returns:
             List[Path]: List of plugin file paths
         """
         pass
-    
+
     def register_plugin(self, plugin: EnhancedPlugin) -> None:
         """Register a plugin.
-        
+
         Args:
             plugin (EnhancedPlugin): Plugin instance to register
         """
         pass
-    
+
     def load_all_plugins(self) -> None:
         """Load and register all plugins in the plugin directory."""
         pass
-    
+
     def get_plugin(self, name: str) -> Optional[EnhancedPlugin]:
         """Get a registered plugin by name.
-        
+
         Args:
             name (str): Plugin name
-            
+
         Returns:
             EnhancedPlugin: Plugin instance or None if not found
         """
         pass
-    
+
     def list_plugins(self) -> List[Dict[str, Any]]:
         """List all registered plugins.
-        
+
         Returns:
             List[Dict[str, Any]]: List of plugin information
         """
         pass
-    
+
     def enable_plugin(self, name: str) -> bool:
         """Enable a plugin.
-        
+
         Args:
             name (str): Plugin name
-            
+
         Returns:
             bool: True if plugin was enabled, False otherwise
         """
         pass
-    
+
     def disable_plugin(self, name: str) -> bool:
         """Disable a plugin.
-        
+
         Args:
             name (str): Plugin name
-            
+
         Returns:
             bool: True if plugin was disabled, False otherwise
         """
         pass
-    
+
     def execute_plugin(self, name: str, data: Any, **kwargs) -> Any:
         """Execute a plugin.
-        
+
         Args:
             name (str): Plugin name
             data (Any): Input data
             **kwargs: Additional arguments for the plugin
-            
+
         Returns:
             Any: Plugin execution result
-            
+
         Raises:
             ValueError: If plugin is not found or not enabled
         """
@@ -1383,16 +1447,17 @@ class DataOptimizer:
 ```python
 class ParallelProcessor:
     @staticmethod
-    def parallel_apply(df: pd.DataFrame, func: Callable, column: str, 
-                      n_cores: int = 4) -> pd.Series:
+    def parallel_apply(
+        df: pd.DataFrame, func: Callable, column: str, n_cores: int = 4
+    ) -> pd.Series:
         """Apply function to column in parallel.
-        
+
         Args:
             df (pd.DataFrame): DataFrame to process
             func (Callable): Function to apply
             column (str): Column to apply function to
             n_cores (int): Number of cores to use
-            
+
         Returns:
             pd.Series: Series with function applied
         """
@@ -1408,10 +1473,16 @@ Excel workbook version control utilities.
 #### WorkbookVersion
 ```python
 class WorkbookVersion:
-    def __init__(self, version_id: str, timestamp: datetime, file_path: Path,
-                 checksum: str, metadata: Dict[str, Any]):
+    def __init__(
+        self,
+        version_id: str,
+        timestamp: datetime,
+        file_path: Path,
+        checksum: str,
+        metadata: Dict[str, Any],
+    ):
         """Initialize a WorkbookVersion.
-        
+
         Args:
             version_id (str): Unique identifier for this version
             timestamp (datetime): When this version was created
@@ -1420,22 +1491,22 @@ class WorkbookVersion:
             metadata (Dict[str, Any]): Additional metadata about the version
         """
         pass
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation.
-        
+
         Returns:
             Dict[str, Any]: Dictionary representation
         """
         pass
-    
+
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'WorkbookVersion':
+    def from_dict(cls, data: Dict[str, Any]) -> "WorkbookVersion":
         """Create WorkbookVersion from dictionary.
-        
+
         Args:
             data (Dict[str, Any]): Dictionary representation
-            
+
         Returns:
             WorkbookVersion: Created WorkbookVersion instance
         """
@@ -1447,68 +1518,70 @@ class WorkbookVersion:
 class WorkbookVersionControl:
     def __init__(self, repository_directory: Path):
         """Initialize the workbook version control system.
-        
+
         Args:
             repository_directory (Path): Directory to store workbook versions
         """
         pass
-    
-    def commit_workbook(self, file_path: Path, metadata: Optional[Dict[str, Any]] = None) -> str:
+
+    def commit_workbook(
+        self, file_path: Path, metadata: Optional[Dict[str, Any]] = None
+    ) -> str:
         """Commit a workbook file and create a new version.
-        
+
         Args:
             file_path (Path): Path to the workbook file
             metadata (Dict[str, Any], optional): Additional metadata
-            
+
         Returns:
             str: Version ID of the committed workbook
-            
+
         Raises:
             FileNotFoundError: If the workbook file is not found
         """
         pass
-    
+
     def get_latest_version(self, workbook_name: str) -> Optional[WorkbookVersion]:
         """Get the latest version of a workbook.
-        
+
         Args:
             workbook_name (str): Name of the workbook
-            
+
         Returns:
             Optional[WorkbookVersion]: Latest version or None if not found
         """
         pass
-    
+
     def get_version_history(self, workbook_name: str) -> List[WorkbookVersion]:
         """Get version history for a workbook.
-        
+
         Args:
             workbook_name (str): Name of the workbook
-            
+
         Returns:
             List[WorkbookVersion]: List of versions
         """
         pass
-    
+
     def restore_version(self, version_id: str, target_path: Path) -> bool:
         """Restore a specific version of a workbook.
-        
+
         Args:
             version_id (str): Version ID to restore
             target_path (Path): Path to restore the workbook to
-            
+
         Returns:
             bool: True if successful, False otherwise
         """
         pass
-    
+
     def compare_versions(self, version_id1: str, version_id2: str) -> Dict[str, Any]:
         """Compare two versions of a workbook.
-        
+
         Args:
             version_id1 (str): First version ID
             version_id2 (str): Second version ID
-            
+
         Returns:
             Dict[str, Any]: Comparison results
         """
@@ -1828,6 +1901,7 @@ Monitoring and observability system for genomics microcosting analysis.
 ```python
 class HealthCheckError(Exception):
     """Custom exception for health check failures."""
+
     pass
 ```
 

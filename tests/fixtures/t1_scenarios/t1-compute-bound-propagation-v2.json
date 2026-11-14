@@ -1,0 +1,38 @@
+{
+  "version": "t1-reception-2023-v2",
+  "previous_version": "t1-reception-2023-v1",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "opt-in provisional scenario; propagates labelled assumptions, not published uncertainty or confidence intervals",
+  "rationale": "Historical processing lower and upper subtotals use the compute midpoint even when separate low and high inputs exist. Match each component bound to its processing subtotal bound.",
+  "change": [
+    {
+      "sheet": "Detailed Table",
+      "cell": "M1058",
+      "source_formula": "=SUM(M1056)+$N1050",
+      "proposed_formula": "=SUM(M1056)+$M1050"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "O1058",
+      "source_formula": "=SUM(O1056)+$N1050",
+      "proposed_formula": "=SUM(O1056)+$O1050"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "M1307",
+      "source_formula": "=M1305+$N1299",
+      "proposed_formula": "=M1305+$M1299"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "O1307",
+      "source_formula": "=O1305+$N1299",
+      "proposed_formula": "=O1305+$O1299"
+    }
+  ],
+  "limitations": [
+    "The compute bounds are an assumption-based sensitivity scenario derived from a single batch, not confidence limits.",
+    "Sensitivity columns P:AA intentionally retain original midpoint compute treatment because they represent different historical parameters.",
+    "This change does not resolve equipment denominator gaps or establish the host/accelerator accounting boundary."
+  ]
+}

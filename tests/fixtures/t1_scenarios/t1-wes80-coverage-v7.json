@@ -1,0 +1,131 @@
+{
+  "version": "t1-wes80-coverage-v7",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "base_scenario": "t1-reception-per-sample-v3",
+  "base_manifest_sha256": "684b67c3dc9531aed6f19416b27553e72089757b89b98561a325bf60b083655d",
+  "status": "source-labelled conditional reconstruction; not a published result or full scientific validation",
+  "rationale": "The WES-trio 80x block uses G (labelled 50x) and omits recorded source quantities. Use the source quantity multiplied by H (labelled 80x), reconciling to source L and the 80x WES-proband block. The sibling 50x-parent block remains unchanged.",
+  "change": [
+    {
+      "sheet": "Detailed Table",
+      "cell": "F723",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G95",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F95*'Cons -  Costs and Util - VCGS'!H95",
+      "source_quantity": "WB30:F95",
+      "source_80x_fraction": "WB30:H95",
+      "source_precomputed_cost": "WB30:L95"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F724",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G96",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F96*'Cons -  Costs and Util - VCGS'!H96",
+      "source_quantity": "WB30:F96",
+      "source_80x_fraction": "WB30:H96",
+      "source_precomputed_cost": "WB30:L96"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F725",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G97",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F97*'Cons -  Costs and Util - VCGS'!H97",
+      "source_quantity": "WB30:F97",
+      "source_80x_fraction": "WB30:H97",
+      "source_precomputed_cost": "WB30:L97"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F726",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G98",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F98*'Cons -  Costs and Util - VCGS'!H98",
+      "source_quantity": "WB30:F98",
+      "source_80x_fraction": "WB30:H98",
+      "source_precomputed_cost": "WB30:L98"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F727",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G99",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F99*'Cons -  Costs and Util - VCGS'!H99",
+      "source_quantity": "WB30:F99",
+      "source_80x_fraction": "WB30:H99",
+      "source_precomputed_cost": "WB30:L99"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F728",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G100",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F100*'Cons -  Costs and Util - VCGS'!H100",
+      "source_quantity": "WB30:F100",
+      "source_80x_fraction": "WB30:H100",
+      "source_precomputed_cost": "WB30:L100"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F729",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G101",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F101*'Cons -  Costs and Util - VCGS'!H101",
+      "source_quantity": "WB30:F101",
+      "source_80x_fraction": "WB30:H101",
+      "source_precomputed_cost": "WB30:L101"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F730",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G102",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F102*'Cons -  Costs and Util - VCGS'!H102",
+      "source_quantity": "WB30:F102",
+      "source_80x_fraction": "WB30:H102",
+      "source_precomputed_cost": "WB30:L102"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F731",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G103",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F103*'Cons -  Costs and Util - VCGS'!H103",
+      "source_quantity": "WB30:F103",
+      "source_80x_fraction": "WB30:H103",
+      "source_precomputed_cost": "WB30:L103"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F732",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G104",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F104*'Cons -  Costs and Util - VCGS'!H104",
+      "source_quantity": "WB30:F104",
+      "source_80x_fraction": "WB30:H104",
+      "source_precomputed_cost": "WB30:L104"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F733",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G105",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F105*'Cons -  Costs and Util - VCGS'!H105",
+      "source_quantity": "WB30:F105",
+      "source_80x_fraction": "WB30:H105",
+      "source_precomputed_cost": "WB30:L105"
+    },
+    {
+      "sheet": "Detailed Table",
+      "cell": "F734",
+      "source_formula": "='Cons -  Costs and Util - VCGS'!G106",
+      "proposed_formula": "='Cons -  Costs and Util - VCGS'!F106*'Cons -  Costs and Util - VCGS'!H106",
+      "source_quantity": "WB30:F106",
+      "source_80x_fraction": "WB30:H106",
+      "source_precomputed_cost": "WB30:L106"
+    }
+  ],
+  "limitations": [
+    "The source-recorded 2-lane kit quantity is zero; it is carried as recorded, not inferred absent in practice.",
+    "The flow-cell dock quantity may already include allocation; the source-table formula does not prove its economic treatment.",
+    "Three source unit costs remain unresolved; positive earlier line values do not establish exact 2023 unit values.",
+    "A separate 2022 source also labels 1/150 as 50x and 1/103 as 80x; assay depth and source labels remain historical modelling assumptions.",
+    "Shared host/accelerator allocation and native Excel validation remain open.",
+    "Preserves the published model; no current costing."
+  ],
+  "inherited_manifest_sha256": {
+    "t1-branch-corrections-v2.json": "f136a41c2f290402e43a1a01813137e31f377536eb374cefb065453ecf1da637",
+    "option2-compute-sensitivity-v1.json": "6b61e488dee1d215b7592690986652467f9be3975c946ff47439bd571e2d223d",
+    "t1-compute-bound-propagation-v2.json": "6a93306140753b49d13a0451edb2a0dd2730632eeeb4583566633f359b2b6aeb"
+  }
+}

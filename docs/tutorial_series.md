@@ -231,7 +231,9 @@ Log security-relevant events:
 from unimelb_phd_phase_1.security import AuditTrail
 
 audit_trail = AuditTrail("logs/audit.log")
-audit_trail.log_event("data_access", "user123", "sensitive_data.xlsx", "Accessed cost data", True)
+audit_trail.log_event(
+    "data_access", "user123", "sensitive_data.xlsx", "Accessed cost data", True
+)
 ```
 
 ### Step 4: Secure Configuration Storage
@@ -241,7 +243,9 @@ Store sensitive configuration data securely:
 ```python
 from unimelb_phd_phase_1.security import SecureConfigStorage
 
-storage = SecureConfigStorage("configs/secure_config.json", encryption_key="my_secret_key")
+storage = SecureConfigStorage(
+    "configs/secure_config.json", encryption_key="my_secret_key"
+)
 storage.save_config({"api_key": "secret_key", "database_url": "postgresql://..."})
 ```
 

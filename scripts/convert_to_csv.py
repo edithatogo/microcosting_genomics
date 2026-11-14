@@ -1,112 +1,69 @@
-"""Convert supporting tables from parquet to CSV for publication.
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Convert prepared native tables to CSV while preserving existing outputs."""
 
-This script converts all prepared parquet files to CSV format for publication
-and ensures consistent naming and organization.
-"""
-
-from pathlib import Path
-import pandas as pd
 import logging
+from pathlib import Path
+from typing import TypedDict
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+import polars as pl
+
 logger = logging.getLogger(__name__)
 
-def convert_parquet_to_csv():
-    """Convert all parquet files in prepared directory to CSV format."""
 
-    prepared_dir = Path("data/prepared")
-    publication_dir = Path("data/publication")
-    publication_dir.mkdir(exist_ok=True)
+class ConversionInfo(TypedDict):
+    """One successfully converted native table and its dimensions."""
 
-    if not prepared_dir.exists():
-        logger.error(f"Prepared directory not found: {prepared_dir}")
-        return
+    original: str
+    csv: str
+    rows: int
+    columns: int
 
-    # Find all parquet files
-    parquet_files = list(prepared_dir.glob("*.parquet"))
-    logger.info(f"Found {len(parquet_files)} parquet files to convert")
 
-    converted_files = []
+def convert_parquet_to_csv(
+    *,
+    prepared_dir: Path = Path("data/prepared"),
+    publication_dir: Path = Path("data/publication"),
+) -> list[ConversionInfo]:
+    """Export native values; refuse existing destinations before writing any CSV."""
+    if not prepared_dir.is_dir():
+        raise FileNotFoundError(prepared_dir)
+    sources = sorted(prepared_dir.glob("*.parquet"))
+    for source in sources:
+        destination = publication_dir / source.with_suffix(".csv").name
+        if destination.exists():
+            raise FileExistsError(destination)
+    publication_dir.mkdir(parents=True, exist_ok=True)
+    converted: list[ConversionInfo] = []
+    for source in sources:
+        frame = pl.read_parquet(source)
+        destination = publication_dir / source.with_suffix(".csv").name
+        with destination.open("x") as stream:
+            frame.write_csv(stream)
+        converted.append(
+            {
+                "original": source.name,
+                "csv": destination.name,
+                "rows": frame.height,
+                "columns": frame.width,
+            },
+        )
+        logger.info("Converted %s: %s rows, %s columns", source.name, *frame.shape)
+    logger.info("Converted %s tables; external release requires review", len(converted))
+    return converted
 
-    for parquet_file in parquet_files:
-        try:
-            # Load parquet file
-            df = pd.read_parquet(parquet_file)
-            logger.info(f"Loaded {parquet_file.name}: {len(df)} rows, {len(df.columns)} columns")
 
-            # Create CSV filename
-            csv_filename = parquet_file.name.replace('.parquet', '.csv')
-            csv_path = publication_dir / csv_filename
-
-            # Save as CSV
-            df.to_csv(csv_path, index=False)
-            logger.info(f"Converted to CSV: {csv_path}")
-
-            converted_files.append({
-                'original': parquet_file.name,
-                'csv': csv_filename,
-                'rows': len(df),
-                'columns': len(df.columns)
-            })
-
-        except Exception as e:
-            logger.error(f"Error converting {parquet_file.name}: {e}")
-
-    # Create summary
-    print("\n" + "="*70)
-    print("SUPPORTING TABLES CSV CONVERSION SUMMARY")
-    print("="*70)
-    print(f"Total files converted: {len(converted_files)}")
-    print(f"Publication directory: {publication_dir}")
-    print()
-
-    # Group files by type
-    core_tables = []
-    dsa_tables = []
-    other_tables = []
-
-    for file_info in converted_files:
-        name = file_info['original']
-        if name.startswith(('2.', '3.')):
-            core_tables.append(file_info)
-        elif 'dsa' in name.lower():
-            dsa_tables.append(file_info)
-        else:
-            other_tables.append(file_info)
-
-    if core_tables:
-        print("Core Supporting Tables:")
-        for info in core_tables:
-            print(f"  - {info['csv']}: {info['rows']} rows, {info['columns']} columns")
-
-    if dsa_tables:
-        print("\nDSA (Sensitivity Analysis) Tables:")
-        for info in dsa_tables:
-            print(f"  - {info['csv']}: {info['rows']} rows, {info['columns']} columns")
-
-    if other_tables:
-        print("\nOther Tables:")
-        for info in other_tables:
-            print(f"  - {info['csv']}: {info['rows']} rows, {info['columns']} columns")
-
-    print(f"\nAll CSV files saved to: {publication_dir}/")
-    print("These files are ready for publication and external analysis.")
-
-    return converted_files
-
-def create_publication_readme():
+def create_publication_readme() -> None:
     """Create a README file for the publication data."""
-
     readme_content = """# Microcosting Genomics - Supporting Tables
 
-This directory contains CSV versions of all supporting tables from the microcosting model, prepared for publication and external analysis.
+This directory contains CSV exports of prepared microcosting tables.
+External release requires data-owner review and separate research qualification.
 
 ## File Descriptions
 
 ### Core Supporting Tables
-- `2._labor_prices.csv` - Hourly salary rates for each personnel category across all jurisdictions
-- `3._estimates.csv` - Default quantities and prices for consumables, equipment, and labour
+- `2._labor_prices.csv` - Hourly salary rates by category and jurisdiction
+- `3._estimates.csv` - Default consumable, equipment and labour inputs
 
 ### DSA (Deterministic Sensitivity Analysis) Tables
 - `dsa__labour_prices.csv` - Alternative labour rates for sensitivity testing scenarios
@@ -120,7 +77,7 @@ This directory contains CSV versions of all supporting tables from the microcost
 
 These CSV files can be:
 - Imported into spreadsheet software (Excel, Google Sheets, etc.)
-- Loaded into statistical software (R, Python pandas, etc.)
+- Loaded into statistical software (R, Python Polars, etc.)
 - Used for external validation and analysis
 - Referenced in publications and documentation
 
@@ -139,15 +96,17 @@ These files were generated by:
 2. Running `scripts/create_ground_truth.py` to create the validation dataset
 3. Running `scripts/convert_to_csv.py` to convert parquet files to CSV format
 
-For questions about data processing or methodology, refer to the main repository documentation.
+For processing and methodology, see the main repository documentation.
 """
 
     readme_path = Path("data/publication/README.md")
-    with open(readme_path, 'w') as f:
+    with readme_path.open("x") as f:
         f.write(readme_content)
 
-    logger.info(f"Created publication README: {readme_path}")
+    logger.info("Created publication README: %s", readme_path)
+
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     convert_parquet_to_csv()
     create_publication_readme()

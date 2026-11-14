@@ -1,280 +1,345 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Tests for the scenario modeling module."""
 
-import pandas as pd
+import polars as pl
 import pytest
 
-from genomics_microcosting.scenario_modeling import Scenario, ScenarioManager, create_common_scenarios
+from genomics_microcosting.scenario_modeling import (
+    Scenario,
+    ScenarioManager,
+    create_common_scenarios,
+)
+from tests.checks import require_equal, require_keys, require_runtime_instance
 
 
-def test_scenario_creation():
+def test_scenario_creation() -> None:
     """Test creating a scenario."""
     scenario = Scenario(
         name="test_scenario",
         description="A test scenario",
         parameters={"param1": 1.0},
-        adjustments={"column1": 1.1}
+        adjustments={"column1": 1.1},
     )
-    
-    assert scenario.name == "test_scenario"
-    assert scenario.description == "A test scenario"
-    assert scenario.parameters == {"param1": 1.0}
-    assert scenario.adjustments == {"column1": 1.1}
+
+    if not (scenario.name == "test_scenario"):
+        raise AssertionError
+    if not (scenario.description == "A test scenario"):
+        raise AssertionError
+    if not (scenario.parameters == {"param1": 1.0}):
+        raise AssertionError
+    if not (scenario.adjustments == {"column1": 1.1}):
+        raise AssertionError
 
 
-def test_scenario_manager_creation():
+def test_scenario_manager_creation() -> None:
     """Test creating a scenario manager."""
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [1, 2, 3],
-            "B": [4, 5, 6]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
-    assert scenario_manager.base_data == sample_data
-    assert len(scenario_manager.scenarios) == 0
-    assert len(scenario_manager.results) == 0
+
+    if not (scenario_manager.base_data == sample_data):
+        raise AssertionError
+    if not (len(scenario_manager.scenarios) == 0):
+        raise AssertionError
+    if not (len(scenario_manager.results) == 0):
+        raise AssertionError
 
 
-def test_add_scenario():
+def test_add_scenario() -> None:
     """Test adding a scenario to the manager."""
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [1, 2, 3],
-            "B": [4, 5, 6]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     scenario = Scenario(
         name="test_scenario",
         description="A test scenario",
         parameters={"param1": 1.0},
-        adjustments={"A": 1.1}
+        adjustments={"A": 1.1},
     )
-    
+
     scenario_manager.add_scenario(scenario)
-    
-    assert len(scenario_manager.scenarios) == 1
-    assert "test_scenario" in scenario_manager.scenarios
-    assert scenario_manager.scenarios["test_scenario"] == scenario
+
+    if not (len(scenario_manager.scenarios) == 1):
+        raise AssertionError
+    if "test_scenario" not in scenario_manager.scenarios:
+        raise AssertionError
+    if not (scenario_manager.scenarios["test_scenario"] == scenario):
+        raise AssertionError
 
 
-def test_add_scenario_from_dict():
+def test_add_scenario_from_dict() -> None:
     """Test adding a scenario from dictionary parameters."""
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [1, 2, 3],
-            "B": [4, 5, 6]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     scenario_manager.add_scenario_from_dict(
         name="test_scenario",
         description="A test scenario",
         parameters={"param1": 1.0},
-        adjustments={"A": 1.1}
+        adjustments={"A": 1.1},
     )
-    
-    assert len(scenario_manager.scenarios) == 1
-    assert "test_scenario" in scenario_manager.scenarios
-    
+
+    if not (len(scenario_manager.scenarios) == 1):
+        raise AssertionError
+    if "test_scenario" not in scenario_manager.scenarios:
+        raise AssertionError
+
     scenario = scenario_manager.scenarios["test_scenario"]
-    assert scenario.name == "test_scenario"
-    assert scenario.description == "A test scenario"
-    assert scenario.parameters == {"param1": 1.0}
-    assert scenario.adjustments == {"A": 1.1}
+    if not (scenario.name == "test_scenario"):
+        raise AssertionError
+    if not (scenario.description == "A test scenario"):
+        raise AssertionError
+    if not (scenario.parameters == {"param1": 1.0}):
+        raise AssertionError
+    if not (scenario.adjustments == {"A": 1.1}):
+        raise AssertionError
 
 
-def test_apply_scenario():
+def test_apply_scenario() -> None:
     """Test applying a scenario to data."""
+    absolute_tolerance = 1e-10
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [100.0, 200.0, 300.0],
-            "B": [400.0, 500.0, 600.0]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [100.0, 200.0, 300.0],
+                "B": [400.0, 500.0, 600.0],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     scenario_manager.add_scenario_from_dict(
         name="inflation",
         description="10% inflation",
         parameters={"inflation_rate": 0.10},
-        adjustments={"A": 1.10}
+        adjustments={"A": 1.10},
     )
-    
+
     # Apply scenario
     result_df = scenario_manager.apply_scenario("inflation", "test_table")
-    
+
     # Check that the scenario was applied correctly
-    assert len(result_df) == 3
-    assert abs(result_df["A"].iloc[0] - 110.0) < 1e-10  # 100 * 1.10
-    assert abs(result_df["A"].iloc[1] - 220.0) < 1e-10  # 200 * 1.10
-    assert abs(result_df["A"].iloc[2] - 330.0) < 1e-10  # 300 * 1.10
-    assert abs(result_df["B"].iloc[0] - 400.0) < 1e-10  # Unchanged
-    assert abs(result_df["B"].iloc[1] - 500.0) < 1e-10  # Unchanged
-    assert abs(result_df["B"].iloc[2] - 600.0) < 1e-10  # Unchanged
+    require_equal(len(result_df), 3)
+    if not (abs(result_df["A"][0] - 110.0) < absolute_tolerance):
+        raise AssertionError  # 100 * 1.10
+    if not (abs(result_df["A"][1] - 220.0) < absolute_tolerance):
+        raise AssertionError  # 200 * 1.10
+    if not (abs(result_df["A"][2] - 330.0) < absolute_tolerance):
+        raise AssertionError  # 300 * 1.10
+    if not (abs(result_df["B"][0] - 400.0) < absolute_tolerance):
+        raise AssertionError  # Unchanged
+    if not (abs(result_df["B"][1] - 500.0) < absolute_tolerance):
+        raise AssertionError  # Unchanged
+    if not (abs(result_df["B"][2] - 600.0) < absolute_tolerance):
+        raise AssertionError  # Unchanged
 
 
-def test_apply_scenario_invalid_scenario():
+def test_apply_scenario_invalid_scenario() -> None:
     """Test applying an invalid scenario."""
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [1, 2, 3],
-            "B": [4, 5, 6]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     # Try to apply a scenario that doesn't exist
     with pytest.raises(ValueError, match="Scenario 'nonexistent' not found"):
         scenario_manager.apply_scenario("nonexistent", "test_table")
 
 
-def test_apply_scenario_invalid_table():
+def test_apply_scenario_invalid_table() -> None:
     """Test applying a scenario to an invalid table."""
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [1, 2, 3],
-            "B": [4, 5, 6]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     scenario_manager.add_scenario_from_dict(
         name="test_scenario",
         description="A test scenario",
         parameters={},
-        adjustments={"A": 1.1}
+        adjustments={"A": 1.1},
     )
-    
+
     # Try to apply scenario to a table that doesn't exist
     with pytest.raises(ValueError, match="Table 'nonexistent' not found in base data"):
         scenario_manager.apply_scenario("test_scenario", "nonexistent")
 
 
-def test_run_scenario_analysis():
+def test_run_scenario_analysis() -> None:
     """Test running a scenario analysis."""
+    absolute_tolerance = 1e-10
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [100.0, 200.0, 300.0],
-            "B": [400.0, 500.0, 600.0]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [100.0, 200.0, 300.0],
+                "B": [400.0, 500.0, 600.0],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     scenario_manager.add_scenario_from_dict(
         name="inflation",
         description="10% inflation",
         parameters={"inflation_rate": 0.10},
-        adjustments={"A": 1.10}
+        adjustments={"A": 1.10},
     )
-    
+
     # Run scenario analysis
     results = scenario_manager.run_scenario_analysis("inflation")
-    
+
     # Check results
-    assert len(results) == 1
-    assert "test_table" in results
-    assert len(scenario_manager.results) == 1
-    assert "inflation" in scenario_manager.results
-    
+    if not (len(results) == 1):
+        raise AssertionError
+    if "test_table" not in results:
+        raise AssertionError
+    if not (len(scenario_manager.results) == 1):
+        raise AssertionError
+    if "inflation" not in scenario_manager.results:
+        raise AssertionError
+
     result_df = results["test_table"]
-    assert abs(result_df["A"].iloc[0] - 110.0) < 1e-10  # 100 * 1.10
-    assert abs(result_df["A"].iloc[1] - 220.0) < 1e-10  # 200 * 1.10
-    assert abs(result_df["A"].iloc[2] - 330.0) < 1e-10  # 300 * 1.10
+    if not (abs(result_df["A"][0] - 110.0) < absolute_tolerance):
+        raise AssertionError  # 100 * 1.10
+    if not (abs(result_df["A"][1] - 220.0) < absolute_tolerance):
+        raise AssertionError  # 200 * 1.10
+    if not (abs(result_df["A"][2] - 330.0) < absolute_tolerance):
+        raise AssertionError  # 300 * 1.10
 
 
-def test_compare_scenarios():
+def test_compare_scenarios() -> None:
     """Test comparing scenarios."""
+    expected_comparison_rows = 2
+    expected_a_baseline = 600.0
+    expected_a_inflation_10 = 660.0
+    expected_a_inflation_20 = 720.0
+    expected_b_cost = 1500.0
     # Create sample data
     sample_data = {
-        "test_table": pd.DataFrame({
-            "A": [100.0, 200.0, 300.0],
-            "B": [400.0, 500.0, 600.0]
-        })
+        "test_table": pl.DataFrame(
+            {
+                "A": [100.0, 200.0, 300.0],
+                "B": [400.0, 500.0, 600.0],
+            },
+        ),
     }
-    
+
     scenario_manager = ScenarioManager(sample_data)
-    
+
     # Add scenarios
     scenario_manager.add_scenario_from_dict(
         name="inflation_10",
         description="10% inflation",
         parameters={"inflation_rate": 0.10},
-        adjustments={"A": 1.10}
+        adjustments={"A": 1.10},
     )
-    
+
     scenario_manager.add_scenario_from_dict(
         name="inflation_20",
         description="20% inflation",
         parameters={"inflation_rate": 0.20},
-        adjustments={"A": 1.20}
+        adjustments={"A": 1.20},
     )
-    
+
     # Compare scenarios
     comparison_df = scenario_manager.compare_scenarios(
-        ["inflation_10", "inflation_20"], 
-        "test_table"
+        ["inflation_10", "inflation_20"],
+        "test_table",
     )
-    
+
     # Check comparison results
-    assert len(comparison_df) == 2  # Two numeric columns (A and B)
-    assert "Column" in comparison_df.columns
-    assert "Base Case" in comparison_df.columns
-    assert "inflation_10" in comparison_df.columns
-    assert "inflation_20" in comparison_df.columns
-    
+    require_equal(
+        len(comparison_df),
+        expected_comparison_rows,
+    )  # Two numeric columns (A and B)
+    require_keys(comparison_df.columns, ("Column",))
+    require_keys(comparison_df.columns, ("Base Case",))
+    require_keys(comparison_df.columns, ("inflation_10",))
+    require_keys(comparison_df.columns, ("inflation_20",))
+
     # Check values for column A
-    a_row = comparison_df[comparison_df["Column"] == "A"].iloc[0]
-    assert a_row["Base Case"] == 600.0  # 100 + 200 + 300
-    assert a_row["inflation_10"] == 660.0  # 110 + 220 + 330
-    assert a_row["inflation_20"] == 720.0  # 120 + 240 + 360
-    
+    a_row = comparison_df.filter(pl.col("Column") == "A").row(0, named=True)
+    require_equal(a_row["Base Case"], expected_a_baseline)  # 100 + 200 + 300
+    require_equal(a_row["inflation_10"], expected_a_inflation_10)  # 110 + 220 + 330
+    require_equal(a_row["inflation_20"], expected_a_inflation_20)  # 120 + 240 + 360
+
     # Check values for column B (unchanged)
-    b_row = comparison_df[comparison_df["Column"] == "B"].iloc[0]
-    assert b_row["Base Case"] == 1500.0  # 400 + 500 + 600
-    assert b_row["inflation_10"] == 1500.0  # Unchanged
-    assert b_row["inflation_20"] == 1500.0  # Unchanged
+    b_row = comparison_df.filter(pl.col("Column") == "B").row(0, named=True)
+    require_equal(b_row["Base Case"], expected_b_cost)  # 400 + 500 + 600
+    require_equal(b_row["inflation_10"], expected_b_cost)  # Unchanged
+    require_equal(b_row["inflation_20"], expected_b_cost)  # Unchanged
 
 
-def test_create_common_scenarios():
+def test_create_common_scenarios() -> None:
     """Test creating common scenarios."""
     scenarios = create_common_scenarios()
-    
+
     # Check that we have the expected scenarios
     expected_scenarios = [
         "inflation_5",
         "cost_reduction_10",
         "high_throughput",
-        "labor_cost_increase"
+        "labor_cost_increase",
     ]
-    
+
     for scenario_name in expected_scenarios:
-        assert scenario_name in scenarios
-        assert isinstance(scenarios[scenario_name], Scenario)
-        
+        if scenario_name not in scenarios:
+            raise AssertionError
+        require_runtime_instance(scenarios[scenario_name], Scenario)
+
     # Check specific scenario details
     inflation_scenario = scenarios["inflation_5"]
-    assert inflation_scenario.name == "inflation_5"
-    assert "5% inflation" in inflation_scenario.description
-    assert "Unit Cost" in inflation_scenario.adjustments
-    assert inflation_scenario.adjustments["Unit Cost"] == 1.05
+    if not (inflation_scenario.name == "inflation_5"):
+        raise AssertionError
+    if "5% inflation" not in inflation_scenario.description:
+        raise AssertionError
+    if "unit_cost_aud_per_unit" not in inflation_scenario.adjustments:
+        raise AssertionError
+    require_equal(inflation_scenario.adjustments["unit_cost_aud_per_unit"], 1.05)
 
 
 if __name__ == "__main__":

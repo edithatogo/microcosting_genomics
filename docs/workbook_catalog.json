@@ -1,0 +1,823 @@
+{
+  "source_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "sheet_count": 35,
+  "native_sheet_count": 35,
+  "formula_count": 36411,
+  "formal_table_count": 0,
+  "compared_cells": 188268,
+  "ingestion_mismatch_count": 0,
+  "scope": "Ingestion values/formulas below configured headers, merged anchors expanded, numeric int/float equivalence; not formula recalculation or scientific acceptance.",
+  "catalog_version": "1",
+  "source_file": "Microcosting - Study 1 - Utilisation and Microcosts v15 (20230902).xlsm",
+  "sheets": [
+    {
+      "id": "WB01",
+      "sheet": "At a Glance",
+      "state": "visible",
+      "rows": 47,
+      "columns": 10,
+      "nonempty_cells": 70,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        46,
+        10
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 920,
+      "role": "process map",
+      "interpretation": "Stage/sub-stage/component map across equipment, consumables and labour; descriptive, not a computed cost table.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB02",
+      "sheet": "Summary Table",
+      "state": "visible",
+      "rows": 81,
+      "columns": 16,
+      "nonempty_cells": 994,
+      "formulas": 763,
+      "literal_sheet_references": [
+        "BI - Stor Use - VCGS",
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        16
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2560,
+      "role": "derived summary",
+      "interpretation": "Cost summary linked to Detailed Table and storage usage; do not add it to its component inputs.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB03",
+      "sheet": "Summary 20230812",
+      "state": "hidden",
+      "rows": 99,
+      "columns": 11,
+      "nonempty_cells": 898,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        98,
+        11
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2156,
+      "role": "historical snapshot",
+      "interpretation": "Dated static summary; no formulas. Preserve as historical evidence, not the current calculation oracle.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB04",
+      "sheet": "Summ Tab by Cat",
+      "state": "visible",
+      "rows": 81,
+      "columns": 16,
+      "nonempty_cells": 992,
+      "formulas": 763,
+      "literal_sheet_references": [
+        "BI - Stor Use - VCGS",
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        16
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2560,
+      "role": "derived summary",
+      "interpretation": "Category-oriented cost summary; shares detailed/storage dependencies with other summaries.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB05",
+      "sheet": "Summ Tab by Stage",
+      "state": "visible",
+      "rows": 81,
+      "columns": 80,
+      "nonempty_cells": 994,
+      "formulas": 763,
+      "literal_sheet_references": [
+        "BI - Stor Use - VCGS",
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        80
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 12800,
+      "role": "derived summary",
+      "interpretation": "Stage-oriented presentation with multiple column blocks; preserve all 80 source columns.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB06",
+      "sheet": "Summ Table for Graph",
+      "state": "visible",
+      "rows": 76,
+      "columns": 16,
+      "nonempty_cells": 964,
+      "formulas": 765,
+      "literal_sheet_references": [
+        "BI - Stor Use - VCGS",
+        "Detailed Table"
+      ],
+      "native_shape": [
+        75,
+        16
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2400,
+      "role": "presentation",
+      "interpretation": "Graph-oriented summary; retain ordering and denominator interpretation before plotting.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB07",
+      "sheet": "Summary Table 2",
+      "state": "visible",
+      "rows": 75,
+      "columns": 18,
+      "nonempty_cells": 992,
+      "formulas": 642,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        74,
+        18
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2664,
+      "role": "derived summary",
+      "interpretation": "Alternate detailed-cost aggregation; distinguish it from similarly named summary editions.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB08",
+      "sheet": "Summary Table Ordered",
+      "state": "visible",
+      "rows": 294,
+      "columns": 26,
+      "nonempty_cells": 1658,
+      "formulas": 642,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        293,
+        26
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 15236,
+      "role": "ordered summary",
+      "interpretation": "Ordered test/category/stage rows with subtotal rows. Stage and subtotal costs must not both be counted.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB09",
+      "sheet": "Sheet1",
+      "state": "visible",
+      "rows": 56,
+      "columns": 5,
+      "nonempty_cells": 280,
+      "formulas": 114,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        55,
+        5
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 550,
+      "role": "derived working summary",
+      "interpretation": "Category/stage LL/MP/UL working summary linked to Detailed Table; not an unidentified disposable sheet.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB10",
+      "sheet": "DSA - Summary",
+      "state": "visible",
+      "rows": 25,
+      "columns": 31,
+      "nonempty_cells": 461,
+      "formulas": 220,
+      "literal_sheet_references": [
+        "DSA - Consumable Discounts",
+        "DSA - Labour Prices",
+        "DSA - Overheads",
+        "DSA - Test Throughput"
+      ],
+      "native_shape": [
+        24,
+        31
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1488,
+      "role": "sensitivity output",
+      "interpretation": "DSA aggregation of overhead, consumable discount, throughput and labour-price branches.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB11",
+      "sheet": "DSA - Tornado (index 0)",
+      "state": "visible",
+      "rows": 18,
+      "columns": 17,
+      "nonempty_cells": 260,
+      "formulas": 210,
+      "literal_sheet_references": [
+        "DSA - Summary"
+      ],
+      "native_shape": [
+        17,
+        17
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 578,
+      "role": "sensitivity presentation",
+      "interpretation": "Zero-index-labelled tornado representation; exact baseline/index interpretation remains to be documented.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB12",
+      "sheet": "DSA - Tornado (index actual)",
+      "state": "visible",
+      "rows": 18,
+      "columns": 17,
+      "nonempty_cells": 260,
+      "formulas": 210,
+      "literal_sheet_references": [
+        "DSA - Summary"
+      ],
+      "native_shape": [
+        17,
+        17
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 578,
+      "role": "sensitivity presentation",
+      "interpretation": "Actual-index-labelled tornado representation; keep separate from zero-index and actual-cost versions.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB13",
+      "sheet": "DSA - Tornado Actual",
+      "state": "visible",
+      "rows": 25,
+      "columns": 33,
+      "nonempty_cells": 492,
+      "formulas": 220,
+      "literal_sheet_references": [
+        "DSA - Consumable Discounts",
+        "DSA - Labour Prices",
+        "DSA - Overheads",
+        "DSA - Test Throughput"
+      ],
+      "native_shape": [
+        24,
+        33
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1584,
+      "role": "sensitivity output",
+      "interpretation": "Actual-cost-labelled tornado comparison across DSA branches; not independent observations.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB14",
+      "sheet": "DSA - Differences",
+      "state": "visible",
+      "rows": 27,
+      "columns": 31,
+      "nonempty_cells": 473,
+      "formulas": 230,
+      "literal_sheet_references": [
+        "DSA - Consumable Discounts",
+        "DSA - Labour Prices",
+        "DSA - Overheads",
+        "DSA - Test Throughput"
+      ],
+      "native_shape": [
+        26,
+        31
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1612,
+      "role": "sensitivity output",
+      "interpretation": "Differences between scenario results; verify sign and denominator before ranking.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB15",
+      "sheet": "DSA - Summary (2)",
+      "state": "visible",
+      "rows": 33,
+      "columns": 31,
+      "nonempty_cells": 519,
+      "formulas": 220,
+      "literal_sheet_references": [
+        "DSA - Consumable Discounts",
+        "DSA - Labour Prices",
+        "DSA - Overheads",
+        "DSA - Test Throughput"
+      ],
+      "native_shape": [
+        32,
+        31
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1984,
+      "role": "sensitivity output",
+      "interpretation": "Alternate DSA summary edition; preserve identity and compare lineage before deduplication.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB16",
+      "sheet": "DSA - Summary - Stats",
+      "state": "visible",
+      "rows": 25,
+      "columns": 6,
+      "nonempty_cells": 97,
+      "formulas": 60,
+      "literal_sheet_references": [
+        "DSA - Summary"
+      ],
+      "native_shape": [
+        24,
+        6
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 288,
+      "role": "sensitivity statistics",
+      "interpretation": "Relative numerator/denominator assay matrix referencing DSA summary; do not infer a generic statistical model from its name.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB17",
+      "sheet": "Detailed Table",
+      "state": "visible",
+      "rows": 1340,
+      "columns": 27,
+      "nonempty_cells": 17571,
+      "formulas": 16605,
+      "literal_sheet_references": [
+        "BI - Comp Use - VCGS",
+        "BI - Stor Use - VCGS",
+        "Cons -  Costs and Util - VCGS",
+        "Eq - Usage - VCGS",
+        "Labour - Usage - VCGS"
+      ],
+      "native_shape": [
+        1336,
+        27
+      ],
+      "header_rows": 4,
+      "data_starts_at": 5,
+      "compared_cells": 72144,
+      "role": "baseline calculation",
+      "interpretation": "Detailed microcosting formulas by test/category/sub-category/step; 1,336 rows below four headers include non-detail rows, not 1,336 proven process steps.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB18",
+      "sheet": "Process",
+      "state": "visible",
+      "rows": 39,
+      "columns": 2,
+      "nonempty_cells": 41,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        38,
+        2
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 152,
+      "role": "process definition",
+      "interpretation": "Stage/step reference table; descriptive baseline topology.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB19",
+      "sheet": "DSA - Overheads",
+      "state": "visible",
+      "rows": 81,
+      "columns": 31,
+      "nonempty_cells": 1917,
+      "formulas": 1467,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        31
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 4960,
+      "role": "sensitivity calculation",
+      "interpretation": "Overhead scenario branch over detailed costs; retain accounting base and avoid duplicate overhead allocation.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB20",
+      "sheet": "DSA - Overheads (USD)",
+      "state": "visible",
+      "rows": 81,
+      "columns": 31,
+      "nonempty_cells": 1919,
+      "formulas": 1496,
+      "literal_sheet_references": [
+        "BI - Comp Use - VCGS",
+        "BI - Comp+Stor Costs - VCGS",
+        "BI - Stor Use - VCGS",
+        "Detailed Table",
+        "Eq - Usage - VCGS"
+      ],
+      "native_shape": [
+        80,
+        31
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 4960,
+      "role": "sensitivity calculation",
+      "interpretation": "USD-labelled overhead branch with additional resource dependencies; verify actual currency/FX lineage before reuse.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB21",
+      "sheet": "Sheet2",
+      "state": "visible",
+      "rows": 11,
+      "columns": 6,
+      "nonempty_cells": 60,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        10,
+        6
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 120,
+      "role": "static working matrix",
+      "interpretation": "Stage-by-assay matrix without formulas; units, origin and intended use require explicit classification.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB22",
+      "sheet": "DSA - Consumable Discounts",
+      "state": "visible",
+      "rows": 81,
+      "columns": 34,
+      "nonempty_cells": 2102,
+      "formulas": 1422,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        34
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 5440,
+      "role": "sensitivity calculation",
+      "interpretation": "Consumable-discount scenarios over detailed costs; not procurement-price evidence by itself.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB23",
+      "sheet": "DSA - Cons Discounts (USD)",
+      "state": "visible",
+      "rows": 81,
+      "columns": 34,
+      "nonempty_cells": 2103,
+      "formulas": 1422,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        80,
+        34
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 5440,
+      "role": "sensitivity calculation",
+      "interpretation": "USD-labelled consumable discount branch; retain currency and conversion assumptions separately.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB24",
+      "sheet": "DSA - Test Throughput",
+      "state": "visible",
+      "rows": 81,
+      "columns": 34,
+      "nonempty_cells": 2102,
+      "formulas": 1512,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        77,
+        34
+      ],
+      "header_rows": 4,
+      "data_starts_at": 5,
+      "compared_cells": 5236,
+      "role": "sensitivity calculation",
+      "interpretation": "Test-throughput scenarios over detailed costs; volume sensitivity is not a validated queue/batch optimizer.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB25",
+      "sheet": "DSA - Labour Prices",
+      "state": "visible",
+      "rows": 81,
+      "columns": 52,
+      "nonempty_cells": 3212,
+      "formulas": 2550,
+      "literal_sheet_references": [
+        "Detailed Table"
+      ],
+      "native_shape": [
+        77,
+        52
+      ],
+      "header_rows": 4,
+      "data_starts_at": 5,
+      "compared_cells": 8008,
+      "role": "sensitivity calculation",
+      "interpretation": "Labour-price scenarios across assays/jurisdictions; preserve price basis and role mappings.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB26",
+      "sheet": "Process - WES+Panel - VCGS",
+      "state": "hidden",
+      "rows": 58,
+      "columns": 3,
+      "nonempty_cells": 57,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        57,
+        3
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 342,
+      "role": "process definition",
+      "interpretation": "WES/panel process description; distinguish physical steps, resources and narrative annotations.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB27",
+      "sheet": "Process - WGS - VCGS",
+      "state": "hidden",
+      "rows": 54,
+      "columns": 3,
+      "nonempty_cells": 52,
+      "formulas": 0,
+      "literal_sheet_references": [],
+      "native_shape": [
+        53,
+        3
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 318,
+      "role": "process definition",
+      "interpretation": "WGS process description; preserve this separate workflow and its resource requirements.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB28",
+      "sheet": "Labour - Costs - VCGS",
+      "state": "visible",
+      "rows": 31,
+      "columns": 30,
+      "nonempty_cells": 724,
+      "formulas": 186,
+      "literal_sheet_references": [],
+      "native_shape": [
+        30,
+        30
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1800,
+      "role": "labour rates",
+      "interpretation": "Labour cost assumptions/rates and costing bases; source dates and on-cost interpretation need parameter-level provenance.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB29",
+      "sheet": "Labour - Usage - VCGS",
+      "state": "visible",
+      "rows": 111,
+      "columns": 41,
+      "nonempty_cells": 2381,
+      "formulas": 1928,
+      "literal_sheet_references": [
+        "Labour - Costs - VCGS"
+      ],
+      "native_shape": [
+        110,
+        41
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 9020,
+      "role": "labour quantities",
+      "interpretation": "Labour usage by process/test linked to labour cost inputs; distinguish hands-on, elapsed and shared time.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB30",
+      "sheet": "Cons -  Costs and Util - VCGS",
+      "state": "visible",
+      "rows": 120,
+      "columns": 17,
+      "nonempty_cells": 1251,
+      "formulas": 442,
+      "literal_sheet_references": [],
+      "native_shape": [
+        119,
+        17
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 4046,
+      "role": "consumable quantities/rates",
+      "interpretation": "Consumable items, prices and usage with computed cells; distinguish unit price, pack size, wastage and per-test consumption.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB31",
+      "sheet": "Eq - Usage - VCGS",
+      "state": "visible",
+      "rows": 53,
+      "columns": 28,
+      "nonempty_cells": 607,
+      "formulas": 478,
+      "literal_sheet_references": [
+        "Eq - Costs and Usage - VCGS"
+      ],
+      "native_shape": [
+        52,
+        28
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 2912,
+      "role": "equipment quantities",
+      "interpretation": "Equipment usage linked to equipment costs; preserve shared capacity and allocation assumptions.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB32",
+      "sheet": "Eq - Costs and Usage - VCGS",
+      "state": "visible",
+      "rows": 63,
+      "columns": 33,
+      "nonempty_cells": 747,
+      "formulas": 176,
+      "literal_sheet_references": [],
+      "native_shape": [
+        62,
+        33
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 4092,
+      "role": "equipment rates/capital",
+      "interpretation": "Equipment costs and usage/annualisation assumptions; distinguish purchase, replacement, useful life, utilization and maintenance.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB33",
+      "sheet": "BI - Comp+Stor Costs - VCGS",
+      "state": "visible",
+      "rows": 34,
+      "columns": 29,
+      "nonempty_cells": 201,
+      "formulas": 51,
+      "literal_sheet_references": [],
+      "native_shape": [
+        33,
+        29
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1914,
+      "role": "compute/storage rates",
+      "interpretation": "Combined bioinformatics compute/storage cost inputs; distinguish rate, allocation and price-period bases.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB34",
+      "sheet": "BI - Comp Use - VCGS",
+      "state": "visible",
+      "rows": 126,
+      "columns": 23,
+      "nonempty_cells": 2035,
+      "formulas": 660,
+      "literal_sheet_references": [
+        "BI - Comp+Stor Costs - VCGS"
+      ],
+      "native_shape": [
+        125,
+        23
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 5750,
+      "role": "compute quantities",
+      "interpretation": "Compute usage linked to combined rates; requested/allocated resources are not automatically measured/billed usage.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    },
+    {
+      "id": "WB35",
+      "sheet": "BI - Stor Use - VCGS",
+      "state": "visible",
+      "rows": 47,
+      "columns": 18,
+      "nonempty_cells": 450,
+      "formulas": 194,
+      "literal_sheet_references": [
+        "BI - Comp+Stor Costs - VCGS"
+      ],
+      "native_shape": [
+        46,
+        18
+      ],
+      "header_rows": 1,
+      "data_starts_at": 2,
+      "compared_cells": 1656,
+      "role": "storage quantities",
+      "interpretation": "Storage usage linked to combined rates; retain volume, copies, retention and time denominator.",
+      "incorporation": "native cached and formula frames verified",
+      "semantic_qualification": "not fully qualified"
+    }
+  ]
+}

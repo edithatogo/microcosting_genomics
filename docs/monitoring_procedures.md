@@ -66,7 +66,9 @@ The [UsageAnalytics](file:///Users/doughnut/GitHub/microcosting_genomics/src/uni
 from unimelb_phd_phase_1.monitoring import UsageAnalytics
 
 usage_analytics = UsageAnalytics()
-usage_analytics.log_user_action("user123", "run_analysis", "cost_driver", {"parameters": {"iterations": 1000}})
+usage_analytics.log_user_action(
+    "user123", "run_analysis", "cost_driver", {"parameters": {"iterations": 1000}}
+)
 stats = usage_analytics.get_usage_statistics()
 ```
 
@@ -85,7 +87,9 @@ The [AlertManager](file:///Users/doughnut/GitHub/microcosting_genomics/src/unime
 from unimelb_phd_phase_1.monitoring import AlertManager
 
 alert_manager = AlertManager()
-alert_manager.send_alert("low_disk_space", "Disk space below 10%", "warning", {"free_gb": 0.5})
+alert_manager.send_alert(
+    "low_disk_space", "Disk space below 10%", "warning", {"free_gb": 0.5}
+)
 recent_alerts = alert_manager.get_recent_alerts()
 ```
 
@@ -101,10 +105,14 @@ The [MonitoringMiddleware](file:///Users/doughnut/GitHub/microcosting_genomics/s
 
 #### Usage Example:
 ```python
-from unimelb_phd_phase_1.monitoring import MonitoringMiddleware, PerformanceMetricsCollector
+from unimelb_phd_phase_1.monitoring import (
+    MonitoringMiddleware,
+    PerformanceMetricsCollector,
+)
 
 metrics_collector = PerformanceMetricsCollector()
 middleware = MonitoringMiddleware(metrics_collector)
+
 
 @middleware.monitor_execution_time("data_processing")
 def process_data(data):
@@ -141,7 +149,13 @@ Returns recent system alerts.
 from unimelb_phd_phase_1.monitoring import setup_standard_monitoring
 
 # Set up all monitoring components
-health_checker, metrics_collector, usage_analytics, alert_manager, monitoring_middleware = setup_standard_monitoring()
+(
+    health_checker,
+    metrics_collector,
+    usage_analytics,
+    alert_manager,
+    monitoring_middleware,
+) = setup_standard_monitoring()
 
 # Run health check
 health_results = health_checker.run_health_check()
@@ -166,6 +180,7 @@ def check_database_connection():
         return {"status": "connected", "latency_ms": 5.2}
     except Exception as e:
         raise HealthCheckError(f"Database connection failed: {e}")
+
 
 # Register the custom check
 health_checker.register_health_check("database", check_database_connection)

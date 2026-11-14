@@ -1,158 +1,172 @@
 #!/usr/bin/env python3
-"""
-Script to prepare translated tables for publication with metadata.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Script to prepare translated tables for publication with metadata."""
 
-import sys
-from pathlib import Path
-import pandas as pd
 import json
-from datetime import datetime
+import logging
+import sys
+import traceback
+from datetime import UTC, datetime
+from pathlib import Path
 
-# Add the src directory to the path so we can import our modules
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
+import pandas as pd
 
-from genomics_microcosting.config import load_config  # noqa: E402
+from genomics_microcosting.config import load_config
+
+logger = logging.getLogger(__name__)
 
 
-def create_table_metadata(df, table_name, description=""):
+def create_table_metadata(
+    df: pd.DataFrame,
+    table_name: str,
+    description: str = "",
+) -> dict[str, object]:
     """Create metadata for a table.
-    
+
     Args:
         df (pd.DataFrame): The DataFrame containing the table data
         table_name (str): Name of the table
         description (str): Description of the table
-        
+
     Returns:
         dict: Metadata dictionary
+
     """
     metadata = {
         "table_name": table_name,
         "description": description,
-        "created_date": datetime.now().isoformat(),
+        "created_date": datetime.now(UTC).astimezone().isoformat(),
         "row_count": len(df),
         "column_count": len(df.columns),
-        "columns": []
+        "columns": [],
     }
-    
+
     for col in df.columns:
         col_info = {
             "name": col,
             "dtype": str(df[col].dtype),
-            "null_count": int(df[col].isnull().sum()),
+            "null_count": int(df[col].isna().sum()),
         }
-        
+
         # Add unique count for categorical columns
-        if df[col].dtype == 'object':
+        if df[col].dtype == "object":
             col_info["unique_count"] = int(df[col].nunique())
             # Add sample values for context
             sample_values = df[col].dropna().unique()[:5].tolist()
             col_info["sample_values"] = sample_values
-        
+
         metadata["columns"].append(col_info)
-    
+
     return metadata
 
 
-def prepare_publication_tables():
+def prepare_publication_tables() -> int | None:
     """Prepare all tables for publication with metadata."""
-    print("Preparing tables for publication...")
-    
+    sys.stdout.write("Preparing tables for publication..." + "\n")
+
     try:
         # Load configuration
         load_config()
-        print("Configuration loaded successfully")
-        
+        sys.stdout.write("Configuration loaded successfully" + "\n")
+
         # Define paths
         data_dir = Path(__file__).resolve().parents[1] / "data" / "prepared"
         publication_dir = Path(__file__).resolve().parents[1] / "publication"
         publication_dir.mkdir(exist_ok=True)
-        
-        print(f"Looking for prepared data in {data_dir}")
-        
+
+        sys.stdout.write(f"Looking for prepared data in {data_dir}" + "\n")
+
         # Process all parquet files
         parquet_files = list(data_dir.glob("*.parquet"))
-        print(f"Found {len(parquet_files)} parquet files")
-        
+        sys.stdout.write(f"Found {len(parquet_files)} parquet files" + "\n")
+
         processed_count = 0
-        
+
         for parquet_file in parquet_files:
             table_name = parquet_file.stem
-            print(f"Processing {table_name}...")
-            
+            sys.stdout.write(f"Processing {table_name}..." + "\n")
+
             try:
                 # Load the data
                 df = pd.read_parquet(parquet_file)
-                print(f"  Loaded {len(df)} rows and {len(df.columns)} columns")
-                
+                sys.stdout.write(
+                    f"  Loaded {len(df)} rows and {len(df.columns)} columns" + "\n",
+                )
+
                 # Save as CSV for publication
                 csv_file = publication_dir / f"{table_name}.csv"
                 df.to_csv(csv_file, index=False)
-                print(f"  Saved CSV to {csv_file}")
-                
+                sys.stdout.write(f"  Saved CSV to {csv_file}" + "\n")
+
                 # Create metadata
                 description = f"Translated table from Excel workbook: {table_name}"
                 metadata = create_table_metadata(df, table_name, description)
-                
+
                 # Save metadata as JSON
                 metadata_file = publication_dir / f"{table_name}_metadata.json"
-                with open(metadata_file, 'w') as f:
+                with Path(metadata_file).open("w") as f:
                     json.dump(metadata, f, indent=2)
-                print(f"  Saved metadata to {metadata_file}")
-                
+                sys.stdout.write(f"  Saved metadata to {metadata_file}" + "\n")
+
                 processed_count += 1
-                
+
             except Exception as e:
-                print(f"  Error processing {table_name}: {e}")
+                logger.exception("Could not complete prepare publication tables")
+                sys.stdout.write(f"  Error processing {table_name}: {e}" + "\n")
                 continue
-        
-        print(f"\nSuccessfully prepared {processed_count} tables for publication")
-        print(f"Publication files saved to {publication_dir}")
-        
+
+        sys.stdout.write(
+            f"\nSuccessfully prepared {processed_count} tables for publication" + "\n",
+        )
+        sys.stdout.write(f"Publication files saved to {publication_dir}" + "\n")
+
         # Create a README for the publication directory
         readme_content = f"""# Publication Tables
 
-This directory contains the translated tables from the Excel workbook prepared for publication.
+This directory holds the workbook tables prepared for publication.
 
 ## Contents
 
 - CSV files: The translated tables in CSV format for easy use outside Excel
-- JSON metadata files: Metadata for each table including column information and data types
+- JSON metadata files: Column names and data types for each table.
 
 ## Processing Information
 
-- Processed on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- Processed on: {datetime.now(UTC).astimezone().strftime("%Y-%m-%d %H:%M:%S")}
 - Source data directory: {data_dir}
 - Number of tables processed: {processed_count}
 
 ## Table Descriptions
 
 """
-        
+
         # Add table descriptions to README
         for parquet_file in parquet_files:
             table_name = parquet_file.stem
             readme_content += f"- {table_name}.csv: Translated table from Excel\n"
-        
-        readme_content += "\n## Usage\n\nThese tables can be used for research, analysis, and reporting on microcosting for rare disease genomics.\n"
-        
+
+        readme_content += (
+            "\n## Usage\n\nThese tables can be used for research, analysis, and "
+            "reporting on microcosting for rare disease genomics.\n"
+        )
+
         readme_file = publication_dir / "README.md"
-        with open(readme_file, 'w') as f:
+        with Path(readme_file).open("w") as f:
             f.write(readme_content)
-        print(f"Created README.md in {publication_dir}")
-        
-        return 0
-        
+        sys.stdout.write(f"Created README.md in {publication_dir}" + "\n")
+
     except Exception as e:
-        print(f"Error preparing publication tables: {e}")
-        import traceback
+        logger.exception("Could not complete prepare publication tables")
+        sys.stdout.write(f"Error preparing publication tables: {e}" + "\n")
+
         traceback.print_exc()
         return 1
+    else:
+        return 0
 
 
-def main():
-    """Main function."""
+def main() -> int | None:
+    """Prepare the tables used in the publication."""
     return prepare_publication_tables()
 
 

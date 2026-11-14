@@ -36,7 +36,7 @@ Validates Excel cell references:
 - Row range: 1 to 1048576
 
 ```python
-validator.validate_cell_reference("A1")      # Valid
+validator.validate_cell_reference("A1")  # Valid
 validator.validate_cell_reference("XFD1048576")  # Valid (maximum values)
 ```
 
@@ -49,13 +49,11 @@ Validates pandas DataFrames:
 
 ```python
 import pandas as pd
-df = pd.DataFrame({'Test': ['Panel'], 'Cost': [50000]})
+
+df = pd.DataFrame({"Test": ["Panel"], "Cost": [50000]})
 
 validator.validate_dataframe(
-    df, 
-    expected_columns=['Test', 'Cost'],
-    min_rows=1,
-    max_rows=1000
+    df, expected_columns=["Test", "Cost"], min_rows=1, max_rows=1000
 )
 ```
 
@@ -84,7 +82,7 @@ Validates string values with length and pattern checking:
 validator.validate_string_value("test string", max_length=50)
 
 # Validate string with pattern (e.g., digits only)
-validator.validate_string_value("12345", pattern=r'^\d+$')
+validator.validate_string_value("12345", pattern=r"^\d+$")
 ```
 
 ### File Path Validation
@@ -98,9 +96,7 @@ Validates file paths:
 from pathlib import Path
 
 validator.validate_file_path(
-    "./data/input.xlsx",
-    must_exist=True,
-    allowed_extensions=['.xlsx', '.xls']
+    "./data/input.xlsx", must_exist=True, allowed_extensions=[".xlsx", ".xls"]
 )
 ```
 
@@ -116,12 +112,7 @@ config = {
     "workbooks": {
         "main": {
             "path": "data/file.xlsx",
-            "sheets": {
-                "Detailed Table": {
-                    "header_rows": 4,
-                    "data_starts_at": 5
-                }
-            }
+            "sheets": {"Detailed Table": {"header_rows": 4, "data_starts_at": 5}},
         }
     }
 }
@@ -139,9 +130,9 @@ Validates non-negative numeric values for cost data:
 ```python
 from unimelb_phd_phase_1.input_validation import validate_cost_value
 
-validate_cost_value(50000)    # Valid
-validate_cost_value(0)        # Valid
-validate_cost_value(-5)       # Raises ValidationError
+validate_cost_value(50000)  # Valid
+validate_cost_value(0)  # Valid
+validate_cost_value(-5)  # Raises ValidationError
 ```
 
 ### Percentage Validator
@@ -150,10 +141,10 @@ Validates percentage values (0-100 range):
 ```python
 from unimelb_phd_phase_1.input_validation import validate_percentage
 
-validate_percentage(75.5)     # Valid
-validate_percentage(0)        # Valid
-validate_percentage(100)      # Valid
-validate_percentage(105)      # Raises ValidationError
+validate_percentage(75.5)  # Valid
+validate_percentage(0)  # Valid
+validate_percentage(100)  # Valid
+validate_percentage(105)  # Raises ValidationError
 ```
 
 ### Positive Integer Validator
@@ -162,9 +153,9 @@ Validates positive integer values:
 ```python
 from unimelb_phd_phase_1.input_validation import validate_positive_integer
 
-validate_positive_integer(5)      # Valid
-validate_positive_integer("10")   # Valid (string conversion)
-validate_positive_integer(0)      # Raises ValidationError
+validate_positive_integer(5)  # Valid
+validate_positive_integer("10")  # Valid (string conversion)
+validate_positive_integer(0)  # Raises ValidationError
 ```
 
 ## Integration Examples
@@ -197,14 +188,11 @@ class DataManager:
     def __init__(self):
         self.validator = InputValidator()
         # ... other initialization ...
-    
+
     def load_sheet(self, sheet_name, format="parquet"):
         try:
             self.validator.validate_sheet_name(sheet_name)
-            self.validator.validate_string_value(
-                format, 
-                pattern=r'^(parquet|csv)$'
-            )
+            self.validator.validate_string_value(format, pattern=r"^(parquet|csv)$")
         except ValidationError as e:
             self.logger.error(f"Invalid input: {e}")
             return None
@@ -247,12 +235,12 @@ class CustomValidator(InputValidator):
     def validate_genomic_test_name(self, test_name: str) -> bool:
         """Validate genomic test name format."""
         self.validate_string_value(test_name, max_length=100)
-        
+
         # Custom pattern for genomic test names
-        pattern = r'^[A-Z0-9\s\-\(\)]+$'
+        pattern = r"^[A-Z0-9\s\-\(\)]+$"
         if not re.match(pattern, test_name):
             raise ValidationError(f"Invalid test name format: {test_name}")
-        
+
         return True
 ```
 
@@ -261,21 +249,13 @@ Define validation rules as configuration:
 
 ```python
 VALIDATION_RULES = {
-    "cost_value": {
-        "type": "numeric",
-        "min_value": 0,
-        "max_value": 1000000
-    },
-    "percentage": {
-        "type": "numeric",
-        "min_value": 0,
-        "max_value": 100
-    },
+    "cost_value": {"type": "numeric", "min_value": 0, "max_value": 1000000},
+    "percentage": {"type": "numeric", "min_value": 0, "max_value": 100},
     "sheet_name": {
         "type": "string",
         "max_length": 255,
-        "pattern": r'^[^\\\/\*\[\]:\?]$'
-    }
+        "pattern": r"^[^\\\/\*\[\]:\?]$",
+    },
 }
 ```
 
