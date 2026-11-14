@@ -3,7 +3,8 @@
 
 import json
 from hashlib import sha256
-from typing import Any
+from typing import Any, cast
+lazy from pathlib import Path
 
 import pytest
 
@@ -69,7 +70,7 @@ def artifact() -> dict[str, Any]:
             "id": source["source_id"], "version": "synthetic-v1",
             "evidence": "synthetic", "access": "public", "validation": "unvalidated",
             "content_digest": "sha256:" + source["sha256"],
-            "locator": source["uri"] + "#table36083",
+            "locator": source["uri"],
         },
     }
     return {
@@ -95,7 +96,7 @@ def request(
     batches: tuple[ExtractionBatch, ...] | None = None,
     *,
     declaration: dict[str, Any] | None = None,
-    **changes: Any,
+    **changes: object,
 ) -> dict[str, Any]:
     """Build an explicit synthetic invocation, leaving economics to Rust."""
     raw, digest = seal(artifact() if declaration is None else declaration)
@@ -138,7 +139,7 @@ def test_failed_then_repeated_batch_keeps_separate_pools() -> None:
 def test_invalid_cohorts_fail_before_pricing(members: object) -> None:
     """Missing, duplicated, excessive or ambiguous membership cannot be allocated."""
     with pytest.raises(ValueError, match="specimen"):
-        request((ExtractionBatch("batch", members),))  # type: ignore[arg-type]
+        request((ExtractionBatch("batch", cast("tuple[str, ...]", members)),))
 
 
 @pytest.mark.parametrize(
@@ -179,7 +180,7 @@ def test_missing_date_scope_or_pinned_identity_fails(changes: dict[str, str]) ->
         request(**changes)
 
 
-@pytest.mark.parametrize("mutation", ["amount", "components", "status", "release"])
+@pytest.mark.parametrize("mutation", ["amount", "components", "extra_component", "source_kind", "status", "release"])
 def test_signed_but_inconsistent_projection_is_rejected(mutation: str) -> None:
     """A self-consistent hash cannot conceal broken release-to-quote lineage."""
     declaration = artifact()
@@ -187,6 +188,11 @@ def test_signed_but_inconsistent_projection_is_rejected(mutation: str) -> None:
         declaration["quotes"][0]["amount"] = "37.00"
     elif mutation == "components":
         declaration["quotes"][0]["components"] = ["base_salary", "base_salary"]
+    elif mutation == "extra_component":
+        declaration["quotes"][0]["components"] = ["base_salary", "oncosts"]
+        declaration["bindings"][0]["components"] = ["base_salary", "oncosts"]
+    elif mutation == "source_kind":
+        declaration["release_snapshot"]["sources"]["records"][0]["kind"] = "unknown"
     elif mutation == "status":
         declaration["release_snapshot"]["quotes"][0]["status"] = "candidate"
     else:
@@ -219,7 +225,7 @@ def test_old_entry_point_is_an_explicit_passthrough() -> None:
     )
 
 
-def test_unrecognized_workbook_bytes_cannot_claim_the_source(tmp_path: Any) -> None:
+def test_unrecognized_workbook_bytes_cannot_claim_the_source(tmp_path: Path) -> None:
     """Do not label a synthetic or repaired file as the preserved workbook."""
     source = tmp_path / "synthetic.xlsm"
     source.write_bytes(b"synthetic non-workbook")

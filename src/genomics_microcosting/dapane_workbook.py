@@ -9,6 +9,7 @@ from zipfile import ZipFile
 lazy from pathlib import Path
 
 from defusedxml import ElementTree
+from openpyxl import load_workbook
 
 from genomics_microcosting.dapane_adapter import (
     SHEET,
@@ -61,15 +62,25 @@ def inspect_manual_extraction_workbook(path: Path) -> dict[str, Any]:
         raise ValueError(message)
     with ZipFile(BytesIO(payload)) as archive:
         worksheet = ElementTree.fromstring(archive.read(_sheet_path(archive)))
+    # Excel shared-formula records can omit repeated formula text. The existing
+    # reader expands those references mechanically; it does not recalculate them.
+    book = load_workbook(BytesIO(payload), read_only=True, data_only=False)
+    try:
+        formulas = {
+            cell.coordinate: str(cell.value) if cell.data_type == "f" else None
+            for row in book[SHEET].iter_rows(min_row=22, max_row=24, min_col=4, max_col=28)
+            for cell in row if getattr(cell, "coordinate", "") in EXPECTED
+        }
+    finally:
+        book.close()
     selected: dict[str, dict[str, str | None]] = {}
     for cell in worksheet.findall(".//{*}c"):
         coordinate = cell.attrib["r"]
         if coordinate not in EXPECTED:
             continue
-        formula = cell.find("{*}f")
         cached = cell.find("{*}v")
         selected[coordinate] = {
-            "formula": None if formula is None else "=" + (formula.text or ""),
+            "formula": formulas[coordinate],
             "cached": None if cached is None else cached.text,
         }
     if set(selected) != set(EXPECTED):

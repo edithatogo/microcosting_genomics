@@ -130,7 +130,8 @@ def _check_scope(
 ) -> None:
     _require(original.get("status") == "accepted", "Quote must be accepted")
     _require(
-        source.get("holding") == "held"
+        source.get("kind") in {"synthetic", "published_wage_reference"}
+        and source.get("holding") == "held"
         and source.get("authority") == "primary"
         and source.get("applicability") == "verified"
         and source.get("sha256") == original.get("source_sha256"),
@@ -173,7 +174,7 @@ def _check_projection(
         and all(isinstance(c, str) and c.strip() for c in components)
         and len(set(components)) == len(components)
         and binding.get("components") == components
-        and original.get("component") in components
+        and components == [original.get("component")]
         and isinstance(binding.get("component_basis"), str)
         and bool(binding["component_basis"].strip()),
         "Component binding is missing, duplicated or inconsistent",
@@ -232,7 +233,7 @@ def selected_workforce_quote(
         and metadata.get("evidence") == ("synthetic" if synthetic else "observed")
         and metadata.get("validation") == ("unvalidated" if synthetic else "source_verified")
         and metadata.get("access") == "public"
-        and metadata.get("locator") in {uri, uri + "#table36083"},
+        and metadata.get("locator") == uri,
         "Projected quotation source metadata differs",
     )
     when, cutoff = _date(service_date), _date(knowledge_cutoff)
