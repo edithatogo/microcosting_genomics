@@ -2,11 +2,15 @@
 """Verify finite policy comparisons against hand-derived cost/TAT outcomes."""
 
 from decimal import Decimal
+from typing import cast
 lazy from pathlib import Path
 
 import pytest
 
-from genomics_microcosting.batch_policy_search import enumerate_batch_policies
+from genomics_microcosting.batch_policy_search import (
+    PolicyGrid,
+    enumerate_batch_policies,
+)
 from tests import checks
 from tests.test_dynamic_batch import dynamic, timed
 from tests.test_static_batch_cost import batch_inputs
@@ -180,3 +184,11 @@ def test_dominance_and_run_bound_do_not_discard_failed_policies(tmp_path: Path) 
     )
     checks.require_equal(bounded.points[0].result.schedule.unserved_case_ids, ("c1",))
     checks.require_equal(bounded.pareto_indices, (1,))
+
+
+def test_policy_grid_rejects_invalid_runtime_keyword_names(tmp_path: Path) -> None:
+    """Reject untyped callers with misspelled policy grid keys."""
+    pricing, context = batch_inputs(tmp_path, "requested_tests")
+    options = cast("PolicyGrid", {"payload_limits": (1,), "max_wait_seconds_typo": ()})
+    with pytest.raises(TypeError, match="Expected exactly payload_limits"):
+        enumerate_batch_policies(timed(1), dynamic(), pricing, context, **options)

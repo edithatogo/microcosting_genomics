@@ -146,6 +146,25 @@ def test_legacy_positional_workbook_options() -> None:
         CalculationEngine(sheet_manager, enable_logging, verbose=True)
 
 
+def test_sheet_manager_rejects_malformed_positional_options() -> None:
+    """Reject invalid legacy options before reading a workbook."""
+    logging_flag = False
+    workbook = Path("unused.xlsx")
+    with pytest.raises(TypeError, match="Too many positional options"):
+        SheetManager(workbook, logging_flag, None, None, None)
+    with pytest.raises(TypeError, match="multiple values for verbose"):
+        SheetManager(workbook, logging_flag, verbose=True)
+    with pytest.raises(TypeError, match="Invalid positional value for verbose"):
+        SheetManager(workbook, "not a flag")
+    empty_config = SheetManager(
+        Path(__file__).resolve().parent / "test_data.xlsx",
+        logging_flag,
+        None,
+        None,
+    )
+    require_equal(empty_config.excel_file_path.name, "test_data.xlsx")
+
+
 def test_engine_initialization(engine: CalculationEngine) -> None:
     """Tests the basic initialization of the CalculationEngine."""
     require_runtime_instance(engine, CalculationEngine)
