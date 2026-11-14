@@ -2,10 +2,12 @@
 """Verify runtime and static contracts for execution decorators."""
 
 from typing import assert_type
+lazy from pathlib import Path
 
 import pytest
 
-from genomics_microcosting.error_handling import ErrorHandler
+from genomics_microcosting.error_handling import ErrorHandler, ErrorSeverity
+from genomics_microcosting.input_validation import InputValidator
 from genomics_microcosting.performance import PerformanceProfiler
 from tests.checks import require_equal
 
@@ -56,3 +58,31 @@ def test_degradation_declares_null_and_fallback() -> None:
     if not (fallback(-1) == "unavailable"):
         raise AssertionError
     require_equal(fallback(2), 2)
+
+
+def test_legacy_positional_recovery_and_validation(tmp_path: Path) -> None:
+    """Retain positional recovery and validation arguments."""
+    handler = ErrorHandler(checkpoint_dir=str(tmp_path))
+    checkpoint = handler.create_checkpoint("local", {"value": 2})
+    flag = True
+    require_equal(handler.restore_checkpoint(checkpoint, flag), {"value": 2})
+
+    @handler.graceful_degradation(
+        "legacy",
+        None,
+        "unavailable",
+        "fixture",
+        None,
+        ErrorSeverity.MEDIUM,
+    )
+    def operation() -> str:
+        message = "synthetic failure"
+        raise ValueError(message)
+
+    require_equal(operation(), "unavailable")
+    validator = InputValidator()
+    workbook = tmp_path / "synthetic.xlsx"
+    workbook.touch()
+    require_equal(validator.validate_file_path(workbook, flag, [".xlsx"]), flag)
+    require_equal(validator.validate_numeric_value(None, None, None, flag), flag)
+    require_equal(validator.validate_string_value("", None, None, flag), flag)

@@ -5,6 +5,22 @@ from typing import Protocol, TypedDict
 lazy from collections.abc import Callable
 
 
+def legacy_bool_option(
+    name: str,
+    positional: tuple[bool, ...],
+    *,
+    keyword: bool | None,
+    default: bool,
+) -> bool:
+    """Bind an existing positional flag alongside its explicit keyword form."""
+    if len(positional) > 1 or (positional and keyword is not None):
+        message = f"Invalid arguments for {name}"
+        raise TypeError(message)
+    if positional:
+        return positional[0]
+    return default if keyword is None else keyword
+
+
 class ProfileMetrics(TypedDict):
     """Describe measured counts, elapsed seconds and memory changes in MiB."""
 

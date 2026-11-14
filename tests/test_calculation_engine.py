@@ -132,6 +132,20 @@ def test_run_engine(test_engine: CalculationEngine) -> None:
     require_equal(results.shape[0], 3)
 
 
+def test_legacy_positional_workbook_options() -> None:
+    """Retain positional options for existing workbook API callers."""
+    workbook = Path(__file__).resolve().parent / "test_data.xlsx"
+    enable_logging = False
+    config: dict[str, SheetConfig] = {"Sheet1": {"header_rows": 1, "data_starts_at": 2}}
+    sheet_manager = SheetManager(workbook, enable_logging, None, config)
+    engine = CalculationEngine(sheet_manager, enable_logging)
+    results, errors = engine.run_engine("Unavailable sheet", enable_logging)
+    require_equal(results, None)
+    require_equal(errors, ["Data sheet 'Unavailable sheet' not found"])
+    with pytest.raises(TypeError, match="Invalid arguments for verbose"):
+        CalculationEngine(sheet_manager, enable_logging, verbose=True)
+
+
 def test_engine_initialization(engine: CalculationEngine) -> None:
     """Tests the basic initialization of the CalculationEngine."""
     require_runtime_instance(engine, CalculationEngine)

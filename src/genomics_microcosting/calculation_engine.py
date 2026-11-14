@@ -18,6 +18,7 @@ from .component_contracts import (
     RequiredParameters,
 )
 from .error_handling import setup_standard_error_handling
+from .execution_contracts import legacy_bool_option
 from .formula_contracts import validate_formula_record
 from .formula_parser import parse_formula
 from .input_validation import InputValidator, ValidationError
@@ -85,16 +86,23 @@ class CalculationEngine:
     def __init__(
         self,
         sheet_manager: SheetManager,
-        *,
-        verbose: bool = False,
+        *positional_verbose: bool,
+        verbose: bool | None = None,
     ) -> None:
         """Initialize the CalculationEngine.
 
         Args:
             sheet_manager (SheetManager): The sheet manager instance for accessing data.
-            verbose (bool, optional): Enable verbose logging. Defaults to False.
+            *positional_verbose: Optional positional verbose flag for existing callers.
+            verbose: Enable verbose logging. Defaults to false.
 
         """
+        verbose = legacy_bool_option(
+            "verbose",
+            positional_verbose,
+            keyword=verbose,
+            default=False,
+        )
         self.logger = get_logger(f"{__name__}.{self.__class__.__name__}")
         level = logging.DEBUG if verbose else logging.INFO
         self.logger.setLevel(level)
@@ -478,20 +486,27 @@ class CalculationEngine:
     def run_engine(
         self,
         sheet_name: str,
-        *,
-        fail_on_error: bool = True,
+        *positional_fail_on_error: bool,
+        fail_on_error: bool | None = None,
     ) -> tuple[pl.DataFrame | None, list[str]]:
         """Execute all formulas in a sheet and return results.
 
         Args:
             sheet_name (str): The name of the sheet to process.
-            fail_on_error (bool): Whether to raise exceptions on errors or collect them.
+            *positional_fail_on_error: Optional positional flag for existing callers.
+            fail_on_error: Whether to raise exceptions on errors or collect them.
 
         Returns:
             tuple: (results_df, errors_list) where results_df contains calculated values
                    and errors_list contains any errors encountered.
 
         """
+        fail_on_error = legacy_bool_option(
+            "fail_on_error",
+            positional_fail_on_error,
+            keyword=fail_on_error,
+            default=True,
+        )
         # Validate inputs
         try:
             self.validator.validate_sheet_name(sheet_name)
@@ -502,14 +517,13 @@ class CalculationEngine:
 
         # Get the data and formula sheets
         data_df = self.sheet_manager.get_data(sheet_name)
-        formula_df = self.sheet_manager.get_formulas(sheet_name)
-
         if data_df is None:
             error_msg = f"Data sheet '{sheet_name}' not found"
             if fail_on_error:
                 raise ValueError(error_msg)
             return None, [error_msg]
 
+        formula_df = self.sheet_manager.get_formulas(sheet_name)
         if formula_df is None:
             error_msg = f"Formula sheet '{sheet_name}' not found"
             if fail_on_error:

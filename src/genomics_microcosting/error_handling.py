@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, TypedDict, Unpack
 lazy from collections.abc import Callable, Mapping
 
+from .execution_contracts import legacy_bool_option
 lazy from .execution_contracts import DegradationDecorator
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,38 @@ class DegradationContext(TypedDict, total=False):
     data_source: str | None
     module: str | None
     severity_threshold: str
+
+
+_DEGRADATION_FIELDS = ("data_source", "module", "severity_threshold")
+
+
+def _degradation_context(
+    positional: tuple[str | None, ...],
+    fields: DegradationContext,
+) -> tuple[str | None, str | None, str]:
+    if len(positional) > len(_DEGRADATION_FIELDS):
+        message = "Too many positional options for graceful_degradation"
+        raise TypeError(message)
+    if (fields.keys() - set(_DEGRADATION_FIELDS)) or any(
+        key in fields for key in _DEGRADATION_FIELDS[: len(positional)]
+    ):
+        message = "Invalid context arguments for graceful_degradation"
+        raise TypeError(message)
+    data_source = positional[0] if positional else fields.get("data_source")
+    module = (
+        positional[1]
+        if len(positional) >= len(_DEGRADATION_FIELDS) - 1
+        else fields.get("module")
+    )
+    threshold = (
+        positional[-1]
+        if len(positional) == len(_DEGRADATION_FIELDS)
+        else fields.get("severity_threshold", ErrorSeverity.MEDIUM)
+    )
+    if not isinstance(threshold, str):
+        message = "The severity threshold must be a string"
+        raise TypeError(message)
+    return data_source, module, threshold
 
 
 class ErrorContext:
@@ -302,19 +335,26 @@ class CheckpointManager:
     def restore_checkpoint(
         self,
         checkpoint_id: str,
-        *,
-        from_disk: bool = False,
+        *positional_from_disk: bool,
+        from_disk: bool | None = None,
     ) -> object:
         """Restore data from a checkpoint.
 
         Args:
             checkpoint_id: Checkpoint identifier
+            *positional_from_disk: Optional positional flag for existing callers.
             from_disk: Whether to load from disk (if persistent)
 
         Returns:
             Checkpoint data or None if not found
 
         """
+        from_disk = legacy_bool_option(
+            "from_disk",
+            positional_from_disk,
+            keyword=from_disk,
+            default=False,
+        )
         checkpoint = None
 
         # Try to load from memory first
@@ -527,6 +567,7 @@ class ErrorHandler:
         operation: str,
         fallback_function: Callable[..., D] | None = None,
         default_value: D | None = None,
+        *positional_context: str | None,
         **context_fields: Unpack[DegradationContext],
     ) -> DegradationDecorator[D]:
         """Wrap an operation with graceful degradation.
@@ -535,17 +576,16 @@ class ErrorHandler:
             operation: Name of the operation
             fallback_function: Function to call on error
             default_value: Default value to return on error
+            *positional_context: Optional positional context for existing callers.
             **context_fields: Data source, module and minimum recovery severity.
 
         Returns:
             Decorated function
 
         """
-        data_source = context_fields.get("data_source")
-        module = context_fields.get("module")
-        severity_threshold = context_fields.get(
-            "severity_threshold",
-            ErrorSeverity.MEDIUM,
+        data_source, module, severity_threshold = _degradation_context(
+            positional_context,
+            context_fields,
         )
 
         def decorator[**P, R](func: Callable[P, R]) -> Callable[P, R | D | None]:
@@ -628,13 +668,14 @@ class ErrorHandler:
     def restore_checkpoint(
         self,
         checkpoint_id: str,
-        *,
-        from_disk: bool = False,
+        *positional_from_disk: bool,
+        from_disk: bool | None = None,
     ) -> object:
         """Restore data from a checkpoint.
 
         Args:
             checkpoint_id: Checkpoint identifier
+            *positional_from_disk: Optional positional flag for existing callers.
             from_disk: Whether to load from disk (if persistent)
 
         Returns:
@@ -643,6 +684,7 @@ class ErrorHandler:
         """
         return self.checkpoint_manager.restore_checkpoint(
             checkpoint_id,
+            *positional_from_disk,
             from_disk=from_disk,
         )
 

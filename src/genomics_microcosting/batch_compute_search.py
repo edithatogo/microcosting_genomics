@@ -156,6 +156,9 @@ def enumerate_compute_batch_policies(
     bindings remain unknown; partial batch service cannot consume whole-workload
     compute inputs. The frontier is conditional on the available priced points.
     """
+    if grid.keys() != ComputePolicyGrid.__required_keys__:
+        message = "Expected payload_limits, max_wait_seconds and compute_inputs"
+        raise TypeError(message)
     compute_inputs = grid["compute_inputs"]
     workload = Workload.model_validate(workload.model_dump())
     pricing = BatchPricing.model_validate(pricing.model_dump())
