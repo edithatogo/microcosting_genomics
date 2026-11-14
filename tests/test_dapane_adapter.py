@@ -13,7 +13,10 @@ from genomics_microcosting.dapane_adapter import (
     historical_manual_extraction,
     manual_dna_extraction_request,
 )
-from genomics_microcosting.dapane_workbook import inspect_manual_extraction_workbook
+from genomics_microcosting.dapane_workbook import (
+    compare_manual_extraction_workbook,
+    inspect_manual_extraction_workbook,
+)
 from tests import checks
 
 
@@ -35,40 +38,72 @@ def seal(artifact: dict[str, Any]) -> tuple[str, str]:
 
 def artifact() -> dict[str, Any]:
     """Build a small synthetic wage release, never a real employment rule."""
-    source = {
-        "source_id": "synthetic-source", "title": "Synthetic reference",
-        "uri": "https://example.org/synthetic", "edition": "fixture-v1",
-        "jurisdiction": "synthetic", "kind": "synthetic", "holding": "held",
-        "authority": "primary", "applicability": "verified", "sha256": "1" * 64,
+    source: dict[str, Any] = {
+        "source_id": "synthetic-source",
+        "title": "Synthetic reference",
+        "uri": "https://example.org/synthetic",
+        "edition": "fixture-v1",
+        "jurisdiction": "synthetic",
+        "kind": "synthetic",
+        "holding": "held",
+        "authority": "primary",
+        "applicability": "verified",
+        "sha256": "1" * 64,
         "retrieved_at": "2026-11-15T00:00:00+00:00",
-        "published_on": "2026-09-01", "effective_from": "2026-09-01",
-        "effective_to": None, "verified_through": "2026-11-16",
-        "nominal_expiry": None, "employers": ["synthetic"],
-        "classifications": ["synthetic"], "supersedes": [], "reason": "",
+        "published_on": "2026-09-01",
+        "effective_from": "2026-09-01",
+        "effective_to": None,
+        "verified_through": "2026-11-16",
+        "nominal_expiry": None,
+        "employers": ["synthetic"],
+        "classifications": ["synthetic"],
+        "supersedes": [],
+        "reason": "",
     }
     provider_quote = {
-        "quote_id": "hourly", "component": "base_salary", "unit": "hour",
-        "amount": "36.00", "starts_on": "2026-09-01", "ends_on": "2026-11-16",
-        "known_from": "2026-11-15", "source_id": source["source_id"],
-        "source_sha256": source["sha256"], "citation": source["uri"],
+        "quote_id": "hourly",
+        "component": "base_salary",
+        "unit": "hour",
+        "amount": "36.00",
+        "starts_on": "2026-09-01",
+        "ends_on": "2026-11-16",
+        "known_from": "2026-11-15",
+        "source_id": source["source_id"],
+        "source_sha256": source["sha256"],
+        "citation": source["uri"],
         "status": "accepted",
     }
     snapshot = {
-        "release_id": "synthetic-v1", "method_id": "direct_unit_quote_v1",
-        "currency": "AUD", "as_known_on": "2026-11-15",
-        "jurisdiction": "synthetic", "employer": "synthetic",
-        "classification": "synthetic", "sources": {"schema_version": 1, "records": [source]},
+        "release_id": "synthetic-v1",
+        "method_id": "direct_unit_quote_v1",
+        "currency": "AUD",
+        "as_known_on": "2026-11-15",
+        "jurisdiction": "synthetic",
+        "employer": "synthetic",
+        "classification": "synthetic",
+        "sources": {"schema_version": 1, "records": [source]},
         "quotes": [provider_quote],
     }
     quote = {
-        "id": "minute", "kind": "resource_use", "target": "laboratory-scientist",
-        "unit": "minute", "amount": "36.00", "per_quantity": "60",
-        "currency": "AUD", "price_year": 2026, "basis": "financial_cost",
-        "components": ["base_salary"], "valid_from": "2026-09-01",
-        "valid_to": "2026-11-16", "known_from": "2026-11-15",
+        "id": "minute",
+        "kind": "resource_use",
+        "target": "laboratory-scientist",
+        "unit": "minute",
+        "amount": "36.00",
+        "per_quantity": "60",
+        "currency": "AUD",
+        "price_year": 2026,
+        "basis": "financial_cost",
+        "components": ["base_salary"],
+        "valid_from": "2026-09-01",
+        "valid_to": "2026-11-16",
+        "known_from": "2026-11-15",
         "source": {
-            "id": source["source_id"], "version": "synthetic-v1",
-            "evidence": "synthetic", "access": "public", "validation": "unvalidated",
+            "id": source["source_id"],
+            "version": "synthetic-v1",
+            "evidence": "synthetic",
+            "access": "public",
+            "validation": "unvalidated",
             "content_digest": "sha256:" + source["sha256"],
             "locator": source["uri"],
         },
@@ -76,18 +111,25 @@ def artifact() -> dict[str, Any]:
     return {
         "schema_version": "workforce-dapane-quotes/1",
         "provider": {
-            "name": "microcosting-healthworkforce", "version": "0.0.1",
+            "name": "microcosting-healthworkforce",
+            "version": "0.0.1",
             "method_id": "direct_unit_quote_v1",
         },
-        "release_id": "synthetic-v1", "as_known_on": "2026-11-15",
+        "release_id": "synthetic-v1",
+        "as_known_on": "2026-11-15",
         "release_snapshot": snapshot,
-        "bindings": [{
-            "provider_quote_id": "hourly", "quote_id": "minute",
-            "target": "laboratory-scientist", "unit": "minute",
-            "per_quantity": "60", "components": ["base_salary"],
-            "component_basis": "Synthetic base only; excludes all on-costs",
-            "price_year": 2026,
-        }],
+        "bindings": [
+            {
+                "provider_quote_id": "hourly",
+                "quote_id": "minute",
+                "target": "laboratory-scientist",
+                "unit": "minute",
+                "per_quantity": "60",
+                "components": ["base_salary"],
+                "component_basis": "Synthetic base only; excludes all on-costs",
+                "price_year": 2026,
+            },
+        ],
         "quotes": [quote],
     }
 
@@ -101,9 +143,13 @@ def request(
     """Build an explicit synthetic invocation, leaving economics to Rust."""
     raw, digest = seal(artifact() if declaration is None else declaration)
     options: dict[str, Any] = {
-        "release_digest": digest, "quote_id": "minute",
-        "batches": (ExtractionBatch("batch", ("a", "b", "c")),) if batches is None else batches,
-        "service_date": "2026-11-15", "knowledge_cutoff": "2026-11-15",
+        "release_digest": digest,
+        "quote_id": "minute",
+        "batches": (ExtractionBatch("batch", ("a", "b", "c")),)
+        if batches is None
+        else batches,
+        "service_date": "2026-11-15",
+        "knowledge_cutoff": "2026-11-15",
         "role_mapping_basis": "Synthetic role mapping; no classification equivalence",
         "run_id": "synthetic-manual-extraction",
     }
@@ -126,10 +172,12 @@ def test_shared_batch_retains_two_physical_resource_uses() -> None:
 
 def test_failed_then_repeated_batch_keeps_separate_pools() -> None:
     """A failed attempt does not erase incurred labour or merge its rounding pool."""
-    result = request((
-        ExtractionBatch("first", ("a", "b", "c"), outcome="failed"),
-        ExtractionBatch("retry", ("a", "b", "c"), repeat_of="first"),
-    ))
+    result = request(
+        (
+            ExtractionBatch("first", ("a", "b", "c"), outcome="failed"),
+            ExtractionBatch("retry", ("a", "b", "c"), repeat_of="first"),
+        ),
+    )
     checks.require_equal(len(result["usage"]), 4)
     checks.require_equal(len(result["allocations"]), 2)
     checks.require_equal(len({u["use_id"] for u in result["usage"]}), 4)
@@ -149,7 +197,10 @@ def test_invalid_cohorts_fail_before_pricing(members: object) -> None:
         (ExtractionBatch("a", ("x",)), ExtractionBatch("b", ("x",))),
         (ExtractionBatch("a", ("x",), repeat_of="unknown"),),
         (ExtractionBatch("a", ("x",)), ExtractionBatch("b", ("x",), repeat_of="a")),
-        (ExtractionBatch("a", ("x",), outcome="failed"), ExtractionBatch("b", ("y",), repeat_of="a")),
+        (
+            ExtractionBatch("a", ("x",), outcome="failed"),
+            ExtractionBatch("b", ("y",), repeat_of="a"),
+        ),
         (
             ExtractionBatch("a", ("x",), outcome="failed"),
             ExtractionBatch("b", ("x",), repeat_of="a"),
@@ -157,9 +208,11 @@ def test_invalid_cohorts_fail_before_pricing(members: object) -> None:
         ),
     ],
 )
-def test_invalid_attempt_histories_fail_closed(batches: tuple[ExtractionBatch, ...]) -> None:
+def test_invalid_attempt_histories_fail_closed(
+    batches: tuple[ExtractionBatch, ...],
+) -> None:
     """No independent alias, success retry, forward reference or fork is inferred."""
-    with pytest.raises(ValueError, match="batch|repeat|specimen"):
+    with pytest.raises(ValueError, match=r"batch|repeat|specimen"):
         request(batches)
 
 
@@ -174,13 +227,16 @@ def test_invalid_attempt_histories_fail_closed(batches: tuple[ExtractionBatch, .
         {"release_digest": "0" * 64},
     ],
 )
-def test_missing_date_scope_or_pinned_identity_fails(changes: dict[str, str]) -> None:
+def test_missing_date_scope_or_pinned_identity_fails(changes: dict[str, Any]) -> None:
     """An accepted release does not imply arbitrary date or role applicability."""
     with pytest.raises(ValueError, match=r".+"):
         request(**changes)
 
 
-@pytest.mark.parametrize("mutation", ["amount", "components", "extra_component", "source_kind", "status", "release"])
+@pytest.mark.parametrize(
+    "mutation",
+    ["amount", "components", "extra_component", "source_kind", "status", "release"],
+)
 def test_signed_but_inconsistent_projection_is_rejected(mutation: str) -> None:
     """A self-consistent hash cannot conceal broken release-to-quote lineage."""
     declaration = artifact()
@@ -201,20 +257,28 @@ def test_signed_but_inconsistent_projection_is_rejected(mutation: str) -> None:
         request(declaration=declaration)
 
 
-@pytest.mark.parametrize("raw", ['{"x":1,"x":2}', '{"x":1.2}', '{"x":NaN}', '{"x":Infinity}'])
+@pytest.mark.parametrize(
+    "raw",
+    ['{"x":1,"x":2}', '{"x":1.2}', '{"x":NaN}', '{"x":Infinity}'],
+)
 def test_ambiguous_json_transport_is_rejected(raw: str) -> None:
     """Duplicate keys and binary/nonfinite tokens never become accepted artifacts."""
     with pytest.raises(ValueError, match=r".+"):
         manual_dna_extraction_request(
-            raw, release_digest="0" * 64, quote_id="minute",
+            raw,
+            release_digest="0" * 64,
+            quote_id="minute",
             batches=(ExtractionBatch("batch", ("a",)),),
-            service_date="2026-11-15", knowledge_cutoff="2026-11-15",
-            role_mapping_basis="synthetic", run_id="synthetic",
+            service_date="2026-11-15",
+            knowledge_cutoff="2026-11-15",
+            role_mapping_basis="synthetic",
+            run_id="synthetic",
         )
 
 
 def test_old_entry_point_is_an_explicit_passthrough() -> None:
     """The rollback adapter retains old values, source coordinates and errors."""
+
     class Legacy:
         """Retain a deliberate missing legacy cell value."""
 
@@ -222,6 +286,7 @@ def test_old_entry_point_is_an_explicit_passthrough() -> None:
             """Return the original fixture value without transformation."""
             checks.require_equal(sheet_name, "Labour - Usage - VCGS")
             return {"AB22": "lab", "AB23": None, "AB24": "subtotal"}[cell_ref]
+
     checks.require_equal(
         historical_manual_extraction(Legacy()),
         {"AB22": "lab", "AB23": None, "AB24": "subtotal"},
@@ -236,9 +301,13 @@ def test_unrecognized_workbook_bytes_cannot_claim_the_source(tmp_path: Path) -> 
         inspect_manual_extraction_workbook(source)
 
 
-@pytest.mark.parametrize(("source", "projected"), [("1E+2", "100"), ("1E-7", "0.0000001")])
+@pytest.mark.parametrize(
+    ("source", "projected"),
+    [("1E+2", "100"), ("1E-7", "0.0000001")],
+)
 def test_exact_exponent_projection_is_transport_not_revaluation(
-    source: str, projected: str,
+    source: str,
+    projected: str,
 ) -> None:
     """A valid Decimal serialization keeps the same exactly represented amount."""
     declaration = artifact()
@@ -254,12 +323,16 @@ def test_exact_exponent_projection_is_transport_not_revaluation(
 def test_scope_strings_cannot_pass_substring_membership(field: str) -> None:
     """The consumer preserves the provider's array semantics after a rehash."""
     declaration = artifact()
-    declaration["release_snapshot"]["sources"]["records"][0][field] = "not-synthetic-authorized"
+    selected_source = declaration["release_snapshot"]["sources"]["records"][0]
+    selected_source[field] = "not-synthetic-authorized"
     with pytest.raises(ValueError, match="array"):
         request(declaration=declaration)
 
 
-@pytest.mark.parametrize("amount", ["1E+97", "1E-37", "-0", "NaN", "Infinity", "not-a-number"])
+@pytest.mark.parametrize(
+    "amount",
+    ["1E+97", "1E-37", "-0", "NaN", "Infinity", "not-a-number"],
+)
 def test_unbounded_or_nonfinite_source_amounts_fail_closed(amount: str) -> None:
     """A signed artifact cannot waive the shared exact numeric contract."""
     declaration = artifact()
@@ -275,3 +348,40 @@ def test_unknown_source_registry_versions_are_not_interpreted(version: object) -
     declaration["release_snapshot"]["sources"]["schema_version"] = version
     with pytest.raises(ValueError, match="registry version"):
         request(declaration=declaration)
+
+
+def test_unknown_named_options_fail_in_the_runtime_boundary() -> None:
+    """A typed keyword wrapper cannot silently accept a new valuation policy."""
+    with pytest.raises(ValueError, match="unknown manual extraction option"):
+        request(unsupported_policy="implicit-conversion")
+
+
+def test_missing_named_options_fail_in_the_runtime_boundary() -> None:
+    """Typed declarations supplement runtime checks of missing mandatory fields."""
+    raw, digest = seal(artifact())
+    incomplete: dict[str, Any] = {"release_digest": digest, "quote_id": "minute"}
+    with pytest.raises(ValueError, match="Missing"):
+        manual_dna_extraction_request(raw, **incomplete)
+
+
+@pytest.mark.parametrize(
+    "report",
+    cast(
+        "list[dict[str, Any]]",
+        [
+            {},
+            {"status": "error", "quote_snapshots": []},
+            {"status": "complete", "quote_snapshots": []},
+            {"status": "complete", "quote_snapshots": [None]},
+            {"status": "complete", "quote_snapshots": [{}]},
+            {"status": "complete", "quote_snapshots": [{}, {}]},
+        ],
+    ),
+)
+def test_comparison_rejects_incomplete_reports_before_reading_sources(
+    report: dict[str, Any],
+    tmp_path: Path,
+) -> None:
+    """Malformed report shapes cannot masquerade as a completed comparison."""
+    with pytest.raises(ValueError, match="complete single-quotation"):
+        compare_manual_extraction_workbook(tmp_path / "absent.xlsm", report)

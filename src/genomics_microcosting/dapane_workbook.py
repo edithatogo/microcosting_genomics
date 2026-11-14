@@ -4,7 +4,7 @@
 from hashlib import sha256
 from io import BytesIO
 from pathlib import PurePosixPath
-from typing import Any
+from typing import Any, cast
 from zipfile import ZipFile
 lazy from pathlib import Path
 
@@ -18,11 +18,16 @@ from genomics_microcosting.dapane_adapter import (
 )
 
 EXPECTED = {
-    "D22": (None, "30"), "E22": (None, "6"), "G22": ("=D22/E22", None),
-    "D23": (None, "5"), "E23": (None, "6"), "G23": ("=D23/E23", None),
+    "D22": (None, "30"),
+    "E22": (None, "6"),
+    "G22": ("=D22/E22", None),
+    "D23": (None, "5"),
+    "E23": (None, "6"),
+    "G23": ("=D23/E23", None),
     "L22": ("='Labour - Costs - VCGS'!AC$3", None),
     "L23": ("='Labour - Costs - VCGS'!AC$3", None),
-    "AB22": ("=$G22/60*L22", None), "AB23": ("=$G23/60*L23", None),
+    "AB22": ("=$G22/60*L22", None),
+    "AB23": ("=$G23/60*L23", None),
     "AB24": ("=SUM(AB22:AB23)", None),
 }
 MAX_WORKBOOK_BYTES = 32 * 1024 * 1024
@@ -33,7 +38,11 @@ def _sheet_path(archive: ZipFile) -> str:
     relationships = ElementTree.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
     targets = {element.attrib["Id"]: element.attrib for element in relationships}
     rid = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
-    matches = [element for element in book.findall(".//{*}sheet") if element.attrib["name"] == SHEET]
+    matches = [
+        element
+        for element in book.findall(".//{*}sheet")
+        if element.attrib["name"] == SHEET
+    ]
     if len(matches) != 1:
         message = "Preserved source sheet is missing or ambiguous"
         raise ValueError(message)
@@ -68,8 +77,14 @@ def inspect_manual_extraction_workbook(path: Path) -> dict[str, Any]:
     try:
         formulas = {
             cell.coordinate: str(cell.value) if cell.data_type == "f" else None
-            for row in book[SHEET].iter_rows(min_row=22, max_row=24, min_col=4, max_col=28)
-            for cell in row if getattr(cell, "coordinate", "") in EXPECTED
+            for row in book[SHEET].iter_rows(
+                min_row=22,
+                max_row=24,
+                min_col=4,
+                max_col=28,
+            )
+            for cell in row
+            if getattr(cell, "coordinate", "") in EXPECTED
         }
     finally:
         book.close()
@@ -99,14 +114,19 @@ def inspect_manual_extraction_workbook(path: Path) -> dict[str, Any]:
         message = "Historical selected roles no longer share the same source rate"
         raise ValueError(message)
     return {
-        "workbook_sha256": WORKBOOK_SHA256, "sheet": SHEET,
-        "mapping_version": "manual-dna-extraction-v1", "cells": selected,
-        "repairs_applied": [], "scope": "selected_manual_extraction_cells_only",
+        "workbook_sha256": WORKBOOK_SHA256,
+        "sheet": SHEET,
+        "mapping_version": "manual-dna-extraction-v1",
+        "cells": selected,
+        "repairs_applied": [],
+        "scope": "selected_manual_extraction_cells_only",
     }
 
 
 def historical_manual_extraction_request(
-    path: Path, *, run_id: str = "historical-manual-dna-extraction",
+    path: Path,
+    *,
+    run_id: str = "historical-manual-dna-extraction",
 ) -> dict[str, Any]:
     """Replay the selected historical per-specimen arithmetic in Rust.
 
@@ -116,67 +136,102 @@ def historical_manual_extraction_request(
     """
     inspection = inspect_manual_extraction_workbook(path)
     source = {
-        "id": "manual-extraction-v15", "version": "preserved-v15",
-        "evidence": "derived", "access": "public", "validation": "unvalidated",
+        "id": "manual-extraction-v15",
+        "version": "preserved-v15",
+        "evidence": "derived",
+        "access": "public",
+        "validation": "unvalidated",
         "content_digest": "sha256:" + WORKBOOK_SHA256,
         "locator": SHEET + "!L22,L23; historical cached loaded rate",
     }
     quote = {
-        "id": "historical-loaded-labour", "kind": "resource_use",
-        "target": "historical-LT", "unit": "minute",
-        "amount": inspection["cells"]["L22"]["cached"], "per_quantity": "60",
-        "currency": "AUD", "price_year": 2023, "basis": "financial_cost",
+        "id": "historical-loaded-labour",
+        "kind": "resource_use",
+        "target": "historical-LT",
+        "unit": "minute",
+        "amount": inspection["cells"]["L22"]["cached"],
+        "per_quantity": "60",
+        "currency": "AUD",
+        "price_year": 2023,
+        "basis": "financial_cost",
         "components": ["legacy_loaded_labour_scope_unresolved"],
-        "valid_from": "2023-09-02", "valid_to": "2023-09-03",
-        "known_from": "2023-09-02", "source": source,
+        "valid_from": "2023-09-02",
+        "valid_to": "2023-09-03",
+        "known_from": "2023-09-02",
+        "source": source,
     }
-    usage = []
+    usage: list[dict[str, Any]] = []
     # These constants are exact interpretations of the verified D22/E22 and
     # D23/E23 source formulas, not a second valuation implementation.
     for cell, quantity in (
-        ("G22", "5"), ("G23", {"numerator": "5", "denominator": "6"}),
+        ("G22", "5"),
+        ("G23", {"numerator": "5", "denominator": "6"}),
     ):
-        usage.append({
-            "id": cell, "use_id": cell, "kind": "resource_use",
-            "target": "historical-LT", "unit": "minute", "quantity": quantity,
-            "service_date": "2023-09-02", "quote_id": quote["id"],
-            "source": {**source, "locator": SHEET + "!" + cell},
-        })
+        usage.append(
+            {
+                "id": cell,
+                "use_id": cell,
+                "kind": "resource_use",
+                "target": "historical-LT",
+                "unit": "minute",
+                "quantity": quantity,
+                "service_date": "2023-09-02",
+                "quote_id": quote["id"],
+                "source": {**source, "locator": SHEET + "!" + cell},
+            },
+        )
     return {
-        "schema_version": "0.1", "run_id": run_id,
+        "schema_version": "0.1",
+        "run_id": run_id,
         "knowledge_cutoff": "2023-09-02",
         "policy": {
-            "id": "historical-cache-replay", "version": "1",
-            "currency": "AUD", "price_year": 2023,
-            "perspective": "historical_workbook_snapshot", "basis": "financial_cost",
+            "id": "historical-cache-replay",
+            "version": "1",
+            "currency": "AUD",
+            "price_year": 2023,
+            "perspective": "historical_workbook_snapshot",
+            "basis": "financial_cost",
             "rounding": {"scale": 2, "mode": "half_even"},
         },
-        "quotes": [quote], "usage": usage,
+        "quotes": [quote],
+        "usage": usage,
     }
 
 
+def _current_quote(current_report: dict[str, Any]) -> dict[str, Any]:
+    current_quotes = current_report.get("quote_snapshots")
+    message = "Comparison requires a complete single-quotation current report"
+    if current_report.get("status") != "complete" or not isinstance(
+        current_quotes,
+        list,
+    ):
+        raise ValueError(message)
+    quotes = cast("list[object]", current_quotes)
+    if len(quotes) != 1 or not isinstance(quotes[0], dict):
+        raise ValueError(message)
+    quote = cast("dict[str, Any]", quotes[0])
+    if not {"amount", "components"}.issubset(quote):
+        raise ValueError(message)
+    return quote
+
+
 def compare_manual_extraction_workbook(
-    path: Path, current_report: dict[str, Any],
+    path: Path,
+    current_report: dict[str, Any],
 ) -> dict[str, Any]:
     """Keep source extraction, native replay and scenario changes distinguishable.
 
     The current report is caller-supplied. This comparison does not requalify its
     input declarations, calculate deltas in Python or correct original formulas.
     """
+    current_quote = _current_quote(current_report)
     inspection = inspect_manual_extraction_workbook(path)
     historical = evaluate_native_request(historical_manual_extraction_request(path))
-    current_quotes = current_report.get("quote_snapshots")
-    if (
-        current_report.get("status") != "complete"
-        or not isinstance(current_quotes, list) or len(current_quotes) != 1
-    ):
-        message = "Comparison requires a complete single-quotation current report"
-        raise ValueError(message)
     previous_quote = historical["quote_snapshots"][0]
-    current_quote = current_quotes[0]
     return {
         "mechanical_extraction": inspection,
-        "historical_replay": historical, "current_revaluation": current_report,
+        "historical_replay": historical,
+        "current_revaluation": current_report,
         "classification": {
             "formula_repairs_applied": [],
             "historical_rounding": "source_line_half_even_2dp",

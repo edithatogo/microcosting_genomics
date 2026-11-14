@@ -78,6 +78,11 @@ These restrictions define this first adapter. It does not infer failure
 probabilities, partial-step repeats, actual staff use from elapsed duration,
 clinical outcome, reportability or completeness of the full assay.
 
+The repository's existing probabilistic sensitivity analysis (PSA) and value of
+information (VOI) demonstrations remain separate examples. This adapter does not
+route them through Dapane, and the installed qualification for this selected
+manual-extraction stage makes no acceptance claim about those demonstrations.
+
 ## Installed use
 
 Install separately built, qualified provider and Dapane wheels into the
