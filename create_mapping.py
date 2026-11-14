@@ -1,9 +1,11 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Create a step to label mapping CSV.
 
 Data files are stored in the repository ``data`` directory located at
 ``Path(__file__).resolve().parents[0] / 'data'``.
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -50,4 +52,4 @@ DATA_DIR = Path(__file__).resolve().parents[0] / "data"
 mapping_file_path = DATA_DIR / "step_to_label_mapping.csv"
 df_mapping.to_csv(mapping_file_path, index=False)
 
-print(f"Mapping saved to {mapping_file_path}")
+sys.stdout.writelines((f"Mapping saved to {mapping_file_path}", "\n"))

@@ -49,18 +49,20 @@ Features include:
 Generate and explore visualizations dynamically:
 
 ```python
-@app.route('/api/generate_viz/<table_name>')
+@app.route("/api/generate_viz/<table_name>")
 def api_generate_viz(table_name):
     """API endpoint to generate a visualization for a table."""
     # Generate visualization based on parameters
     img_base64 = generate_visualization(df, viz_type, column_name, category_column)
-    
-    return jsonify({
-        'success': True,
-        'image': img_base64,
-        'table_name': table_name,
-        'viz_type': viz_type
-    })
+
+    return jsonify(
+        {
+            "success": True,
+            "image": img_base64,
+            "table_name": table_name,
+            "viz_type": viz_type,
+        }
+    )
 ```
 
 Visualization types:
@@ -73,7 +75,7 @@ Visualization types:
 Interactive tools for scenario analysis:
 
 ```python
-@app.route('/visualize')
+@app.route("/visualize")
 def visualize():
     """Page for visualizations."""
     tables = list(app.data.keys()) if app.data else []
@@ -272,7 +274,7 @@ Extend the web interface with new functionality:
 
 ```python
 # Add new route in web.py
-@app.route('/custom-feature')
+@app.route("/custom-feature")
 def custom_feature():
     """Custom feature endpoint."""
     return render_template("custom_feature.html")

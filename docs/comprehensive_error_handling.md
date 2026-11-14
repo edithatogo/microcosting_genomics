@@ -30,8 +30,7 @@ from unimelb_phd_phase_1.error_handling import setup_standard_error_handling
 
 # Create error handler with optional checkpoint directory
 error_handler = setup_standard_error_handling(
-    logger=logger, 
-    checkpoint_dir="./checkpoints"
+    logger=logger, checkpoint_dir="./checkpoints"
 )
 ```
 
@@ -43,7 +42,7 @@ The `@graceful_degradation` decorator provides automatic error handling for func
     operation="load_data",
     default_value=[],
     data_source="input_data.xlsx",
-    module="data_loader"
+    module="data_loader",
 )
 def load_data(file_path):
     """Load data that might fail."""
@@ -60,9 +59,7 @@ try:
     result = risky_operation()
 except Exception as e:
     context = ErrorContext(
-        operation="risky_operation",
-        data_source="input_data",
-        module="data_processor"
+        operation="risky_operation", data_source="input_data", module="data_processor"
     )
     error_info = error_handler.handle_error(e, context, ErrorSeverity.MEDIUM)
 ```
@@ -103,9 +100,9 @@ The system provides robust checkpoint/restart functionality for long-running ana
 ```python
 # Create checkpoint with data and metadata
 checkpoint_id = error_handler.create_checkpoint(
-    "analysis_step_1", 
+    "analysis_step_1",
     analysis_data,
-    {"step": "initial_processing", "status": "completed"}
+    {"step": "initial_processing", "status": "completed"},
 )
 ```
 
@@ -123,17 +120,13 @@ Checkpoints can be stored persistently to disk for recovery after application re
 
 ```python
 # Initialize with checkpoint directory
-error_handler = setup_standard_error_handling(
-    checkpoint_dir="./analysis_checkpoints"
-)
+error_handler = setup_standard_error_handling(checkpoint_dir="./analysis_checkpoints")
 
 # Create persistent checkpoint
 checkpoint_id = error_handler.create_checkpoint("persistent_checkpoint", data)
 
 # After restart, create new handler with same directory
-new_handler = setup_standard_error_handling(
-    checkpoint_dir="./analysis_checkpoints"
-)
+new_handler = setup_standard_error_handling(checkpoint_dir="./analysis_checkpoints")
 
 # Restore from persistent storage
 restored_data = new_handler.restore_checkpoint(checkpoint_id, from_disk=True)
@@ -165,7 +158,7 @@ validator.validate_sheet_name("Detailed Table")
 validator.validate_cell_reference("A1")
 
 # Validate DataFrame
-validator.validate_dataframe(df, expected_columns=['Test', 'Cost'])
+validator.validate_dataframe(df, expected_columns=["Test", "Cost"])
 
 # Validate numeric value
 validator.validate_numeric_value(50000, min_value=0)
@@ -203,15 +196,13 @@ Custom degradation strategies can be registered:
 def custom_degradation_strategy(error, context):
     """Custom degradation strategy."""
     return {
-        'action': 'custom_recovery',
-        'default_value': None,
-        'message': f'Custom recovery for {error}'
+        "action": "custom_recovery",
+        "default_value": None,
+        "message": f"Custom recovery for {error}",
     }
 
-error_handler.register_degradation_strategy(
-    'CustomError', 
-    custom_degradation_strategy
-)
+
+error_handler.register_degradation_strategy("CustomError", custom_degradation_strategy)
 ```
 
 ## Error Recovery Scenarios
@@ -244,22 +235,21 @@ class CalculationEngine:
     def __init__(self, sheet_manager):
         self.error_handler = setup_standard_error_handling()
         self.validator = InputValidator()
-    
+
     def get_cell_value(self, sheet_name, cell_ref):
         """Get cell value with error handling."""
+
         @self.error_handler.graceful_degradation(
-            operation="get_cell_value",
-            default_value=None,
-            data_source="sheet_data"
+            operation="get_cell_value", default_value=None, data_source="sheet_data"
         )
         def _get_cell_value(sheet_name, cell_ref):
             # Validate inputs
             self.validator.validate_sheet_name(sheet_name)
             self.validator.validate_cell_reference(cell_ref)
-            
+
             # Process data
             # ... implementation ...
-            
+
         return _get_cell_value(sheet_name, cell_ref)
 ```
 
@@ -268,15 +258,12 @@ class CalculationEngine:
 class DataManager:
     def __init__(self):
         self.validator = InputValidator()
-    
+
     def load_sheet(self, sheet_name, format="parquet"):
         """Load sheet with validation."""
         try:
             self.validator.validate_sheet_name(sheet_name)
-            self.validator.validate_string_value(
-                format, 
-                pattern=r'^(parquet|csv)$'
-            )
+            self.validator.validate_string_value(format, pattern=r"^(parquet|csv)$")
         except ValidationError as e:
             logger.error(f"Invalid input: {e}")
             return None

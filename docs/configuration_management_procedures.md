@@ -61,7 +61,7 @@ parameter = AnalysisParameter(
     data_type="int",
     default_value=1000,
     min_value=100,
-    max_value=100000
+    max_value=100000,
 )
 
 # Validate the parameter
@@ -89,14 +89,16 @@ env_manager = EnvironmentConfigurationManager(base_config_manager)
 dev_overrides = {
     "parameters": {
         "top_n_drivers": 5,  # Smaller number for faster development testing
-        "monte_carlo_iterations": 100  # Fewer iterations for development
+        "monte_carlo_iterations": 100,  # Fewer iterations for development
     }
 }
 env_manager.add_environment("development", dev_overrides)
 
 # Get environment-specific configuration
 dev_config = env_manager.get_environment_config("development", "cost_driver_analysis")
-print(f"Development config top_n_drivers: {dev_config.parameters['top_n_drivers'].value}")
+print(
+    f"Development config top_n_drivers: {dev_config.parameters['top_n_drivers'].value}"
+)
 ```
 
 ### 3. Configuration Versioning
@@ -118,7 +120,9 @@ config_manager = AnalysisConfigurationManager()
 config = config_manager.get_configuration("psa_analysis")
 
 # Create a version
-version_hash = version_manager.create_version(config, "Initial version for paper submission")
+version_hash = version_manager.create_version(
+    config, "Initial version for paper submission"
+)
 print(f"Created version: {version_hash}")
 
 # List versions
@@ -139,8 +143,8 @@ The system supports dynamic configuration updates during runtime, allowing param
 #### Implementation Example:
 ```python
 from unimelb_phd_phase_1.config_validation import (
-    DynamicConfigurationUpdater, 
-    setup_standard_config_validation
+    DynamicConfigurationUpdater,
+    setup_standard_config_validation,
 )
 from unimelb_phd_phase_1.analysis_config import AnalysisConfigurationManager
 
@@ -149,9 +153,11 @@ config_manager = AnalysisConfigurationManager()
 validator = setup_standard_config_validation()
 updater = DynamicConfigurationUpdater(config_manager, validator)
 
+
 # Define an update listener
 def on_config_update(config_name, parameter_name, new_value):
     print(f"Configuration updated: {config_name}.{parameter_name} = {new_value}")
+
 
 # Register the listener
 updater.register_update_listener(on_config_update)

@@ -59,13 +59,15 @@ import pandas as pd
 detector = DataAnomalyDetector()
 
 # Create test data with anomalies
-df = pd.DataFrame({
-    'cost': [100, 200, 300, 400, 50000],  # Last value is an outlier
-    'other_cost': [50, 60, 70, 80, -10]   # Negative value
-})
+df = pd.DataFrame(
+    {
+        "cost": [100, 200, 300, 400, 50000],  # Last value is an outlier
+        "other_cost": [50, 60, 70, 80, -10],  # Negative value
+    }
+)
 
 # Detect anomalies
-anomalies = detector.detect_cost_anomalies(df, ['cost', 'other_cost'])
+anomalies = detector.detect_cost_anomalies(df, ["cost", "other_cost"])
 print(f"Detected {len(anomalies)} anomalies")
 ```
 
@@ -85,7 +87,7 @@ data_manager = DataManager()
 # Define sheet dependencies
 sheet_dependencies = {
     "Main Analysis": ["Labor Prices", "Equipment Costs"],
-    "Sensitivity Analysis": ["Main Analysis", "Scenario Parameters"]
+    "Sensitivity Analysis": ["Main Analysis", "Scenario Parameters"],
 }
 
 # Verify cross-sheet integrity
@@ -112,11 +114,13 @@ import pandas as pd
 handler = MissingDataHandler()
 
 # Create test data with missing values
-df = pd.DataFrame({
-    'A': [1, 2, None, 4, 5],
-    'B': [None, None, None, None, None],  # Completely missing
-    'C': [1, 2, 3, 4, 5]
-})
+df = pd.DataFrame(
+    {
+        "A": [1, 2, None, 4, 5],
+        "B": [None, None, None, None, None],  # Completely missing
+        "C": [1, 2, 3, 4, 5],
+    }
+)
 
 # Analyze missing data patterns
 analysis = handler.analyze_missing_data_patterns(df)
@@ -146,13 +150,15 @@ import pandas as pd
 verifier = DataIntegrityVerifier()
 
 # Create test data with integrity issues
-df = pd.DataFrame({
-    'cost': [100, 200, -50, 400, 'invalid'],  # Negative and non-numeric values
-    'id': [1, 2, 3, 3, 5]  # Duplicate ID
-})
+df = pd.DataFrame(
+    {
+        "cost": [100, 200, -50, 400, "invalid"],  # Negative and non-numeric values
+        "id": [1, 2, 3, 3, 5],  # Duplicate ID
+    }
+)
 
 # Verify cost integrity
-violations = verifier.verify_cost_integrity(df, ['cost'])
+violations = verifier.verify_cost_integrity(df, ["cost"])
 print(f"Found {len(violations)} cost integrity violations")
 
 # Verify unique constraints
@@ -192,9 +198,9 @@ qa_system = DataQualityAssurance(data_manager)
 # Assess data quality for a sheet
 metrics = qa_system.assess_data_quality(
     sheet_name="Detailed Table",
-    cost_columns=['Total Cost', 'Labor Cost', 'Equipment Cost'],
-    expected_ranges={'Total Cost': (0, 1000000)},
-    unique_columns=['Test ID']
+    cost_columns=["Total Cost", "Labor Cost", "Equipment Cost"],
+    expected_ranges={"Total Cost": (0, 1000000)},
+    unique_columns=["Test ID"],
 )
 
 # Generate quality report

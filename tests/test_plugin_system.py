@@ -1,263 +1,327 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Tests for the plugin system."""
 
-import pytest
-from pathlib import Path
 import tempfile
+from pathlib import Path
+
+import pytest
 
 from genomics_microcosting.plugin_system import (
-    Plugin, AnalysisPlugin, VisualizationPlugin, PluginManager
+    AnalysisPlugin,
+    Plugin,
+    PluginManager,
+    VisualizationPlugin,
 )
+from tests.checks import require_equal
 
 
-class TestPlugin(Plugin):
+class ExamplePlugin(Plugin):
     """Test plugin implementation."""
-    
-    def __init__(self):
+
+    def __init__(self) -> None:
+        """Create a plugin with observable initialization and cleanup."""
         super().__init__(
             name="test_plugin",
             version="1.0.0",
-            description="Test plugin for testing"
+            description="Test plugin for testing",
         )
         self.initialized = False
         self.cleaned_up = False
-    
+
     def initialize(self) -> None:
         """Initialize the plugin."""
         self.initialized = True
-    
+
     def cleanup(self) -> None:
         """Clean up the plugin."""
         self.cleaned_up = True
 
 
-class TestAnalysisPlugin(AnalysisPlugin):
+class ExampleAnalysisPlugin(AnalysisPlugin):
     """Test analysis plugin."""
-    
-    def __init__(self):
+
+    def __init__(self) -> None:
+        """Register the analysis fixture with a stable name."""
         super().__init__(
             name="test_analysis",
             version="1.0.0",
-            description="Test analysis plugin"
+            description="Test analysis plugin",
         )
-    
-    def analyze(self, data):
+
+    def analyze(self, data: object) -> str:
         """Perform analysis."""
         return f"analyzed: {data}"
 
 
-class TestVisualizationPlugin(VisualizationPlugin):
+class ExampleVisualizationPlugin(VisualizationPlugin):
     """Test visualization plugin."""
-    
-    def __init__(self):
+
+    def __init__(self) -> None:
+        """Register the visualisation fixture with a stable name."""
         super().__init__(
             name="test_visualization",
             version="1.0.0",
-            description="Test visualization plugin"
+            description="Test visualization plugin",
         )
-    
-    def visualize(self, data, **kwargs):
+
+    def visualize(self, data: object, **_kwargs: object) -> str:
         """Create visualization."""
         return f"visualized: {data}"
 
 
-def test_plugin_base_class():
+def test_plugin_base_class() -> None:
     """Test the base Plugin class."""
     plugin = Plugin("test", "1.0.0", "Test plugin")
-    
-    assert plugin.name == "test"
-    assert plugin.version == "1.0.0"
-    assert plugin.description == "Test plugin"
-    assert plugin.enabled is True
-    
+
+    if not (plugin.name == "test"):
+        raise AssertionError
+    if not (plugin.version == "1.0.0"):
+        raise AssertionError
+    if not (plugin.description == "Test plugin"):
+        raise AssertionError
+    if plugin.enabled is not True:
+        raise AssertionError
+
     # Test default initialize and cleanup methods
     plugin.initialize()  # Should not raise
-    plugin.cleanup()     # Should not raise
+    plugin.cleanup()  # Should not raise
 
 
-def test_analysis_plugin():
+def test_analysis_plugin() -> None:
     """Test the AnalysisPlugin class."""
-    plugin = TestAnalysisPlugin()
-    
-    assert plugin.name == "test_analysis"
-    assert plugin.version == "1.0.0"
-    assert plugin.description == "Test analysis plugin"
-    
+    plugin = ExampleAnalysisPlugin()
+
+    if not (plugin.name == "test_analysis"):
+        raise AssertionError
+    if not (plugin.version == "1.0.0"):
+        raise AssertionError
+    if not (plugin.description == "Test analysis plugin"):
+        raise AssertionError
+
     # Test analyze method
     result = plugin.analyze("test_data")
-    assert result == "analyzed: test_data"
+    if not (result == "analyzed: test_data"):
+        raise AssertionError
 
 
-def test_visualization_plugin():
+def test_visualization_plugin() -> None:
     """Test the VisualizationPlugin class."""
-    plugin = TestVisualizationPlugin()
-    
-    assert plugin.name == "test_visualization"
-    assert plugin.version == "1.0.0"
-    assert plugin.description == "Test visualization plugin"
-    
+    plugin = ExampleVisualizationPlugin()
+
+    if not (plugin.name == "test_visualization"):
+        raise AssertionError
+    if not (plugin.version == "1.0.0"):
+        raise AssertionError
+    if not (plugin.description == "Test visualization plugin"):
+        raise AssertionError
+
     # Test visualize method
     result = plugin.visualize("test_data", param="value")
-    assert result == "visualized: test_data"
+    if not (result == "visualized: test_data"):
+        raise AssertionError
 
 
-def test_plugin_manager_initialization():
+def test_plugin_manager_initialization() -> None:
     """Test PluginManager initialization."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        
-        assert plugin_manager.plugin_directory == plugin_dir
-        assert len(plugin_manager.plugins) == 0
+
+        if not (plugin_manager.plugin_directory == plugin_dir):
+            raise AssertionError
+        if not (len(plugin_manager.plugins) == 0):
+            raise AssertionError
 
 
-def test_plugin_manager_register_plugin():
+def test_plugin_manager_register_plugin() -> None:
     """Test registering plugins."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        plugin = TestPlugin()
-        
+        plugin = ExamplePlugin()
+
         plugin_manager.register_plugin(plugin)
-        
-        assert len(plugin_manager.plugins) == 1
-        assert "test_plugin" in plugin_manager.plugins
-        assert plugin_manager.plugins["test_plugin"] == plugin
+
+        if not (len(plugin_manager.plugins) == 1):
+            raise AssertionError
+        if "test_plugin" not in plugin_manager.plugins:
+            raise AssertionError
+        if not (plugin_manager.plugins["test_plugin"] == plugin):
+            raise AssertionError
 
 
-def test_plugin_manager_get_plugin():
+def test_plugin_manager_get_plugin() -> None:
     """Test getting plugins."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        plugin = TestPlugin()
+        plugin = ExamplePlugin()
         plugin_manager.register_plugin(plugin)
-        
+
         # Test getting existing plugin
         retrieved_plugin = plugin_manager.get_plugin("test_plugin")
-        assert retrieved_plugin == plugin
-        
+        if not (retrieved_plugin == plugin):
+            raise AssertionError
+
         # Test getting non-existent plugin
         retrieved_plugin = plugin_manager.get_plugin("nonexistent")
-        assert retrieved_plugin is None
+        if retrieved_plugin is not None:
+            raise AssertionError
 
 
-def test_plugin_manager_list_plugins():
+def test_plugin_manager_list_plugins() -> None:
     """Test listing plugins."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        
+
         # Register multiple plugins
-        plugin1 = TestPlugin()
-        plugin2 = TestAnalysisPlugin()
-        plugin3 = TestVisualizationPlugin()
-        
+        plugin1 = ExamplePlugin()
+        plugin2 = ExampleAnalysisPlugin()
+        plugin3 = ExampleVisualizationPlugin()
+
         plugin_manager.register_plugin(plugin1)
         plugin_manager.register_plugin(plugin2)
         plugin_manager.register_plugin(plugin3)
-        
+
         # List plugins
         plugins = plugin_manager.list_plugins()
-        assert len(plugins) == 3
-        
+        require_equal(len(plugins), 3)
+
         # Check plugin information
         plugin_names = [p["name"] for p in plugins]
-        assert "test_plugin" in plugin_names
-        assert "test_analysis" in plugin_names
-        assert "test_visualization" in plugin_names
+        if "test_plugin" not in plugin_names:
+            raise AssertionError
+        if "test_analysis" not in plugin_names:
+            raise AssertionError
+        if "test_visualization" not in plugin_names:
+            raise AssertionError
 
 
-def test_plugin_manager_enable_disable():
+def test_plugin_manager_enable_disable() -> None:
     """Test enabling and disabling plugins."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        plugin = TestPlugin()
+        plugin = ExamplePlugin()
         plugin_manager.register_plugin(plugin)
-        
+
         # Plugin should be enabled by default
-        assert plugin.enabled is True
-        
+        if plugin.enabled is not True:
+            raise AssertionError
+
         # Disable plugin
         result = plugin_manager.disable_plugin("test_plugin")
-        assert result is True
-        assert plugin.enabled is False
-        
+        if result is not True:
+            raise AssertionError
+        disabled = False
+        require_equal(plugin.enabled, disabled)
+
         # Enable plugin
         result = plugin_manager.enable_plugin("test_plugin")
-        assert result is True
-        assert plugin.enabled is True
-        
+        if result is not True:
+            raise AssertionError
+        if plugin.enabled is not True:
+            raise AssertionError
+
         # Try to enable/disable non-existent plugin
         result = plugin_manager.enable_plugin("nonexistent")
-        assert result is False
-        
+        if result is not False:
+            raise AssertionError
+
         result = plugin_manager.disable_plugin("nonexistent")
-        assert result is False
+        if result is not False:
+            raise AssertionError
 
 
-def test_plugin_manager_execute_plugin_method():
+def test_plugin_manager_execute_plugin_method() -> None:
     """Test executing plugin methods."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        
+
         # Register plugins
-        analysis_plugin = TestAnalysisPlugin()
-        viz_plugin = TestVisualizationPlugin()
+        analysis_plugin = ExampleAnalysisPlugin()
+        viz_plugin = ExampleVisualizationPlugin()
         plugin_manager.register_plugin(analysis_plugin)
         plugin_manager.register_plugin(viz_plugin)
-        
+
         # Execute analyze method
-        result = plugin_manager.execute_plugin_method("test_analysis", "analyze", "test_data")
-        assert result == "analyzed: test_data"
-        
+        result = plugin_manager.execute_plugin_method(
+            "test_analysis",
+            "analyze",
+            "test_data",
+        )
+        if not (result == "analyzed: test_data"):
+            raise AssertionError
+
         # Execute visualize method
-        result = plugin_manager.execute_plugin_method("test_visualization", "visualize", "test_data")
-        assert result == "visualized: test_data"
-        
+        result = plugin_manager.execute_plugin_method(
+            "test_visualization",
+            "visualize",
+            "test_data",
+        )
+        if not (result == "visualized: test_data"):
+            raise AssertionError
+
         # Try to execute method on non-existent plugin
         with pytest.raises(ValueError, match="Plugin nonexistent not found"):
             plugin_manager.execute_plugin_method("nonexistent", "analyze", "test_data")
-        
+
+        # Try to execute an attribute that exists but cannot be called
+        with pytest.raises(
+            AttributeError,
+            match=r"Plugin test_analysis\.enabled is not callable",
+        ):
+            plugin_manager.execute_plugin_method(
+                "test_analysis",
+                "enabled",
+                "test_data",
+            )
+
         # Try to execute non-existent method
-        with pytest.raises(AttributeError, match="Plugin test_analysis does not have method nonexistent_method"):
-            plugin_manager.execute_plugin_method("test_analysis", "nonexistent_method", "test_data")
-        
-        # Try to execute non-existent method
-        with pytest.raises(AttributeError, match="Plugin test_analysis does not have method nonexistent_method"):
-            plugin_manager.execute_plugin_method("test_analysis", "nonexistent_method", "test_data")
+        with pytest.raises(
+            AttributeError,
+            match="Plugin test_analysis does not have method nonexistent_method",
+        ):
+            plugin_manager.execute_plugin_method(
+                "test_analysis",
+                "nonexistent_method",
+                "test_data",
+            )
 
 
-def test_plugin_manager_plugin_cleanup():
+def test_plugin_manager_plugin_cleanup() -> None:
     """Test plugin cleanup."""
     with tempfile.TemporaryDirectory() as temp_dir:
         plugin_dir = Path(temp_dir) / "plugins"
         plugin_dir.mkdir()
-        
+
         plugin_manager = PluginManager(plugin_dir)
-        plugin = TestPlugin()
+        plugin = ExamplePlugin()
         plugin_manager.register_plugin(plugin)
-        
+
         # Initialize plugin
         plugin.initialize()
-        assert plugin.initialized is True
-        
+        if plugin.initialized is not True:
+            raise AssertionError
+
         # Cleanup plugins
         plugin_manager.cleanup()
-        assert plugin.cleaned_up is True
+        if plugin.cleaned_up is not True:
+            raise AssertionError
 
 
 if __name__ == "__main__":

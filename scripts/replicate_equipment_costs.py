@@ -1,5 +1,7 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Replicate equipment cost calculations using the extracted CSV data."""
 
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -9,12 +11,14 @@ import pandas as pd
 # Load the data, skipping initial rows and setting a header row
 DATA_DIR = Path(__file__).resolve().parents[0] / "data" / "extracted"
 df = pd.read_csv(
-    DATA_DIR / "Eq - Costs and Usage - VCGS_values.csv", header=3, dtype=str
+    DATA_DIR / "Eq - Costs and Usage - VCGS_values.csv",
+    header=3,
+    dtype=str,
 )
 
 # Drop empty rows
-df.dropna(how="all", inplace=True)
-df.reset_index(drop=True, inplace=True)
+df = df.dropna(how="all")
+df = df.reset_index(drop=True)
 
 # Clean up column names
 # The header has some issues due to merged cells in Excel.
@@ -68,11 +72,9 @@ for col in numeric_cols:
 
 
 # Replicate the 'Annualised cost' calculation: =H5/E5
-# H is 'List Price (AUD)', E is 'Useful Life'
 df["Calculated Annualised cost"] = df["List Price (AUD)"] / df["Useful Life"]
 
 # Replicate the 'Present value' calculation: "=PMT(4.52%, E5, -H5)"
-# E is 'Useful Life', H is 'List Price (AUD)'
 # The rate is 4.52%
 rate = 0.0452
 df["Calculated Present value"] = df.apply(
@@ -89,20 +91,23 @@ df["Calculated Present value"] = df.apply(
 # This calculation has a fixed divisor from another row, which makes it tricky.
 # For now, we will just show the first few rows of the main calculations.
 
-print("Cleaned Data:")
-print(df.head())
+sys.stdout.write("Cleaned Data:" + "\n")
+sys.stdout.write(str(df.head()) + "\n")
 
 
-print("\nData with Calculated Columns:")
-print(
-    df[
-        [
-            "List Price (AUD)",
-            "Useful Life",
-            "Annualised cost",
-            "Calculated Annualised cost",
-            "Present value",
-            "Calculated Present value",
-        ]
-    ].head()
+sys.stdout.write("\nData with Calculated Columns:" + "\n")
+sys.stdout.write(
+    str(
+        df[
+            [
+                "List Price (AUD)",
+                "Useful Life",
+                "Annualised cost",
+                "Calculated Annualised cost",
+                "Present value",
+                "Calculated Present value",
+            ]
+        ].head(),
+    )
+    + "\n",
 )

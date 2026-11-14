@@ -22,7 +22,7 @@ When a required data source is missing, the system gracefully degrades by using 
 @error_handler.graceful_degradation(
     operation="load_analysis_data",
     default_value=pd.DataFrame(),
-    data_source="missing_analysis_data.xlsx"
+    data_source="missing_analysis_data.xlsx",
 )
 def load_analysis_data(file_path):
     """Simulate loading analysis data that might fail."""
@@ -30,6 +30,7 @@ def load_analysis_data(file_path):
         raise FileNotFoundError(f"Analysis data file not found: {file_path}")
     # Simulate successful loading
     return pd.DataFrame({"test": [1, 2, 3]})
+
 
 # This will fail gracefully and return default value
 result = load_analysis_data("nonexistent_file.xlsx")
@@ -40,9 +41,7 @@ When invalid input is detected, the system validates inputs and handles validati
 
 ```python
 @error_handler.graceful_degradation(
-    operation="process_cost_data",
-    default_value=0.0,
-    data_source="cost_calculation"
+    operation="process_cost_data", default_value=0.0, data_source="cost_calculation"
 )
 def process_cost_data(cost_value):
     """Process cost data with validation."""
@@ -50,6 +49,7 @@ def process_cost_data(cost_value):
     validator.validate_numeric_value(cost_value, min_value=0)
     # Process the cost value
     return cost_value * 1.1  # Add 10% markup
+
 
 # Test with invalid input (negative value)
 result = process_cost_data(-500)
@@ -62,15 +62,14 @@ When calculation errors occur (e.g., division by zero), the system recovers usin
 
 ```python
 @error_handler.graceful_degradation(
-    operation="calculate_ratio",
-    default_value=1.0,
-    data_source="ratio_calculation"
+    operation="calculate_ratio", default_value=1.0, data_source="ratio_calculation"
 )
 def calculate_ratio(numerator, denominator):
     """Calculate ratio with potential division by zero."""
     if denominator == 0:
         raise ZeroDivisionError("Cannot divide by zero")
     return numerator / denominator
+
 
 # Test division by zero recovery
 result = calculate_ratio(10, 0)
@@ -87,7 +86,7 @@ analysis_steps = [
     {"step": "data_loading", "data": {"samples": 100}},
     {"step": "preprocessing", "data": {"samples": 100, "features": 50}},
     {"step": "analysis", "data": {"results": [1, 2, 3, 4, 5]}},
-    {"step": "reporting", "data": {"summary": "Analysis complete"}}
+    {"step": "reporting", "data": {"summary": "Analysis complete"}},
 ]
 
 completed_steps = []
@@ -99,28 +98,30 @@ for i, step in enumerate(analysis_steps):
         if step["step"] == "analysis" and i == 2:
             # Simulate an error in the analysis step
             raise RuntimeError("Analysis failed due to resource constraints")
-        
+
         # Create checkpoint for successful step
         checkpoint_id = error_handler.create_checkpoint(
             f"analysis_step_{i}",
             step["data"],
-            {"step_name": step["step"], "status": "completed"}
+            {"step_name": step["step"], "status": "completed"},
         )
         completed_steps.append((step["step"], checkpoint_id))
-        
+
     except Exception as e:
         context = ErrorContext(
             operation=f"analysis_step_{i}",
             data_source=step["step"],
-            parameters={"step_data": step}
+            parameters={"step_data": step},
         )
         error_info = error_handler.handle_error(e, context, ErrorSeverity.HIGH)
-        
+
         # Try to recover using last successful checkpoint
         if completed_steps:
             last_step_name, last_checkpoint_id = completed_steps[-1]
             recovered_data = error_handler.restore_checkpoint(last_checkpoint_id)
-            logger.info(f"Recovered from checkpoint {last_checkpoint_id} for step {last_step_name}")
+            logger.info(
+                f"Recovered from checkpoint {last_checkpoint_id} for step {last_step_name}"
+            )
         break
 ```
 
@@ -131,22 +132,25 @@ When data quality issues are detected, the system handles them gracefully.
 @error_handler.graceful_degradation(
     operation="process_genomic_data",
     default_value=pd.DataFrame(),
-    data_source="genomic_cost_data"
+    data_source="genomic_cost_data",
 )
 def process_genomic_data(df):
     """Process genomic data with quality validation."""
     # Validate data structure
     validator.validate_dataframe(df, min_rows=1)
-    
+
     # Check for negative costs
-    negative_costs = df[df['Cost'] < 0]
+    negative_costs = df[df["Cost"] < 0]
     if not negative_costs.empty:
         raise ValueError(f"Found {len(negative_costs)} negative cost values")
-    
+
     # Process valid data
     processed_df = df.copy()
-    processed_df['Total_Cost'] = processed_df['Cost'] * processed_df['Quantity'].fillna(1)
+    processed_df["Total_Cost"] = processed_df["Cost"] * processed_df["Quantity"].fillna(
+        1
+    )
     return processed_df
+
 
 # Test with problematic data
 result = process_genomic_data(test_data_with_issues)
@@ -160,25 +164,23 @@ When errors occur in nested function calls, the system recovers at each level.
 
 ```python
 @error_handler.graceful_degradation(
-    operation="outer_calculation",
-    default_value=0,
-    data_source="nested_calculation"
+    operation="outer_calculation", default_value=0, data_source="nested_calculation"
 )
 def outer_calculation(x, y):
     """Outer calculation that calls inner calculation."""
     intermediate_result = inner_calculation(x)
     return intermediate_result + y
 
+
 @error_handler.graceful_degradation(
-    operation="inner_calculation",
-    default_value=1,
-    data_source="nested_calculation"
+    operation="inner_calculation", default_value=1, data_source="nested_calculation"
 )
 def inner_calculation(x):
     """Inner calculation that might fail."""
     if x < 0:
         raise ValueError("Input must be non-negative")
     return x * 2
+
 
 # Test error in inner calculation
 result = outer_calculation(-5, 3)
@@ -193,16 +195,17 @@ When resource exhaustion occurs (e.g., memory errors), the system recovers grace
 @error_handler.graceful_degradation(
     operation="memory_intensive_operation",
     default_value=[],
-    data_source="large_dataset"
+    data_source="large_dataset",
 )
 def memory_intensive_operation(size):
     """Simulate memory-intensive operation."""
     if size > 1000000:
         # Simulate MemoryError
         raise MemoryError("Not enough memory to process large dataset")
-    
+
     # Simulate successful operation
     return list(range(min(size, 1000)))
+
 
 # Test memory exhaustion recovery
 result = memory_intensive_operation(2000000)
@@ -221,14 +224,13 @@ for i, phase in enumerate(analysis_phases):
     checkpoint_id = error_handler.create_checkpoint(
         f"analysis_phase_{i}",
         phase,
-        {"phase_name": phase["phase"], "progress": phase["progress"]}
+        {"phase_name": phase["phase"], "progress": phase["progress"]},
     )
     checkpoint_ids.append(checkpoint_id)
 
 # Simulate application restart by creating new error handler
 new_error_handler = setup_standard_error_handling(
-    logger=logger, 
-    checkpoint_dir=checkpoint_dir
+    logger=logger, checkpoint_dir=checkpoint_dir
 )
 
 # Verify checkpoints can be restored from disk

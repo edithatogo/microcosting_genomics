@@ -78,7 +78,7 @@ dm.save_sheet("Detailed Table", df, formats=["parquet", "csv"])
 metadata = {
     "source": "Excel workbook",
     "processing_date": "2023-12-01",
-    "version": "1.0"
+    "version": "1.0",
 }
 dm.save_for_publication("Detailed Table", df, metadata)
 

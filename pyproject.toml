@@ -1,66 +1,113 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling==1.33.0", "hatch-vcs==0.5.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "genomics-microcosting"
-version = "0.2.0"
-description = "{{PROJECT_DESCRIPTION}}"
+dynamic = ["version"]
+description = "Source-backed rare disease genomics microcosting with native Polars"
 
-license = { file = "LICENSE" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = "==3.15.1"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    "pydantic>=2.14.3,<3",
+    "pandera[polars]",
     "openpyxl",
-    "pandas",
+    "pyarrow",
+    "polars",
     "numpy",
     "numpy-financial",
-    "PyYAML",
     "scipy",
+    "PyYAML",
     "flask",
+    "defusedxml>=0.7.1",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest",
-    "pre-commit",
-    "ruff",
-    "black",
-    "isort",
-    "bandit",
-    "pyarrow",
+visualization = ["matplotlib", "plotly"]
+reporting = [
     "weasyprint",
     "jinja2",
-    "markdown",
-    "plotly",
-    "seaborn",
-    # Note: hypothesis is not compatible with Python 3.13
-    # "hypothesis",
+    "reportlab>=5.1.0",
+]
+security = [
+    "cryptography>=50.0.2",
 ]
 
 [project.scripts]
 validate-engine = "genomics_microcosting.validate_engine:validate_engine"
 prepare-data = "genomics_microcosting.prepare_data:main"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[tool.hatch.version]
+source = "vcs"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["genomics_microcosting*"]
+[tool.hatch.version.raw-options]
+fallback_version = "0.2.0"
+
+[tool.hatch.build]
+exclude = ["**/*.xlsx", "**/*.xlsm", "**/*.parquet", "**/*.pkl", "**/*.docx", "**/*.ipynb", "/conductor", "/.private-runs"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/genomics_microcosting"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"config.yaml" = "genomics_microcosting/config.yaml"
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/config.yaml", "/pyproject.toml", "/README.md", "/LICENSE", "/CITATION.cff", "/SECURITY.md", "/uv.lock", "/scripts/__init__.py", "/scripts/convert_to_csv.py", "/scripts/parse_cost_tables.py", "/scripts/parse_additional_tables.py", "/tools/__init__.py", "/tools/select_tests.py", "/tools/check_package.py", "/tools/build_t1_scenario.py"]
+
+[tool.hatch.build.targets.sdist.force-include]
+"tests/debug_test.py" = "tests/debug_test.py"
 
 [tool.pytest.ini_options]
-addopts = "-p no:hypothesis"
+addopts = "--strict-markers --strict-config"
+xfail_strict = true
+filterwarnings = ["error"]
 testpaths = ["tests"]
 env = [
     "MPLBACKEND=Agg",
 ]
 
+
 [tool.ruff.lint]
-# Allow sys.path modifications before imports in scripts
-ignore = ["E402"]
+select = ["ALL"]
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+
+[dependency-groups]
+profiling = ["scalene"]
+dev = [
+    "cryptography",
+    "plotly",
+    "basedpyright",
+    "ruff>=0.17.4",
+    "bandit",
+    "pytest",
+    "pytest-cov",
+    "hypothesis",
+    "pytest-env>=1.8.5",
+    "pre-commit",
+    "pytest-gremlins",
+    "matplotlib",
+    "psutil>=7.2.2",
+    "types-psutil>=7.2.2.20260906",
+    "types-openpyxl>=3.1.5.20261017",
+    "types-pyyaml>=6.0.12.20261103",
+    "vulture>=2.16",
+    "pytest-timeout>=2.4.0",
+    "pytest-socket>=0.8.1",
+    "reportlab>=5.1.0",
+    "types-reportlab>=5.1.0.20261104",
+]
+
+[tool.basedpyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.15"
+include = ["src", "tests"]

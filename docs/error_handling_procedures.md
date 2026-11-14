@@ -57,7 +57,7 @@ The system implements graceful degradation strategies to continue operation when
     operation="data_loading",
     default_value=[],
     data_source="sample_data.csv",
-    module="data_loader"
+    module="data_loader",
 )
 def load_data(file_path: str):
     """Load data that might fail."""
@@ -74,9 +74,7 @@ try:
     result = risky_operation()
 except Exception as e:
     context = ErrorContext(
-        operation="risky_operation",
-        data_source="input_data",
-        module="data_processor"
+        operation="risky_operation", data_source="input_data", module="data_processor"
     )
     error_info = error_handler.handle_error(e, context, ErrorSeverity.MEDIUM)
 ```
@@ -147,12 +145,12 @@ The error handling system is integrated with the calculation engine to provide r
 class CalculationEngine:
     def __init__(self):
         self.error_handler = setup_standard_error_handling()
-    
+
     @error_handler.graceful_degradation(
         operation="get_cell_value",
         default_value=0,
         data_source="excel_sheet",
-        module="calculation_engine"
+        module="calculation_engine",
     )
     def get_cell_value(self, sheet_name: str, cell_address: str) -> float:
         """Get cell value with graceful degradation."""

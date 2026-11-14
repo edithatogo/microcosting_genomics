@@ -76,52 +76,53 @@ import pandas as pd
 from typing import Any, Dict
 from unimelb_phd_phase_1.plugin_system import AnalysisPlugin
 
+
 class CustomAnalysisPlugin(AnalysisPlugin):
     """Plugin for custom cost analysis functionality."""
-    
+
     def __init__(self):
         super().__init__(
             name="custom_analysis",
             version="1.0.0",
             description="Custom cost analysis plugin for microcosting data",
             tags=["analysis", "custom"],
-            dependencies=[]
+            dependencies=[],
         )
-    
+
     def analyze(self, data: pd.DataFrame) -> Dict[str, Any]:
         """Perform custom analysis on microcosting data.
-        
+
         Args:
             data (pd.DataFrame): Microcosting data
-            
+
         Returns:
             Dict[str, Any]: Analysis results
         """
         if not isinstance(data, pd.DataFrame):
             raise ValueError("Data must be a pandas DataFrame")
-        
+
         # Perform custom analysis
         results = {
             "total_rows": len(data),
             "total_columns": len(data.columns),
-            "numeric_columns": len(data.select_dtypes(include=['number']).columns),
-            "memory_usage_mb": data.memory_usage(deep=True).sum() / 1024 / 1024
+            "numeric_columns": len(data.select_dtypes(include=["number"]).columns),
+            "memory_usage_mb": data.memory_usage(deep=True).sum() / 1024 / 1024,
         }
-        
+
         # Add custom calculations
-        numeric_data = data.select_dtypes(include=['number'])
+        numeric_data = data.select_dtypes(include=["number"])
         if not numeric_data.empty:
             results["cost_statistics"] = {
                 "mean_cost": numeric_data.mean().to_dict(),
                 "median_cost": numeric_data.median().to_dict(),
-                "std_cost": numeric_data.std().to_dict()
+                "std_cost": numeric_data.std().to_dict(),
             }
-        
+
         return results
-    
+
     def configure(self, config: Dict[str, Any]) -> None:
         """Configure the plugin with user-provided settings.
-        
+
         Args:
             config (Dict[str, Any]): Configuration dictionary
         """
@@ -227,26 +228,28 @@ class ConfigurablePlugin(AnalysisPlugin):
         super().__init__(
             name="configurable_analysis",
             version="1.0.0",
-            description="Configurable analysis plugin"
+            description="Configurable analysis plugin",
         )
-        
+
         # Define default configuration
         self.default_config = {
             "threshold": 100,
             "include_statistics": True,
-            "output_format": "json"
+            "output_format": "json",
         }
-    
+
     def configure(self, config: Dict[str, Any]) -> None:
         """Configure plugin with user settings."""
         super().configure(config)
-        
+
         # Apply configuration with defaults
         self.threshold = config.get("threshold", self.default_config["threshold"])
-        self.include_statistics = config.get("include_statistics", 
-                                           self.default_config["include_statistics"])
-        self.output_format = config.get("output_format", 
-                                      self.default_config["output_format"])
+        self.include_statistics = config.get(
+            "include_statistics", self.default_config["include_statistics"]
+        )
+        self.output_format = config.get(
+            "output_format", self.default_config["output_format"]
+        )
 ```
 
 ### User Configuration
@@ -254,11 +257,7 @@ Users can provide custom configuration:
 
 ```python
 # User configuration
-user_config = {
-    "threshold": 500,
-    "include_statistics": False,
-    "output_format": "csv"
-}
+user_config = {"threshold": 500, "include_statistics": False, "output_format": "csv"}
 
 # Apply configuration
 plugin.configure(user_config)
@@ -278,8 +277,8 @@ class DependentPlugin(AnalysisPlugin):
             description="Plugin with dependencies",
             dependencies=[
                 {"name": "custom_analysis", "version": ">=1.0.0"},
-                {"name": "statistical_tools", "version": ">=2.1.0"}
-            ]
+                {"name": "statistical_tools", "version": ">=2.1.0"},
+            ],
         )
 ```
 
@@ -320,7 +319,7 @@ class CategorizedPlugin(AnalysisPlugin):
             version="1.0.0",
             description="Categorized analysis plugin",
             tags=["analysis", "cost", "detailed"],
-            categories=["cost_analysis", "microcosting"]
+            categories=["cost_analysis", "microcosting"],
         )
 ```
 

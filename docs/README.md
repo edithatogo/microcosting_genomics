@@ -101,22 +101,21 @@ dm.save_for_publication("Detailed Table", df, metadata={"version": "1.0"})
 Perform sensitivity analyses using the advanced scenario modeling:
 
 ```python
-from src.genomics_microcosting.advanced_scenario_modeling import AdvancedScenarioAnalyzer
+from src.genomics_microcosting.advanced_scenario_modeling import (
+    AdvancedScenarioAnalyzer,
+)
 
 # Initialize analyzer
 analyzer = AdvancedScenarioAnalyzer()
 
 # Perform deterministic sensitivity analysis
 dsa_results = analyzer.perform_deterministic_analysis(
-    baseline_data=baseline_df,
-    parameters=dsa_parameters
+    baseline_data=baseline_df, parameters=dsa_parameters
 )
 
 # Perform probabilistic sensitivity analysis
 psa_results = analyzer.perform_probabilistic_analysis(
-    baseline_data=baseline_df,
-    parameters=psa_parameters,
-    simulation_count=1000
+    baseline_data=baseline_df, parameters=psa_parameters, simulation_count=1000
 )
 ```
 

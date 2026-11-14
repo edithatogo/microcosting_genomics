@@ -1,9 +1,11 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Replicate the labour cost calculations using the extracted CSV data.
 
 The required CSV files are stored in the repository ``data`` directory which is
 located at ``Path(__file__).resolve().parents[0] / 'data'``.
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -14,7 +16,7 @@ file_path = DATA_DIR / "Labour - Costs - VCGS_values.csv"
 df = pd.read_csv(file_path, header=1)
 
 # Drop empty rows
-df.dropna(how="all", inplace=True)
+df = df.dropna(how="all")
 
 # Clean up column names
 # The header has some issues due to merged cells in Excel.
@@ -54,8 +56,8 @@ columns = [
 df.columns = columns
 
 # Display the first few rows of the cleaned data
-print("Cleaned Data:")
-print(df.head())
+sys.stdout.write("Cleaned Data:" + "\n")
+sys.stdout.write(str(df.head()) + "\n")
 
 # Replicate the calculations
 # Formula for 'Base Salary Mid-point' is =V3+((X3-V3)/2)
@@ -64,21 +66,14 @@ df["Calculated Base Salary Mid-point"] = df["Base Salary LL"] + (
     (df["Base Salary UL"] - df["Base Salary LL"]) / 2
 )
 
-# Formula for 'Base Salary + Costs LL' is =(V3+(V3*$J3)+(V3*$M3)+(V3*$N3)+(V3*$O3)+(V3*$P3)+(V3*$Q3)+($R3)+(V3*((52+$S3)/52))*(1+$T3))*1/$L3
+# Formula for 'Base Salary + Costs LL' is
+# =(V3+(V3*$J3)+(V3*$M3)+(V3*$N3)+(V3*$O3)+(V3*$P3)+(V3*$Q3)+($R3)
+#   +(V3*((52+$S3)/52))*(1+$T3))*1/$L3
 # This is more complex. Let's break it down.
-# J = 'Superannuation Rate (%)'
-# M = 'Average Penalties %'
-# N = 'Public Holiday Penalty Percentage'
-# O = 'Private Practice Loading'
-# P = 'Attraction and Retention Allowance'
-# Q = 'Sick Leave Percentage'
-# R = 'Professional Development Allowance'
-# S = 'Annual Leave Entitlement (Weeks)'
-# T = 'Annual Leave Loading (%)'
-# L = 'Average productive time (%)'
 # K = 'Hours per week' (not in this formula)
 
-# Note: The formula in the sheet seems to be calculating the cost per hour, then multiplying by hours per week and weeks per year.
+# Note: The formula in the sheet seems to be calculating the cost per hour, then
+# multiplying by hours per week and weeks per year.
 # The formula `... * 1/$L3` seems to be dividing by productive time.
 # Let's replicate the 'Base Salary + Costs LL'
 df["Calculated Base Salary + Costs LL"] = (
@@ -104,17 +99,20 @@ df["Calculated Base Salary + Costs (hourly) LL"] = (
 )
 
 
-print("\nData with Calculated Columns:")
-print(
-    df[
-        [
-            "Base Salary LL",
-            "Base Salary Mid-point",
-            "Calculated Base Salary Mid-point",
-            "Base Salary + Costs LL",
-            "Calculated Base Salary + Costs LL",
-            "Base Salary + Costs (hourly) LL",
-            "Calculated Base Salary + Costs (hourly) LL",
-        ]
-    ].head()
+sys.stdout.write("\nData with Calculated Columns:" + "\n")
+sys.stdout.write(
+    str(
+        df[
+            [
+                "Base Salary LL",
+                "Base Salary Mid-point",
+                "Calculated Base Salary Mid-point",
+                "Base Salary + Costs LL",
+                "Calculated Base Salary + Costs LL",
+                "Base Salary + Costs (hourly) LL",
+                "Calculated Base Salary + Costs (hourly) LL",
+            ]
+        ].head(),
+    )
+    + "\n",
 )

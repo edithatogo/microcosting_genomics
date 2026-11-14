@@ -1,0 +1,19 @@
+{
+  "version": "t1-combined-sensitivity-v5",
+  "source_workbook_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "conditional combined sensitivity, not an independent observation or a published result",
+  "description": "Compose v3 per-sample trio reception with v4 extreme exclusion of two allocated-core charges, alongside the v2 corrections and bound propagation.",
+  "constituent_sha256": {
+    "t1-branch-corrections-v2.json": "f136a41c2f290402e43a1a01813137e31f377536eb374cefb065453ecf1da637",
+    "option2-compute-sensitivity-v1.json": "6b61e488dee1d215b7592690986652467f9be3975c946ff47439bd571e2d223d",
+    "t1-compute-bound-propagation-v2.json": "6a93306140753b49d13a0451edb2a0dd2730632eeeb4583566633f359b2b6aeb",
+    "t1-reception-per-sample-v3.json": "684b67c3dc9531aed6f19416b27553e72089757b89b98561a325bf60b083655d",
+    "t1-host-overlap-v4.json": "929554a0361f0cdb87d48088fc01f355bc5685fc0f97e500c261ef4da113b9e1"
+  },
+  "limitations": [
+    "Historical allocation of host and accelerator costs is unknown; removing both selected charges is a conditional extreme, not proof of duplication.",
+    "Trio receipt scaling reflects earlier source-model convention; actual sample/case activity and liaison allocation remain unmeasured.",
+    "Task timing extrema are conditional sensitivities, not confidence intervals or jointly observed extremes.",
+    "Preserves source workbook and published model; no current costs."
+  ]
+}

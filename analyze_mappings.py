@@ -1,9 +1,11 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Analyze mappings between steps and labels.
 
 Data files are expected in the repository ``data`` directory located at
 ``Path(__file__).resolve().parents[0] / 'data'``.
 """
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -11,12 +13,12 @@ import pandas as pd
 # Load the Detailed Table data
 DATA_DIR = Path(__file__).resolve().parents[0] / "data" / "extracted"
 df_detailed = pd.read_csv(DATA_DIR / "Detailed Table_values.csv", header=2)
-df_detailed.dropna(how="all", inplace=True)
+df_detailed = df_detailed.dropna(how="all")
 df_detailed.reset_index(drop=True)
 
 # Load the Labour Costs data
 df_labour = pd.read_csv(DATA_DIR / "Labour - Costs - VCGS_values.csv", header=1)
-df_labour.dropna(how="all", inplace=True)
+df_labour = df_labour.dropna(how="all")
 df_labour.reset_index(drop=True)
 
 # Clean up column names
@@ -90,10 +92,10 @@ df_labour.columns = labour_columns
 detailed_steps = df_detailed["Step"].unique()
 labour_labels = df_labour["Label"].unique()
 
-print("Unique Steps in Detailed Table:")
+sys.stdout.writelines(("Unique Steps in Detailed Table:", "\n"))
 for step in detailed_steps:
-    print(f"- {step}")
+    sys.stdout.writelines((f"- {step}", "\n"))
 
-print("\nUnique Labels in Labour Costs:")
+sys.stdout.writelines(("\nUnique Labels in Labour Costs:", "\n"))
 for label in labour_labels:
-    print(f"- {label}")
+    sys.stdout.writelines((f"- {label}", "\n"))

@@ -1,5 +1,7 @@
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
 """Replicate the consumable cost calculations from the extracted CSV."""
 
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -7,12 +9,14 @@ import pandas as pd
 # Load the data, reading all as string initially
 DATA_DIR = Path(__file__).resolve().parents[0] / "data" / "extracted"
 df = pd.read_csv(
-    DATA_DIR / "Cons -  Costs and Util - VCGS_values.csv", header=2, dtype=str
+    DATA_DIR / "Cons -  Costs and Util - VCGS_values.csv",
+    header=2,
+    dtype=str,
 )
 
 # Drop empty rows
-df.dropna(how="all", inplace=True)
-df.reset_index(drop=True, inplace=True)
+df = df.dropna(how="all")
+df = df.reset_index(drop=True)
 
 # A bit of cleaning of column names
 df.columns = [
@@ -59,31 +63,33 @@ df["Calculated Other"] = df["Unit Cost"] * df["Units per"]
 
 # Replicate the '50x', '80x', and '30x' calculations
 # Formula for '50x' is =E62*F62*G62
-# E is 'Unit Cost', F is 'Units per', G is '50x (WES)'
 df["Calculated 50x"] = df["Unit Cost"] * df["Units per"] * df["50x (WES)"]
 df["Calculated 80x"] = df["Unit Cost"] * df["Units per"] * df["80x (WES)"]
 df["Calculated 30x"] = df["Unit Cost"] * df["Units per"] * df["30x (WGS)"]
 
 
 # Display the first few rows of the cleaned data and calculations
-print("Cleaned Data and Initial Calculations:")
-print(
-    df[
-        [
-            "Consumables",
-            "Unit Cost",
-            "Units per",
-            "Other",
-            "Calculated Other",
-            "50x (WES)",
-            "50x",
-            "Calculated 50x",
-            "80x (WES)",
-            "80x",
-            "Calculated 80x",
-            "30x (WGS)",
-            "30x",
-            "Calculated 30x",
-        ]
-    ].head()
+sys.stdout.write("Cleaned Data and Initial Calculations:" + "\n")
+sys.stdout.write(
+    str(
+        df[
+            [
+                "Consumables",
+                "Unit Cost",
+                "Units per",
+                "Other",
+                "Calculated Other",
+                "50x (WES)",
+                "50x",
+                "Calculated 50x",
+                "80x (WES)",
+                "80x",
+                "Calculated 80x",
+                "30x (WGS)",
+                "30x",
+                "Calculated 30x",
+            ]
+        ].head(),
+    )
+    + "\n",
 )

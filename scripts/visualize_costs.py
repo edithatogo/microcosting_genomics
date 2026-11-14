@@ -1,32 +1,30 @@
 #!/usr/bin/env python3
-"""
-Script to create visualizations of cost data.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Script to create visualizations of cost data."""
 
+import logging
 import sys
-from pathlib import Path
 
-# Add the src directory to the path so we can import our modules
-src_path = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(src_path))
+from genomics_microcosting.visualization import create_summary_dashboard
 
-from genomics_microcosting.visualization import create_summary_dashboard  # noqa: E402
+logger = logging.getLogger(__name__)
 
 
-def main():
-    """Main function to create visualizations."""
-    print("Creating cost visualization dashboard...")
-    
+def main() -> int:
+    """Create visualizations."""
+    sys.stdout.write("Creating cost visualization dashboard..." + "\n")
+
     try:
         # Create dashboard
         figures = create_summary_dashboard()
-        print(f"Created {len(figures)} visualizations")
-        print("Dashboard creation complete!")
-        
+        sys.stdout.write(f"Created {len(figures)} visualizations" + "\n")
+        sys.stdout.write("Dashboard creation complete!" + "\n")
+
     except Exception as e:
-        print(f"Error creating visualizations: {e}")
+        logger.exception("Could not complete visualize costs")
+        sys.stdout.write(f"Error creating visualizations: {e}" + "\n")
         return 1
-        
+
     return 0
 
 

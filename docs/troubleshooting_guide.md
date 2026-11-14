@@ -347,7 +347,7 @@ KeyError: 'workbooks'
 
 **Symptoms**:
 ```
-ModuleNotFoundError: No module named 'unimelb_phd_phase_1'
+ModuleNotFoundError: No module named 'genomics_microcosting'
 ```
 
 **Causes**:
@@ -356,9 +356,9 @@ ModuleNotFoundError: No module named 'unimelb_phd_phase_1'
 - Path issues
 
 **Solutions**:
-1. Install the package with `pip install -e .`
-2. Verify you're using the correct Python environment
-3. Check PYTHONPATH includes the project directory
+1. Install the package with `uv sync --locked --python 3.15.1`.
+2. Confirm `.venv/bin/python --version` reports Python 3.15.1.
+3. Run the command through the interpreter or entry point in `.venv/bin`.
 
 ### Problem: Dependency installation failures
 
@@ -402,6 +402,7 @@ Set the logging level to DEBUG for more detailed information:
 
 ```python
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 ```
 

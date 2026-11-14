@@ -1,0 +1,20 @@
+{
+  "version": "t1-support-plan-af26-v1",
+  "source_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "provisional opt-in diagnostic; denominator uses workbook WES-80x allocation basis, not an established original AF26 formula",
+  "sheet": "Eq - Costs and Usage - VCGS",
+  "cell": "AF26",
+  "source_formula": "=K26/P26",
+  "proposed_formula": "=K26/P16",
+  "denominator_evidence": [
+    "Eq - Usage - VCGS!E30 references P16",
+    "Eq - Usage - VCGS!E35 references P15",
+    "Eq - Usage - VCGS!E40 references P14",
+    "P14:P16 all reference H59, cached 9200"
+  ],
+  "limits": [
+    "K26 uses straight-line source amount while active support-plan cost uses PMT-based L26; AF26 must not be substituted into active costing without reconciling basis.",
+    "Coverage allocation is selected explicitly; other denominator cells may diverge in future.",
+    "This does not establish original intended AF26 denominator."
+  ]
+}

@@ -1,15 +1,14 @@
-"""
-Validates the replicated 'BI - Comp+Stor Costs - VCGS' data against the original.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Validates the replicated 'BI - Comp+Stor Costs - VCGS' data against the original."""
+
+import sys
 
 import numpy as np
 import pandas as pd
 
 
-def validate_bi_comp_stor_costs():
-    """
-    Validates the replicated 'BI - Comp+Stor Costs - VCGS' data.
-    """
+def validate_bi_comp_stor_costs() -> None:
+    """Validate the replicated 'BI - Comp+Stor Costs - VCGS' data."""
     # Load original data, skipping headers
 
     # Load replicated data
@@ -77,10 +76,16 @@ def validate_bi_comp_stor_costs():
         orig_series = server_df_orig[orig_col].iloc[0:2].astype(float)
         rep_series = replicated_server_df[rep_col].astype(float)
         if not np.allclose(
-            orig_series.values, rep_series.values, rtol=1e-5, atol=1e-8, equal_nan=True
+            orig_series.values,
+            rep_series.values,
+            rtol=1e-5,
+            atol=1e-8,
+            equal_nan=True,
         ):
             errors.append(
-                f"Server Costs Mismatch in column {orig_col}:\nOriginal:\n{orig_series.values}\nReplicated:\n{rep_series.values}"
+                f"Server Costs Mismatch in column {orig_col}:\nOriginal:\n"
+                f"{orig_series.to_numpy()}\nReplicated:\n"
+                f"{rep_series.to_numpy()}",
             )
 
     # --- Validate Equipment Costs ---
@@ -156,10 +161,16 @@ def validate_bi_comp_stor_costs():
         orig_series = pd.to_numeric(equipment_df_orig[orig_col], errors="coerce")
         rep_series = replicated_equipment_df[rep_col].astype(float)
         if not np.allclose(
-            orig_series.values, rep_series.values, rtol=1e-5, atol=1e-8, equal_nan=True
+            orig_series.values,
+            rep_series.values,
+            rtol=1e-5,
+            atol=1e-8,
+            equal_nan=True,
         ):
             errors.append(
-                f"Equipment Costs Mismatch in column {orig_col}:\nOriginal:\n{orig_series.values}\nReplicated:\n{rep_series.values}"
+                f"Equipment Costs Mismatch in column {orig_col}:\nOriginal:\n"
+                f"{orig_series.to_numpy()}\nReplicated:\n"
+                f"{rep_series.to_numpy()}",
             )
 
     # --- Validate Storage Costs ---
@@ -189,22 +200,29 @@ def validate_bi_comp_stor_costs():
     }
     for orig_col, rep_col in storage_cols_to_check.items():
         orig_series = pd.to_numeric(
-            storage_df_orig[orig_col].iloc[[1, 4, 5, 6]], errors="coerce"
+            storage_df_orig[orig_col].iloc[[1, 4, 5, 6]],
+            errors="coerce",
         )
         rep_series = replicated_storage_df[rep_col].astype(float)
         if not np.allclose(
-            orig_series.values, rep_series.values, rtol=1e-5, atol=1e-8, equal_nan=True
+            orig_series.values,
+            rep_series.values,
+            rtol=1e-5,
+            atol=1e-8,
+            equal_nan=True,
         ):
             errors.append(
-                f"Storage Costs Mismatch in column {orig_col}:\nOriginal:\n{orig_series.values}\nReplicated:\n{rep_series.values}"
+                f"Storage Costs Mismatch in column {orig_col}:\nOriginal:\n"
+                f"{orig_series.to_numpy()}\nReplicated:\n"
+                f"{rep_series.to_numpy()}",
             )
 
     if errors:
         for error in errors:
-            print(error)
-        print(f"\\n{len(errors)} validation errors found.")
+            sys.stdout.write(str(error) + "\n")
+        sys.stdout.write(f"\\n{len(errors)} validation errors found." + "\n")
     else:
-        print("Validation successful! No discrepancies found.")
+        sys.stdout.write("Validation successful! No discrepancies found." + "\n")
 
 
 if __name__ == "__main__":

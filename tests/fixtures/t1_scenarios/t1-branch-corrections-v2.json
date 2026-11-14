@@ -1,0 +1,131 @@
+{
+  "version": "t1-branch-corrections-v2",
+  "baseline_sha256": "2990ff57504a51c5a9152b053a8e7cfa0e490f27a75bb356810f3564f96b5eb4",
+  "status": "provisional opt-in engineering correction; not accepted as a complete or published baseline",
+  "corrects": [
+    {
+      "id": "H01_wgs_compute",
+      "label": "Exclude earlier exome subtotal and rows from genome compute subtotal",
+      "changes": [
+        {
+          "sheet": "BI - Comp Use - VCGS",
+          "cell": "V105",
+          "source_formula": "=SUM(V47:V104)",
+          "proposed_formula": "=SUM(V69:V104)"
+        }
+      ],
+      "decision": "provisional opt-in engineering correction; original baseline retained; scientific scope pending",
+      "details": "Exact selected output deltas and provenance retained in ignored private receipt."
+    },
+    {
+      "id": "H02_wgs_proband_equipment",
+      "label": "Use the genome library-preparation equipment component subtotal",
+      "changes": [
+        {
+          "sheet": "Detailed Table",
+          "cell": "M917",
+          "source_formula": "='Eq - Usage - VCGS'!$T18",
+          "proposed_formula": "='Eq - Usage - VCGS'!$T26"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "N917",
+          "source_formula": "='Eq - Usage - VCGS'!$U18",
+          "proposed_formula": "='Eq - Usage - VCGS'!$U26"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "O917",
+          "source_formula": "='Eq - Usage - VCGS'!$V18",
+          "proposed_formula": "='Eq - Usage - VCGS'!$V26"
+        }
+      ],
+      "decision": "provisional opt-in engineering correction; original baseline retained; scientific scope pending",
+      "details": "Exact selected output deltas and provenance retained in ignored private receipt."
+    },
+    {
+      "id": "H03_exome_trio_bounds",
+      "label": "Apply three-sample factor to exome trio equipment bounds",
+      "changes": [
+        {
+          "sheet": "Detailed Table",
+          "cell": "M622",
+          "source_formula": "='Eq - Usage - VCGS'!$T18",
+          "proposed_formula": "='Eq - Usage - VCGS'!$T18*3"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "O622",
+          "source_formula": "='Eq - Usage - VCGS'!$V18",
+          "proposed_formula": "='Eq - Usage - VCGS'!$V18*3"
+        }
+      ],
+      "decision": "provisional opt-in engineering correction; original baseline retained; scientific scope pending",
+      "details": "Exact selected output deltas and provenance retained in ignored private receipt."
+    },
+    {
+      "id": "H04_wgs_storage",
+      "label": "Sum genome storage subtotals without processing rows and subtotals",
+      "changes": [
+        {
+          "sheet": "Detailed Table",
+          "cell": "M1068",
+          "source_formula": "=SUM(M1015:M1066)",
+          "proposed_formula": "=SUM(M1062,M1066)"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "M1317",
+          "source_formula": "=SUM(M1264:M1315)",
+          "proposed_formula": "=SUM(M1311,M1315)"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "N1068",
+          "source_formula": "=SUM(N1015:N1066)",
+          "proposed_formula": "=SUM(N1062,N1066)"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "N1317",
+          "source_formula": "=SUM(N1264:N1315)",
+          "proposed_formula": "=SUM(N1311,N1315)"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "O1068",
+          "source_formula": "=SUM(O1015:O1066)",
+          "proposed_formula": "=SUM(O1062,O1066)"
+        },
+        {
+          "sheet": "Detailed Table",
+          "cell": "O1317",
+          "source_formula": "=SUM(O1264:O1315)",
+          "proposed_formula": "=SUM(O1311,O1315)"
+        }
+      ],
+      "decision": "provisional opt-in engineering correction; original baseline retained; scientific scope pending",
+      "details": "Exact selected output deltas and provenance retained in ignored private receipt."
+    },
+    {
+      "id": "H05_trio_role_bound",
+      "label": "Reference the alternative role lower-bound line rather than a total",
+      "changes": [
+        {
+          "sheet": "Detailed Table",
+          "cell": "M536",
+          "source_formula": "='Labour - Usage - VCGS'!AA18",
+          "proposed_formula": "='Labour - Usage - VCGS'!AA16"
+        }
+      ],
+      "decision": "provisional opt-in engineering correction; original baseline retained; scientific scope pending",
+      "details": "Exact selected output deltas and provenance retained in ignored private receipt."
+    }
+  ],
+  "limits": [
+    "Computational aggregation selects WGS rows without the earlier WES subtotal and overlap; WGS-specific shared workload inclusion remains an assumption.",
+    "Storage aggregates network and archive subtotal rows only; archival and network quantities/units remain source assumptions.",
+    "Role lower bound follows same role and neighboring bounds; reception alternative selection remains unresolved.",
+    "Original seven equipment errors and four compute bounds are not repaired."
+  ]
+}

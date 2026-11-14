@@ -1,16 +1,14 @@
-"""
-Replicates the calculations from the 'BI - Comp+Stor Costs - VCGS' sheet.
-"""
+# Copyright 2026 Dylan. SPDX-License-Identifier: Apache-2.0
+"""Replicates the calculations from the 'BI - Comp+Stor Costs - VCGS' sheet."""
 
+import sys
 from pathlib import Path
 
 import pandas as pd
 
 
-def replicate_bi_comp_stor_costs():
-    """
-    Replicates the calculations from the 'BI - Comp+Stor Costs - VCGS' sheet.
-    """
+def replicate_bi_comp_stor_costs() -> None:
+    """Replicates the calculations from the 'BI - Comp+Stor Costs - VCGS' sheet."""
     # Define the data as a dictionary of lists, similar to the Excel sheet
     server_data = {
         "Description": [
@@ -117,7 +115,9 @@ def replicate_bi_comp_stor_costs():
     df_equipment.to_csv(output_dir / "equipment_costs.csv", index=False)
     df_storage.to_csv(output_dir / "storage_costs.csv", index=False)
 
-    print("Replicated BI Comp+Stor Costs and saved to data/replicated/")
+    sys.stdout.write(
+        "Replicated BI Comp+Stor Costs and saved to data/replicated/" + "\n",
+    )
 
 
 if __name__ == "__main__":
