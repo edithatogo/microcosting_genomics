@@ -3,11 +3,13 @@
 
 import json
 from hashlib import sha256
+from types import SimpleNamespace
 from typing import Any, cast
 lazy from pathlib import Path
 
 import pytest
 
+from genomics_microcosting import dapane_adapter
 from genomics_microcosting.dapane_adapter import (
     ExtractionBatch,
     historical_manual_extraction,
@@ -385,3 +387,81 @@ def test_comparison_rejects_incomplete_reports_before_reading_sources(
     """Malformed report shapes cannot masquerade as a completed comparison."""
     with pytest.raises(ValueError, match="complete single-quotation"):
         compare_manual_extraction_workbook(tmp_path / "absent.xlsm", report)
+
+
+def test_native_delegation_preserves_request_and_result_objects(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A transport spy cannot replace numerical acceptance by the real runtime."""
+    original = request()
+    snapshot = canonical(original)
+    received: list[dict[str, Any]] = []
+    replay_marker: dict[str, Any] = {"synthetic_sentinel": "not a numerical result"}
+
+    def evaluator(value: dict[str, Any]) -> dict[str, Any]:
+        received.append(value)
+        return replay_marker
+
+    def loader(name: str) -> SimpleNamespace:
+        checks.require_equal(name, "dapane")
+        return SimpleNamespace(evaluate=evaluator)
+
+    monkeypatch.setattr(dapane_adapter, "import_module", loader)
+    result = dapane_adapter.evaluate_native_request(original)
+    checks.require(condition=received[0] is original)
+    checks.require(condition=result is replay_marker)
+    checks.require_equal(canonical(original), snapshot)
+    raw, digest = seal(artifact())
+    wrapped = dapane_adapter.evaluate_manual_dna_extraction(
+        raw,
+        release_digest=digest,
+        quote_id="minute",
+        batches=(ExtractionBatch("batch", ("a", "b", "c")),),
+        service_date="2026-11-15",
+        knowledge_cutoff="2026-11-15",
+        role_mapping_basis="Synthetic role mapping; no classification equivalence",
+        run_id="synthetic-manual-extraction",
+    )
+    checks.require(condition=wrapped is replay_marker)
+    checks.require_equal(canonical(received[-1]), snapshot)
+
+
+@pytest.mark.parametrize("failure_point", ["import", "evaluate"])
+def test_optional_runtime_errors_propagate_without_python_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+    failure_point: str,
+) -> None:
+    """Keep the identical import or native exception; do not synthesize a price."""
+    failure = (
+        ModuleNotFoundError("synthetic runtime unavailable")
+        if failure_point == "import"
+        else ValueError("synthetic native validation failure")
+    )
+
+    def evaluator(value: dict[str, Any]) -> dict[str, Any]:
+        checks.require_equal(value["usage"][0]["quantity"], "30")
+        raise failure
+
+    def loader(name: str) -> SimpleNamespace:
+        checks.require_equal(name, "dapane")
+        if failure_point == "import":
+            raise failure
+        return SimpleNamespace(evaluate=evaluator)
+
+    monkeypatch.setattr(dapane_adapter, "import_module", loader)
+    with pytest.raises(type(failure), match="synthetic") as caught:
+        dapane_adapter.evaluate_native_request(request())
+    checks.require(condition=caught.value is failure)
+
+
+def test_descriptor_retains_source_scope_and_declared_assumptions() -> None:
+    """Published recipe metadata must preserve its selected labour-only scope."""
+    descriptor = dapane_adapter.manual_dna_extraction_descriptor()
+    checks.require_equal(descriptor["nominal_batch_samples"], 6)
+    checks.require_equal(
+        [(step["source_cell"], step["batch_minutes"]) for step in descriptor["steps"]],
+        [("D22", "30"), ("D23", "5")],
+    )
+    checks.require(condition=descriptor["scientific_validation"] is False)
+    checks.require(condition="equipment" in descriptor["excluded"])
+    checks.require(condition="unquoted labour components" in descriptor["excluded"])
