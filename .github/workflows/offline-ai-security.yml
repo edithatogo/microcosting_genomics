@@ -1,0 +1,14 @@
+name: Offline AI security
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-ai-security:
+    uses: edithatogo/repository-standards/.github/workflows/reusable-ai-sec-pipeline.yml@bc507add33f071aebcbf198d57debdf7235d230d
+    permissions:
+      contents: read
+    with:
+      enforce_ai: false
