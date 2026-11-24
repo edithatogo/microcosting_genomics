@@ -169,3 +169,21 @@ provider runtimes, native CLI parity, exact reference cases, selected historical
 comparisons and source/wheel identities. Until those checks are observed, this
 document describes the implementation boundary, not a claim of completed
 qualification.
+
+## Historical TapeStation genomic DNA quality-control costs
+
+Use `genomics_microcosting.dapane_workbook.historical_gdna_qc_request(path)`
+with the same preserved v15 workbook. It returns a Dapane 0.1 request for
+labwork and administration in rows 32–33 of `Labour - Usage - VCGS`
+and seven direct per-sample consumables in rows 13–19 of
+`Cons -  Costs and Util - VCGS`.
+The request uses exact minutes from the verified time formulas and retains the
+workbook's cached loaded hourly rate. Each consumable retains its own
+workbook quantity, unit cost and source cells. Serialize it as JSON for
+`dapane evaluate`, or pass it to `dapane.evaluate` in Python.
+`inspect_gdna_qc_workbook(path)` returns the selected formulas and original
+binary caches for comparison. Keep the returned source observations local.
+
+The workbook vintage is the replay date. Labour eligibility, the loaded rate's
+components, shared equipment allocation, overhead and later stages remain outside
+this calculation.

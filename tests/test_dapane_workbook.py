@@ -14,10 +14,11 @@ from genomics_microcosting import dapane_workbook
 from tests import checks
 
 SHEET_MEMBER = "xl/worksheets/sheet1.xml"
+CONSUMABLES_MEMBER = "xl/worksheets/sheet2.xml"
 SYNTHETIC_SHEET_XML = (
     '<?xml version="1.0" encoding="UTF-8"?>'
     '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-    '<dimension ref="D22:AB24"/><sheetData><row r="22">'
+    '<dimension ref="D22:AB33"/><sheetData><row r="22">'
     '<c r="D22"><v>30</v></c><c r="E22"><v>6</v></c>'
     '<c r="G22"><f>D22/E22</f><v>5</v></c>'
     '<c r="L22"><f t="shared" si="0" ref="L22:L23">'
@@ -28,7 +29,28 @@ SYNTHETIC_SHEET_XML = (
     '<c r="L23"><f t="shared" si="0"/><v>12.30</v></c>'
     '<c r="AB23"><f>$G23/60*L23</f><v>0.17083333333333334</v></c></row>'
     '<row r="24"><c r="AB24"><f>SUM(AB22:AB23)</f>'
-    "<v>1.1958333333333333</v></c></row></sheetData></worksheet>"
+    "<v>1.1958333333333333</v></c></row>"
+    '<row r="32"><c r="G32"><f>0.036*60</f><v>2.1599999999999997</v></c>'
+    "<c r='L32'><f>'Labour - Costs - VCGS'!AC$3</f><v>12.30</v></c>"
+    '<c r="AB32"><f>$G32/60*L32</f><v>0.4428</v></c></row>'
+    '<row r="33"><c r="G33"><f>0.036*60</f><v>2.1599999999999997</v></c>'
+    "<c r='L33'><f>'Labour - Costs - VCGS'!AC$3</f><v>12.30</v></c>"
+    '<c r="AB33"><f>$G33/60*L33</f><v>0.4428</v></c></row>'
+    "</sheetData></worksheet>"
+)
+
+
+SYNTHETIC_CONSUMABLES_XML = (
+    '<?xml version="1.0" encoding="UTF-8"?>'
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+    '<dimension ref="E13:J19"/><sheetData>'
+    + "".join(
+        f'<row r="{row}"><c r="E{row}"><v>2.30</v></c>'
+        f'<c r="F{row}"><v>0.5</v></c>'
+        f'<c r="J{row}"><f>E{row}*F{row}</f><v>1.15</v></c></row>'
+        for row in range(13, 20)
+    )
+    + "</sheetData></worksheet>"
 )
 
 
@@ -59,6 +81,7 @@ def synthetic_workbook(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """Create public toy cells without copying any preserved workbook material."""
     book = Workbook()
     book.create_sheet("Labour - Usage - VCGS", 0)
+    book.create_sheet("Cons -  Costs and Util - VCGS", 1)
     del book["Sheet"]
     buffer = BytesIO()
     book.save(buffer)
@@ -66,6 +89,7 @@ def synthetic_workbook(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     path = tmp_path / "synthetic.xlsx"
     path.write_bytes(buffer.getvalue())
     replace_member(path, SHEET_MEMBER, SYNTHETIC_SHEET_XML.encode())
+    replace_member(path, CONSUMABLES_MEMBER, SYNTHETIC_CONSUMABLES_XML.encode())
     pin_synthetic(path, monkeypatch)
     return path
 
@@ -115,6 +139,65 @@ def test_historical_request_preserves_exact_exposure_and_opaque_components(
         request["quotes"][0]["source"]["content_digest"],
         "sha256:" + sha256(synthetic_workbook.read_bytes()).hexdigest(),
     )
+
+
+def test_gdna_qc_request_maps_labour_and_seven_consumables(
+    synthetic_workbook: Path,
+) -> None:
+    """Retain binary caches as evidence and use the verified formula's exact time."""
+    inspection = dapane_workbook.inspect_gdna_qc_workbook(synthetic_workbook)
+    checks.require_equal(
+        inspection["sheets"]["Labour - Usage - VCGS"]["G32"],
+        {"formula": "=0.036*60", "cached": "2.1599999999999997"},
+    )
+    request = dapane_workbook.historical_gdna_qc_request(synthetic_workbook)
+    checks.require_equal(
+        [(line["id"], line["quantity"]) for line in request["usage"]],
+        [("G32", "2.16"), ("G33", "2.16")]
+        + [(f"F{row}", "0.5") for row in range(13, 20)],
+    )
+    checks.require_equal(request["quotes"][0]["amount"], "12.30")
+    checks.require_equal(request["quotes"][0]["per_quantity"], "60")
+    checks.require_equal(
+        request["quotes"][0]["source"]["locator"],
+        "Labour - Usage - VCGS!L32,L33; historical cached loaded rate",
+    )
+
+    checks.require_equal(
+        [quote["amount"] for quote in request["quotes"][1:]],
+        ["2.30"] * 7,
+    )
+    checks.require_equal(
+        [quote["unit"] for quote in request["quotes"][1:]],
+        ["item"] * 7,
+    )
+
+
+@pytest.mark.parametrize(
+    ("member", "change", "coordinate"),
+    [
+        (SHEET_MEMBER, ("0.036*60", "0.04*60"), "G32"),
+        (CONSUMABLES_MEMBER, ("E19*F19", "E19*F18"), "J19"),
+    ],
+)
+def test_gdna_qc_rejects_changed_source_formula(
+    synthetic_workbook: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    member: str,
+    change: tuple[str, str],
+    coordinate: str,
+) -> None:
+    """Reject a changed source formula even if the workbook gets a new digest."""
+    sources = {
+        SHEET_MEMBER: SYNTHETIC_SHEET_XML,
+        CONSUMABLES_MEMBER: SYNTHETIC_CONSUMABLES_XML,
+    }
+    before, after = change
+    changed = sources[member].replace(before, after, 1)
+    replace_member(synthetic_workbook, member, changed.encode())
+    pin_synthetic(synthetic_workbook, monkeypatch)
+    with pytest.raises(ValueError, match=f"at {coordinate}"):
+        dapane_workbook.historical_gdna_qc_request(synthetic_workbook)
 
 
 @pytest.mark.parametrize("change", ["unchanged", "rate", "components"])
