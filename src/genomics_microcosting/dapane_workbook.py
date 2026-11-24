@@ -6,11 +6,12 @@ from io import BytesIO
 from pathlib import PurePosixPath
 from typing import Any, cast
 from zipfile import ZipFile
-lazy from collections.abc import Mapping
+lazy from collections.abc import Collection, Mapping
 lazy from pathlib import Path
 
 from defusedxml import ElementTree
 from openpyxl import load_workbook
+from openpyxl.utils.cell import coordinate_to_tuple
 
 from genomics_microcosting.dapane_adapter import (
     SHEET,
@@ -75,7 +76,8 @@ def _sheet_path(archive: ZipFile, sheet: str) -> str:
     return path
 
 
-def _verified_payload(path: Path) -> bytes:
+def verified_workbook_payload(path: Path) -> bytes:
+    """Read the unchanged workbook from the selected source edition."""
     if path.stat().st_size > MAX_WORKBOOK_BYTES:
         message = "Workbook exceeds the selected source bound"
         raise ValueError(message)
@@ -86,10 +88,10 @@ def _verified_payload(path: Path) -> bytes:
     return payload
 
 
-def _inspect_cells(
+def read_workbook_cells(
     payload: bytes,
     sheet: str,
-    expected: Mapping[str, tuple[str | None, str | None]],
+    coordinates: Collection[str],
     *,
     rows: tuple[int, int],
 ) -> dict[str, dict[str, str | None]]:
@@ -98,6 +100,7 @@ def _inspect_cells(
         worksheet = ElementTree.fromstring(archive.read(_sheet_path(archive, sheet)))
     # Excel shared-formula records can omit repeated formula text. The existing
     # reader expands those references mechanically; it does not recalculate them.
+    columns = [coordinate_to_tuple(cell)[1] for cell in coordinates]
     book = load_workbook(BytesIO(payload), read_only=True, data_only=False)
     try:
         formulas = {
@@ -105,24 +108,35 @@ def _inspect_cells(
             for row in book[sheet].iter_rows(
                 min_row=rows[0],
                 max_row=rows[1],
-                min_col=4,
-                max_col=28,
+                min_col=min(columns),
+                max_col=max(columns),
             )
             for cell in row
-            if getattr(cell, "coordinate", "") in expected
+            if getattr(cell, "coordinate", "") in coordinates
         }
     finally:
         book.close()
     selected: dict[str, dict[str, str | None]] = {}
     for cell in worksheet.findall(".//{*}c"):
         coordinate = cell.attrib["r"]
-        if coordinate not in expected:
+        if coordinate not in coordinates:
             continue
         cached = cell.find("{*}v")
         selected[coordinate] = {
-            "formula": formulas[coordinate],
+            "formula": formulas.get(coordinate),
             "cached": None if cached is None else cached.text,
         }
+    return selected
+
+
+def _inspect_cells(
+    payload: bytes,
+    sheet: str,
+    expected: Mapping[str, tuple[str | None, str | None]],
+    *,
+    rows: tuple[int, int],
+) -> dict[str, dict[str, str | None]]:
+    selected = read_workbook_cells(payload, sheet, expected, rows=rows)
     if set(selected) != set(expected):
         message = "Selected source mapping is incomplete"
         raise ValueError(message)
@@ -150,7 +164,12 @@ def _require_shared_rate(
 
 def inspect_manual_extraction_workbook(path: Path) -> dict[str, Any]:
     """Return raw selected extraction cells from the hash-verified workbook."""
-    cells = _inspect_cells(_verified_payload(path), SHEET, EXPECTED, rows=(22, 24))
+    cells = _inspect_cells(
+        verified_workbook_payload(path),
+        SHEET,
+        EXPECTED,
+        rows=(22, 24),
+    )
     _require_shared_rate(cells, "L22", "L23")
     return {
         "workbook_sha256": WORKBOOK_SHA256,
@@ -164,7 +183,7 @@ def inspect_manual_extraction_workbook(path: Path) -> dict[str, Any]:
 
 def inspect_gdna_qc_workbook(path: Path) -> dict[str, Any]:
     """Return the hash-verified TapeStation QC labour and consumable cells."""
-    payload = _verified_payload(path)
+    payload = verified_workbook_payload(path)
     labour = _inspect_cells(payload, SHEET, GDNA_QC_EXPECTED, rows=(32, 33))
     _require_shared_rate(labour, "L32", "L33")
     consumables = _inspect_cells(
@@ -238,7 +257,7 @@ def historical_gdna_qc_request(
         }
         request["quotes"].append(quote)
         request["usage"].append(
-            _historical_use(
+            historical_use(
                 use_cell,
                 consumables[use_cell]["cached"],
                 quote,
@@ -284,6 +303,17 @@ def _historical_labour_request(
         "known_from": "2023-09-02",
         "source": source,
     }
+    request = new_historical_request(run_id)
+    request["quotes"].append(quote)
+    request["usage"].extend(
+        historical_use(cell, quantity, quote, locator=f"{SHEET}!{cell}")
+        for cell, quantity in exposures
+    )
+    return request
+
+
+def new_historical_request(run_id: str) -> dict[str, Any]:
+    """Start an exact request using the historical workbook policy."""
     return {
         "schema_version": "0.1",
         "run_id": run_id,
@@ -297,21 +327,19 @@ def _historical_labour_request(
             "basis": "financial_cost",
             "rounding": {"scale": 2, "mode": "half_even"},
         },
-        "quotes": [quote],
-        "usage": [
-            _historical_use(cell, quantity, quote, locator=f"{SHEET}!{cell}")
-            for cell, quantity in exposures
-        ],
+        "quotes": [],
+        "usage": [],
     }
 
 
-def _historical_use(
+def historical_use(
     cell: str,
     quantity: str | dict[str, str],
     quote: dict[str, Any],
     *,
     locator: str,
 ) -> dict[str, Any]:
+    """Associate an exact workbook use with its admitted source quote."""
     return {
         "id": cell,
         "use_id": cell,

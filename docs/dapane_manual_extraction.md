@@ -187,3 +187,29 @@ binary caches for comparison. Keep the returned source observations local.
 The workbook vintage is the replay date. Labour eligibility, the loaded rate's
 components, shared equipment allocation, overhead and later stages remain outside
 this calculation.
+
+## Equipment, overhead, loaded labour and library preparation
+
+The optional `genomics_microcosting.dapane_stage_replay` module exports exact
+requests for the five workbook pathways `Panel`, `EA-P`, `EA-T`, `WGA-P` and
+`WGA-T`.
+
+- `historical_qc_full_request(path, scenario)` adds the TapeStation charge from
+  the detailed extraction table. The booked calculation uses the annual PMT
+  charge divided by throughput. QC receives its share of extraction overhead
+  through the same 27% direct-cost formula.
+- `historical_library_preparation_request(path, scenario)` reconstructs the
+  equipment, consumable, labour and overhead lines from the detailed formulas
+  for that pathway. The installed Dapane engine provides the exact direct
+  subtotal for calculating overhead.
+- `historical_loaded_labour_request(path, band)` rebuilds the two selected
+  midpoint rates and the lower medical-scientist rate from their component
+  inputs. The workbook's leave expression includes a second base salary term.
+  The replay retains that term as an explicit separate component.
+
+Both direct-cost requests use the recorded pathway formula references. For
+example, WGA-T books two unmultiplied QC labour lines, multiplies QC
+consumables and equipment by three, and uses lower-bound library-preparation
+labour results. WGA-P takes its equipment subtotal from the WES allocation
+block. These references describe the historical costing and can be reviewed
+with their original workbook evidence.
